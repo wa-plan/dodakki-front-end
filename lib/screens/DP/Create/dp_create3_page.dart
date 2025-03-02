@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/screens/DP/Create/dp_create2_page.dart';
 import 'package:domino/styles.dart';
-import 'package:domino/widgets/DP/Create/DP_input2.dart';
-import 'package:domino/widgets/DP/Create/Description2.dart';
+import 'package:domino/widgets/DP/Create/dp_create3_widget.dart';
+import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
 import 'package:domino/widgets/DP/ai_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

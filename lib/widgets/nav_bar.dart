@@ -2,8 +2,8 @@ import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/nav_provider.dart';
-import 'package:domino/screens/DP/dp_main.dart';
-import 'package:domino/screens/TD/td_main.dart';
+import 'package:domino/screens/DP/dp_main_page.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
 import 'package:domino/screens/ST/settings_main.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
 

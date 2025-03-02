@@ -515,8 +515,7 @@ class DeleteTodayDominoService {
       return false;
     }
 
-    final url =
-        Uri.parse('$baseUrl/api/goal?goalId=$goalId&goalDate=$goalDate');
+    final url = Uri.parse('$baseUrl/api/goal');
 
     final body = jsonEncode({'goalId': goalId, 'goalDate': goalDate});
 
@@ -607,6 +606,7 @@ class MandalartInfoService {
           jsonDecode(utf8.decode(response.bodyBytes)); // UTF-8로 디코딩
 
       if (response.statusCode >= 200) {
+        
         print('서버 응답 데이터: $decodedResponse');
         return decodedResponse; // 성공 시 데이터 반환
       } else if (response.statusCode >= 400) {
@@ -640,10 +640,8 @@ class MandalartInfoService {
   }
 }
 
-class MandaIdListService {
-  static Future<List<int>?> mandaIdList(
-    BuildContext context,
-  ) async {
+/*class MandalartInfoService {
+  static Future<bool> mandalartInfo(context, {required int mandalartId}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
     print('저장된 토큰: $token');
@@ -656,10 +654,10 @@ class MandaIdListService {
         backgroundColor: Colors.red,
         textColor: Colors.white,
       );
-      return null;
+      return false;
     }
 
-    final url = Uri.parse('$baseUrl/api/mandalart');
+    final url = Uri.parse('$baseUrl/api/mandalart/all/$mandalartId');
 
     try {
       final response = await http.get(
@@ -671,26 +669,35 @@ class MandaIdListService {
       );
 
       print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
+      print('서버 응답 본문: ${jsonDecode(utf8.decode(response.bodyBytes))}');
 
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonResponse =
-            json.decode(utf8.decode(response.bodyBytes));
-
-        List<int> idList =
-            jsonResponse.map((item) => item['id'] as int).toList();
-        print('idList: $idList');
-        return idList;
-      } else {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
+          msg: '조회 성공',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+        return true;
+      } else if (response.statusCode >= 400) {
+        Fluttertoast.showToast(
+          msg: '조회 실패: ${response.body}',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.red,
           textColor: Colors.white,
         );
-        return null;
+      } else {
+        Fluttertoast.showToast(
+          msg: '조회 실패: ${response.body}',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
       }
+      return false;
     } catch (e) {
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
@@ -699,7 +706,7 @@ class MandaIdListService {
         backgroundColor: Colors.red,
         textColor: Colors.white,
       );
-      return null;
+      return false;
     }
   }
-}
+}*/

@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/Create/dp_create6_page.dart';
-import 'package:domino/screens/DP/dp_main.dart';
+import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:domino/widgets/DP/color_Grid23.dart';
 import 'package:domino/widgets/DP/color_Grid2.dart';
@@ -203,10 +203,9 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
 
                     // DP 메인 페이지로 이동
                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const DPMain()),
-                              );
+                      context,
+                      MaterialPageRoute(builder: (context) => const DPMain()),
+                    );
                   });
                 }, Icons.keyboard_arrow_left_rounded, currentWidth)
                     .customIconButton(),
@@ -218,7 +217,8 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                     Container(
                       decoration: BoxDecoration(
                         color: const Color(0xff515151), // 첫 번째 색상
-                        borderRadius: BorderRadius.circular(currentWidth < 600 ? 2 : 3),
+                        borderRadius:
+                            BorderRadius.circular(currentWidth < 600 ? 2 : 3),
                       ),
                       width: currentWidth < 600 ? 7 : 11,
                       height: currentWidth < 600 ? 7 : 11,
@@ -229,7 +229,8 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                     Container(
                       decoration: BoxDecoration(
                         color: const Color(0xffD9D9D9), // 첫 번째 색상
-                        borderRadius: BorderRadius.circular(currentWidth < 600 ? 2 : 3),
+                        borderRadius:
+                            BorderRadius.circular(currentWidth < 600 ? 2 : 3),
                       ),
                       width: currentWidth < 600 ? 7 : 11,
                       height: currentWidth < 600 ? 7 : 11,
@@ -240,7 +241,8 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                     Container(
                       decoration: BoxDecoration(
                         color: const Color(0xff515151), // 첫 번째 색상
-                        borderRadius: BorderRadius.circular(currentWidth < 600 ? 2 : 3),
+                        borderRadius:
+                            BorderRadius.circular(currentWidth < 600 ? 2 : 3),
                       ),
                       width: currentWidth < 600 ? 7 : 11,
                       height: currentWidth < 600 ? 7 : 11,
@@ -262,13 +264,12 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: currentWidth < 600 ? 15 : 20),
-                    DPGuideText('나만의 스타일로 만다라트를 꾸며요.', currentWidth)
-                        .dPGuideText(),
-                    SizedBox(height: currentWidth < 600 ? 14 : 20),
-                        
+                        DPGuideText('나만의 스타일로 만다라트를 꾸며요.', currentWidth)
+                            .dPGuideText(),
+                        SizedBox(height: currentWidth < 600 ? 14 : 20),
                         Center(
                           child: Container(
-                            width: currentHeight*0.4,
+                            width: currentHeight * 0.4,
                             padding: const EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
                             decoration: BoxDecoration(
@@ -277,8 +278,7 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                             ),
                             child: GridView(
                               shrinkWrap: true, // GridView를 자식으로 설정
-                              physics:
-                                  const NeverScrollableScrollPhysics(), 
+                              physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
@@ -388,9 +388,10 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                               width: currentWidth < 600 ? 400 : 410,
                               child: GridView(
                                 gridDelegate:
-                                     SliverGridDelegateWithFixedCrossAxisCount(
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 6,
-                                  crossAxisSpacing: currentWidth < 600 ? 20 : 23,
+                                  crossAxisSpacing:
+                                      currentWidth < 600 ? 20 : 23,
                                   mainAxisSpacing: currentWidth < 600 ? 20 : 23,
                                 ),
                                 children: List.generate(colors.length, (index) {
@@ -413,7 +414,7 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                                           ),
                                         ),
                                         if (selectColorIndex == index + 1)
-                                           Icon(
+                                          Icon(
                                             Icons.check_circle_rounded,
                                             color: const Color(0xff303030),
                                             size: currentWidth < 600 ? 20 : 22,
@@ -432,57 +433,54 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      NewButton(Colors.black, Colors.white, '이전',
-                        () {
-                          Navigator.pop(context);
-                        }, currentWidth 
-                      ).newButton(),
-                      NewButton(Colors.black, Colors.white, '완료',
-                        () async {
-                          // Execute _addSecondGoal and wait for the result
-                          final secondGoalSuccess = await _addSecondGoal();
+                      NewButton(Colors.black, Colors.white, '이전', () {
+                        Navigator.pop(context);
+                      }, currentWidth)
+                          .newButton(),
+                      NewButton(Colors.black, Colors.white, '완료', () async {
+                        // Execute _addSecondGoal and wait for the result
+                        final secondGoalSuccess = await _addSecondGoal();
 
-                          // If _addSecondGoal was successful, update the created goals and proceed to _addThirdGoal
-                          if (secondGoalSuccess) {
-                            // Update the created goal using provider
-                            context
-                                .read<SaveMandalartCreatedGoal>()
-                                .updateMandalartCreatedGoal(
-                                    "${widget.mainGoalId}");
+                        // If _addSecondGoal was successful, update the created goals and proceed to _addThirdGoal
+                        if (secondGoalSuccess) {
+                          // Update the created goal using provider
+                          context
+                              .read<SaveMandalartCreatedGoal>()
+                              .updateMandalartCreatedGoal(
+                                  "${widget.mainGoalId}");
 
-                            // Ensure that the update is completed before moving to next goal
-                            final thirdGoalSuccess = await _addThirdGoal();
+                          // Ensure that the update is completed before moving to next goal
+                          final thirdGoalSuccess = await _addThirdGoal();
 
-                            // If both goals are added successfully, navigate to DPMain
-                            if (thirdGoalSuccess) {
-                              for (int i = 0; i < 9; i++) {
-                                context
-                                    .read<SaveInputtedDetailGoalModel>()
-                                    .updateDetailGoal(i.toString(), "");
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                context.read<GoalColor>().updateGoalColor(
-                                    i.toString(), const Color(0xff929292));
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                for (int j = 0; j < 9; j++) {
-                                  context
-                                      .read<SaveInputtedActionPlanModel>()
-                                      .updateActionPlan(i, j.toString(), "");
-                                }
-                              }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const CompletePage()),
-                              );
+                          // If both goals are added successfully, navigate to DPMain
+                          if (thirdGoalSuccess) {
+                            for (int i = 0; i < 9; i++) {
+                              context
+                                  .read<SaveInputtedDetailGoalModel>()
+                                  .updateDetailGoal(i.toString(), "");
                             }
+
+                            for (int i = 0; i < 9; i++) {
+                              context.read<GoalColor>().updateGoalColor(
+                                  i.toString(), const Color(0xff929292));
+                            }
+
+                            for (int i = 0; i < 9; i++) {
+                              for (int j = 0; j < 9; j++) {
+                                context
+                                    .read<SaveInputtedActionPlanModel>()
+                                    .updateActionPlan(i, j.toString(), "");
+                              }
+                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CompletePage()),
+                            );
                           }
-                        }, currentWidth
-                        
-                      ).newButton(),
+                        }
+                      }, currentWidth)
+                          .newButton(),
                     ]),
               ],
             )));

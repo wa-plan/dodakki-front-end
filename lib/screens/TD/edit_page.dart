@@ -1,7 +1,7 @@
 import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:domino/apis/services/td_services.dart';
-import 'package:domino/screens/TD/td_main.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
 //import 'package:domino/widgets/DP/mandalart2.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/widgets/TD/edit_calendar.dart';
@@ -313,8 +313,7 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
   void deleteTodayDomino(int goalId, String goalDate) async {
     final success = await DeleteTodayDominoService.deleteTodayDomino(
         goalId: goalId, goalDate: goalDate);
-    print('goalId=$goalId');
-    print('goalDate=$goalDate');
+
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
       ScaffoldMessenger.of(context).showSnackBar(

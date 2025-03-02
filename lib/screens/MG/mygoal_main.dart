@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/apis/services/td_services.dart';
 import 'package:domino/provider/DP/model.dart';
@@ -11,7 +9,6 @@ import 'package:domino/screens/MG/mygoal_profile_edit.dart';
 import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/screens/MG/mygoal_goal_add.dart';
 import 'package:provider/provider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:domino/widgets/MG/cheering_message.dart';
 
 class MyGoal extends StatefulWidget {
@@ -25,9 +22,7 @@ class _MyGoalState extends State<MyGoal> {
   final String message = "";
   String nickname = '';
   String description = '';
-  String? profile;
-  String selectedImage = "";
-  String defaultImage = 'assets/img/profile_smp4.png'; // 기본 이미지 경로
+  String selectedImage = "assets/img/profile_smp4.png";
 
   late PageController _pageController; // PageController 추가
   int successNum = 0;
@@ -52,8 +47,6 @@ class _MyGoalState extends State<MyGoal> {
       setState(() {
         nickname = data['nickname'] ?? '당신은 어떤 사람인가요?';
         description = data['description'] ?? '프로필 편집을 통해 \n자신을 표현해주세요.';
-
-        profile = data['profile'] ?? defaultImage;
       });
     }
   }
@@ -88,6 +81,9 @@ class _MyGoalState extends State<MyGoal> {
         failedIDs.sort((a, b) {
           return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
         });
+        /*inProgressIDs.sort((a, b) {
+          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+        });*/
 
         inProgressIDs.sort((a, b) {
           // BOOKMARK 상태 확인
@@ -203,30 +199,12 @@ class _MyGoalState extends State<MyGoal> {
     }
   }
 
-  ImageProvider _getImageProvider(String? imagePath) {
-    if (imagePath == null || imagePath.isEmpty) {
-      return AssetImage(defaultImage);
-    }
-
-    if (imagePath.startsWith('http')) {
-      // 서버에서 받은 URL이면 NetworkImage로 처리
-      return NetworkImage(imagePath);
-    } else if (imagePath.startsWith('file://')) {
-      // 로컬 파일이면 FileImage로 변환
-      return FileImage(File(imagePath.replaceFirst('file://', '')));
-    } else {
-      // assets 폴더에 있는 경우 AssetImage로 처리
-      return AssetImage(imagePath);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     userInfo();
     userMandaIdInfo();
-    print('profile: $profile');
   }
 
   @override
@@ -238,7 +216,6 @@ class _MyGoalState extends State<MyGoal> {
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -249,11 +226,7 @@ class _MyGoalState extends State<MyGoal> {
           padding: appBarPadding,
           child: Text(
             '나의 목표',
-            //style: Theme.of(context).textTheme.titleLarge,
-            style: TextStyle(
-                fontSize: currentWidth < 600 ? 20 : 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         backgroundColor: backgroundColor,
@@ -273,8 +246,8 @@ class _MyGoalState extends State<MyGoal> {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(5),
-                        width: 80, // CircleAvatar의 전체 크기
-                        height: 80,
+                        width: 95 / 1.2, // CircleAvatar의 전체 크기
+                        height: 95 / 1.2,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
@@ -283,76 +256,52 @@ class _MyGoalState extends State<MyGoal> {
                           ),
                         ),
                         child: Container(
-                          width: 80,
-                          height: 80,
+                          width: 95,
+                          height: 95,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: _getImageProvider(profile),
+                              image: AssetImage(selectedImage),
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(width: currentWidth < 600 ? 12 : 14),
+                      const SizedBox(width: 20),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(nickname,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 12 : 14,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w500)),
                           const SizedBox(height: 11),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5.0, vertical: 5.0),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff303030),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              description,
-                              style: TextStyle(
-                                  height: 1.5,
-                                  color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 10 : 12,
-                                  fontWeight: FontWeight.w200),
-                            ),
+                          Text(
+                            description,
+                            style: const TextStyle(
+                                height: 1.5,
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w200),
                           ),
                         ],
                       ),
                     ],
                   ),
                   const Spacer(),
-                  Container(
-                    width: 33,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff303030),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                          color: const Color(0xff575757), width: 0.5), // 테두리 색상
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileEdit(
-                                selectedImage: "",
-                                profileImage: profile ?? defaultImage,
-                                cameraImage: ""),
-                          ),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.edit,
-                        color: Color.fromARGB(255, 106, 106, 106),
-                        size: 15,
+                  //프로필 편집 버튼
+                  CustomIconButton(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileEdit(
+                          selectedImage: selectedImage,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }, Icons.edit, currentWidth)
+                      .customIconButton(),
                 ],
               ),
               const SizedBox(height: 10),
@@ -391,125 +340,94 @@ class _MyGoalState extends State<MyGoal> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: currentWidth < 600 ? 30 : 35,
-              ),
+              const SizedBox(height: 30),
               Column(
                 children: [
-                  if (inProgressIDs.isEmpty)
-                    Container(
-                      height: currentWidth < 600 ? 200 : 220, // 높이 조정 가능
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff2A2A2A),
-                        borderRadius: BorderRadius.circular(20), // 모서리 둥글게
-                      ),
-                      child: Text(
-                        "새로운 목표를 세워볼까요?",
-                        style: TextStyle(
-                          fontSize: currentWidth < 600 ? 14 : 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xffAAAAAA),
-                        ),
-                      ),
-                    )
-                  else ...[
-                    SizedBox(
-                      height: currentWidth < 600
-                          ? currentWidth * 0.6
-                          : currentWidth * 0.4,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: inProgressIDs.length,
-                        itemBuilder: (context, index) {
-                          String mandalartId =
-                              inProgressIDs[index]['id'] ?? ''; // id 값
-
-                          String name =
-                              inProgressIDs[index]['name'] ?? ''; // name 값
-
-                          String status = statusList.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () =>
-                                    {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['status'] ??
-                              '';
-
-                          String dday = ddayList.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () =>
-                                    {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['dday'] ??
-                              '0';
-
-                          String color = colorList.firstWhere(
-                                (element) =>
-                                    element['id'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'color': '0xff000000'
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['color'] ??
-                              '0xff000000';
-
-                          int successNum = successNums.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'successNum': 0
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['successNum'] ??
-                              0;
-
-                          List<String> photoList = (photos[mandalartId] ?? [])
-                              .map<String>((photo) => photo['path'].toString())
-                              .toList();
-
-                          String bookmark = bookmarks.firstWhere(
-                                (element) =>
-                                    element['id'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'bookmark': 'UNBOOKMARK'
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['bookmark'] ??
-                              'UNBOOKMARK';
-
-                          print('$mandalartId $name의 북마크 상태는 $bookmark입니다');
-
-                          return GoalCard(
-                            mandalartId: mandalartId,
-                            name: name,
-                            status: status,
-                            photoList: photoList,
-                            dday: dday,
-                            color: color,
-                            successNum: successNum,
-                            bookmark: bookmark,
-                            onBookmarkToggle: (id, action) {},
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 25),
-                  Center(
-                    child: SmoothPageIndicator(
+                  SizedBox(
+                    height: 175,
+                    child: PageView.builder(
                       controller: _pageController,
-                      count: inProgressIDs.length,
-                      effect: const ColorTransitionEffect(
-                        dotHeight: 7.0,
-                        dotWidth: 7.0,
-                        activeDotColor: Color(0xffFF6767),
-                        dotColor: Color.fromARGB(255, 61, 61, 61),
-                      ),
+                      itemCount: inProgressIDs.length,
+                      itemBuilder: (context, index) {
+                        String mandalartId =
+                            inProgressIDs[index]['id'] ?? ''; // id 값
+
+                        String name =
+                            inProgressIDs[index]['name'] ?? ''; // name 값
+
+                        String status = statusList.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['status'] ??
+                            '';
+
+                        String dday = ddayList.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['dday'] ??
+                            '0';
+
+                        String color = colorList.firstWhere(
+                              (element) =>
+                                  element['id'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () => {
+                                'color': '0xff000000'
+                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['color'] ??
+                            '0xff000000';
+
+                        int successNum = successNums.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'successNum': 0}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['successNum'] ??
+                            0;
+
+                        List<String> photoList = (photos[mandalartId] ?? [])
+                            .map<String>((photo) => photo['path'].toString())
+                            .toList();
+
+                        String bookmark = bookmarks.firstWhere(
+                              (element) =>
+                                  element['id'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () => {
+                                'bookmark': 'UNBOOKMARK'
+                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['bookmark'] ??
+                            'UNBOOKMARK';
+
+                        print('$mandalartId $name의 북마크 상태는 $bookmark입니다');
+
+                        return GoalCard(
+                          mandalartId: mandalartId,
+                          name: name,
+                          status: status,
+                          photoList: photoList,
+                          dday: dday,
+                          color: color,
+                          successNum: successNum,
+                          bookmark: bookmark,
+                          onBookmarkToggle: (id, action) {},
+                        );
+                      },
                     ),
                   ),
+                  const SizedBox(height: 25),
+                  if (inProgressIDs.length != 1 && inProgressIDs.isNotEmpty)
+                    Center(
+                      child: PageIndicator(_pageController, inProgressIDs)
+                          .pageIndicator(),
+                    ),
                 ],
               ),
               const SizedBox(height: 35),
