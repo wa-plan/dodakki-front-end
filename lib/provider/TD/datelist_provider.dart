@@ -66,6 +66,8 @@ class DateListProvider extends ChangeNotifier {
 
   void setInterval(bool switchValue, DateTime date) {
     _interval = 0;
+    _dateList.clear();
+
     if (switchValue) {
       // Add null check here
       if (_everyDay) {
@@ -78,26 +80,10 @@ class DateListProvider extends ChangeNotifier {
         _interval = 14;
       }
       if (_everyMonth) {
-        // 현재 선택된 날짜의 월과 일(day)을 기억
-        int currentMonth = date.month;
-        int currentDay = date.day;
-
-        // 다음 달로 이동
-        int nextMonth = currentMonth + 1;
-        int nextYear = date.year;
-
-        if (nextMonth > 12) {
-          nextMonth = 1;
-          nextYear++;
-        }
-
-        // 다음 달의 같은 일로 설정
-        _interval =
-            DateTime(nextYear, nextMonth, currentDay).difference(date).inDays;
+        _interval = 30;
       }
       _generateDateList(date);
     } else {
-      _dateList.clear();
       _dateList.add(date);
     }
 
@@ -107,11 +93,40 @@ class DateListProvider extends ChangeNotifier {
   void _generateDateList(DateTime startDate) {
     _dateList.clear();
     DateTime currentDate = startDate;
+    DateTime endDate = startDate.add(const Duration(days: 365)); // 1년 후까지 반복
 
-    while (currentDate.isBefore(startDate.add(const Duration(days: 365)))) {
-      _dateList.add(currentDate);
-      currentDate = currentDate.add(Duration(days: _interval));
+    while (currentDate.isBefore(endDate) ||
+        currentDate.isAtSameMomentAs(endDate)) {
+      _dateList.add(currentDate); // 🔹 날짜 추가
+
+      if (_everyDay) {
+        currentDate = currentDate.add(const Duration(days: 1));
+      } else if (_everyWeek) {
+        currentDate = currentDate.add(const Duration(days: 7));
+      } else if (_everyTwoWeek) {
+        currentDate = currentDate.add(const Duration(days: 14));
+      } else if (_everyMonth) {
+        // 🔹 다음 달의 같은 날짜로 설정
+        int nextMonth = currentDate.month + 1;
+        int nextYear = currentDate.year;
+
+        // 연도 변경 처리 (12월 → 1월)
+        if (nextMonth > 12) {
+          nextMonth = 1;
+          nextYear++;
+        }
+
+        // 🔹 현재 날짜의 day가 다음 달에 없는 경우, 마지막 날짜로 설정
+        int lastDayOfNextMonth = DateTime(nextYear, nextMonth + 1, 0).day;
+        int newDay = currentDate.day > lastDayOfNextMonth
+            ? lastDayOfNextMonth
+            : currentDate.day;
+
+        // 새로운 날짜 설정
+        currentDate = DateTime(nextYear, nextMonth, newDay);
+      }
     }
+
     notifyListeners();
   }
 

@@ -51,7 +51,7 @@ class _AccountManagementState extends State<AccountManagement> {
               Text(
                 '내 계정',
                 style: TextStyle(
-                    fontSize: currentWidth < 600 ? 18 : 22,
+                    fontSize: currentWidth < 600 ? 20 : 24,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),

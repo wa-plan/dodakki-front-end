@@ -60,6 +60,8 @@ class PopupDialog extends StatelessWidget {
       );
     }
 
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: const EdgeInsets.all(0),
@@ -69,23 +71,24 @@ class PopupDialog extends StatelessWidget {
         decoration: const BoxDecoration(
             color: Color.fromARGB(255, 26, 26, 26),
             borderRadius: BorderRadius.all(Radius.circular(5))),
-        height: 170,
-        width: 400,
+        height: currentWidth < 600 ? 155 : 220,
+        width: currentWidth < 600 ? 260 : 400,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Image.asset('assets/img/Dominho2.png', width: 90, height: 120),
-            const SizedBox(width: 30),
+            Image.asset('assets/img/Dominho2.png',
+                width: currentWidth < 600 ? 50 : 110),
+            SizedBox(width: currentWidth < 600 ? 11 : 50),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     content,
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: currentWidth < 600 ? 14 : 20,
                         fontWeight: FontWeight.w500,
                         height: 1.7),
                   ),
@@ -93,12 +96,11 @@ class PopupDialog extends StatelessWidget {
                     height: 25,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (cancel)
                         Button(Colors.black, Colors.white, '취소',
                             () => Navigator.of(context).pop()).button(),
-
-                      const Spacer(), // Pushes the buttons to the end
                       ...buttons,
                     ],
                   ),

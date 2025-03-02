@@ -117,6 +117,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     dday = widget.dday;
     status = widget.status;
     photoList = widget.photoList;
+    print('color: $color');
 
     userMandaInfo(mandalartId);
 
@@ -135,10 +136,10 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size.width; // 한 번만 가져오기
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -147,7 +148,6 @@ class MyGoalDetailState extends State<MyGoalDetail> {
           titleSpacing: 0.0,
           title: Padding(
             padding: appBarPadding,
-
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -196,6 +196,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                     ),
                     child: GestureDetector(
                       onTap: () {
+                        print('widget.color: ${widget.color}');
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -207,9 +208,9 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                     color: color,
                                     goalImage: goalImage)));
                       },
-
                       child: const Icon(
                         Icons.edit,
+                        size: 18,
                         color: Color(0xff646464),
                       ),
                     ),
@@ -226,7 +227,6 @@ class MyGoalDetailState extends State<MyGoalDetail> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-
               Center(
                 child: Text(
                   name,
@@ -249,8 +249,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                         child: Image.asset(
                           'assets/img/if_no_img.png', // 로컬 기본 이미지
                           fit: BoxFit.cover,
-                          width: 400,
-                          height: 100,
+                          //width: 400,
+                          //height: 100,
                         ),
                       )
                     ] else ...[
@@ -334,14 +334,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               const SizedBox(
                 height: 15,
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
                     padding: const EdgeInsets.fromLTRB(14, 5, 14, 5),
-                    height: 33,
-                    width: 106,
+                    height: currentWidth < 600 ? 33 : 50,
+                    width: currentWidth < 600 ? 106 : 135,
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: const Color(0xff575757), width: 0.5),
@@ -362,9 +361,9 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                             ),
                           )
                           .toList(),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: Colors.white,
-                          fontSize: 13,
+                          fontSize: currentWidth < 600 ? 13 : 18,
                           fontWeight: FontWeight.w500),
                       onChanged: (value) {
                         setState(() {
@@ -393,7 +392,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const EventPage(),
+                                    builder: (context) =>
+                                        EventPage(domino: successNum),
                                   ),
                                 );
                               },
@@ -491,14 +491,14 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                         ),
                       ),
                       const SizedBox(
-                        height: 120,
+                        height: 125,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: size * 0.4,
-                            height: 130,
+                            width: currentWidth < 600 ? 130 : 270,
+                            height: currentWidth < 600 ? 130 : 200,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 15.0, vertical: 7.0),
                             decoration: BoxDecoration(
@@ -515,22 +515,26 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                       Icon(
                                         Icons.circle_outlined,
                                         color: Color(widget.colorValue),
-                                        size: 20,
+                                        size: currentWidth < 600 ? 20 : 24,
                                       ),
-                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                          width: currentWidth < 600 ? 10 : 18),
                                       Text(
                                         '$successRate%',
                                         style: TextStyle(
                                             color: Color(widget.colorValue),
-                                            fontSize: 16,
+                                            fontSize:
+                                                currentWidth < 600 ? 16 : 24,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                          width: currentWidth < 600 ? 10 : 18),
                                       Text(
                                         '$successNum개',
                                         style: TextStyle(
                                             color: Color(widget.colorValue),
-                                            fontSize: 16,
+                                            fontSize:
+                                                currentWidth < 600 ? 16 : 24,
                                             fontWeight: FontWeight.w600),
                                       ),
                                     ],
@@ -539,25 +543,29 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.change_history_outlined,
                                         color: Colors.white,
-                                        size: 20,
+                                        size: currentWidth < 600 ? 20 : 24,
                                       ),
-                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                          width: currentWidth < 600 ? 10 : 18),
                                       Text(
                                         '$inProgressRate%',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 16,
+                                            fontSize:
+                                                currentWidth < 600 ? 16 : 24,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                          width: currentWidth < 600 ? 10 : 18),
                                       Text(
                                         '$inProgressNum개',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 16,
+                                            fontSize:
+                                                currentWidth < 600 ? 16 : 24,
                                             fontWeight: FontWeight.w600),
                                       ),
                                     ],
@@ -566,62 +574,63 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.clear_outlined,
-                                        color: Color(0xff626161),
-                                        size: 20,
+                                        color: const Color(0xff626161),
+                                        size: currentWidth < 600 ? 20 : 24,
                                       ),
-                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                          width: currentWidth < 600 ? 10 : 18),
                                       Text(
                                         '${failedRate == 100 ? 0 : failedRate}%',
-                                        style: const TextStyle(
-                                            color: Color(0xff626161),
-                                            fontSize: 16,
+                                        style: TextStyle(
+                                            color: const Color(0xff626161),
+                                            fontSize:
+                                                currentWidth < 600 ? 16 : 24,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                          width: currentWidth < 600 ? 10 : 18),
                                       Text(
                                         '$failedNum개',
-                                        style: const TextStyle(
-                                            color: Color(0xff626161),
-                                            fontSize: 16,
+                                        style: TextStyle(
+                                            color: const Color(0xff626161),
+                                            fontSize:
+                                                currentWidth < 600 ? 16 : 24,
                                             fontWeight: FontWeight.w600),
                                       ),
                                     ],
                                   ),
                                 ]),
                           ),
-                          SizedBox(width: size * 0.05),
+                          SizedBox(width: currentWidth < 600 ? 10 : 30),
                           Container(
-                            width: size * 0.4,
-                            height: 130,
+                            width: currentWidth < 600 ? 130 : 270,
+                            height: currentWidth < 600 ? 130 : 200,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 15.0, vertical: 7.0),
                             decoration: BoxDecoration(
                               color: const Color(0xff303030),
-
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         '나의 도미노',
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 16,
+                                            fontSize:
+                                                currentWidth < 600 ? 14 : 20,
                                             fontWeight: FontWeight.w500),
                                       ),
-
                                     ),
                                     GestureDetector(
                                       onTap: () {
@@ -639,21 +648,21 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                     ),
                                   ],
                                 ),
-
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
                                       Image.asset(
                                         'assets/img/domino.png',
-                                        width: 25,
+                                        width: currentWidth < 600 ? 25 : 40,
                                       ),
                                       const SizedBox(width: 5),
-                                      const Text(
+                                      Text(
                                         'x',
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 20,
+                                            fontSize:
+                                                currentWidth < 600 ? 20 : 26,
                                             fontWeight: FontWeight.w500),
                                       ),
                                       const SizedBox(width: 5),
@@ -661,12 +670,12 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                         '$successNum',
                                         style: TextStyle(
                                             color: Color(widget.colorValue),
-                                            fontSize: 24,
+                                            fontSize:
+                                                currentWidth < 600 ? 18 : 24,
                                             fontWeight: FontWeight.w600),
                                       ),
                                     ],
                                   ),
-
                                 ),
                               ],
                             ),

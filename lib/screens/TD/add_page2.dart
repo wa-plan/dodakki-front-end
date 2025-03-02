@@ -30,13 +30,11 @@ class AddPage2State extends State<AddPage2> {
   late TextEditingController dominoController; // 'late'로 나중에 초기화될 것을 명시
   bool switchValue = false;
 
-
   String dominoValue = '';
   String repeatInfo = '';
 
   RepeatSettingsState repeatSettings =
       RepeatSettingsState(); // RepeatSettingsState 인스턴스 생성
-
 
   @override
   void dispose() {
@@ -61,45 +59,6 @@ class AddPage2State extends State<AddPage2> {
         ),
       );
     }
-  }
-
-  // 텍스트폼필드 함수
-  Widget renderTextFormField({
-    required FormFieldSetter onSaved,
-    required FormFieldValidator validator,
-  }) {
-    return SizedBox(
-      height: 45,
-      child: TextFormField(
-        onSaved: onSaved,
-        validator: validator,
-        controller: dominoController,
-        style: const TextStyle(fontSize: 16, color: Colors.white),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(10.0),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(3),
-              borderSide:
-                  const BorderSide(color: Color(0xffBFBFBF), width: 0.5)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(3),
-              borderSide:
-                  const BorderSide(color: Color(0xffBFBFBF), width: 0.5)),
-          suffixIcon: dominoController.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    dominoController.clear();
-                  },
-                  icon: const Icon(
-                    Icons.clear_outlined,
-                    color: Color(0xffBFBFBF),
-                    size: 17,
-                  ),
-                )
-              : null,
-        ),
-      ),
-    );
   }
 
   @override
@@ -158,19 +117,18 @@ class AddPage2State extends State<AddPage2> {
                       const SizedBox(height: 13),
                       Form(
                         key: formKey,
-                        child: renderTextFormField(
-                          onSaved: (value) {
-                            setState(() {
-                              dominoValue = value!;
-                            });
-                          },
-                          validator: (value) {
-                            if (value!.length < 1) {
+                        child: CustomTextField(
+                          "",
+                          dominoController,
+                          (value) {
+                            if (value == null || value.isEmpty) {
                               return '한 글자 이상 써주세요';
                             }
                             return null;
                           },
-                        ),
+                          false,
+                          1,
+                        ).textField(),
                       ),
                       const SizedBox(height: 28),
                       const Text(
@@ -226,65 +184,62 @@ class AddPage2State extends State<AddPage2> {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xff131313),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                  ),
-                  child: const Text(
-                    '이전',
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xff131313),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-
-                      DateTime? pickedDate =
-                          context.read<DateProvider>().pickedDate;
-
-                      if (pickedDate == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('날짜를 선택해 주세요.')),
-                        );
-                      } else {
-                        context
-                            .read<DateListProvider>()
-                            .setInterval(switchValue, pickedDate);
-                        List<DateTime> dateList =
-                            context.read<DateListProvider>().dateList;
-                        repeatInfo =
-                            context.read<DateListProvider>().repeatInfo();
-                        print('repeatInfo=$repeatInfo');
-                        addDomino(widget.thirdGoalId, dominoController.text,
-                            dateList, repeatInfo);
-                            context.read<SelectAPModel>().selectAP("", null);
-                      }
-                      context.read<SelectAPModel>().selectAP("플랜선택없음", null);
-                    }
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                  ),
-                  child: const Text(
-                    '완료',
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                  ),
-                
+                child: const Text(
+                  '이전',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
               ),
-           ] ),
+              TextButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+
+                    DateTime? pickedDate =
+                        context.read<DateProvider>().pickedDate;
+
+                    if (pickedDate == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('날짜를 선택해 주세요.')),
+                      );
+                    } else {
+                      context
+                          .read<DateListProvider>()
+                          .setInterval(switchValue, pickedDate);
+                      List<DateTime> dateList =
+                          context.read<DateListProvider>().dateList;
+                      repeatInfo =
+                          context.read<DateListProvider>().repeatInfo();
+                      print('repeatInfo=$repeatInfo');
+                      addDomino(widget.thirdGoalId, dominoController.text,
+                          dateList, repeatInfo);
+                      context.read<SelectAPModel>().selectAP("", null);
+                    }
+                    context.read<SelectAPModel>().selectAP("플랜선택없음", null);
+                  }
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                ),
+                child: const Text(
+                  '완료',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+              ),
+            ]),
           ],
         ),
       ),

@@ -33,7 +33,7 @@ class _ContactUsState extends State<ContactUs> {
                 Text(
                   '문의하기',
                   style: TextStyle(
-                      fontSize: currentWidth < 600 ? 18 : 22,
+                      fontSize: currentWidth < 600 ? 20 : 24,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),

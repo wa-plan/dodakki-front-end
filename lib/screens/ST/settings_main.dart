@@ -109,7 +109,7 @@ class _SettingsMainState extends State<SettingsMain> {
           child: Text(
             '설정',
             style: TextStyle(
-                fontSize: currentWidth < 600 ? 18 : 22,
+                fontSize: currentWidth < 600 ? 20 : 24,
                 color: Colors.white,
                 fontWeight: FontWeight.bold),
           ),

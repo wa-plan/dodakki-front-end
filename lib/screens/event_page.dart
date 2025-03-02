@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class EventPage extends StatefulWidget {
-  const EventPage({super.key});
+  final int domino;
+  const EventPage({super.key, required this.domino});
 
   @override
   State<EventPage> createState() => _EventPageState();
 }
 
 class _EventPageState extends State<EventPage> {
-  String domino = "30"; //도미노 개수 api 가져오기
   String goal = "환상적인 세계여행"; //제1목표 title api 가져오기
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -72,7 +72,7 @@ class _EventPageState extends State<EventPage> {
                             ),
                           ),
                           TextSpan(
-                            text: domino,
+                            text: widget.domino.toString(),
                             style: const TextStyle(
                               height: 2,
                               color: Color(0xffFF7575),

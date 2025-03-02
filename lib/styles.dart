@@ -705,22 +705,27 @@ class ColorOption2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: colorCode,
-          borderRadius: BorderRadius.circular(6),
+      child: Padding(
+        padding: EdgeInsets.all(currentWidth < 600 ? 5 : 10),
+        child: Container(
+          width: currentWidth < 600 ? 35 : 50,
+          height: currentWidth < 600 ? 35 : 50,
+          decoration: BoxDecoration(
+            color: colorCode,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: isSelected
+              ? const Icon(
+                  Icons.check,
+                  color: Colors.black,
+                  size: 24,
+                )
+              : null,
         ),
-        child: isSelected
-            ? const Icon(
-                Icons.check,
-                color: Colors.black,
-                size: 24,
-              )
-            : null,
       ),
     );
   }

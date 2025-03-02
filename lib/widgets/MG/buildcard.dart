@@ -1,7 +1,6 @@
 import 'package:domino/screens/MG/mygoal_goal_detail.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:domino/apis/services/mg_services.dart';
 
 class GoalCard extends StatefulWidget {
@@ -73,10 +72,10 @@ class _GoalCardState extends State<GoalCard> {
     final colorValue =
         int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', ''));
     int ddayParsed = int.parse(widget.dday);
-    double screenWidth = MediaQuery.of(context).size.width;
-    double imageSize = screenWidth * 0.14;
-    final List<Color> colors = _getColorsByCondition(Color(colorValue));
     final currentWidth = MediaQuery.of(context).size.width;
+
+    double imageSize = currentWidth < 600 ? 70 : 110;
+    final List<Color> colors = _getColorsByCondition(Color(colorValue));
 
     return GestureDetector(
       onTap: () {
@@ -100,7 +99,7 @@ class _GoalCardState extends State<GoalCard> {
         color: Colors.transparent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,7 +113,7 @@ class _GoalCardState extends State<GoalCard> {
                       child: Icon(
                         Icons.star,
                         color: starColor,
-                        size: 23,
+                        size: currentWidth < 600 ? 23 : 30,
                       ),
                     ),
                     const SizedBox(width: 5),
@@ -122,7 +121,7 @@ class _GoalCardState extends State<GoalCard> {
                       widget.name,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: currentWidth < 600 ? 14 : 16,
+                        fontSize: currentWidth < 600 ? 14 : 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -142,7 +141,7 @@ class _GoalCardState extends State<GoalCard> {
                             : 'D-$ddayParsed',
                         style: TextStyle(
                           color: const Color.fromARGB(255, 194, 194, 194),
-                          fontSize: currentWidth < 600 ? 11 : 13,
+                          fontSize: currentWidth < 600 ? 11 : 16,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -156,26 +155,29 @@ class _GoalCardState extends State<GoalCard> {
                       color: const Color(0xff303030),
                       borderRadius: BorderRadius.circular(3.0),
                     ),
-                    width: currentWidth < 600 ? 200 : 400,
-                    height: currentWidth < 600 ? 80 : 160,
-                    child: const Center(
+                    width: currentWidth < 600 ? 190 : 380,
+                    height: currentWidth < 600 ? 80 : 140,
+                    child: Center(
                       child: Text(
                         '이미지를 추가해 주세요',
-                        style: TextStyle(color: Color(0xff979797)),
+                        style: TextStyle(
+                            fontSize: currentWidth < 600 ? 12 : 18,
+                            color: const Color(0xff979797)),
                       ),
                     ),
                   )
                 else
                   SizedBox(
                     height: imageSize, // 이미지 높이 설정
-                    width: screenWidth * 0.8, // 가로 크기 제한 (화면의 80%)
+                    width: currentWidth < 600 ? 190 : 380, // 가로 크기 제한 (화면의 80%)
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal, // 가로 스크롤 가능
                       itemCount:
                           widget.photoList.length.clamp(1, 3), // 최대 3개 제한
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: currentWidth < 600 ? 5 : 10),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8), // 둥근 모서리 적용
                             child: Image.network(
@@ -188,11 +190,13 @@ class _GoalCardState extends State<GoalCard> {
                                   width: imageSize,
                                   height: imageSize,
                                   color: Colors.grey[300],
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
                                       '이미지 로드 실패',
                                       style: TextStyle(
-                                          color: Colors.red, fontSize: 12),
+                                          color: Colors.red,
+                                          fontSize:
+                                              currentWidth < 600 ? 12 : 18),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -206,9 +210,9 @@ class _GoalCardState extends State<GoalCard> {
                   ),
                 const SizedBox(height: 10),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(width: 16),
+                    SizedBox(width: currentWidth < 600 ? 16 : 30),
                     Column(
                       children: [
                         Text(
@@ -216,19 +220,19 @@ class _GoalCardState extends State<GoalCard> {
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: currentWidth < 600 ? 12 : 16),
+                              fontSize: currentWidth < 600 ? 12 : 20),
                         ),
                         Text(
                           '${widget.successNum}개',
                           style: TextStyle(
                             color: const Color(0xffFCFF62),
                             fontWeight: FontWeight.w600,
-                            fontSize: currentWidth < 600 ? 16 : 20,
+                            fontSize: currentWidth < 600 ? 16 : 24,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(width: currentWidth < 600 ? 5 : 20),
+                    SizedBox(width: currentWidth < 600 ? 10 : 90),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -237,7 +241,7 @@ class _GoalCardState extends State<GoalCard> {
                           radius: currentWidth < 600 ? 6 : 10,
                         ),
                         SizedBox(
-                          width: currentWidth < 600 ? 18 : 22,
+                          width: currentWidth < 600 ? 14 : 25,
                         ),
                         // 첫 번째 색상
                         Container(
@@ -245,12 +249,12 @@ class _GoalCardState extends State<GoalCard> {
                             color: colors[0], // 첫 번째 색상
                             borderRadius: BorderRadius.circular(2.0),
                           ),
-                          width: currentWidth < 600 ? 13 : 17, //13
+                          width: currentWidth < 600 ? 13 : 19, //13
                           height:
                               currentWidth < 600 ? 6 : 12, // 첫 번째 높이 (6.0으로 고정)
                         ),
                         SizedBox(
-                          width: currentWidth < 600 ? 18 : 22,
+                          width: currentWidth < 600 ? 14 : 25,
                         ),
                         // 두 번째 색상
                         Container(
@@ -260,11 +264,11 @@ class _GoalCardState extends State<GoalCard> {
                                 : Colors.transparent, // 두 번째 색상
                             borderRadius: BorderRadius.circular(2.0),
                           ),
-                          width: currentWidth < 600 ? 13 : 17,
+                          width: currentWidth < 600 ? 13 : 19,
                           height: currentWidth < 600 ? 16 : 22, //16
                         ),
-                        const SizedBox(
-                          width: 18,
+                        SizedBox(
+                          width: currentWidth < 600 ? 14 : 25,
                         ),
                         // 세 번째 색상
                         Container(
@@ -274,13 +278,13 @@ class _GoalCardState extends State<GoalCard> {
                                 : Colors.transparent, // 세 번째 색상
                             borderRadius: BorderRadius.circular(2.0),
                           ),
-                          width: currentWidth < 600 ? 13 : 17,
+                          width: currentWidth < 600 ? 13 : 19,
                           height: currentWidth < 600
                               ? 26
                               : 36, // 세 번째 높이 (예: 20 추가)
                         ),
-                        const SizedBox(
-                          width: 18,
+                        SizedBox(
+                          width: currentWidth < 600 ? 14 : 25,
                         ),
                         // 네 번째 색상
                         Container(
@@ -290,7 +294,7 @@ class _GoalCardState extends State<GoalCard> {
                                 : Colors.transparent, // 네 번째 색상
                             borderRadius: BorderRadius.circular(2.0),
                           ),
-                          width: currentWidth < 600 ? 13 : 17,
+                          width: currentWidth < 600 ? 13 : 19,
                           height: currentWidth < 600
                               ? 36
                               : 46, // 네 번째 높이 (예: 30 추가)
@@ -301,14 +305,14 @@ class _GoalCardState extends State<GoalCard> {
                 ),
               ],
             ),
-            const SizedBox(width: 15),
+            SizedBox(width: currentWidth < 600 ? 15 : 30),
             Container(
               decoration: BoxDecoration(
                 color: Color(colorValue),
                 borderRadius: BorderRadius.circular(2.0),
               ),
-              width: 13,
-              height: 172,
+              width: currentWidth < 600 ? 13 : 19,
+              height: currentWidth < 600 ? 160 : 250,
             ),
           ],
         ),
