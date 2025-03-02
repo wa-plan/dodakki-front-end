@@ -67,7 +67,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               Text(
                 '비밀번호 변경',
                 style: TextStyle(
-                    fontSize: currentWidth < 600 ? 18 : 22,
+                    fontSize: currentWidth < 600 ? 20 : 24,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),

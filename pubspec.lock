@@ -81,6 +81,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.0"
+<<<<<<< HEAD
   cross_file:
     dependency: transitive
     description:
@@ -105,6 +106,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+=======
+>>>>>>> dev
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -496,6 +499,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.15.0"
+<<<<<<< HEAD
   mime:
     dependency: transitive
     description:
@@ -504,6 +508,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+=======
+>>>>>>> dev
   nested:
     dependency: transitive
     description:
@@ -733,6 +739,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+<<<<<<< HEAD
   smooth_page_indicator:
     dependency: "direct main"
     description:
@@ -741,6 +748,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0+3"
+=======
+>>>>>>> dev
   source_span:
     dependency: transitive
     description:
@@ -797,6 +806,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.3"
+<<<<<<< HEAD
   timezone:
     dependency: "direct main"
     description:
@@ -805,6 +815,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.0"
+=======
+>>>>>>> dev
   typed_data:
     dependency: transitive
     description:
@@ -982,5 +994,10 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
+<<<<<<< HEAD
   dart: ">=3.6.0 <4.0.0"
   flutter: ">=3.27.0"
+=======
+  dart: ">=3.4.0 <4.0.0"
+  flutter: ">=3.18.0-18.0.pre.54"
+>>>>>>> dev

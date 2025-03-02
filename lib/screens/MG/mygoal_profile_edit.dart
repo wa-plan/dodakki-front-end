@@ -298,40 +298,35 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final imageSize = MediaQuery.of(context).size.width / 2;
+    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
-            padding: appBarPadding,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MyGoal(),
-                      ),
-                    );
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Color(0xffD4D4D4),
-                    size: 17,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  '프로필 편집',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
-            )),
+          padding: appBarPadding,
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                color: const Color(0xffD4D4D4),
+                iconSize: 17,
+              ),
+              Text(
+                '프로필 편집',
+                style: TextStyle(
+                    fontSize: currentWidth < 600 ? 20 : 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
         backgroundColor: backgroundColor,
       ),
       body: SingleChildScrollView(
@@ -361,8 +356,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                           children: [
                             Container(
                               padding: const EdgeInsets.all(5),
-                              width: imageSize / 1.2, // CircleAvatar의 전체 크기
-                              height: imageSize / 1.2,
+                              width: currentWidth < 600
+                                  ? 140
+                                  : 250, //imageSize / 1.2, // CircleAvatar의 전체 크기
+                              height: currentWidth < 600
+                                  ? 140
+                                  : 250, //imageSize / 1.2,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -372,7 +371,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 ),
                               ),
                               child: CircleAvatar(
-                                radius: imageSize / 2.4,
+                                radius: currentWidth < 600
+                                    ? 70
+                                    : 125, //imageSize / 2.4,
                                 backgroundImage: (() {
                                   // 값이 있는 이미지 찾기
                                   String? imageToShow = profile != ""
@@ -391,14 +392,15 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 backgroundColor: Colors.transparent,
                               ),
                             ),
-                            const Positioned(
-                                right: 20,
-                                top: 135,
+                            Positioned(
+                                right: currentWidth < 600 ? 20 : 35,
+                                top: currentWidth < 600 ? 110 : 200,
                                 child: CircleAvatar(
-                                    radius: 17,
+                                    radius: currentWidth < 600 ? 14 : 20,
                                     backgroundColor: mainRed,
                                     child: Icon(Icons.edit,
-                                        size: 20, color: backgroundColor))),
+                                        size: currentWidth < 600 ? 16 : 24,
+                                        color: backgroundColor))),
                           ],
                         ),
                       ),
@@ -420,10 +422,29 @@ class _ProfileEditState extends State<ProfileEdit> {
                     const Question(question: '닉네임을 만들어봐요'),
                     const SizedBox(height: 10),
                     SizedBox(
-                        height: 40,
-                        child: CustomTextField('Ex. 꿈꾸는 마이클',
-                                _nicknamecontroller, (value) => null, false, 1)
-                            .textField()),
+                      height: 40,
+                      child: StatefulBuilder(
+                        builder: (context, setState) {
+                          // 🔹 리스너 추가: 입력값 변경 시 setState() 호출
+                          _nicknamecontroller.addListener(() {
+                            setState(() {});
+                          });
+
+                          return CustomTextField(
+                            'Ex. 꿈꾸는 마이클',
+                            _nicknamecontroller,
+                            (value) => null, // validator
+                            false, // obscureText
+                            1, // maxLines
+                          ).textField(
+                            onClear: () {
+                              _nicknamecontroller.clear();
+                              setState(() {}); // 🔹 clear() 후에도 UI 갱신
+                            },
+                          );
+                        },
+                      ),
+                    ),
                     const SizedBox(height: 40),
                     const Question(question: '당신은 어떤 사람인가요?'),
                     const SizedBox(height: 10),
@@ -455,8 +476,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                   Button(Colors.black, Colors.white, '완료', () async {
                     await _uploadSelectedImage(); // 🔹 이미지 업로드 완료까지 대기
                     if (_imageFiles.isNotEmpty) {
-                      print('_imageFiles=$_imageFiles');
-
                       // 🔹 업로드된 이미지가 존재하는지 확인
                       bool isEdited = await _editProfile(
                         _nicknamecontroller.text,

@@ -346,9 +346,12 @@ class EditDominoService {
   }
 }
 
-class EditTodayDominoService {
-  static Future<bool> editTodayDomino(
-      {required int goalId, required String goalDate}) async {
+class EditDominoNewService {
+  static Future<bool> editDomino(
+      {required int thirdGoalId,
+      required String name,
+      required List dates,
+      required String repetition}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
     print('저장된 토큰: $token');
@@ -364,12 +367,18 @@ class EditTodayDominoService {
       return false;
     }
 
-    final url = Uri.parse('$baseUrl/api/goal');
+    final url = Uri.parse('$baseUrl/api/goal/full-update');
+    final dateStrings = dates.map((date) => date.toIso8601String()).toList();
 
-    final body = jsonEncode({'goalId': goalId, 'goalDate': goalDate});
+    final body = jsonEncode({
+      'thirdGoalId': thirdGoalId,
+      'name': name,
+      'dates': dateStrings,
+      'repetition': repetition,
+    });
 
     try {
-      final response = await http.delete(
+      final response = await http.put(
         url,
         headers: {
           'Content-Type': 'application/json',
@@ -380,10 +389,11 @@ class EditTodayDominoService {
 
       print('서버 응답 상태 코드: ${response.statusCode}');
       print('서버 응답 본문: ${response.body}');
+      print('도미노수정api');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
-          msg: '오늘의 도미노가 성공적으로 수정되었습니다.',
+          msg: '도미노 목표가 변경되었습니다.',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.green,
@@ -392,7 +402,7 @@ class EditTodayDominoService {
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
-          msg: '오늘의 도미노 수정 실패: ${response.body}',
+          msg: '도미노 수정 실패: ${response.body}',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.red,
@@ -400,7 +410,7 @@ class EditTodayDominoService {
         );
       } else {
         Fluttertoast.showToast(
-          msg: '오늘의 도미노 수정 실패: ${response.body}',
+          msg: '도미노 수정 실패: ${response.body}',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.red,
@@ -410,7 +420,7 @@ class EditTodayDominoService {
       return false;
     } catch (e) {
       Fluttertoast.showToast(
-        msg: '오류 발생: $e',
+        msg: '도미노 수정 오류 발생: $e',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,
@@ -438,7 +448,7 @@ class DeleteDominoService {
       return false;
     }
 
-    final url = Uri.parse('$baseUrl/api/goal/$goalId');
+    final url = Uri.parse('$baseUrl/api/goal/delete-future-domino');
 
     final body = jsonEncode({
       'goalId': goalId,

@@ -61,10 +61,11 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     }
   }
 
-  /// 이미지 삭제 함수
   void _deleteImage(int index) {
     setState(() {
-      _imageFiles.removeAt(index);
+      if (index >= 0 && index < _imageFiles.length) {
+        _imageFiles.removeAt(index);
+      }
     });
   }
 
@@ -117,40 +118,35 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     });
   }
 
-  /*void _deleteImage(String imagePath) {
-    setState(() {
-      _combinedImages.remove(imagePath); // 이미지 리스트에서 제거
-    });
-  }*/
-
   DateTime? _selectedDate; // 상위 화면에서 사용하는 상태 변수
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
           child: Row(
             children: [
-              GestureDetector(
-                onTap: () {
+              IconButton(
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Color(0xffD4D4D4),
-                  size: 17,
-                ),
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                color: const Color(0xffD4D4D4),
+                iconSize: 17,
               ),
-              const SizedBox(width: 10),
               Text(
                 '목표 세우기',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: TextStyle(
+                    fontSize: currentWidth < 600 ? 20 : 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -171,9 +167,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       const Question(question: '어떤 목표인가요?'),
-
                       const Tag(Color.fromARGB(255, 59, 59, 59),
                               Colors.transparent, '필수')
                           .tag()
@@ -198,9 +192,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       const Question(question: '언제까지 목표를 이루고 싶나요?'),
-
                       const Tag(Color.fromARGB(255, 59, 59, 59),
                               Colors.transparent, '필수')
                           .tag()
@@ -210,29 +202,28 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          height: 40,
+                          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(3),
+                              color: const Color(0xff2A2A2A)),
+                          child: Text(
+                            _selectedDate != null
+                                ? DateFormat('yyyy년 MM월 dd일')
+                                    .format(_selectedDate!) // 선택된 날짜 포맷팅
 
-                        width: 350,
-                        height: 40,
-                        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3),
-                            color: const Color(0xff2A2A2A)),
+                                : '클릭해서 날짜를 선택해 주세요.', // null인 경우 출력
 
-                        child: Text(
-                          _selectedDate != null
-                              ? DateFormat('yyyy년 MM월 dd일')
-                                  .format(_selectedDate!) // 선택된 날짜 포맷팅
-
-                              : '클릭해서 날짜를 선택해 주세요.', // null인 경우 출력
-
-                          style: TextStyle(
-                            color: _selectedDate != null
-                                ? Colors.white
-                                : const Color.fromARGB(255, 113, 113, 113),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
+                            style: TextStyle(
+                              color: _selectedDate != null
+                                  ? Colors.white
+                                  : const Color.fromARGB(255, 113, 113, 113),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ),
@@ -256,9 +247,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   ),
                   const SizedBox(height: 13),
                   Row(
-
                     crossAxisAlignment: CrossAxisAlignment.center,
-
                     children: [
                       Checkbox(
                         checkColor: backgroundColor,
@@ -277,23 +266,19 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                           });
                         },
                       ),
-
                       const SizedBox(width: 5),
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-
                           Text(
                             "확실하지 않아요",
                             style: TextStyle(color: Colors.white),
                           ),
                           SizedBox(height: 5),
                           Text(
-
                             '그럼 오늘부터 날짜를 세어나갈게요.',
                             style: TextStyle(
                                 color: Color(0xff909090),
-
                                 fontSize: 10,
                                 fontWeight: FontWeight.w400),
                           ),
@@ -309,9 +294,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   const Question(question: '목표에 대해서 더 알려주세요.'),
-
                   const SizedBox(height: 13),
                   SizedBox(
                       height: 80,
@@ -330,9 +313,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   const Question(question: '목표를 보여주는 사진이 있나요?'),
-
                   const SizedBox(height: 13),
                   Row(
                     children: [
@@ -341,49 +322,76 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
+                              // ✅ 새로 추가한 이미지 리스트를 Map을 사용해 변환
                               ..._imageFiles.asMap().entries.map((entry) {
                                 int index = entry.key;
                                 var imageData = entry.value;
 
-                                // 이미지 데이터 타입 출력
-                                print('imageData 타입: ${imageData.runtimeType}');
-
-                                // 이미지가 Uint8List가 맞는지 확인하고 유효한지 체크
-                                if (imageData.isNotEmpty) {
-                                  return Stack(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: CircleAvatar(
-                                          radius: 40,
-                                          backgroundImage:
-                                              NetworkImage(imageData),
+                                return Stack(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 10.0),
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundColor: Colors
+                                            .grey[300], // ✅ 로드 실패 대비 배경 설정
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              40), // ✅ 원형 이미지 유지
+                                          child: imageData.startsWith("http")
+                                              ? Image.network(
+                                                  imageData, // ✅ URL이면 NetworkImage 사용
+                                                  width: 80,
+                                                  height: 80,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    return const Center(
+                                                      child: Text(
+                                                        '로드 실패', // ✅ 이미지 로드 실패 시 표시
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              : const Center(
+                                                  child: Text(
+                                                    '로드 실패', // ✅ URL이 아니면 기본적으로 표시
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
                                         ),
                                       ),
-                                      Positioned(
-                                        right: 0,
-                                        top: 0,
-                                        child: GestureDetector(
-                                          onTap: () =>
-                                              _deleteImage(index), // 이미지 삭제
-                                          child: const CircleAvatar(
-                                            radius: 12,
-                                            backgroundColor: Colors.black,
-                                            child: Icon(Icons.close,
-                                                size: 15, color: Colors.white),
-                                          ),
+                                    ),
+                                    // ❗ 삭제 버튼 (Positioned 유지)
+                                    Positioned(
+                                      right: 0,
+                                      top: 0,
+                                      child: GestureDetector(
+                                        onTap: () =>
+                                            _deleteImage(index), // ✅ 삭제 기능 호출
+                                        child: const CircleAvatar(
+                                          radius: 12,
+                                          backgroundColor: Colors.black,
+                                          child: Icon(Icons.close,
+                                              size: 15, color: Colors.white),
                                         ),
                                       ),
-                                    ],
-                                  );
-                                } else {
-                                  return Container(); // 잘못된 데이터 타입 처리
-                                }
+                                    ),
+                                  ],
+                                );
                               }),
+
+                              // ✅ 최대 3개 미만일 때만 추가 버튼 표시
                               if (_imageFiles.length < 3)
                                 GestureDetector(
-                                  onTap: _pickImages, // 이미지 선택 함수 호출
+                                  onTap: _pickImages, // 🔹 이미지 선택 함수 호출
                                   child: const CircleAvatar(
                                     radius: 40,
                                     backgroundColor:
@@ -411,9 +419,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       const Question(question: '목표를 색깔로 표현해주세요.'),
-
                       const Tag(Color.fromARGB(255, 59, 59, 59),
                               Colors.transparent, '필수')
                           .tag()
@@ -423,9 +429,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                     height: 13,
                   ),
                   Row(
-
                     mainAxisAlignment: MainAxisAlignment.center,
-
                     children: [
                       ColorOption2(
                         colorCode: const Color(0xffFF7A7A),
