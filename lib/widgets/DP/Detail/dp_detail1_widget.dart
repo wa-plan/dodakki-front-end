@@ -1,6 +1,6 @@
 // DP 디테일 페이지에 들어가는 9x9 만다라트 (3x3 만다라트 선택 가능)
-import 'package:domino/screens/DP/Detail/detail2_23_page.dart';
-import 'package:domino/screens/DP/Detail/detail3_12_page.dart';
+import 'package:domino/screens/DP/Detail/dp_detail3_page.dart';
+import 'package:domino/screens/DP/Detail/dp_detail2_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 

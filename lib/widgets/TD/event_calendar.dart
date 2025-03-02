@@ -1,7 +1,7 @@
 import 'package:domino/apis/services/td_services.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:domino/screens/TD/add_page1.dart';
+import 'package:domino/screens/TD/td_create1_page.dart';
 import 'package:domino/screens/TD/edit_page.dart';
 import 'package:intl/intl.dart';
 import 'package:domino/styles.dart';
@@ -105,6 +105,7 @@ class _EventCalendarState extends State<EventCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         TableCalendar<Event>(
@@ -152,29 +153,29 @@ class _EventCalendarState extends State<EventCalendar> {
             ),
             defaultTextStyle: TextStyle(
               color: mainTextColor,
-              fontSize: MediaQuery.of(context).size.width * 0.035,
+              fontSize: currentWidth < 600 ? 12 : 16,
             ),
             weekendTextStyle: TextStyle(
               color: mainTextColor,
-              fontSize: MediaQuery.of(context).size.width * 0.035,
+              fontSize: currentWidth < 600 ? 12 : 16,
             ),
           ),
           daysOfWeekStyle: const DaysOfWeekStyle(
             weekdayStyle: TextStyle(color: Color(0xffD4D4D4)), // 평일 색상
             weekendStyle: TextStyle(color: Color(0xffD4D4D4)), // 주말 색상
           ),
-          headerStyle: const HeaderStyle(
+          headerStyle: HeaderStyle(
             titleCentered: true,
-            titleTextStyle: TextStyle(color: Colors.white, fontSize: 15),
+            titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
             leftChevronIcon: Icon(
               Icons.arrow_back_ios,
-              color: Color(0xffD4D4D4),
-              size: 17,
+              color: const Color(0xffD4D4D4),
+              size: currentWidth < 600 ? 17 : 20,
             ),
             rightChevronIcon: Icon(
               Icons.arrow_forward_ios,
-              color: Color(0xffD4D4D4),
-              size: 17,
+              color: const Color(0xffD4D4D4),
+              size: currentWidth < 600 ? 17 : 20,
             ),
             formatButtonVisible:
                 false, //원래 달력 열고 닫는 버튼. 지금은 화살표 아이콘이 역할을 대신하고 있음.
@@ -200,22 +201,18 @@ class _EventCalendarState extends State<EventCalendar> {
                 size: 30,
               ),
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddPage1(),
-                    ));
-              },
-              padding: EdgeInsets.zero, // 패딩 설정
-              constraints: const BoxConstraints(),
-              icon: const Icon(Icons.add, color: Color(0xffD4D4D4), size: 26),
-            ),
+            CustomIconButton(() {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddPage1(),
+                  ));
+            }, Icons.add, currentWidth)
+                .customIconButton(),
           ],
         ),
-        const SizedBox(
-          height: 10,
+        SizedBox(
+          height: currentWidth < 600 ? 7 : 10,
         ),
         Expanded(
           child: ValueListenableBuilder<List<Event>>(
@@ -249,6 +246,13 @@ class _EventCalendarState extends State<EventCalendar> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+                        print(
+                          value[index]
+                              .color
+                              .replaceAll('Color(', '') // 'Color(' 부분 제거
+                              .replaceAll(')', ''),
+                        );
+
                         // 롱 프레스 이벤트 처리
                         if (value[index].repetition != 'NONE') {
                           value[index].switchValue = true;
@@ -277,28 +281,32 @@ class _EventCalendarState extends State<EventCalendar> {
                             value[index].switchValue,
                             value[index].interval,
                             value[index].id,
-                            value[index].color);
+                            value[index].color,
+                            currentWidth);
                       },
                       child: Container(
-                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 20),
+                        margin:  EdgeInsets.fromLTRB(0, 0, 0, currentWidth < 600 ? 14 : 17),
+                        padding:  EdgeInsets.symmetric(
+                            vertical: currentWidth < 600 ? 13 : 15, 
+                            horizontal: currentWidth < 600 ? 20 : 25),
                         decoration: BoxDecoration(
                           color: const Color(0xff2A2A2A),
-                          borderRadius: BorderRadius.circular(3),
+                          borderRadius: BorderRadius.circular(
+                            currentWidth < 600 ? 3 : 5
+                          ),
                         ),
                         child: Row(
                           children: [
                             Container(
-                              width: 17,
-                              height: 50,
+                              width: currentWidth < 600 ? 14 : 14,
+                              height: currentWidth < 600 ? 45 : 50,
                               margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                               decoration: BoxDecoration(
                                 color: Color(int.parse(
                                   value[index]
                                       .color
                                       .replaceAll(
-                                          'Color(', '') // 'Color(' 부분 제거
+                                          'Color(', '') 
                                       .replaceAll(')', ''),
                                 )),
                                 borderRadius: BorderRadius.circular(3),
@@ -309,15 +317,23 @@ class _EventCalendarState extends State<EventCalendar> {
                               children: [
                                 Text(
                                   value[index].thirdGoal,
-                                  style: Theme.of(context).textTheme.bodySmall,
+                                  style: TextStyle(
+                                      fontSize: currentWidth < 600 ? 11 : 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color(0xffA1A1A1)),
                                 ),
-                                const SizedBox(height: 3),
+                                 SizedBox(
+                                  height: currentWidth < 600 ? 3 : 5),
                                 Text(
                                   value[index].goalName,
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: TextStyle(
+                                      fontSize: currentWidth < 600 ? 13 : 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white),
                                 ),
                               ],
                             ),
+                            
                             Expanded(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -338,13 +354,13 @@ class _EventCalendarState extends State<EventCalendar> {
                                     },
                                     icon: Icon(
                                       Icons.clear_outlined,
-                                      size: 20,
+                                      size: currentWidth < 600 ? 20 : 25,
                                       color: value[index].didZero
                                           ? mainGold
                                           : const Color(0xff5C5C5C),
                                     ),
                                   ),
-                                  const SizedBox(width: 5),
+                                   SizedBox(width: currentWidth < 600 ? 0 : 10),
                                   IconButton(
                                     onPressed: () {
                                       setState(() {
@@ -361,13 +377,13 @@ class _EventCalendarState extends State<EventCalendar> {
                                     },
                                     icon: Icon(
                                       Icons.change_history_outlined,
-                                      size: 20,
+                                      size: currentWidth < 600 ? 20 : 25,
                                       color: value[index].didHalf
                                           ? mainGold
                                           : const Color(0xff5C5C5C),
                                     ),
                                   ),
-                                  const SizedBox(width: 5),
+                                  SizedBox(width: currentWidth < 600 ? 0 : 10),
                                   IconButton(
                                     onPressed: () {
                                       setState(() {
@@ -384,7 +400,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                     },
                                     icon: Icon(
                                       Icons.circle_outlined,
-                                      size: 20,
+                                      size: currentWidth < 600 ? 20 : 25,
                                       color: value[index].didAll
                                           ? mainGold
                                           : const Color(0xff5C5C5C),
@@ -409,10 +425,7 @@ class _EventCalendarState extends State<EventCalendar> {
 }
 
 void editDialog(BuildContext context, DateTime date, String title,
-    String content, bool switchvalue, int interval, int goalId, String color) {
-  color = color.replaceAll('Color(', '').replaceAll(')', '');
-  Color colorValue = Color(int.parse(color));
-
+    String content, bool switchvalue, int interval, int goalId, String color, double currentWidth) {
   String getIntervalText() {
     if (!switchvalue) {
       return 'X';
@@ -443,75 +456,67 @@ void editDialog(BuildContext context, DateTime date, String title,
         contentPadding: const EdgeInsets.all(0),
         elevation: 30.0,
         content: Container(
-          padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 26, 26, 26),
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-          height: 180,
-
-          width: 350,
+          padding: EdgeInsets.all(currentWidth < 600 ? 22 : 30),
+          decoration:  BoxDecoration(
+              color: const Color.fromARGB(255, 26, 26, 26),
+              borderRadius: BorderRadius.all(
+                Radius.circular(currentWidth < 600 ? 5 : 8))),
+          height: currentWidth < 600 ? 150 : 220,
+          width: currentWidth < 600 ? 400 : 400,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              Container(
+                width: currentWidth < 600 ? 13 : 15,
+                height: double.infinity,
+                decoration:  BoxDecoration(
+                  color: mainRed,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(currentWidth < 600 ? 3 : 5)),
+                ),
+              ),
+               SizedBox(
+                width: currentWidth < 600 ? 16 : 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 15,
-
-                    height: 120,
-
-                    decoration: BoxDecoration(
-                      color: colorValue,
-                      borderRadius: const BorderRadius.all(Radius.circular(3)),
-                    ),
+                 
+                  Text(
+                    content,
+                    style: TextStyle(color: Colors.grey, fontSize: currentWidth < 600 ? 11 : 17),
                   ),
-                  const SizedBox(width: 30),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      Text(
-                        content,
-                        style:
-                            const TextStyle(color: Colors.grey, fontSize: 13),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        title,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        '반복',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Text(
-                        getIntervalText(),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ],
+                   SizedBox(height: currentWidth < 600 ? 5 : 7),
+                  Text(
+                    title,
+                    style:  TextStyle(
+                        color: Colors.white,
+                        fontSize: currentWidth < 600 ? 13 : 19,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: currentWidth < 600 ? 20 : 25),
+                   Text(
+                    '반복',
+                    style: TextStyle(
+                      color: Colors.grey, fontSize: currentWidth < 600 ? 11 : 17),
+                  ),
+                  Text(
+                    getIntervalText(),
+                    style:  TextStyle(color: Colors.white, fontSize: currentWidth < 600 ? 13 : 19),
                   ),
                 ],
               ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
+              const Spacer(),
+              CustomIconButton(() {
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EditPage(
                           date, content, title, switchvalue, interval, goalId),
                     ),
                   );
-                },
-                icon: const Icon(Icons.edit),
-                color: const Color.fromARGB(255, 98, 98, 98),
-                padding: EdgeInsets.zero,
-                iconSize: 25,
-              ),
+                  }, Icons.edit, currentWidth)
+                      .customIconButton(),
+              
             ],
           ),
         ),

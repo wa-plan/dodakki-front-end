@@ -18,8 +18,8 @@ class MandalartGrid2 extends StatefulWidget {
 }
 
 class _MandalartGrid2 extends State<MandalartGrid2> {
-  int? _selectedBoxHintNum2; 
-  int? _selectedBoxHintNum3; 
+  int? _selectedBoxHintNum2;
+  int? _selectedBoxHintNum3;
 
   void _selectBox(int hintNum2, int hintNum3) {
     setState(() {
@@ -30,9 +30,12 @@ class _MandalartGrid2 extends State<MandalartGrid2> {
 
   @override
   Widget build(BuildContext context) {
+    final currentHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      width: 350,
+      width: currentHeight * 0.5,
       child: GridView(
+        shrinkWrap: true, // GridView를 자식으로 설정
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         children: List.generate(9, (j) {
@@ -44,15 +47,22 @@ class _MandalartGrid2 extends State<MandalartGrid2> {
                   crossAxisCount: 3,
                   children: List.generate(9, (i) {
                     if (i == 4) {
-                      return DPGrid1(
-                              widget.mandalart,
-                              ColorTransform(widget.firstColor)
-                                  .colorTransform(), 8)
-                          .dpGrid1();
+                      return Opacity(
+                        opacity: 0.3,
+                        child: DPGrid1(
+                                widget.mandalart,
+                                ColorTransform(widget.firstColor)
+                                    .colorTransform(),
+                                8)
+                            .dpGrid1(),
+                      );
                     } else {
-                      return DPGrid2(
-                              i, widget.mandalart, widget.secondGoals, 8, null)
-                          .dpGrid2();
+                      return Opacity(
+                        opacity: 0.3,
+                        child: DPGrid2(
+                                i, widget.mandalart, widget.secondGoals, 8, null)
+                            .dpGrid2(),
+                      );
                     }
                   })),
             );
@@ -67,9 +77,12 @@ class _MandalartGrid2 extends State<MandalartGrid2> {
                   children: List.generate(9, (i) {
                     if (i == 4) {
                       //Second Goal Grid
-                      return DPGrid2(
-                              j, widget.mandalart, widget.secondGoals, 8, null)
-                          .dpGrid2();
+                      return Opacity(
+                        opacity: 0.3,
+                        child: TDGrid2(
+                                j, widget.mandalart, widget.secondGoals, 8, null)
+                            .tdGrid2(),
+                      );
                     } else {
                       //Third Goal Grid
                       return TDGrid3(
