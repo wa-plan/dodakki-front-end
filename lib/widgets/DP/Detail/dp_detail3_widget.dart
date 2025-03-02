@@ -2,46 +2,49 @@
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 
-class MandalartGrid5 extends StatefulWidget {
+class MandalartGrid4 extends StatefulWidget {
   
   final String mandalart;
   final List<Map<String, dynamic>> secondGoals;
   final int selectedSecondGoal;
   final String firstColor;
 
-  const MandalartGrid5({
+  const MandalartGrid4({
     super.key,
     required this.mandalart,
     required this.secondGoals,
     required this.selectedSecondGoal,
     required this.firstColor
-    
   });
 
   @override
-  State<MandalartGrid5> createState() => _MandalartGrid5();
+  State<MandalartGrid4> createState() => _MandalartGrid4();
 }
 
-  class _MandalartGrid5 extends State<MandalartGrid5> {
+  class _MandalartGrid4 extends State<MandalartGrid4> {
 
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+    final currentHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      width: 300,
+      width: currentHeight * 0.4,
       child: GridView(
+        shrinkWrap: true, // GridView를 자식으로 설정
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5),
         children: [
             for (int i = 0; i < 4; i++)
-              DPGrid2(i, widget.mandalart, widget.secondGoals, 15, null).dpGrid2(),
+              DPGrid3(widget.selectedSecondGoal, i, widget.mandalart, widget.secondGoals, 15, null).dpGrid3(),
 
-            DPGrid1(widget.mandalart, ColorTransform(widget.firstColor).colorTransform(), 15).dpGrid1(),
+            DPGrid2(widget.selectedSecondGoal, widget.mandalart, widget.secondGoals, 15, null).dpGrid2(),
 
             for (int i = 4; i < 8; i++)
-              DPGrid2(i, widget.mandalart, widget.secondGoals, 15, null).dpGrid2(),
+              DPGrid3(widget.selectedSecondGoal, i, widget.mandalart, widget.secondGoals, 15, null).dpGrid3(),
         ],              
         ),
     );
