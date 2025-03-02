@@ -1,5 +1,3 @@
-import 'package:domino/screens/DP/dp_main.dart';
-import 'package:domino/screens/TR/tr_2.dart';
 import 'package:domino/screens/TR/tr_7.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
