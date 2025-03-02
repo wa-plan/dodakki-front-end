@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:domino/screens/TD/td_main.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
+import 'package:domino/screens/Tutorial/tutorial1_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 String? baseUrl = dotenv.env['BASE_URL'];
 
 class LoginService {
-  Future<bool> login(
+  Future<void> login(
       BuildContext context, String userId, String password) async {
     final url = Uri.parse('$baseUrl/api/auth/login');
 
@@ -49,13 +50,12 @@ class LoginService {
                 icon: Icons.check_circle, // 아이콘
               ).message(context);*/
 
-              /*Navigator.pushReplacement(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const TdMain(),
+                  builder: (context) => const Tutorial1(),
                 ),
-              );*/
-              return true;
+              );
             }
           } else {
             if (context.mounted) {
@@ -68,7 +68,6 @@ class LoginService {
               );
             }
           }
-          return false;
         } else {
           if (context.mounted) {
             Fluttertoast.showToast(
@@ -80,7 +79,6 @@ class LoginService {
             );
           }
         }
-        return false;
       } else {
         if (context.mounted) {
           Message(
@@ -91,7 +89,6 @@ class LoginService {
             icon: Icons.block, // 아이콘
           ).message(context);
         }
-        return false;
       }
     } catch (e) {
       if (context.mounted) {
@@ -103,7 +100,6 @@ class LoginService {
           textColor: Colors.white,
         );
       }
-      return false;
     }
   }
 }
@@ -147,7 +143,7 @@ class ChangePasswordService {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
-          msg: '새 비밀번호가 이메일로 전송되었습니다.',
+          msg: '비밀번호가 성공적으로 변경되었습니다.',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.green,
@@ -265,8 +261,8 @@ class IdFindService {
       print('서버 응답: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        //final responseData = jsonDecode(response.body);
-        return response.body; // Adjust based on your API response
+        final responseData = jsonDecode(response.body);
+        return responseData.toString(); // Adjust based on your API response
       } else {
         Fluttertoast.showToast(
           msg: '사용자 ID를 찾을 수 없습니다.',

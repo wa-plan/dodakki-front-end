@@ -1,12 +1,13 @@
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:domino/styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/change_password.dart';
 import 'package:domino/widgets/popup.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:domino/apis/services/lr_services.dart'; // Import the new service
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AccountManagement extends StatefulWidget {
   final String email;
@@ -24,13 +25,8 @@ class AccountManagement extends StatefulWidget {
 }
 
 class _AccountManagementState extends State<AccountManagement> {
-  static const storage = FlutterSecureStorage();
-  //데이터를 이전 페이지에서 전달 받은 정보를 저장하기 위한 변수
-
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -50,10 +46,7 @@ class _AccountManagementState extends State<AccountManagement> {
               ),
               Text(
                 '내 계정',
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 18 : 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
@@ -111,8 +104,6 @@ class _AccountManagementState extends State<AccountManagement> {
 
   Widget _buildSettingItem(
       {required String menu, required String title, void Function()? onTap}) {
-    final currentWidth = MediaQuery.of(context).size.width;
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -125,19 +116,14 @@ class _AccountManagementState extends State<AccountManagement> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(menu,
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 12 : 16,
-                    color: const Color(0xff949494))),
+            Text(menu, style: const TextStyle(color: Color(0xff949494))),
             const SizedBox(height: 9),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(title,
-                    style: TextStyle(
-                        fontSize: currentWidth < 600 ? 12 : 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600)),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w600)),
                 if (onTap != null)
                   const Icon(
                     Icons.arrow_forward_ios_rounded,
@@ -153,8 +139,6 @@ class _AccountManagementState extends State<AccountManagement> {
   }
 
   Widget _buildCombinedSwitchItem() {
-    final currentWidth = MediaQuery.of(context).size.width;
-
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -165,22 +149,16 @@ class _AccountManagementState extends State<AccountManagement> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('종료',
-              style: TextStyle(
-                  fontSize: currentWidth < 600 ? 12 : 16,
-                  color: const Color(0xff949494))),
+          const Text('종료', style: TextStyle(color: Color(0xff949494))),
           const SizedBox(height: 9),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('로그아웃',
+              const Text('로그아웃',
                   style: TextStyle(
-                      fontSize: currentWidth < 600 ? 12 : 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600)),
+                      color: Colors.white, fontWeight: FontWeight.w600)),
               GestureDetector(
                 onTap: () {
-                  storage.delete(key: "login");
                   _logout();
                   Navigator.pushReplacement(
                     context,
@@ -201,11 +179,9 @@ class _AccountManagementState extends State<AccountManagement> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('탈퇴하기',
+              const Text('탈퇴하기',
                   style: TextStyle(
-                      fontSize: currentWidth < 600 ? 12 : 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600)),
+                      color: Colors.white, fontWeight: FontWeight.w600)),
               GestureDetector(
                 onTap: () {
                   PopupDialog.show(

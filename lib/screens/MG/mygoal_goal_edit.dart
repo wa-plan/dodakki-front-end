@@ -4,11 +4,10 @@ import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:domino/widgets/popup.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:domino/apis/services/image_services.dart';
+import 'package:domino/apis/services/mg_services.dart';
 
 class MygoalEdit extends StatefulWidget {
   final String name;
@@ -38,65 +37,38 @@ class _MygoalEditState extends State<MygoalEdit> {
   XFile? _pickedFile;
   late String _selectedColor;
   DateTime calculatedDate = DateTime.now();
-  //List<String> _combinedImages = []; // Combined list of existing and new images
-  final List<String> _imageFiles = [];
+  List<String> _combinedImages = []; // Combined list of existing and new images
 
   @override
   void initState() {
     super.initState();
+    _selectedColor = widget.color;
+
+    // Initialize combinedImages with existing images
+    _combinedImages = List.from(widget.goalImage);
 
     // dday 계산
     calculatedDate = DateTime.now().add(Duration(days: widget.dday));
 
     // 전달받은 색상 설정
-    _selectedColor = widget.color.toLowerCase();
-
-    // 🔹 초깃값 설정
-    _namecontroller.text = widget.name; // widget.name을 초깃값으로 설정
-    _descriptcontroller.text = widget.description; // 목표 설명 초기값 설정
-
-    print(widget.goalImage);
+    _selectedColor = widget.color;
   }
 
-  Future<void> _pickImages() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.image,
-        withData: kIsWeb, // 웹에서는 true, 모바일에서는 false
-      );
-
-      if (result != null) {
-        // 파일 업로드 서비스 호출
-        String uploadedUrl = await UploadFileService.uploadFiles(result.files);
-
-        if (uploadedUrl.isNotEmpty) {
-          print('업로드된 파일 URL: $uploadedUrl');
-          setState(() {
-            _imageFiles.add(uploadedUrl); // URL을 _imageFiles에 추가
-          });
-          print('_imageFiles=$_imageFiles');
-        } else {
-          print('파일 업로드 실패');
-        }
+  // 이미지 픽커로부터 이미지를 선택하는 메서드
+  Future<void> _getPhotoLibraryImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _pickedFile = pickedFile;
+        // Add the new image to the combined list
+        _combinedImages.add(pickedFile.path); // Save path of the new image
+      });
+    } else {
+      if (kDebugMode) {
+        print('선택 안 함');
       }
-    } catch (e) {
-      print('이미지 선택 오류: $e');
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
     }
-  }
-
-  /// 이미지 삭제 함수
-  void _deleteImage(int index) {
-    setState(() {
-      _imageFiles.removeAt(index);
-    });
   }
 
   Future<bool> _editName(String name, int mandalartId) async {
@@ -108,19 +80,6 @@ class _MygoalEditState extends State<MygoalEdit> {
       return success;
     } catch (e) {
       debugPrint('Error in _editName: $e');
-      return false; // Return false if there's an error
-    }
-  }
-
-  Future<bool> _editDate(String newDate, int mandalartId) async {
-    try {
-      final success = await EditGoalDateService.editGoalDate(
-        newDate: newDate,
-        mandalartId: mandalartId,
-      );
-      return success;
-    } catch (e) {
-      debugPrint('Error in _editDate: $e');
       return false; // Return false if there's an error
     }
   }
@@ -162,6 +121,12 @@ class _MygoalEditState extends State<MygoalEdit> {
   void _onColorSelected(String color) {
     setState(() {
       _selectedColor = color;
+    });
+  }
+
+  void _deleteImage(String imagePath) {
+    setState(() {
+      _combinedImages.remove(imagePath); // 이미지 리스트에서 제거
     });
   }
 
@@ -226,12 +191,8 @@ class _MygoalEditState extends State<MygoalEdit> {
                     const SizedBox(height: 13),
                     TextFormField(
                       controller: _namecontroller,
-                      style: const TextStyle(
-                        color: Colors.white, // 🔹 텍스트 색상을 흰색으로 설정
-                        fontSize: 14, // 🔹 원하는 폰트 크기 (선택 사항)
-                        fontWeight: FontWeight.w400, // 🔹 원하는 폰트 굵기 (선택 사항)
-                      ),
                       decoration: InputDecoration(
+                        hintText: widget.name,
                         contentPadding: const EdgeInsets.all(10.0),
                         hintStyle: const TextStyle(
                             color: Color.fromARGB(255, 128, 128, 128),
@@ -346,12 +307,8 @@ class _MygoalEditState extends State<MygoalEdit> {
                       child: TextFormField(
                         controller: _descriptcontroller,
                         maxLines: 5,
-                        style: const TextStyle(
-                          color: Colors.white, // 🔹 텍스트 색상을 흰색으로 설정
-                          fontSize: 14, // 🔹 원하는 폰트 크기 (선택 사항)
-                          fontWeight: FontWeight.w400, // 🔹 원하는 폰트 굵기 (선택 사항)
-                        ),
                         decoration: InputDecoration(
+                          hintText: widget.description,
                           hintStyle: const TextStyle(
                               color: Color.fromARGB(255, 128, 128, 128),
                               fontSize: 13,
@@ -398,16 +355,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                // 🔹 기존 이미지 + 추가된 이미지 리스트 합쳐서 최대 3개까지만 표시
-                                ...[...widget.goalImage, ..._imageFiles]
-                                    .take(3)
-                                    .toList()
-                                    .asMap()
-                                    .entries
-                                    .map((entry) {
-                                  int index = entry.key;
-                                  var imageData = entry.value;
-
+                                ..._combinedImages.map((imagePath) {
                                   return Stack(
                                     children: [
                                       Padding(
@@ -415,8 +363,12 @@ class _MygoalEditState extends State<MygoalEdit> {
                                             const EdgeInsets.only(right: 10.0),
                                         child: CircleAvatar(
                                           radius: 40,
-                                          backgroundImage: NetworkImage(
-                                              imageData), // 🔹 이미지 적용
+                                          backgroundImage: File(imagePath)
+                                                  .existsSync()
+                                              ? FileImage(File(
+                                                  imagePath)) // For new images
+                                              : AssetImage(imagePath)
+                                                  as ImageProvider, // For existing images
                                         ),
                                       ),
                                       Positioned(
@@ -424,10 +376,10 @@ class _MygoalEditState extends State<MygoalEdit> {
                                         top: 0,
                                         child: GestureDetector(
                                           onTap: () => _deleteImage(
-                                              index), // 🔹 삭제 기능 추가
+                                              imagePath), // 이미지 삭제 함수 호출
                                           child: const CircleAvatar(
                                             radius: 12,
-                                            backgroundColor: Colors.black,
+                                            backgroundColor: Colors.black54,
                                             child: Icon(Icons.close,
                                                 size: 15, color: Colors.white),
                                           ),
@@ -436,13 +388,10 @@ class _MygoalEditState extends State<MygoalEdit> {
                                     ],
                                   );
                                 }),
-
-                                // 🔹 최대 3개 미만일 때만 이미지 추가 버튼 표시
-                                if ([...widget.goalImage, ..._imageFiles]
-                                        .length <
-                                    3)
+                                if (_combinedImages.length <
+                                    3) // 이미지가 3개 미만일 때만 CircleAvatar 버튼 표시
                                   GestureDetector(
-                                    onTap: _pickImages, // 🔹 이미지 선택 함수 호출
+                                    onTap: _getPhotoLibraryImage,
                                     child: const CircleAvatar(
                                       radius: 40,
                                       backgroundColor:
@@ -488,39 +437,33 @@ class _MygoalEditState extends State<MygoalEdit> {
                       children: [
                         ColorOption(
                           colorCode: const Color(0xffFF7A7A),
-                          isSelected:
-                              _selectedColor.toLowerCase() == '0xffff7a7a',
-                          onTap: () => _onColorSelected('0xffff7a7a'),
+                          isSelected: _selectedColor == '0xffFF7A7A',
+                          onTap: () => _onColorSelected('0xffFF7A7A'),
                         ),
                         ColorOption(
                           colorCode: const Color(0xffFFB82D),
-                          isSelected:
-                              _selectedColor.toLowerCase() == '0xffb82d',
-                          onTap: () => _onColorSelected('0xffb82d'),
+                          isSelected: _selectedColor == '0xffFFB82D',
+                          onTap: () => _onColorSelected('0xffFFB82D'),
                         ),
                         ColorOption(
                           colorCode: const Color(0xffFCFF62),
-                          isSelected:
-                              _selectedColor.toLowerCase() == '0xfffcff62',
-                          onTap: () => _onColorSelected('0xfffcff62'),
+                          isSelected: _selectedColor == '0xffFCFF62',
+                          onTap: () => _onColorSelected('0xffFCFF62'),
                         ),
                         ColorOption(
                           colorCode: const Color(0xff72FF5B),
-                          isSelected:
-                              _selectedColor.toLowerCase() == '0xff72ff5b',
-                          onTap: () => _onColorSelected('0xff72ff5b'),
+                          isSelected: _selectedColor == '0xff72FF5B',
+                          onTap: () => _onColorSelected('0xff72FF5B'),
                         ),
                         ColorOption(
                           colorCode: const Color(0xff5B8DFF),
-                          isSelected:
-                              _selectedColor.toLowerCase() == '0xff5b8dff',
-                          onTap: () => _onColorSelected('0xff5b8dff'),
+                          isSelected: _selectedColor == '0xff5B8DFF',
+                          onTap: () => _onColorSelected('0xff5B8DFF'),
                         ),
                         ColorOption(
                           colorCode: const Color(0xffD09CFF),
-                          isSelected:
-                              _selectedColor.toLowerCase() == '0xffd09cff',
-                          onTap: () => _onColorSelected('0xffd09cff'),
+                          isSelected: _selectedColor == '0xffD09CFF',
+                          onTap: () => _onColorSelected('0xffD09CFF'),
                         ),
                       ],
                     ),
@@ -551,7 +494,6 @@ class _MygoalEditState extends State<MygoalEdit> {
                   ),
                   TextButton(
                     onPressed: () {
-                      print('calculatedDate=$calculatedDate');
                       PopupDialog.show(
                         context,
                         '이건 아니야.. \n정말 떠날거야...?',
@@ -596,53 +538,30 @@ class _MygoalEditState extends State<MygoalEdit> {
                   ),
                   TextButton(
                     onPressed: () async {
-                      // 모든 API 호출이 성공했는지 확인할 변수
-                      bool isSuccess = true;
+                      bool nameSuccess = false;
+                      bool descriptSuccess = false;
+                      bool colorSuccess = false;
 
-                      // 🔹 목표 이름 수정
-                      bool nameSuccess = await _editName(
+                      nameSuccess = await _editName(
                           _namecontroller.text, int.parse(widget.id));
-                      if (!nameSuccess) {
-                        isSuccess = false;
+
+                      // If successful, navigate to the MyGoalDetail page
+                      if (nameSuccess) {
+                        descriptSuccess = await _editDescript(
+                            _descriptcontroller.text, int.parse(widget.id));
+                      } else {
+                        // Show error or feedback if save fails
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('목표 이름 저장에 실패했습니다.')),
+                          const SnackBar(content: Text('목표 저장에 실패했습니다.')),
                         );
                       }
 
-                      // 🔹 목표 설명 수정
-                      bool descriptSuccess = await _editDescript(
-                          _descriptcontroller.text, int.parse(widget.id));
-                      if (!descriptSuccess) {
-                        isSuccess = false;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('목표 설명 저장에 실패했습니다.')),
-                        );
+                      if (descriptSuccess) {
+                        colorSuccess = await _editColor(
+                            _selectedColor, int.parse(widget.id));
                       }
 
-                      // 🔹 날짜 변환 후 목표 날짜 수정
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(calculatedDate);
-                      bool dateSuccess =
-                          await _editDate(formattedDate, int.parse(widget.id));
-                      if (!dateSuccess) {
-                        isSuccess = false;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('목표 날짜 저장에 실패했습니다.')),
-                        );
-                      }
-
-                      // 🔹 목표 색상 수정
-                      bool colorSuccess = await _editColor(
-                          _selectedColor, int.parse(widget.id));
-                      if (!colorSuccess) {
-                        isSuccess = false;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('목표 색상 저장에 실패했습니다.')),
-                        );
-                      }
-
-                      // 🔹 모든 API 호출이 성공했을 경우만 화면 닫기
-                      if (isSuccess) {
+                      if (colorSuccess) {
                         Navigator.pop(context);
                       }
                     },
@@ -660,7 +579,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ],

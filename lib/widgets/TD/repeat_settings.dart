@@ -1,4 +1,3 @@
-import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/TD/datelist_provider.dart';
@@ -20,22 +19,15 @@ class RepeatSettingsState extends State<RepeatSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 20,),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-          decoration: BoxDecoration(
-            color: const Color(0xff2A2A2A),
-            borderRadius: BorderRadius.circular(3),
-          ),
-          child: Row(
+    final currentWidth = MediaQuery.of(context).size.width;
+    return 
+        Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Row(
                 children: [
                   Checkbox(
-                    side: MaterialStateBorderSide.resolveWith((states) =>
+                    side: WidgetStateBorderSide.resolveWith((states) =>
                         const BorderSide(
                             width: 1,
                             color: Color.fromARGB(255, 156, 156, 156))), //체크박스 테두리의 두께와 색깔 지정
@@ -52,16 +44,17 @@ class RepeatSettingsState extends State<RepeatSettings> {
                       context.read<DateListProvider>().setEveryday(everyDay);
                     },
                   ),
-                  const Text(
+                  Text(
                     '매일',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, 
+                    fontSize: currentWidth < 600 ? 11 : 13),
                   ),
                 ],
               ),
               Row(
                 children: [
                   Checkbox(
-                    side: MaterialStateBorderSide.resolveWith((states) =>
+                    side: WidgetStateBorderSide.resolveWith((states) =>
                         const BorderSide(
                             width: 1,
                             color: Color.fromARGB(255, 156, 156, 156))), //체크박스 테두리의 두께와 색깔 지정
@@ -78,16 +71,17 @@ class RepeatSettingsState extends State<RepeatSettings> {
                       context.read<DateListProvider>().setEveryweek(everyWeek);
                     },
                   ),
-                  const Text(
+                   Text(
                     '매주',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white,
+                    fontSize: currentWidth < 600 ? 11 : 13),
                   ),
                 ],
               ),
               Row(
                 children: [
                   Checkbox(
-                    side: MaterialStateBorderSide.resolveWith((states) =>
+                    side: WidgetStateBorderSide.resolveWith((states) =>
                         const BorderSide(
                             width: 1,
                             color: Color.fromARGB(255, 156, 156, 156))), //체크박스 테두리의 두께와 색깔 지정
@@ -106,16 +100,16 @@ class RepeatSettingsState extends State<RepeatSettings> {
                           .setEverytwoweek(everyTwoWeek);
                     },
                   ),
-                  const Text(
+                   Text(
                     '격주',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: currentWidth < 600 ? 11 : 13),
                   ),
                 ],
               ),
               Row(
                 children: [
                   Checkbox(
-                    side: MaterialStateBorderSide.resolveWith((states) =>
+                    side: WidgetStateBorderSide.resolveWith((states) =>
                         const BorderSide(
                             width: 1,
                             color: Color.fromARGB(255, 156, 156, 156))), //체크박스 테두리의 두께와 색깔 지정
@@ -134,17 +128,14 @@ class RepeatSettingsState extends State<RepeatSettings> {
                           .setEverymonth(everyMonth);
                     },
                   ),
-                  const Text(
+                   Text(
                     '매월',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: currentWidth < 600 ? 11 : 13),
                   ),
                 ],
               ),
             ],
-          ),
-        ),
-        const SizedBox(height: 20,),
-      ],
-    );
+          );
+
   }
 }

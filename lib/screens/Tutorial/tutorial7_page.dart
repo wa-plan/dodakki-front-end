@@ -2,18 +2,18 @@ import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 
-class CompletePage extends StatefulWidget {
-  const CompletePage({super.key});
+class Tutorial7 extends StatefulWidget {
+  const Tutorial7({super.key});
 
   @override
-  State<CompletePage> createState() => _CompletePageState();
+  State<Tutorial7> createState() => Tutorial7State();
 }
 
-class _CompletePageState extends State<CompletePage> {
+class Tutorial7State extends State<Tutorial7> {
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
-    final currentHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
         backgroundColor: backgroundColor,
         body: Padding(
@@ -39,7 +39,7 @@ class _CompletePageState extends State<CompletePage> {
                         child: Column(
                           children: [
                             Text(
-                              "플랜 만들기 성공!",
+                              "이제 함께 시작해볼까?",
                               style: TextStyle(
                                 fontSize: currentWidth < 600 ? 16 : 25,
                                 fontWeight: FontWeight.w600,
@@ -48,8 +48,7 @@ class _CompletePageState extends State<CompletePage> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "이제 목표를 향해\n달려볼까요?",
-                              textAlign: TextAlign.center,
+                              "상상도 못할 만큼 큰\n도미노를 쓰러뜨려봐!",
                               style: TextStyle(
                                 fontSize: currentWidth < 600 ? 14 : 23,
                                 fontWeight: FontWeight.w400,
@@ -69,7 +68,7 @@ class _CompletePageState extends State<CompletePage> {
                 child: Center(
                   child: Image.asset(
                     "assets/img/Complete.png", 
-                    height: currentHeight*0.4))),
+                    height: currentWidth < 600 ? 270 : 400))),
         
                
             ],
@@ -98,7 +97,7 @@ class _CompletePageState extends State<CompletePage> {
                   ),
                 ),
                 child: Text(
-                  '네!',
+                  '시작하기',
                   style: TextStyle(
                       color: backgroundColor,
                       fontSize: currentWidth < 600 ? 15 : 21,

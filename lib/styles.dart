@@ -17,6 +17,7 @@ const mainGold = Color(0xffF6C92B);
 const appBarPadding = EdgeInsets.fromLTRB(25.0, 30.0, 25.0, 20);
 const fullPadding = EdgeInsets.fromLTRB(25.0, 10, 25.0, 20.0);
 
+
 //colorPalette
 Map<Color, Color> colorPalette = {
   const Color(0xffFF7A7A): const Color(0xffFFC2C2),
@@ -42,13 +43,17 @@ class DPTitleText {
   DPTitleText(this.text, this.currentWidth);
 
   Widget dPTitleText() {
-    return Text(text,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: currentWidth < 600 ? 17 : 27,
-            fontWeight: FontWeight.w600));
+    return Text(
+                  text,
+                  style: TextStyle(
+              color: Colors.white,
+              fontSize: currentWidth < 600 ? 17 : 27,
+              fontWeight: FontWeight.w600
+            )
+                );
   }
 }
+
 
 //DP_create_guideText
 class DPGuideText {
@@ -59,19 +64,19 @@ class DPGuideText {
 
   Widget dPGuideText() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: currentWidth < 600 ? 15 : 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              text,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: currentWidth < 600 ? 15 : 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        );
   }
 }
 
@@ -114,8 +119,7 @@ class NewButton {
   final Function function;
   final double currentWidth;
 
-  NewButton(this.buttonColor, this.textColor, this.text, this.function,
-      this.currentWidth);
+  NewButton(this.buttonColor, this.textColor, this.text, this.function, this.currentWidth);
 
   Widget newButton() {
     return TextButton(
@@ -230,7 +234,7 @@ class DPMainGoal {
 
   Widget dpMainGoal() {
     return Container(
-        height: currentHeight * 0.05,
+        height: currentHeight*0.05,
         width: double.infinity,
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -238,13 +242,13 @@ class DPMainGoal {
           borderRadius: BorderRadius.circular(3),
           color: color,
           boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-              offset: const Offset(0, 0), // X, Y 위치 (0,0)
-              blurRadius: 7, // 블러 7
-              spreadRadius: 0, // 스프레드 0
-            ),
-          ],
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                    offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                    blurRadius: 7, // 블러 7
+                    spreadRadius: 0, // 스프레드 0
+                  ),
+                ],
         ),
         child: Text(
             textAlign: TextAlign.center,
@@ -349,6 +353,49 @@ class DPGrid2 {
       this.maxFontSize, this.border);
 
   Widget dpGrid2() {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color:
+            secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
+                ? ColorTransform(secondGoals[hintNum]['color']).colorTransform()
+                : Colors.transparent,
+        border: border,
+      ),
+      margin: const EdgeInsets.all(1.0),
+      child: Center(
+        child: AutoSizeText(
+          secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
+              ? secondGoals[hintNum]['secondGoal']
+              : "",
+          maxLines: 3,
+          minFontSize: 6,
+          maxFontSize: maxFontSize,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+//TDGrid2
+class TDGrid2 {
+  final int hintNum;
+  final String mandalart;
+  final List<Map<String, dynamic>> secondGoals;
+  final Border? border;
+  final double maxFontSize;
+
+  const TDGrid2(this.hintNum, this.mandalart, this.secondGoals,
+      this.maxFontSize, this.border);
+
+  Widget tdGrid2() {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
@@ -539,7 +586,7 @@ class TDGrid3 {
                       .containsKey(hintNum3) &&
                   secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal'] !=
                       ""
-              ? Border.all(color: Colors.white, width: 2)
+              ? Border.all(color: Colors.white, width: 5)
               : null,
         ),
         margin: const EdgeInsets.all(1.0),
@@ -605,7 +652,16 @@ class ColorTransform {
   const ColorTransform(this.color);
 
   Color colorTransform() {
-    return Color(int.parse(color.replaceAll('Color(', '').replaceAll(')', '')));
+    String processedColor = color
+        .replaceAll('Color(', '')
+        .replaceAll(')', '');
+
+    if (processedColor.startsWith('#')) {
+      // #RRGGBB 또는 #AARRGGBB를 0x 형식으로 변환
+      processedColor = processedColor.replaceFirst('#', '0x');
+    }
+
+    return Color(int.parse(processedColor));
   }
 }
 
@@ -670,10 +726,12 @@ class CustomTextField {
 }
 
 class Question extends StatelessWidget {
+  final String number;
   final String question;
 
   const Question({
     super.key,
+    required this.number,
     required this.question,
   });
 
@@ -681,6 +739,12 @@ class Question extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        Text(number,
+            style: const TextStyle(
+                color: mainRed, fontWeight: FontWeight.w800, fontSize: 14)),
+        const SizedBox(
+          width: 8,
+        ),
         Text(question,
             style: const TextStyle(
                 color: Colors.white,
@@ -822,13 +886,13 @@ class CustomIconButton {
         color: const Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-            offset: const Offset(0, 0), // X, Y 위치 (0,0)
-            blurRadius: 7, // 블러 7
-            spreadRadius: 0, // 스프레드 0
-          ),
-        ],
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                    offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                    blurRadius: 7, // 블러 7
+                    spreadRadius: 0, // 스프레드 0
+                  ),
+                ],
       ),
       child: GestureDetector(
         onTap: () {

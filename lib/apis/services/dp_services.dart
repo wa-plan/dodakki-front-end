@@ -41,8 +41,7 @@ class MainGoalListService {
       print('서버 응답: ${response.body}');
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonResponse =
-            json.decode(utf8.decode(response.bodyBytes));
+        final List<dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
 
         List<Map<String, dynamic>> mainGoals = jsonResponse
             .map((item) => {
@@ -122,6 +121,7 @@ class AddSecondGoalService {
         //print('서버 응답 본문: ${response.body}');
 
         if (response.statusCode == 200 || response.statusCode == 201) {
+          
         } else {
           Fluttertoast.showToast(
             msg: '목표 생성 실패: ${response.body}',
@@ -184,8 +184,8 @@ class SecondGoalListService {
       print('서버 응답: ${response.body}');
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse =
-            json.decode(utf8.decode(response.bodyBytes));
+
+        final Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
 
         // Parsing the response to match the desired structure
         final List<Map<String, dynamic>> mainGoals = [
@@ -306,6 +306,7 @@ class AddThirdGoalService {
           print('서버 응답 본문: ${response.body}');
 
           if (response.statusCode == 200 || response.statusCode == 201) {
+            
           } else {
             Fluttertoast.showToast(
               msg: '목표 생성 실패: ${response.body}',
@@ -332,6 +333,7 @@ class AddThirdGoalService {
     return allSuccess;
   }
 }
+
 
 class DeleteMandalartService {
   static Future<bool> deleteMandalart(
@@ -715,8 +717,7 @@ class MainGoalDetailService {
       print('서버 응답: ${response.body}');
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonResponse =
-            json.decode(utf8.decode(response.bodyBytes));
+        final List<dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
         List<Map<String, dynamic>> mainGoalsDetail = jsonResponse
             .map((item) => {
                   'id': item['id'],
