@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/screens/DP/Create/dp_create2_page.dart';
 import 'package:domino/styles.dart';
-import 'package:domino/widgets/DP/Create/DP_input3.dart';
-import 'package:domino/widgets/DP/Create/Description2.dart';
+import 'package:domino/widgets/DP/Create/dp_create4_widget.dart';
+import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
 import 'package:domino/widgets/DP/ai_popup2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -158,7 +158,7 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset('assets/img/AIIcon.png', height: 15),
+                          Image.asset('assets/img/AIIcon.png', height: currentWidth < 600 ? 15 : 18),
                           SizedBox(width: currentWidth < 600 ? 4 : 7),
                           Text(
                             'Ask AI',

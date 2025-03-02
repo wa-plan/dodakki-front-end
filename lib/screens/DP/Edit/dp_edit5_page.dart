@@ -2,14 +2,14 @@ import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 
-class CompletePage extends StatefulWidget {
-  const CompletePage({super.key});
+class EditCompletePage extends StatefulWidget {
+  const EditCompletePage({super.key});
 
   @override
-  State<CompletePage> createState() => _CompletePageState();
+  State<EditCompletePage> createState() => _EditCompletePageState();
 }
 
-class _CompletePageState extends State<CompletePage> {
+class _EditCompletePageState extends State<EditCompletePage> {
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
@@ -39,7 +39,7 @@ class _CompletePageState extends State<CompletePage> {
                         child: Column(
                           children: [
                             Text(
-                              "플랜 만들기 성공!",
+                              "플랜 수정하기 성공!",
                               style: TextStyle(
                                 fontSize: currentWidth < 600 ? 16 : 25,
                                 fontWeight: FontWeight.w600,
@@ -48,7 +48,7 @@ class _CompletePageState extends State<CompletePage> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "이제 목표를 향해\n달려볼까요?",
+                              "새로운 플랜으로 다시\n달려볼까요?",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: currentWidth < 600 ? 14 : 23,

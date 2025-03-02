@@ -1,13 +1,13 @@
 import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:domino/apis/services/td_services.dart';
-import 'package:domino/screens/TD/td_main.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
+//import 'package:domino/widgets/DP/mandalart2.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/widgets/TD/edit_calendar.dart';
 import 'package:domino/widgets/TD/edit_repeat_settings.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:domino/styles.dart';
 
 class EditPage extends StatefulWidget {
   final DateTime date;
@@ -35,36 +35,9 @@ class EditPageState extends State<EditPage> {
   String dominoValue = '';
   late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
 
-  /*void editDomino(int goalId, String newGoal) async {
+  void editDomino(int goalId, String newGoal) async {
     final success =
-        await EditDominoNewService.editDomino(goalId: goalId, newGoal: newGoal);
-
-    if (success) {
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노가 삭제되었습니다.')),
-      );
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const TdMain(),
-          ));
-    } else {
-      // 실패한 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
-      );
-    }
-  }*/
-
-  void editDominoNew(int thirdGoalId, String name, List<DateTime> dates,
-      String repetition) async {
-    final success = await EditDominoNewService.editDomino(
-        thirdGoalId: thirdGoalId,
-        name: name,
-        dates: dates,
-        repetition: repetition);
+        await EditDominoService.editDomino(goalId: goalId, newGoal: newGoal);
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
@@ -85,18 +58,41 @@ class EditPageState extends State<EditPage> {
     }
   }
 
+  //텍스트폼필드 함수 만들기
+  renderTextFormField({
+    required FormFieldSetter onSaved,
+    required FormFieldValidator validator,
+  }) {
+    return TextFormField(
+      onSaved: onSaved,
+      validator: validator,
+      controller: dominoController,
+      style: const TextStyle(fontSize: 16, color: Colors.white),
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        suffixIcon: dominoController.text.isNotEmpty
+            ? IconButton(
+                onPressed: () {
+                  dominoController.clear();
+                },
+                icon: const Icon(Icons.clear_outlined),
+              )
+            : null,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     dominoController = TextEditingController(text: widget.content);
     switchValue = widget.switchValue;
     interval = widget.interval;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<DateListProvider>().updateRepeatSettings(interval);
-      }
-    });
+    context.read<DateListProvider>().updateRepeatSettings(interval);
+    everyDay = context.read<DateListProvider>().everyDay;
+    everyWeek = context.read<DateListProvider>().everyWeek;
+    everyTwoWeek = context.read<DateListProvider>().everyTwoWeek;
+    everyMonth = context.read<DateListProvider>().everyMonth;
   }
 
   @override
@@ -144,18 +140,19 @@ class EditPageState extends State<EditPage> {
               ),
               Form(
                 key: formKey,
-                child: CustomTextField(
-                  "",
-                  dominoController,
-                  (value) {
-                    if (value == null || value.isEmpty) {
+                child: renderTextFormField(
+                  onSaved: (value) {
+                    setState(() {
+                      dominoValue = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value.length < 1) {
                       return '1자 이상 써주세요';
                     }
                     return null;
                   },
-                  false,
-                  1,
-                ).textField(),
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -235,7 +232,7 @@ class EditPageState extends State<EditPage> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                /*TextButton(
+                TextButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       formKey.currentState!.save();
@@ -280,86 +277,6 @@ class EditPageState extends State<EditPage> {
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-                ),*/
-                TextButton(
-                  onPressed: () async {
-                    // 🔹 async 추가
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-
-                      DateTime? pickedDate =
-                          context.read<DateProvider>().pickedDate;
-
-                      if (pickedDate == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('날짜를 선택해 주세요.')),
-                        );
-                      } else {
-                        // 🔹 반복 설정을 적용
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (mounted) {
-                            context
-                                .read<DateListProvider>()
-                                .setInterval(switchValue, pickedDate);
-                          }
-                        });
-
-                        // 🔹 반복 정보 가져오기
-                        String repetition =
-                            context.read<DateListProvider>().repeatInfo();
-                        List<DateTime> dateList =
-                            context.read<DateListProvider>().dateList;
-
-                        // 🔹 날짜 리스트가 비어 있으면 기본값 설정
-                        if (dateList.isEmpty) {
-                          dateList = [pickedDate];
-                        }
-
-                        print('전송값 테스트!!');
-                        print(widget.goalId);
-                        print(dominoController.text);
-                        print(dateList);
-                        print(repetition);
-
-                        // 🔹 수정 요청 후 성공 여부 확인
-                        bool success = await EditDominoNewService.editDomino(
-                          thirdGoalId: widget.goalId,
-                          name: dominoController.text,
-                          dates: dateList,
-                          repetition: repetition,
-                        );
-
-                        if (success) {
-                          // 성공 메시지 출력 후 페이지 이동
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('도미노가 수정되었습니다.')),
-                          );
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TdMain(),
-                            ),
-                          );
-                        } else {
-                          // 실패 메시지 출력
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('도미노 수정에 실패했습니다.')),
-                          );
-                        }
-                      }
-                    }
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xff131313),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0))),
-                  child: const Text(
-                    'new완료',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
                 ),
               ]),
             ],
@@ -396,8 +313,7 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
   void deleteTodayDomino(int goalId, String goalDate) async {
     final success = await DeleteTodayDominoService.deleteTodayDomino(
         goalId: goalId, goalDate: goalDate);
-    print('goalId=$goalId');
-    print('goalDate=$goalDate');
+
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
       ScaffoldMessenger.of(context).showSnackBar(

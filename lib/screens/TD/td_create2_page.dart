@@ -1,6 +1,6 @@
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/provider/TD/datelist_provider.dart';
-import 'package:domino/screens/TD/td_main.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/provider/TD/date_provider.dart';
@@ -61,6 +61,45 @@ class AddPage2State extends State<AddPage2> {
     }
   }
 
+  // 텍스트폼필드 함수
+  Widget renderTextFormField({
+    required FormFieldSetter onSaved,
+    required FormFieldValidator validator,
+    required double currentWidth
+  }) {
+    return SizedBox(
+      height: currentWidth < 600 ? 45 : 50,
+      child: TextFormField(
+        onSaved: onSaved,
+        validator: validator,
+        controller: dominoController,
+        style: const TextStyle(color: Colors.white, fontSize: 14),
+        decoration: InputDecoration(
+          filled: true,
+        fillColor: const Color(0xff2A2A2A),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(6),
+        ),
+         contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+          
+          suffixIcon: dominoController.text.isNotEmpty
+              ? IconButton(
+                  onPressed: () {
+                    dominoController.clear();
+                  },
+                  icon:  Icon(
+                    Icons.cancel,
+                    size: currentWidth < 600 ? 14 : 16,
+                        color: const Color.fromARGB(255, 98, 98, 98),
+                  ),
+                )
+              : null,
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -72,6 +111,7 @@ class AddPage2State extends State<AddPage2> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -79,109 +119,88 @@ class AddPage2State extends State<AddPage2> {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: Text(
-            '도미노 만들기',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          child: DPTitleText('도미노 만들기', currentWidth).dPTitleText(),
         ),
         backgroundColor: backgroundColor,
       ),
       body: Padding(
         padding: fullPadding,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const SizedBox(height: 5),
             Expanded(
-              child: ListView(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '더 자세하게 바꿀 수 있어요.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    DPGuideText('더 구체적으로 바꿀 수 있어요.', currentWidth).dPGuideText(),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+
+                    
+          
+                    Form(
+                      key: formKey,
+                      child: renderTextFormField(
+                        currentWidth: currentWidth,
+                        onSaved: (value) {
+                          setState(() {
+                            dominoValue = value!;
+                          });
+                        },
+                        validator: (value) {
+                          if (value!.length < 1) {
+                            return '한 글자 이상 써주세요';
+                          }
+                          return null;
+                        },
                       ),
-                      const Text(
-                        '영어 공부를 영단어 5개 암기로!',
-                        style: TextStyle(
-                            color: mainGold,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 1.1),
-                      ),
-                      const SizedBox(height: 13),
-                      Form(
-                        key: formKey,
-                        child: CustomTextField(
-                          "",
-                          dominoController,
-                          (value) {
-                            if (value == null || value.isEmpty) {
-                              return '한 글자 이상 써주세요';
-                            }
-                            return null;
-                          },
-                          false,
-                          1,
-                        ).textField(),
-                      ),
-                      const SizedBox(height: 28),
-                      const Text(
-                        '언제 실행하고 싶나요?',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      Center(
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 15),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff2A2A2A),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                            height: 350,
-                            width: 350,
-                            child: const AddCalendar()),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            '반복하기',
-                            style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    DPGuideText('더 구체적으로 바꿀 수 있어요.', currentWidth).dPGuideText(),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    Center(
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 15),
+                          decoration: BoxDecoration(
+                            color: const Color(0xff2A2A2A),
+                            borderRadius: BorderRadius.circular(3),
                           ),
-                          const SizedBox(width: 10),
-                          SizedBox(
-                            height: 10,
-                            child: Switch(
-                              activeColor: Colors.white,
-                              activeTrackColor: const Color(0xff18AD00),
-                              inactiveTrackColor: const Color(0xff5D5D5D),
-                              inactiveThumbColor: Colors.white,
-                              value: switchValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  switchValue = value;
-                                });
-                              },
-                            ),
+                          width: currentWidth < 600 ? 300 : 500,
+                          child: const AddCalendar()),
+                    ),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                         Text(
+                          '반복하기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: currentWidth < 600 ? 13 : 16),
+                        ),
+                        SizedBox(height: currentWidth < 600 ? 10 : 15),
+                        SizedBox(
+                          height: currentWidth < 600 ? 7 : 10,
+                          child: Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: const Color(0xff18AD00),
+                            inactiveTrackColor: const Color(0xff5D5D5D),
+                            inactiveThumbColor: Colors.white,
+                            value: switchValue,
+                            onChanged: (value) {
+                              setState(() {
+                                switchValue = value;
+                              });
+                            },
                           ),
-                        ],
-                      ),
-                      if (switchValue) const RepeatSettings() // 반복 설정 위젯 추가
-                    ],
-                  ),
-                ],
+                        ),
+                      ],
+                    ),
+                    if (switchValue) const RepeatSettings() // 반복 설정 위젯 추가
+                  ],
+                ),
               ),
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
