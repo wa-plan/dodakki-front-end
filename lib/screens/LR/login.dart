@@ -1,5 +1,5 @@
 import 'package:domino/screens/LR/loginregister_find_password.dart';
-import 'package:domino/screens/TD/td_main.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
 import 'package:domino/screens/TR/tr_1.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
