@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:domino/screens/DP/Create/dp_create1_page.dart';
 import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/apis/services/dp_services.dart';
-import 'package:domino/screens/DP/Detail/detail_9x9_page.dart';
+import 'package:domino/screens/DP/Detail/dp_detail1_page.dart';
 import 'package:provider/provider.dart';
 
 class DPMain extends StatefulWidget {

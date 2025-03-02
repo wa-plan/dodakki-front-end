@@ -1,4 +1,4 @@
-import 'package:domino/screens/DP/dp_main.dart';
+import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 

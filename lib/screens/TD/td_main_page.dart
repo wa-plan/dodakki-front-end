@@ -9,6 +9,7 @@ class TdMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
 
@@ -18,10 +19,7 @@ class TdMain extends StatelessWidget {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: Text(
-            '오늘의 도미노',
-            style: Theme.of(context).textTheme.titleLarge
-          ),
+          child: DPTitleText('오늘의 도미노', currentWidth).dPTitleText(),
         ),
         backgroundColor: backgroundColor,
       ),

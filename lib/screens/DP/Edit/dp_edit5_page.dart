@@ -2,18 +2,18 @@ import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 
-class Tutorial7 extends StatefulWidget {
-  const Tutorial7({super.key});
+class EditCompletePage extends StatefulWidget {
+  const EditCompletePage({super.key});
 
   @override
-  State<Tutorial7> createState() => Tutorial7State();
+  State<EditCompletePage> createState() => _EditCompletePageState();
 }
 
-class Tutorial7State extends State<Tutorial7> {
+class _EditCompletePageState extends State<EditCompletePage> {
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
-
+    final currentHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         backgroundColor: backgroundColor,
         body: Padding(
@@ -39,7 +39,7 @@ class Tutorial7State extends State<Tutorial7> {
                         child: Column(
                           children: [
                             Text(
-                              "이제 함께 시작해볼까?",
+                              "플랜 수정하기 성공!",
                               style: TextStyle(
                                 fontSize: currentWidth < 600 ? 16 : 25,
                                 fontWeight: FontWeight.w600,
@@ -48,7 +48,8 @@ class Tutorial7State extends State<Tutorial7> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "상상도 못할 만큼 큰\n도미노를 쓰러뜨려봐!",
+                              "새로운 플랜으로 다시\n달려볼까요?",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: currentWidth < 600 ? 14 : 23,
                                 fontWeight: FontWeight.w400,
@@ -68,7 +69,7 @@ class Tutorial7State extends State<Tutorial7> {
                 child: Center(
                   child: Image.asset(
                     "assets/img/Complete.png", 
-                    height: currentWidth < 600 ? 270 : 400))),
+                    height: currentHeight*0.4))),
         
                
             ],
@@ -97,7 +98,7 @@ class Tutorial7State extends State<Tutorial7> {
                   ),
                 ),
                 child: Text(
-                  '시작하기',
+                  '네!',
                   style: TextStyle(
                       color: backgroundColor,
                       fontSize: currentWidth < 600 ? 15 : 21,

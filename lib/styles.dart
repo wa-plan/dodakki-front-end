@@ -384,6 +384,49 @@ class DPGrid2 {
   }
 }
 
+//TDGrid2
+class TDGrid2 {
+  final int hintNum;
+  final String mandalart;
+  final List<Map<String, dynamic>> secondGoals;
+  final Border? border;
+  final double maxFontSize;
+
+  const TDGrid2(this.hintNum, this.mandalart, this.secondGoals,
+      this.maxFontSize, this.border);
+
+  Widget tdGrid2() {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color:
+            secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
+                ? ColorTransform(secondGoals[hintNum]['color']).colorTransform()
+                : Colors.transparent,
+        border: border,
+      ),
+      margin: const EdgeInsets.all(1.0),
+      child: Center(
+        child: AutoSizeText(
+          secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
+              ? secondGoals[hintNum]['secondGoal']
+              : "",
+          maxLines: 3,
+          minFontSize: 6,
+          maxFontSize: maxFontSize,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
 //Grid for Creating
 class DPCreateGrid {
   final String text;
@@ -543,7 +586,7 @@ class TDGrid3 {
                       .containsKey(hintNum3) &&
                   secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal'] !=
                       ""
-              ? Border.all(color: Colors.white, width: 2)
+              ? Border.all(color: Colors.white, width: 5)
               : null,
         ),
         margin: const EdgeInsets.all(1.0),
@@ -609,7 +652,16 @@ class ColorTransform {
   const ColorTransform(this.color);
 
   Color colorTransform() {
-    return Color(int.parse(color.replaceAll('Color(', '').replaceAll(')', '')));
+    String processedColor = color
+        .replaceAll('Color(', '')
+        .replaceAll(')', '');
+
+    if (processedColor.startsWith('#')) {
+      // #RRGGBB 또는 #AARRGGBB를 0x 형식으로 변환
+      processedColor = processedColor.replaceFirst('#', '0x');
+    }
+
+    return Color(int.parse(processedColor));
   }
 }
 
