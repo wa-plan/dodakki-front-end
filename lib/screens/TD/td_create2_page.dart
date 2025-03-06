@@ -157,7 +157,7 @@ class AddPage2State extends State<AddPage2> {
                       ),
                     ),
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
-                    DPGuideText('더 구체적으로 바꿀 수 있어요.', currentWidth).dPGuideText(),
+                    DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
                     Center(
                       child: Container(

@@ -1,6 +1,6 @@
 import 'package:domino/screens/LR/loginregister_find_password.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
-import 'package:domino/screens/TR/tr_1.dart';
+import 'package:domino/screens/Tutorial/tutorial1_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/LR/register.dart';
@@ -55,9 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
         password = parts[passwordIndex + 1];
       }
 
-      print("UserID: $userId");
-      print("Password: $password");
-
       // userId와 password가 모두 있으면 로그인 처리
       if (userId != null && password != null) {
         bool isSuccess = await _loginService.login(context, userId, password);
@@ -70,15 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
               MaterialPageRoute(builder: (context) => const TdMain()),
             );
           }
-        } else {
-          print("자동 로그인 실패: 로그인 정보를 확인하세요.");
-        }
-      } else {
-        print("로그인 정보가 불완전합니다.");
-      }
-    } else {
-      print("저장된 로그인 정보가 없습니다.");
-    }
+        } else {}
+      } else {}
+    } else {}
   }
 
   void _login() async {
@@ -109,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const TR_1()),
+          MaterialPageRoute(builder: (context) => const Tutorial1()),
         );
       }
     } else {
@@ -134,97 +125,97 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
+    final currentHeight = MediaQuery.of(context).size.height;
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-
-          image: AssetImage('assets/img/newBG.png'), // 배경 이미지
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-                Text(
-                  '도닦기에 오신 것을\n환영합니다:)',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 18 : 24,
-                      fontWeight: FontWeight.w700,
-                      height: 1.7),
-                ),
-                const SizedBox(height: 30),
-                Column(
+    return Scaffold(
+      backgroundColor: Color(0xff222222),
+      body: Padding(
+          padding: currentWidth < 600
+              ? const EdgeInsets.fromLTRB(25, 30, 0, 15)
+              : const EdgeInsets.fromLTRB(50, 60, 0, 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 40),
+              Text(
+                '도닦기에 오신 것을\n환영합니다:)',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: currentWidth < 600 ? 18 : 24,
+                    fontWeight: FontWeight.w700,
+                    height: 1.4),
+              ),
+              SizedBox(height: currentWidth < 600 ? 30 : 45),
+              Padding(
+                padding: currentWidth < 600
+              ? const EdgeInsets.fromLTRB(0, 0, 25, 0)
+              : const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                child: Column(
                   children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text(
-                        'ID',
-                        style: TextStyle(
-                            color: const Color(0xffAAAAAA),
-                            fontFamily: "Pretendard",
-                            fontSize: currentWidth < 600 ? 16 : 20,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        width: currentWidth < 600 ? 25 : 50,
-                      ),
-                      SizedBox(
-                        height: currentWidth < 600 ? 35 : 70,
-                        width: currentWidth < 600 ? 200 : 400,
-                        child: Padding(
-                          padding:
-                              EdgeInsets.only(top: currentWidth < 600 ? 0 : 10),
-                          child: CustomTextField('아이디를 입력해 주세요.', _idcontroller,
-                                  (value) {
-                            if (value == null || value.isEmpty) {
-                              return '아이디를 입력해 주세요.';
-                            }
-                            return null;
-                          }, false, 1)
-                              .textField(),
-                        ),
-                      )
-                    ]),
-                    const SizedBox(height: 20.0),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text(
-                        'PW',
-                        style: TextStyle(
-                            color: const Color(0xffAAAAAA),
-                            fontSize: currentWidth < 600 ? 16 : 20,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        width: currentWidth < 600 ? 20 : 40,
-                      ),
-                      SizedBox(
-                        height: currentWidth < 600 ? 35 : 70,
-                        width: currentWidth < 600 ? 200 : 400,
-                        child: Padding(
-                          padding:
-                              EdgeInsets.only(top: currentWidth < 600 ? 0 : 10),
-                          child: CustomTextField(
-                                  '비밀번호를 입력해 주세요.', _pwcontroller, (value) {
-                            if (value == null || value.isEmpty) {
-                              return '비밀번호를 입력해 주세요.';
-                            }
-                            return null;
-                          }, false, 1)
-                              .textField(),
-                        ),
-                      )
-                    ]),
-                    const SizedBox(height: 20),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ID',
+                              style: TextStyle(
+                                  color: const Color(0xffAAAAAA),
+                                  fontFamily: "Pretendard",
+                                  fontSize: currentWidth < 600 ? 16 : 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: SizedBox(
+                              height: currentWidth < 600 ? 38 : 70,
+                              child: NewCustomTextField(
+                                      '아이디를 입력해 주세요.', _idcontroller, (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '아이디를 입력해 주세요.';
+                                }
+                                return null;
+                              }, false, 1, currentWidth)
+                                  .newtextField(),
+                            ),
+                          )
+                        ]),
+                    SizedBox(height: currentWidth < 600 ? 15 : 0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'PW',
+                              style: TextStyle(
+                                  color: const Color(0xffAAAAAA),
+                                  fontSize: currentWidth < 600 ? 16 : 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: SizedBox(
+                              height: currentWidth < 600 ? 38 : 70,
+                              child: NewCustomTextField(
+                                      '비밀번호를 입력해 주세요.', _pwcontroller, (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '비밀번호를 입력해 주세요.';
+                                }
+                                return null;
+                              }, false, 1, currentWidth)
+                                  .newtextField(),
+                            ),
+                          )
+                        ]),
+                    SizedBox(height: 20),
                     SizedBox(
-                      width: currentWidth < 600 ? 280 : 500,
-                      height: currentWidth < 600 ? 35 : 50,
+                      width: double.infinity,
+                      height: currentWidth < 600 ? 40 : 50,
                       child: TextButton(
                           onPressed: () async {
                             // SecureStorage에 데이터 저장
@@ -278,10 +269,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             '아이디/비밀번호 찾기',
                             style: TextStyle(
                               color: const Color(0xffAAAAAA),
-                              fontSize: currentWidth < 600 ? 13 : 16,
+                              fontSize: currentWidth < 600 ? 12.5 : 16,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+                        ),
+                        Container(
+                          width: 1.3,
+                          height: 15,
+                          color: const Color(0xffAAAAAA),
                         ),
                         TextButton(
                           onPressed: () {
@@ -304,20 +300,31 @@ class _LoginScreenState extends State<LoginScreen> {
                             '계정생성하기',
                             style: TextStyle(
                               color: const Color(0xffAAAAAA),
-                              fontSize: currentWidth < 600 ? 13 : 16,
+                              fontSize: currentWidth < 600 ? 12.5 : 16,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    
                   ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                    height: currentWidth < 600 ? 5 : 20,
+                  ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Image.asset(
+                      "assets/img/tr_1.png", 
+                      height: currentWidth < 1000 ? currentHeight*0.4 : 0),
+              )
+              
+            ],
           ),
         ),
-      ),
+      
     );
   }
 }
