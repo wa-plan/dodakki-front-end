@@ -30,6 +30,7 @@ class AddCalendarState extends State<AddCalendar> {
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     return TableCalendar(
+      rowHeight: 35,
       locale: 'ko-KR',
       focusedDay: _focusedDay,
       selectedDayPredicate: (day) {
@@ -54,6 +55,7 @@ class AddCalendarState extends State<AddCalendar> {
       },
       calendarFormat: CalendarFormat.month,
       calendarStyle: CalendarStyle(
+        
             markerSize: 0.0,
             isTodayHighlighted: true,
             todayDecoration: const BoxDecoration(

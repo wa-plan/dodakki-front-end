@@ -690,7 +690,68 @@ class CustomTextField {
         contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
         hintStyle: const TextStyle(
             color: Color(0xffAAAAAA),
-            fontSize: 13,
+            fontSize: 12,
+            fontWeight: FontWeight.w400),
+        suffixIcon: controller.text.isNotEmpty
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
+                children: [
+                  GestureDetector(
+                    onTap: onClear ??
+                        () {
+                          controller.clear();
+                        },
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 13, 10, 10),
+                      child: const Icon(
+                        Icons.cancel,
+                        size: 14,
+                        color: Color.fromARGB(255, 98, 98, 98),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : null,
+      ),
+      validator: validator,
+    );
+  }
+}
+
+//NewTextFormField
+class NewCustomTextField {
+  final String hintText;
+  final TextEditingController controller;
+  final FormFieldValidator<String?> validator;
+  final bool obscureText;
+  final int maxLines;
+  final double currentWidth;
+
+  const NewCustomTextField(this.hintText, this.controller, this.validator,
+      this.obscureText, this.maxLines, this.currentWidth);
+
+  Widget newtextField({
+    bool obscureText = false,
+    void Function()? onClear,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      maxLines: maxLines,
+      style: const TextStyle(color: Colors.white, fontSize: 14),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: const Color(0xff2A2A2A),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        hintText: hintText,
+        contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+        hintStyle: TextStyle(
+            color: Color(0xffAAAAAA),
+            fontSize: currentWidth < 600 ? 12 : 14,
             fontWeight: FontWeight.w400),
         suffixIcon: controller.text.isNotEmpty
             ? Column(

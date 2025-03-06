@@ -1,3 +1,4 @@
+import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +28,11 @@ class EditCalendarState extends State<EditCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         TableCalendar(
+          rowHeight: 35,
           locale: 'ko-KR',
           focusedDay: _focusedDay,
           selectedDayPredicate: (day) {
@@ -54,32 +57,37 @@ class EditCalendarState extends State<EditCalendar> {
           },
           calendarFormat: CalendarFormat.month,
           calendarStyle: CalendarStyle(
+            markerSize: 0.0,
               outsideDaysVisible: false,
               isTodayHighlighted: true,
               todayDecoration: const BoxDecoration(
                   color: Color(0xFF5B5B5B), shape: BoxShape.circle),
               selectedDecoration: const BoxDecoration(
-                  color: Color(0xFFFF6767), shape: BoxShape.rectangle),
+                  color: mainRed, shape: BoxShape.circle),
               defaultTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: MediaQuery.of(context).size.width * 0.035,
-              ),
-              weekendTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: MediaQuery.of(context).size.width * 0.035,
-              )),
-          headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-              titleTextStyle: TextStyle(color: Colors.white),
-              leftChevronIcon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
-              rightChevronIcon: Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-              )),
+              color: mainTextColor,
+              fontSize: currentWidth < 600 ? 12 : 16,
+            ),
+            weekendTextStyle: TextStyle(
+              color: mainTextColor,
+              fontSize: currentWidth < 600 ? 12 : 16,
+            ),),
+          headerStyle: HeaderStyle(
+            titleCentered: true,
+            titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
+            leftChevronIcon: Icon(
+              Icons.arrow_back_ios,
+              color: const Color(0xffD4D4D4),
+              size: currentWidth < 600 ? 17 : 20,
+            ),
+            rightChevronIcon: Icon(
+              Icons.arrow_forward_ios,
+              color: const Color(0xffD4D4D4),
+              size: currentWidth < 600 ? 17 : 20,
+            ),
+            formatButtonVisible:
+                false, //원래 달력 열고 닫는 버튼. 지금은 화살표 아이콘이 역할을 대신하고 있음.
+          ),
           firstDay: DateTime.utc(2014, 1, 1),
           lastDay: DateTime.utc(2034, 12, 31),
         ),

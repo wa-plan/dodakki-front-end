@@ -2,7 +2,7 @@ import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:domino/apis/services/td_services.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
-//import 'package:domino/widgets/DP/mandalart2.dart';
+import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/widgets/TD/edit_calendar.dart';
 import 'package:domino/widgets/TD/edit_repeat_settings.dart';
@@ -62,23 +62,35 @@ class EditPageState extends State<EditPage> {
   renderTextFormField({
     required FormFieldSetter onSaved,
     required FormFieldValidator validator,
+    required double currentWidth
   }) {
     return TextFormField(
       onSaved: onSaved,
       validator: validator,
       controller: dominoController,
-      style: const TextStyle(fontSize: 16, color: Colors.white),
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        suffixIcon: dominoController.text.isNotEmpty
-            ? IconButton(
-                onPressed: () {
-                  dominoController.clear();
-                },
-                icon: const Icon(Icons.clear_outlined),
-              )
-            : null,
-      ),
+      style: const TextStyle(color: Colors.white, fontSize: 14),
+        decoration: InputDecoration(
+          filled: true,
+        fillColor: const Color(0xff2A2A2A),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(6),
+        ),
+         contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+          
+          suffixIcon: dominoController.text.isNotEmpty
+              ? IconButton(
+                  onPressed: () {
+                    dominoController.clear();
+                  },
+                  icon:  Icon(
+                    Icons.cancel,
+                    size: currentWidth < 600 ? 14 : 16,
+                        color: const Color.fromARGB(255, 98, 98, 98),
+                  ),
+                )
+              : null,
+        ),
     );
   }
 
@@ -97,189 +109,187 @@ class EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
         title: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
-          child: Text(
-            '도미노 수정하기',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: MediaQuery.of(context).size.width * 0.06,
-                fontWeight: FontWeight.w600),
-          ),
+          padding: appBarPadding,
+          child: DPTitleText('도미노 만들기', currentWidth).dPTitleText(),
         ),
-        backgroundColor: const Color(0xff262626),
+        backgroundColor: backgroundColor,
       ),
-      backgroundColor: const Color(0xff262626),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(38.0, 30.0, 40.0, 0.0),
-        child: ListView(children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                '더 자세하게 바꿀 수 있어요.',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.1),
-              ),
-              const Text(
-                '예시) 영어 공부 > 영단어 5개 암기',
-                style: TextStyle(
-                    color: Color(0xffF6C92B),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.1),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Form(
-                key: formKey,
-                child: renderTextFormField(
-                  onSaved: (value) {
-                    setState(() {
-                      dominoValue = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value.length < 1) {
-                      return '1자 이상 써주세요';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                '언제 실행하고 싶나요?',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold),
-              ),
-              EditCalendar(widget.date), //추가할 때 달력
-
-              const SizedBox(
-                height: 20,
-              ),
-
-              //반복하기 기능
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end, //오른쪽 정렬
-                children: [
-                  const Text(
-                    '반복하기',
-                    style: TextStyle(color: Colors.white),
+        padding: fullPadding,
+        child: Column(children: [
+          const SizedBox(height: 5),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: currentWidth < 600 ? 15 : 25),
+                  DPGuideText('더 구체적으로 바꿀 수 있어요.', currentWidth).dPGuideText(),
+                  SizedBox(height: currentWidth < 600 ? 15 : 25),
+                  Form(
+                    key: formKey,
+                    child: renderTextFormField(
+                      currentWidth: currentWidth,
+                      onSaved: (value) {
+                        setState(() {
+                          dominoValue = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value.length < 1) {
+                          return '한 글자 이상 써주세요';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                  const SizedBox(width: 10),
-                  Switch(
-                    value: switchValue,
-                    onChanged: (value) {
-                      setState(() {
-                        switchValue = value;
-                      });
-                    },
+                  SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 15),
+                          decoration: BoxDecoration(
+                            color: const Color(0xff2A2A2A),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          width: currentWidth < 600 ? 300 : 500,
+                      child: EditCalendar(widget.date))), //추가할 때 달력
+
+                  SizedBox(height: currentWidth < 600 ? 15 : 25),
+
+                  //반복하기 기능
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end, //오른쪽 정렬
+                    children: [
+                       Text(
+                        '반복하기',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: currentWidth < 600 ? 13 : 16),
+                      ),
+                      SizedBox(height: currentWidth < 600 ? 10 : 15),
+
+
+                      SizedBox(
+                        height: currentWidth < 600 ? 7 : 10,
+                        child: Switch(
+                          activeColor: Colors.white,
+                            activeTrackColor: const Color(0xff18AD00),
+                            inactiveTrackColor: const Color(0xff5D5D5D),
+                            inactiveThumbColor: Colors.white,
+                          value: switchValue,
+                          onChanged: (value) {
+                            setState(() {
+                              switchValue = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
+                  
+                  if (switchValue)
+                    EditRepeatSettings(
+                        everyDay, everyWeek, everyTwoWeek, everyMonth),
+
+                  
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: TextButton.styleFrom(
+                              backgroundColor: const Color(0xff131313),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6.0))),
+                          child: const Text(
+                            '이전',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ), //취소 버튼
+                        TextButton(
+                          onPressed: () {
+                            howDeleteDialog(
+                                context, widget.goalId, widget.date);
+                          },
+                          style: TextButton.styleFrom(
+                              backgroundColor: const Color(0xFFFF6767),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6.0))),
+                          child: const Text(
+                            '삭제',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState!.save();
+
+                              DateTime? pickedDate =
+                                  context.read<DateProvider>().pickedDate;
+
+                              print(pickedDate);
+
+                              if (pickedDate == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('날짜를 선택해 주세요.')),
+                                );
+                              } else {
+                                context
+                                    .read<DateListProvider>()
+                                    .setInterval(switchValue, pickedDate);
+                                List<DateTime> dateList =
+                                    context.read<DateListProvider>().dateList;
+                                String repeatInfo = context
+                                    .read<DateListProvider>()
+                                    .repeatInfo();
+                                print('repeatInfo=$repeatInfo');
+                                EditDominoService.editDomino(
+                                    goalId: widget.goalId,
+                                    newGoal: dominoController.text);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const TdMain(),
+                                    ));
+                              }
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                              backgroundColor: const Color(0xff131313),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6.0))),
+                          child: const Text(
+                            '완료',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ]),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              if (switchValue)
-                EditRepeatSettings(
-                    everyDay, everyWeek, everyTwoWeek, everyMonth),
-
-              const SizedBox(
-                height: 20,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xff131313),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0))),
-                  child: const Text(
-                    '이전',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ), //취소 버튼
-                TextButton(
-                  onPressed: () {
-                    howDeleteDialog(context, widget.goalId, widget.date);
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF6767),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0))),
-                  child: const Text(
-                    '삭제',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-
-                      DateTime? pickedDate =
-                          context.read<DateProvider>().pickedDate;
-
-                      print(pickedDate);
-
-                      if (pickedDate == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('날짜를 선택해 주세요.')),
-                        );
-                      } else {
-                        context
-                            .read<DateListProvider>()
-                            .setInterval(switchValue, pickedDate);
-                        List<DateTime> dateList =
-                            context.read<DateListProvider>().dateList;
-                        String repeatInfo =
-                            context.read<DateListProvider>().repeatInfo();
-                        print('repeatInfo=$repeatInfo');
-                        EditDominoService.editDomino(
-                            goalId: widget.goalId,
-                            newGoal: dominoController.text);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TdMain(),
-                            ));
-                      }
-                    }
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xff131313),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0))),
-                  child: const Text(
-                    '완료',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ]),
-            ],
+            ),
           ),
         ]),
       ),
