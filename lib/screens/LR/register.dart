@@ -1,7 +1,5 @@
-import 'dart:ui';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:domino/screens/LR/login.dart';
 import 'package:domino/apis/services/lr_services.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -55,295 +53,272 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: appBarPadding,
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                color: const Color(0xffD4D4D4),
-                iconSize: 17,
-              ),
-              Text(
-                '계정생성',
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 18 : 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-        backgroundColor: backgroundColor,
-      ),
-      body: SingleChildScrollView(
+      backgroundColor: Color(0xff222222),
+      body: Padding(
+        padding: currentWidth < 600
+            ? const EdgeInsets.fromLTRB(25, 25, 0, 15)
+            : const EdgeInsets.fromLTRB(50, 50, 0, 50),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        CustomIconButton(() {
+                          Navigator.of(context).pop();
+                        }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                            .customIconButton(),
+                        SizedBox(width: currentWidth < 600 ? 10 : 15),
+                        DPTitleText('계정생성하기', currentWidth).dPTitleText(),
+                        const Spacer(),
+                      ],
+                    ),
+                    SizedBox(height: currentWidth < 600 ? 40 : 70),
                     Text(
                       "본인확인 및 본인인증",
                       style: TextStyle(
-                        color: const Color(0xffD4D4D4),
-                        fontWeight: FontWeight.bold,
-                        fontSize: currentWidth < 600 ? 13 : 16,
-                      ),
+                          color: Colors.white,
+                          fontSize: currentWidth < 600 ? 14 : 20,
+                          fontWeight: FontWeight.w700,
+                          height: 1.4),
                     ),
-                    SizedBox(
-                      width: currentWidth < 600 ? 150 : 300,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Email',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 15 : 18,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            SizedBox(
-                              height: currentWidth < 600 ? 30 : 45,
-                              width: currentWidth < 600 ? 200 : 350,
-                              child: CustomTextField(
-                                      '이메일 주소를 입력해 주세요.', _emailController,
-                                      (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '이메일을 주소를 입력해 주세요.';
-                                }
-                                final emailRegex =
-                                    RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                                if (!emailRegex.hasMatch(value)) {
-                                  return '유효한 이메일을 입력해 주세요.';
-                                }
-                                return null;
-                              }, false, 1)
-                                  .textField(),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Phone',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 15 : 18,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: currentWidth < 600 ? 30 : 45,
-                                  width: currentWidth < 600 ? 200 : 350,
-                                  child: CustomTextField(
+                    SizedBox(height: currentWidth < 600 ? 20 : 30),
+                    Form(
+                      key: _formKey,
+                      child: Padding(
+                        padding: currentWidth < 600
+                            ? const EdgeInsets.fromLTRB(0, 0, 25, 0)
+                            : const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                        child: Column(children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  'Email',
+                                  style: TextStyle(
+                                      color: const Color(0xffAAAAAA),
+                                      fontFamily: "Pretendard",
+                                      fontSize: currentWidth < 600 ? 13 : 20,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: SizedBox(
+                                  height: currentWidth < 600 ? 38 : 70,
+                                  child: NewCustomTextField(
+                                          '이메일 주소를 입력해 주세요.', _emailController,
+                                          (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '이메일을 주소를 입력해 주세요.';
+                                    }
+                                    final emailRegex =
+                                        RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                                    if (!emailRegex.hasMatch(value)) {
+                                      return '유효한 이메일을 입력해 주세요.';
+                                    }
+                                    return null;
+                                  }, false, 1, currentWidth)
+                                      .newtextField(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: currentWidth < 600 ? 15 : 0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  'Phone',
+                                  style: TextStyle(
+                                      color: const Color(0xffAAAAAA),
+                                      fontSize: currentWidth < 600 ? 13 : 20,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: SizedBox(
+                                  height: currentWidth < 600 ? 38 : 70,
+                                  child: NewCustomTextField(
                                           '전화번호를 입력해 주세요.', _phoneController,
                                           (value) {
                                     if (value == null || value.isEmpty) {
                                       return '올바른 전화번호를 입력해 주세요.';
                                     }
                                     return null;
-                                  }, false, 1)
-                                      .textField(),
+                                  }, false, 1, currentWidth)
+                                      .newtextField(),
                                 ),
-                                const SizedBox(width: 10.0),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]),
-                ),
-              ],
-            ),
-            const SizedBox(height: 50),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                              ),
+                            ],
+                          ),
+                        ]),
+                      ),
+                    ),
+                    SizedBox(height: currentWidth < 600 ? 40 : 25),
                     Text(
                       "아이디 생성",
                       style: TextStyle(
-                        color: const Color(0xffD4D4D4),
-                        fontWeight: FontWeight.bold,
-                        fontSize: currentWidth < 600 ? 13 : 16,
-                      ),
+                          color: Colors.white,
+                          fontSize: currentWidth < 600 ? 14 : 20,
+                          fontWeight: FontWeight.w700,
+                          height: 1.4),
                     ),
-                    SizedBox(
-                      width: currentWidth < 600 ? 195 : 355,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                SizedBox(
-                  width: 400,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    SizedBox(height: currentWidth < 600 ? 20 : 30),
+                    Padding(
+                      padding: currentWidth < 600
+                          ? const EdgeInsets.fromLTRB(0, 0, 25, 0)
+                          : const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
                         children: [
-                          Text(
-                            'ID',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: currentWidth < 600 ? 15 : 18,
-                                fontWeight: FontWeight.w400),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ID',
+                              style: TextStyle(
+                                  color: const Color(0xffAAAAAA),
+                                  fontFamily: "Pretendard",
+                                  fontSize: currentWidth < 600 ? 13 : 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          SizedBox(
-                            height: currentWidth < 600 ? 30 : 45,
-                            width: currentWidth < 600 ? 210 : 350,
-                            child: CustomTextField(
-                                    '아이디를 입력해주세요.', _idController, (value) {
-                              if (value == null || value.isEmpty) {
-                                return '3~15자 영문/숫자 조합으로 입력해주세요.';
-                              }
-                              if (value.length < 3 || value.length > 15) {
-                                return '아이디는 3~15자로 입력해 주세요.';
-                              }
-                              return null;
-                            }, false, 1)
-                                .textField(),
+                          Expanded(
+                            flex: 5,
+                            child: SizedBox(
+                              height: currentWidth < 600 ? 38 : 70,
+                              child: NewCustomTextField(
+                                      '아이디를 입력해주세요.', _idController, (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '3~15자 영문/숫자 조합으로 입력해주세요.';
+                                }
+                                if (value.length < 3 || value.length > 15) {
+                                  return '아이디는 3~15자로 입력해 주세요.';
+                                }
+                                return null;
+                              }, false, 1, currentWidth)
+                                  .newtextField(),
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20.0),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 50),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                    ),
+                    SizedBox(height: currentWidth < 600 ? 40 : 25),
                     Text(
                       "비밀번호 생성",
                       style: TextStyle(
-                        color: const Color(0xffD4D4D4),
-                        fontWeight: FontWeight.bold,
-                        fontSize: currentWidth < 600 ? 13 : 16,
-                      ),
+                          color: Colors.white,
+                          fontSize: currentWidth < 600 ? 14 : 20,
+                          fontWeight: FontWeight.w700,
+                          height: 1.4),
                     ),
-                    SizedBox(
-                      width: currentWidth < 600 ? 180 : 340,
+                    SizedBox(height: currentWidth < 600 ? 20 : 30),
+                    Padding(
+                      padding: currentWidth < 600
+                          ? const EdgeInsets.fromLTRB(0, 0, 25, 0)
+                          : const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  'PW',
+                                  style: TextStyle(
+                                      color: const Color(0xffAAAAAA),
+                                      fontFamily: "Pretendard",
+                                      fontSize: currentWidth < 600 ? 13 : 20,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: SizedBox(
+                                  height: currentWidth < 600 ? 38 : 70,
+                                  child: NewCustomTextField(
+                                          '8~16자를 입력해 주세요.', _pwController,
+                                          (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '8~16자를 입력해 주세요.';
+                                    }
+                                    if (value.length < 8 || value.length > 16) {
+                                      return '비밀번호는 8~16자로 입력해 주세요.';
+                                    }
+                                    return null;
+                                  }, true, 1, currentWidth)
+                                      .newtextField(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: currentWidth < 600 ? 15 : 0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  'PW',
+                                  style: TextStyle(
+                                      color: const Color(0xffAAAAAA),
+                                      fontSize: currentWidth < 600 ? 13 : 20,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: SizedBox(
+                                  height: currentWidth < 600 ? 38 : 70,
+                                  child: NewCustomTextField(
+                                          '비밀번호를 확인해 주세요.', _checkpwController,
+                                          (value) {
+                                    if (value == null ||
+                                        value != _pwController.text) {
+                                      return '비밀번호가 일치하지 않습니다.';
+                                    }
+                                    return null;
+                                  }, true, 1, currentWidth)
+                                      .newtextField(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 17.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                  child: NewButton(Colors.black, Colors.white,
+                                          '등록하기', _register, currentWidth)
+                                      .newButton()),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20.0),
-                SizedBox(
-                  width: currentWidth < 600 ? 245 : 400,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'PW',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: currentWidth < 600 ? 15 : 18,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          SizedBox(
-                            height: currentWidth < 600 ? 30 : 45,
-                            width: currentWidth < 600 ? 200 : 350,
-                            child: CustomTextField(
-                                    '8~16자를 입력해 주세요.', _pwController, (value) {
-                              if (value == null || value.isEmpty) {
-                                return '8~16자를 입력해 주세요.';
-                              }
-                              if (value.length < 8 || value.length > 16) {
-                                return '비밀번호는 8~16자로 입력해 주세요.';
-                              }
-                              return null;
-                            }, true, 1)
-                                .textField(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'PW',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: currentWidth < 600 ? 15 : 18,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          SizedBox(
-                            height: currentWidth < 600 ? 30 : 45,
-                            width: currentWidth < 600 ? 200 : 350,
-                            child: CustomTextField(
-                                    '비밀번호를 확인해 주세요.', _checkpwController,
-                                    (value) {
-                              if (value == null ||
-                                  value != _pwController.text) {
-                                return '비밀번호가 일치하지 않습니다.';
-                              }
-                              return null;
-                            }, true, 1)
-                                .textField(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 17.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                              child: Button(Colors.black, Colors.white, '계정생성',
-                                      _register)
-                                  .button()),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),

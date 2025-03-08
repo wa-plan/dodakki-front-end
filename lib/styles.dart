@@ -45,7 +45,7 @@ class DPTitleText {
     return Text(text,
         style: TextStyle(
             color: Colors.white,
-            fontSize: currentWidth < 600 ? 17 : 27,
+            fontSize: currentWidth < 600 ? 15 : 23,
             fontWeight: FontWeight.w600));
   }
 }
@@ -121,7 +121,7 @@ class NewButton {
     return TextButton(
       onPressed: () => function(),
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
         backgroundColor: buttonColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6.0),
@@ -131,7 +131,7 @@ class NewButton {
         text,
         style: TextStyle(
           color: textColor,
-          fontSize: currentWidth < 600 ? 14 : 17,
+          fontSize: currentWidth < 600 ? 13 : 16,
           fontWeight: FontWeight.w500,
         ),
       ),
