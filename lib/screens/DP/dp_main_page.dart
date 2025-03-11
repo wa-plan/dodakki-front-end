@@ -1,4 +1,5 @@
 // DP 메인 페이지
+import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/styles.dart';
 import 'package:domino/widgets/DP/DP_main_mandalart.dart';
@@ -22,10 +23,149 @@ class _DPMainState extends State<DPMain> {
   final PageController _pageController = PageController();
   List<Map<String, String>> inProgressID = [];
 
+  final String message = "";
+  String nickname = '';
+  String description = '';
+  String selectedImage = "assets/img/profile_smp4.png";
+
+  int successNum = 0;
+  String mandaDescription = '';
+  String bookmark = 'UNBOOKMARK';
+  List<Map<String, String>> failedIDs = [];
+  List<Map<String, String>> inProgressIDs = [];
+  List<Map<String, String>> successIDs = [];
+  List<Map<String, String>> nameList = [];
+  List<Map<String, String>> statusList = [];
+  List<Map<String, String>> ddayList = [];
+  List<Map<String, String>> colorList = [];
+  List<Map<dynamic, dynamic>> successNums = [];
+  Map<String, List<Map<String, String>>> photos = {};
+  String? profile;
+  String defaultImage = 'assets/img/profile_smp4.png'; // 기본 이미지 경로
+
+  List<Map<String, String>> mandalarts = [];
+  List<Map<String, String>> bookmarks = [];
+
   @override
   void initState() {
     super.initState();
+    userInfo();
+    userMandaIdInfo();
     _mainGoalList();
+  }
+
+  void userInfo() async {
+    final data = await UserInfoService.userInfo();
+    if (data.isNotEmpty) {
+      setState(() {
+        nickname = data['nickname'] ?? '당신은 어떤 사람인가요?';
+        description = data['description'] ?? '프로필 편집을 통해 \n자신을 표현해주세요.';
+      });
+    }
+  }
+
+  Future<void> userMandaIdInfo() async {
+    if (mandalarts.isNotEmpty) return;
+
+    try {
+      final data = await UserMandaIdService.userManda();
+
+      if (data.isNotEmpty) {
+        setState(() {
+          mandalarts = data['mandalarts']!;
+          bookmarks = data['bookmarks']!;
+        });
+
+        // 비동기 작업 병렬 처리
+        final tasks = mandalarts.map((mandalart) async {
+          final String mandalartId = mandalart['id'] ?? '0';
+          await userMandaInfo(mandalartId);
+        });
+
+        await Future.wait(tasks); // 모든 작업 완료를 기다림
+
+        // id 값을 기준으로 오름차순 정렬
+        failedIDs.sort((a, b) {
+          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+        });
+
+        inProgressIDs.sort((a, b) {
+          // BOOKMARK 상태 확인
+          final aBookmark = bookmarks
+              .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
+          final bBookmark = bookmarks
+              .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
+
+          // BOOKMARK 상태 기준으로 정렬
+          if (aBookmark && !bBookmark) {
+            return -1; // a가 BOOKMARK 상태이고, b는 UNBOOKMARK 상태
+          }
+          if (!aBookmark && bBookmark) {
+            return 1; // b가 BOOKMARK 상태이고, a는 UNBOOKMARK 상태
+          }
+
+          // 같은 상태라면 id 값 기준 정렬 (오름차순)
+          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+        });
+
+        context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
+
+        successIDs.sort((a, b) {
+          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+        });
+      }
+    } catch (e) {
+      // 에러 발생 시 처리
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('데이터 로드 중 오류가 발생했습니다: $e')),
+      );
+    }
+  }
+
+  Future<void> userMandaInfo(String mandalartId) async {
+    if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
+
+    try {
+      final data = await UserMandaInfoService.userMandaInfo(context,
+          mandalartId: int.parse(mandalartId));
+
+      if (data != null) {
+        String id = mandalartId;
+        String name = data['name'] ?? '';
+        String status = data['status']?.toString() ?? '';
+        List<dynamic> photoList = data['photoList'] ?? [];
+        String dday = data['dday']?.toString() ?? '0';
+        int successNum = data['statusNum']?['successNum'] ?? 0;
+
+        setState(() {
+          if (status == "FAIL") failedIDs.add({"id": id, "name": name});
+          if (status == "IN_PROGRESS") {
+            inProgressIDs.add({"id": id, "name": name});
+          }
+          if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
+
+          nameList.add({'mandalartId': id, 'name': name});
+          statusList.add({'mandalartId': id, 'status': status});
+          ddayList.add({'mandalartId': id, 'dday': dday});
+          successNums.add({'mandalartId': id, 'successNum': successNum});
+
+          // 사진 리스트를 photos에 저장
+          if (photoList.isNotEmpty) {
+            photos[id] = [];
+            for (var photo in photoList) {
+              photos[id]?.add({
+                'path': photo['path'] ?? '',
+                'id': photo['id'].toString(),
+              });
+            }
+          }
+        });
+      } else {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('데이터 로드 실패: $e')),
+      );
+    }
   }
 
   void _mainGoalList() async {
@@ -37,9 +177,6 @@ class _DPMainState extends State<DPMain> {
           []; // 비어 있는 secondGoals를 위한 리스트 추가
       List<Map<String, String>> inProgressID =
           Provider.of<GoalOrder>(context, listen: false).goalOrder;
-
-      print('inProgressIDs : $inProgressID'); //쓰러뜨릴목표
-      print('goals : $goals'); //전체목표
 
       for (var goal in inProgressID) {
         final mandalartId = goal['id'].toString();
@@ -62,7 +199,6 @@ class _DPMainState extends State<DPMain> {
               'mandalartId': mandalartId,
               'name': name,
             });
-            print('empty = $emptySecondGoals');
           }
         }
       }
@@ -242,47 +378,47 @@ class _DPMainState extends State<DPMain> {
                                     );
                                   },
                                   child: Column(
-                                      children: [
-                                        const SizedBox(height: 15),
-                                        Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              15, 7, 0, 7),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xff2B2B2B),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          width: double.infinity,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            mandalart,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: currentWidth < 600 ? 12 : 17,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                    children: [
+                                      const SizedBox(height: 15),
+                                      Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 7, 0, 7),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xff2B2B2B),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          mandalart,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                currentWidth < 600 ? 12 : 17,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
-                                        Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              40, 20, 40, 40),
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: MandalartGrid(
-                                            mandalart: mandalart,
-                                            firstColor: firstColor,
-                                            secondGoals: secondGoals,
-                                            mandalartId: int.parse(mandalartId),
-                                            currentHeight: currentHeight,
-                                          ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            40, 20, 40, 40),
+                                        decoration: BoxDecoration(
+                                          color: Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
-                                      ],
-                                    ),
-                                  
+                                        child: MandalartGrid(
+                                          mandalart: mandalart,
+                                          firstColor: firstColor,
+                                          secondGoals: secondGoals,
+                                          mandalartId: int.parse(mandalartId),
+                                          currentHeight: currentHeight,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 );
                               }
                             },

@@ -109,6 +109,12 @@ class _EventCalendarState extends State<EventCalendar> {
     return Column(
       children: [
         TableCalendar<Event>(
+          calendarBuilders: CalendarBuilders(
+            outsideBuilder: (context, date, _) {
+              return SizedBox.shrink(); // 다른 달의 날짜를 숨김
+            },
+          ),
+          rowHeight: 35,
           firstDay: DateTime.utc(2014, 1, 1),
           lastDay: DateTime.utc(2034, 12, 31),
           focusedDay: _focusedDay,
@@ -146,10 +152,20 @@ class _EventCalendarState extends State<EventCalendar> {
             markerSize: 0.0,
             isTodayHighlighted: true,
             todayDecoration: const BoxDecoration(
-                color: Color(0xFF5B5B5B), shape: BoxShape.circle),
+                color: const Color(0xff2A2A2A), shape: BoxShape.circle),
             selectedDecoration: const BoxDecoration(
               color: mainRed,
               shape: BoxShape.circle,
+            ),
+            selectedTextStyle: TextStyle(
+              fontSize: 12, // 선택된 날짜의 폰트 크기 고정
+              fontWeight: FontWeight.w700,
+              color: Colors.white, // 선택된 날짜의 텍스트 색상
+            ),
+            todayTextStyle: TextStyle(
+              fontSize: 12, // 오늘 날짜 폰트 크기
+              fontWeight: FontWeight.w700, // 오늘 날짜 폰트 굵기
+              color: Colors.white, // 오늘 날짜 텍스트 색상
             ),
             defaultTextStyle: TextStyle(
               color: mainTextColor,
@@ -182,15 +198,8 @@ class _EventCalendarState extends State<EventCalendar> {
           ),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              onPressed: () {},
-              padding: EdgeInsets.zero, // 패딩 설정
-              constraints: const BoxConstraints(),
-              icon: const Icon(Icons.add, color: backgroundColor, size: 26),
-            ),
-            // 화살표 버튼 추가
             IconButton(
               onPressed: _toggleCalendarFormat,
               padding: EdgeInsets.zero, // 패딩 설정
@@ -198,9 +207,17 @@ class _EventCalendarState extends State<EventCalendar> {
               icon: Icon(
                 _isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
                 color: const Color(0xffD4D4D4),
-                size: 30,
+                size: 25,
               ),
             ),
+          ],
+        ),
+        SizedBox(
+          height: currentWidth < 600 ? 2 : 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
             CustomIconButton(() {
               Navigator.push(
                   context,
@@ -212,7 +229,7 @@ class _EventCalendarState extends State<EventCalendar> {
           ],
         ),
         SizedBox(
-          height: currentWidth < 600 ? 7 : 10,
+          height: currentWidth < 600 ? 14 : 20,
         ),
         Expanded(
           child: ValueListenableBuilder<List<Event>>(
@@ -285,28 +302,27 @@ class _EventCalendarState extends State<EventCalendar> {
                             currentWidth);
                       },
                       child: Container(
-                        margin:  EdgeInsets.fromLTRB(0, 0, 0, currentWidth < 600 ? 14 : 17),
-                        padding:  EdgeInsets.symmetric(
-                            vertical: currentWidth < 600 ? 13 : 15, 
-                            horizontal: currentWidth < 600 ? 20 : 25),
+                        margin: EdgeInsets.fromLTRB(
+                            0, 0, 0, currentWidth < 600 ? 10 : 14),
+                        padding: EdgeInsets.symmetric(
+                            vertical: currentWidth < 600 ? 10 : 15,
+                            horizontal: currentWidth < 600 ? 13 : 25),
                         decoration: BoxDecoration(
                           color: const Color(0xff2A2A2A),
-                          borderRadius: BorderRadius.circular(
-                            currentWidth < 600 ? 3 : 5
-                          ),
+                          borderRadius:
+                              BorderRadius.circular(currentWidth < 600 ? 3 : 5),
                         ),
                         child: Row(
                           children: [
                             Container(
-                              width: currentWidth < 600 ? 14 : 14,
-                              height: currentWidth < 600 ? 45 : 50,
+                              width: currentWidth < 600 ? 12 : 14,
+                              height: currentWidth < 600 ? 40 : 50,
                               margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                               decoration: BoxDecoration(
                                 color: Color(int.parse(
                                   value[index]
                                       .color
-                                      .replaceAll(
-                                          'Color(', '') 
+                                      .replaceAll('Color(', '')
                                       .replaceAll(')', ''),
                                 )),
                                 borderRadius: BorderRadius.circular(3),
@@ -315,99 +331,116 @@ class _EventCalendarState extends State<EventCalendar> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  value[index].thirdGoal,
-                                  style: TextStyle(
-                                      fontSize: currentWidth < 600 ? 11 : 14,
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xffA1A1A1)),
+                                SizedBox(
+                                  width: 70,
+                                  child: Text(
+                                    value[index].thirdGoal,
+                                    overflow:
+                                        TextOverflow.ellipsis, // 길면 ...으로 생략
+                                    maxLines: 1, // 한 줄로 제한
+                                    style: TextStyle(
+                                        fontSize: currentWidth < 600 ? 11 : 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xffA1A1A1)),
+                                  ),
                                 ),
-                                 SizedBox(
-                                  height: currentWidth < 600 ? 3 : 5),
-                                Text(
-                                  value[index].goalName,
-                                  style: TextStyle(
-                                      fontSize: currentWidth < 600 ? 13 : 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white),
+                                SizedBox(height: currentWidth < 600 ? 3 : 5),
+                                SizedBox(
+                                  width: 70,
+                                  child: Text(
+                                    value[index].goalName,
+                                    overflow:
+                                        TextOverflow.ellipsis, // 길면 ...으로 생략
+                                    maxLines: 1, // 한 줄로 제한
+                                    style: TextStyle(
+                                        fontSize: currentWidth < 600 ? 13 : 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white),
+                                  ),
                                 ),
                               ],
                             ),
-                            
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        value[index].didZero =
-                                            !value[index].didZero;
-                                        value[index].didHalf = false;
-                                        value[index].didAll = false;
-                                      });
-                                      String formattedDate =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(_selectedDay!);
-                                      dominoStatus(value[index].id, "FAIL",
-                                          formattedDate);
-                                    },
-                                    icon: Icon(
-                                      Icons.clear_outlined,
-                                      size: currentWidth < 600 ? 20 : 25,
-                                      color: value[index].didZero
-                                          ? mainGold
-                                          : const Color(0xff5C5C5C),
-                                    ),
+                            Spacer(),
+                            Row(
+                              children: [
+                                IconButton(
+                                  padding: EdgeInsets.zero, // 패딩 최소화
+                                  constraints:
+                                      BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                  onPressed: () {
+                                    setState(() {
+                                      value[index].didZero =
+                                          !value[index].didZero;
+                                      value[index].didHalf = false;
+                                      value[index].didAll = false;
+                                    });
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(_selectedDay!);
+                                    dominoStatus(
+                                        value[index].id, "FAIL", formattedDate);
+                                  },
+                                  icon: Icon(
+                                    Icons.clear_outlined,
+                                    size: currentWidth < 600 ? 18 : 25,
+                                    color: value[index].didZero
+                                        ? mainGold
+                                        : const Color(0xff646464),
                                   ),
-                                   SizedBox(width: currentWidth < 600 ? 0 : 10),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        value[index].didHalf =
-                                            !value[index].didHalf;
-                                        value[index].didZero = false;
-                                        value[index].didAll = false;
-                                      });
-                                      String formattedDate =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(_selectedDay!);
-                                      dominoStatus(value[index].id,
-                                          "IN_PROGRESS", formattedDate);
-                                    },
-                                    icon: Icon(
-                                      Icons.change_history_outlined,
-                                      size: currentWidth < 600 ? 20 : 25,
-                                      color: value[index].didHalf
-                                          ? mainGold
-                                          : const Color(0xff5C5C5C),
-                                    ),
+                                ),
+                                SizedBox(width: currentWidth < 600 ? 0 : 10),
+                                IconButton(
+                                  padding: EdgeInsets.zero, // 패딩 최소화
+                                  constraints:
+                                      BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                  onPressed: () {
+                                    setState(() {
+                                      value[index].didHalf =
+                                          !value[index].didHalf;
+                                      value[index].didZero = false;
+                                      value[index].didAll = false;
+                                    });
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(_selectedDay!);
+                                    dominoStatus(value[index].id, "IN_PROGRESS",
+                                        formattedDate);
+                                  },
+                                  icon: Icon(
+                                    Icons.change_history_outlined,
+                                    size: currentWidth < 600 ? 18 : 25,
+                                    color: value[index].didHalf
+                                        ? mainGold
+                                        : const Color(0xff646464),
                                   ),
-                                  SizedBox(width: currentWidth < 600 ? 0 : 10),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        value[index].didAll =
-                                            !value[index].didAll;
-                                        value[index].didZero = false;
-                                        value[index].didHalf = false;
-                                      });
-                                      String formattedDate =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(_selectedDay!);
-                                      dominoStatus(value[index].id, "SUCCESS",
-                                          formattedDate);
-                                    },
-                                    icon: Icon(
-                                      Icons.circle_outlined,
-                                      size: currentWidth < 600 ? 20 : 25,
-                                      color: value[index].didAll
-                                          ? mainGold
-                                          : const Color(0xff5C5C5C),
-                                    ),
+                                ),
+                                SizedBox(width: currentWidth < 600 ? 0 : 10),
+                                IconButton(
+                                  padding: EdgeInsets.zero, // 패딩 최소화
+                                  constraints:
+                                      BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                  onPressed: () {
+                                    setState(() {
+                                      value[index].didAll =
+                                          !value[index].didAll;
+                                      value[index].didZero = false;
+                                      value[index].didHalf = false;
+                                    });
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(_selectedDay!);
+                                    dominoStatus(value[index].id, "SUCCESS",
+                                        formattedDate);
+                                  },
+                                  icon: Icon(
+                                    Icons.circle_outlined,
+                                    size: currentWidth < 600 ? 18 : 25,
+                                    color: value[index].didAll
+                                        ? mainGold
+                                        : const Color(0xff646464),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -424,8 +457,16 @@ class _EventCalendarState extends State<EventCalendar> {
   }
 }
 
-void editDialog(BuildContext context, DateTime date, String title,
-    String content, bool switchvalue, int interval, int goalId, String color, double currentWidth) {
+void editDialog(
+    BuildContext context,
+    DateTime date,
+    String title,
+    String content,
+    bool switchvalue,
+    int interval,
+    int goalId,
+    String color,
+    double currentWidth) {
   String getIntervalText() {
     if (!switchvalue) {
       return 'X';
@@ -457,10 +498,10 @@ void editDialog(BuildContext context, DateTime date, String title,
         elevation: 30.0,
         content: Container(
           padding: EdgeInsets.all(currentWidth < 600 ? 22 : 30),
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
               color: const Color.fromARGB(255, 26, 26, 26),
               borderRadius: BorderRadius.all(
-                Radius.circular(currentWidth < 600 ? 5 : 8))),
+                  Radius.circular(currentWidth < 600 ? 5 : 8))),
           height: currentWidth < 600 ? 150 : 220,
           width: currentWidth < 600 ? 400 : 400,
           child: Row(
@@ -469,54 +510,56 @@ void editDialog(BuildContext context, DateTime date, String title,
               Container(
                 width: currentWidth < 600 ? 13 : 15,
                 height: double.infinity,
-                decoration:  BoxDecoration(
+                decoration: BoxDecoration(
                   color: mainRed,
                   borderRadius: BorderRadius.all(
-                    Radius.circular(currentWidth < 600 ? 3 : 5)),
+                      Radius.circular(currentWidth < 600 ? 3 : 5)),
                 ),
               ),
-               SizedBox(
-                width: currentWidth < 600 ? 16 : 20),
+              SizedBox(width: currentWidth < 600 ? 16 : 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 
                   Text(
                     content,
-                    style: TextStyle(color: Colors.grey, fontSize: currentWidth < 600 ? 11 : 17),
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: currentWidth < 600 ? 11 : 17),
                   ),
-                   SizedBox(height: currentWidth < 600 ? 5 : 7),
+                  SizedBox(height: currentWidth < 600 ? 5 : 7),
                   Text(
                     title,
-                    style:  TextStyle(
+                    style: TextStyle(
                         color: Colors.white,
                         fontSize: currentWidth < 600 ? 13 : 19,
                         fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: currentWidth < 600 ? 20 : 25),
-                   Text(
+                  Text(
                     '반복',
                     style: TextStyle(
-                      color: Colors.grey, fontSize: currentWidth < 600 ? 11 : 17),
+                        color: Colors.grey,
+                        fontSize: currentWidth < 600 ? 11 : 17),
                   ),
                   Text(
                     getIntervalText(),
-                    style:  TextStyle(color: Colors.white, fontSize: currentWidth < 600 ? 13 : 19),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: currentWidth < 600 ? 13 : 19),
                   ),
                 ],
               ),
               const Spacer(),
               CustomIconButton(() {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditPage(
-                          date, content, title, switchvalue, interval, goalId),
-                    ),
-                  );
-                  }, Icons.edit, currentWidth)
-                      .customIconButton(),
-              
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditPage(
+                        date, content, title, switchvalue, interval, goalId),
+                  ),
+                );
+              }, Icons.edit, currentWidth)
+                  .customIconButton(),
             ],
           ),
         ),

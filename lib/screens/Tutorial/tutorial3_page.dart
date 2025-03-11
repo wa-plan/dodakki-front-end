@@ -107,8 +107,7 @@ class Tutorial3State extends State<Tutorial3> {
                         }, currentWidth, 3, currentSelection)
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option2('뿌듯한\n학교생활하기', currentWidth)
-                            .option2(),
+                        Option2('뿌듯한\n학교생활하기', currentWidth).option2(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('완벽하게\n자기관리하기', () {
                           wrongAnswer;
@@ -164,7 +163,8 @@ class Tutorial3State extends State<Tutorial3> {
                   currentSelection == 1
                       ? Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Tutorial4()),
+                          MaterialPageRoute(
+                              builder: (context) => const Tutorial4()),
                         )
                       : null;
                 },
@@ -209,17 +209,16 @@ class Option {
         padding: EdgeInsets.all(currentWidth < 600 ? 7 : 20),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: currentSelection == index
-              ? const Color(0xff555634)
-              : const Color(0xff3B3B3B),
-          border: Border.all(
             color: currentSelection == index
-                ? const Color(0xff949B36)
-                : Colors.transparent,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(currentWidth < 600 ? 6 : 8)
-        ),
+                ? const Color(0xff555634)
+                : const Color(0xff3B3B3B),
+            border: Border.all(
+              color: currentSelection == index
+                  ? const Color(0xff949B36)
+                  : Colors.transparent,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(currentWidth < 600 ? 6 : 8)),
         child: Center(
           child: Text(
             text,
@@ -244,28 +243,27 @@ class Option2 {
 
   Widget option2() {
     return Container(
-          child: CircleAvatar(
-        radius: currentWidth < 600 ? 32.5 : 62.5,
-        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
-        child: Container(
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: mainRed,
-            ),
-      
-          child: Center(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: backgroundColor,
-                fontSize: currentWidth < 600 ? 10 : 15,
-                fontWeight: FontWeight.w700,
-              ),
+        child: CircleAvatar(
+      radius: currentWidth < 600 ? 35 : 62.5,
+      backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
+      child: Container(
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: mainRed,
+        ),
+        child: Center(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: backgroundColor,
+              fontSize: currentWidth < 600 ? 10 : 15,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
-      ));
+      ),
+    ));
   }
 }

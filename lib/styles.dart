@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 //color
-const backgroundColor = Color(0xff262626);
+const backgroundColor = Color(0xff222222);
 const mainRed = Color(0xffFF7A7A);
 const mainTextColor = Colors.white;
 const mainGold = Color(0xffF6C92B);
@@ -926,8 +926,8 @@ class CustomIconButton {
 
   Widget customIconButton() {
     return Container(
-      width: currentWidth < 600 ? 35 : 50,
-      height: currentWidth < 600 ? 24 : 35,
+      width: currentWidth < 600 ? 33 : 50,
+      height: currentWidth < 600 ? 22 : 35,
       decoration: BoxDecoration(
         color: const Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
@@ -947,7 +947,7 @@ class CustomIconButton {
         child: Icon(
           icon,
           color: const Color(0xff646464),
-          size: currentWidth < 600 ? 21 : 30,
+          size: currentWidth < 600 ? 18 : 30,
         ),
       ),
     );
