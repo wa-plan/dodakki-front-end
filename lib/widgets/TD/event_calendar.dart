@@ -285,60 +285,77 @@ class _EventCalendarState extends State<EventCalendar> {
                             currentWidth);
                       },
                       child: Container(
-                        margin:  EdgeInsets.fromLTRB(0, 0, 0, currentWidth < 600 ? 14 : 17),
-                        padding:  EdgeInsets.symmetric(
-                            vertical: currentWidth < 600 ? 13 : 15, 
+                        margin: EdgeInsets.fromLTRB(
+                            0, 0, 0, currentWidth < 600 ? 14 : 17),
+                        padding: EdgeInsets.symmetric(
+                            vertical: currentWidth < 600 ? 13 : 15,
                             horizontal: currentWidth < 600 ? 20 : 25),
                         decoration: BoxDecoration(
                           color: const Color(0xff2A2A2A),
-                          borderRadius: BorderRadius.circular(
-                            currentWidth < 600 ? 3 : 5
-                          ),
+                          borderRadius:
+                              BorderRadius.circular(currentWidth < 600 ? 3 : 5),
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              width: currentWidth < 600 ? 14 : 14,
-                              height: currentWidth < 600 ? 45 : 50,
-                              margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                              decoration: BoxDecoration(
-                                color: Color(int.parse(
-                                  value[index]
-                                      .color
-                                      .replaceAll(
-                                          'Color(', '') 
-                                      .replaceAll(')', ''),
-                                )),
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Text(
-                                  value[index].thirdGoal,
-                                  style: TextStyle(
-                                      fontSize: currentWidth < 600 ? 11 : 14,
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xffA1A1A1)),
+                                Container(
+                                  width: 14,
+                                  height: currentWidth < 600 ? 45 : 50,
+                                  margin:
+                                      const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                  decoration: BoxDecoration(
+                                    color: Color(int.parse(
+                                      value[index]
+                                          .color
+                                          .replaceAll('Color(', '')
+                                          .replaceAll(')', ''),
+                                    )),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
                                 ),
-                                 SizedBox(
-                                  height: currentWidth < 600 ? 3 : 5),
-                                Text(
-                                  value[index].goalName,
-                                  style: TextStyle(
-                                      fontSize: currentWidth < 600 ? 13 : 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      value[index].thirdGoal,
+                                      style: TextStyle(
+                                          fontSize:
+                                              currentWidth < 600 ? 11 : 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: const Color(0xffA1A1A1)),
+                                    ),
+                                    SizedBox(
+                                        height: currentWidth < 600 ? 3 : 5),
+                                    SizedBox(
+                                      width: 90,
+                                      child: Text(
+                                        value[index].goalName,
+                                        style: TextStyle(
+                                            fontSize:
+                                                currentWidth < 600 ? 13 : 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white),
+                                        maxLines: 2, // 👉 최대 2줄까지만 표시
+                                        overflow: TextOverflow
+                                            .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
+                                        softWrap: true, // 👉 자동 줄바꿈 허용
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                            
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: currentWidth < 600 ? 35 : 50,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero, // 내부 여백 제거
+                                    constraints:
+                                        const BoxConstraints(), // 추가적인 여백 제거
                                     onPressed: () {
                                       setState(() {
                                         value[index].didZero =
@@ -360,8 +377,14 @@ class _EventCalendarState extends State<EventCalendar> {
                                           : const Color(0xff5C5C5C),
                                     ),
                                   ),
-                                   SizedBox(width: currentWidth < 600 ? 0 : 10),
-                                  IconButton(
+                                ),
+                                SizedBox(width: currentWidth < 600 ? 0 : 10),
+                                SizedBox(
+                                  width: currentWidth < 600 ? 35 : 50,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero, // 내부 여백 제거
+                                    constraints:
+                                        const BoxConstraints(), // 추가적인 여백 제거
                                     onPressed: () {
                                       setState(() {
                                         value[index].didHalf =
@@ -383,8 +406,14 @@ class _EventCalendarState extends State<EventCalendar> {
                                           : const Color(0xff5C5C5C),
                                     ),
                                   ),
-                                  SizedBox(width: currentWidth < 600 ? 0 : 10),
-                                  IconButton(
+                                ),
+                                SizedBox(width: currentWidth < 600 ? 0 : 10),
+                                SizedBox(
+                                  width: currentWidth < 600 ? 35 : 50,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero, // 내부 여백 제거
+                                    constraints:
+                                        const BoxConstraints(), // 추가적인 여백 제거
                                     onPressed: () {
                                       setState(() {
                                         value[index].didAll =
@@ -406,8 +435,8 @@ class _EventCalendarState extends State<EventCalendar> {
                                           : const Color(0xff5C5C5C),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -424,8 +453,16 @@ class _EventCalendarState extends State<EventCalendar> {
   }
 }
 
-void editDialog(BuildContext context, DateTime date, String title,
-    String content, bool switchvalue, int interval, int goalId, String color, double currentWidth) {
+void editDialog(
+    BuildContext context,
+    DateTime date,
+    String title,
+    String content,
+    bool switchvalue,
+    int interval,
+    int goalId,
+    String color,
+    double currentWidth) {
   String getIntervalText() {
     if (!switchvalue) {
       return 'X';
@@ -457,11 +494,11 @@ void editDialog(BuildContext context, DateTime date, String title,
         elevation: 30.0,
         content: Container(
           padding: EdgeInsets.all(currentWidth < 600 ? 22 : 30),
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
               color: const Color.fromARGB(255, 26, 26, 26),
               borderRadius: BorderRadius.all(
-                Radius.circular(currentWidth < 600 ? 5 : 8))),
-          height: currentWidth < 600 ? 150 : 220,
+                  Radius.circular(currentWidth < 600 ? 5 : 8))),
+          height: currentWidth < 600 ? 165 : 235,
           width: currentWidth < 600 ? 400 : 400,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -469,54 +506,69 @@ void editDialog(BuildContext context, DateTime date, String title,
               Container(
                 width: currentWidth < 600 ? 13 : 15,
                 height: double.infinity,
-                decoration:  BoxDecoration(
-                  color: mainRed,
+                decoration: BoxDecoration(
+                  color: Color(int.parse(
+                          color
+                              .replaceAll('Color(', '')
+                              .replaceAll(')', '')
+                              .replaceAll('0x', ''),
+                          radix: 16) +
+                      0xFF000000),
                   borderRadius: BorderRadius.all(
-                    Radius.circular(currentWidth < 600 ? 3 : 5)),
+                      Radius.circular(currentWidth < 600 ? 3 : 5)),
                 ),
               ),
-               SizedBox(
-                width: currentWidth < 600 ? 16 : 20),
+              SizedBox(width: currentWidth < 600 ? 16 : 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 
                   Text(
                     content,
-                    style: TextStyle(color: Colors.grey, fontSize: currentWidth < 600 ? 11 : 17),
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: currentWidth < 600 ? 11 : 17),
                   ),
-                   SizedBox(height: currentWidth < 600 ? 5 : 7),
-                  Text(
-                    title,
-                    style:  TextStyle(
-                        color: Colors.white,
-                        fontSize: currentWidth < 600 ? 13 : 19,
-                        fontWeight: FontWeight.w500),
+                  SizedBox(height: currentWidth < 600 ? 5 : 7),
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: currentWidth < 600 ? 13 : 19,
+                          fontWeight: FontWeight.w500),
+                      maxLines: 2, // 👉 최대 2줄까지만 표시
+                      overflow:
+                          TextOverflow.ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
+                      softWrap: true, // 👉 자동 줄바꿈 허용
+                    ),
                   ),
                   SizedBox(height: currentWidth < 600 ? 20 : 25),
-                   Text(
+                  Text(
                     '반복',
                     style: TextStyle(
-                      color: Colors.grey, fontSize: currentWidth < 600 ? 11 : 17),
+                        color: Colors.grey,
+                        fontSize: currentWidth < 600 ? 11 : 17),
                   ),
                   Text(
                     getIntervalText(),
-                    style:  TextStyle(color: Colors.white, fontSize: currentWidth < 600 ? 13 : 19),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: currentWidth < 600 ? 13 : 19),
                   ),
                 ],
               ),
               const Spacer(),
               CustomIconButton(() {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditPage(
-                          date, content, title, switchvalue, interval, goalId),
-                    ),
-                  );
-                  }, Icons.edit, currentWidth)
-                      .customIconButton(),
-              
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditPage(
+                        date, content, title, switchvalue, interval, goalId),
+                  ),
+                );
+              }, Icons.edit, currentWidth)
+                  .customIconButton(),
             ],
           ),
         ),
