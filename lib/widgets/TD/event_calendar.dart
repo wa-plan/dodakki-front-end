@@ -109,11 +109,11 @@ class _EventCalendarState extends State<EventCalendar> {
     return Column(
       children: [
         TableCalendar<Event>(
-          calendarBuilders: CalendarBuilders(
+          /*calendarBuilders: CalendarBuilders(
             outsideBuilder: (context, date, _) {
               return SizedBox.shrink(); // 다른 달의 날짜를 숨김
             },
-          ),
+          ),*/
           rowHeight: 35,
           firstDay: DateTime.utc(2014, 1, 1),
           lastDay: DateTime.utc(2034, 12, 31),
@@ -152,7 +152,7 @@ class _EventCalendarState extends State<EventCalendar> {
             markerSize: 0.0,
             isTodayHighlighted: true,
             todayDecoration: const BoxDecoration(
-                color: const Color(0xff2A2A2A), shape: BoxShape.circle),
+                color: Color(0xff2A2A2A), shape: BoxShape.circle),
             selectedDecoration: const BoxDecoration(
               color: mainRed,
               shape: BoxShape.circle,
@@ -166,6 +166,10 @@ class _EventCalendarState extends State<EventCalendar> {
               fontSize: 12, // 오늘 날짜 폰트 크기
               fontWeight: FontWeight.w700, // 오늘 날짜 폰트 굵기
               color: Colors.white, // 오늘 날짜 텍스트 색상
+            ),
+            outsideTextStyle: TextStyle(
+              color: const Color.fromARGB(255, 125, 125, 125),
+              fontSize: currentWidth < 600 ? 12 : 16,
             ),
             defaultTextStyle: TextStyle(
               color: mainTextColor,
@@ -183,7 +187,8 @@ class _EventCalendarState extends State<EventCalendar> {
           headerStyle: HeaderStyle(
             titleCentered: true,
             titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
-            leftChevronIcon: Icon(
+            leftChevronIcon: 
+            Icon(
               Icons.arrow_back_ios,
               color: const Color(0xffD4D4D4),
               size: currentWidth < 600 ? 17 : 20,
@@ -213,7 +218,7 @@ class _EventCalendarState extends State<EventCalendar> {
           ],
         ),
         SizedBox(
-          height: currentWidth < 600 ? 2 : 10,
+          height: currentWidth < 600 ? 0 : 10,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -304,9 +309,9 @@ class _EventCalendarState extends State<EventCalendar> {
                       child: Container(
                         margin: EdgeInsets.fromLTRB(
                             0, 0, 0, currentWidth < 600 ? 10 : 14),
-                        padding: EdgeInsets.symmetric(
-                            vertical: currentWidth < 600 ? 10 : 15,
-                            horizontal: currentWidth < 600 ? 13 : 25),
+                        padding: currentWidth < 600
+                            ? EdgeInsets.fromLTRB(10, 13, 25, 13)
+                            : EdgeInsets.fromLTRB(20, 25, 30, 25),
                         decoration: BoxDecoration(
                           color: const Color(0xff2A2A2A),
                           borderRadius:
@@ -315,9 +320,9 @@ class _EventCalendarState extends State<EventCalendar> {
                         child: Row(
                           children: [
                             Container(
-                              width: currentWidth < 600 ? 12 : 14,
-                              height: currentWidth < 600 ? 40 : 50,
-                              margin: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                              width: currentWidth < 600 ? 11 : 14,
+                              height: currentWidth < 600 ? 40 : 55,
+                              margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
                               decoration: BoxDecoration(
                                 color: Color(int.parse(
                                   value[index]
@@ -330,9 +335,10 @@ class _EventCalendarState extends State<EventCalendar> {
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  width: 70,
+                                  width: currentWidth < 600 ? 90 : 200,
                                   child: Text(
                                     value[index].thirdGoal,
                                     overflow:
@@ -340,13 +346,13 @@ class _EventCalendarState extends State<EventCalendar> {
                                     maxLines: 1, // 한 줄로 제한
                                     style: TextStyle(
                                         fontSize: currentWidth < 600 ? 11 : 14,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         color: const Color(0xffA1A1A1)),
                                   ),
                                 ),
-                                SizedBox(height: currentWidth < 600 ? 3 : 5),
+                                SizedBox(height: currentWidth < 600 ? 2 : 5),
                                 SizedBox(
-                                  width: 70,
+                                  width: currentWidth < 600 ? 90 : 200,
                                   child: Text(
                                     value[index].goalName,
                                     overflow:
@@ -354,7 +360,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                     maxLines: 1, // 한 줄로 제한
                                     style: TextStyle(
                                         fontSize: currentWidth < 600 ? 13 : 16,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         color: Colors.white),
                                   ),
                                 ),
@@ -363,11 +369,8 @@ class _EventCalendarState extends State<EventCalendar> {
                             Spacer(),
                             Row(
                               children: [
-                                IconButton(
-                                  padding: EdgeInsets.zero, // 패딩 최소화
-                                  constraints:
-                                      BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
-                                  onPressed: () {
+                                GestureDetector(
+                                  onTap: () {
                                     setState(() {
                                       value[index].didZero =
                                           !value[index].didZero;
@@ -380,20 +383,22 @@ class _EventCalendarState extends State<EventCalendar> {
                                     dominoStatus(
                                         value[index].id, "FAIL", formattedDate);
                                   },
-                                  icon: Icon(
-                                    Icons.clear_outlined,
-                                    size: currentWidth < 600 ? 18 : 25,
-                                    color: value[index].didZero
-                                        ? mainGold
-                                        : const Color(0xff646464),
+                                  child: Container(
+                                    padding: EdgeInsets.zero, // 패딩 최소화
+                                    constraints:
+                                        BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                    child: Icon(
+                                      Icons.clear_outlined,
+                                      size: currentWidth < 600 ? 18 : 25,
+                                      color: value[index].didZero
+                                          ? mainGold
+                                          : const Color(0xff646464),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(width: currentWidth < 600 ? 0 : 10),
-                                IconButton(
-                                  padding: EdgeInsets.zero, // 패딩 최소화
-                                  constraints:
-                                      BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
-                                  onPressed: () {
+                                SizedBox(width: currentWidth < 600 ? 23 : 30),
+                                GestureDetector(
+                                  onTap: () {
                                     setState(() {
                                       value[index].didHalf =
                                           !value[index].didHalf;
@@ -406,20 +411,22 @@ class _EventCalendarState extends State<EventCalendar> {
                                     dominoStatus(value[index].id, "IN_PROGRESS",
                                         formattedDate);
                                   },
-                                  icon: Icon(
-                                    Icons.change_history_outlined,
-                                    size: currentWidth < 600 ? 18 : 25,
-                                    color: value[index].didHalf
-                                        ? mainGold
-                                        : const Color(0xff646464),
+                                  child: Container(
+                                    padding: EdgeInsets.zero, // 패딩 최소화
+                                    constraints:
+                                        BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                    child: Icon(
+                                      Icons.change_history_outlined,
+                                      size: currentWidth < 600 ? 18 : 25,
+                                      color: value[index].didHalf
+                                          ? mainGold
+                                          : const Color(0xff646464),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(width: currentWidth < 600 ? 0 : 10),
-                                IconButton(
-                                  padding: EdgeInsets.zero, // 패딩 최소화
-                                  constraints:
-                                      BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
-                                  onPressed: () {
+                                SizedBox(width: currentWidth < 600 ? 23 : 30),
+                                GestureDetector(
+                                  onTap: () {
                                     setState(() {
                                       value[index].didAll =
                                           !value[index].didAll;
@@ -432,12 +439,17 @@ class _EventCalendarState extends State<EventCalendar> {
                                     dominoStatus(value[index].id, "SUCCESS",
                                         formattedDate);
                                   },
-                                  icon: Icon(
-                                    Icons.circle_outlined,
-                                    size: currentWidth < 600 ? 18 : 25,
-                                    color: value[index].didAll
-                                        ? mainGold
-                                        : const Color(0xff646464),
+                                  child: Container(
+                                    padding: EdgeInsets.zero, // 패딩 최소화
+                                    constraints:
+                                        BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                    child: Icon(
+                                      Icons.circle_outlined,
+                                      size: currentWidth < 600 ? 18 : 25,
+                                      color: value[index].didAll
+                                          ? mainGold
+                                          : const Color(0xff646464),
+                                    ),
                                   ),
                                 ),
                               ],

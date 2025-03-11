@@ -46,23 +46,17 @@ class _DPMainState extends State<DPMain> {
   List<Map<String, String>> mandalarts = [];
   List<Map<String, String>> bookmarks = [];
 
-  @override
-  void initState() {
-    super.initState();
-    userInfo();
-    userMandaIdInfo();
-    _mainGoalList();
-  }
+@override
+void initState() {
+  super.initState();
+  _initializeData();
+}
 
-  void userInfo() async {
-    final data = await UserInfoService.userInfo();
-    if (data.isNotEmpty) {
-      setState(() {
-        nickname = data['nickname'] ?? '당신은 어떤 사람인가요?';
-        description = data['description'] ?? '프로필 편집을 통해 \n자신을 표현해주세요.';
-      });
-    }
-  }
+Future<void> _initializeData() async {
+  await userMandaIdInfo(); // 데이터를 먼저 가져오기
+  _mainGoalList(); // 데이터를 기반으로 호출
+}
+
 
   Future<void> userMandaIdInfo() async {
     if (mandalarts.isNotEmpty) return;

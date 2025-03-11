@@ -14,8 +14,8 @@ const mainTextColor = Colors.white;
 const mainGold = Color(0xffF6C92B);
 
 //padding
-const appBarPadding = EdgeInsets.fromLTRB(25.0, 30.0, 25.0, 20);
-const fullPadding = EdgeInsets.fromLTRB(25.0, 10, 25.0, 20.0);
+const appBarPadding = EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20);
+const fullPadding = EdgeInsets.fromLTRB(20.0, 10, 20.0, 20.0);
 
 //colorPalette
 Map<Color, Color> colorPalette = {
@@ -947,7 +947,7 @@ class CustomIconButton {
         child: Icon(
           icon,
           color: const Color(0xff646464),
-          size: currentWidth < 600 ? 18 : 30,
+          size: currentWidth < 600 ? 18 : 25,
         ),
       ),
     );

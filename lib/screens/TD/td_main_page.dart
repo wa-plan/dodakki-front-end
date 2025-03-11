@@ -7,6 +7,8 @@ import 'package:domino/styles.dart';
 class TdMain extends StatelessWidget {
   const TdMain({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;

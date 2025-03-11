@@ -52,12 +52,18 @@ class _AddPage1State extends State<AddPage1> {
   List<Map<String, String>> bookmarks = [];
 
   @override
-  void initState() {
-    super.initState();
-    userMandaIdInfo();
-    thirdGoalId = 0;
-    _mainGoalList();
-  }
+void initState() {
+  super.initState();
+  _initializeData();
+}
+
+Future<void> _initializeData() async {
+  await userMandaIdInfo(); // 데이터를 먼저 가져오기
+  setState(() {
+    thirdGoalId = 0; // 초기화
+  });
+  _mainGoalList(); // 데이터를 기반으로 호출
+}
 
   Future<void> userMandaInfo(String mandalartId) async {
     if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
@@ -326,7 +332,7 @@ class _AddPage1State extends State<AddPage1> {
                                 }
                               },
                               isExpanded: true,
-                              dropdownColor: const Color(0xff262626),
+                              dropdownColor: Color(0xff222222),
                               style: const TextStyle(color: Colors.white),
                               iconEnabledColor: Colors.white,
                               underline: Container(),
