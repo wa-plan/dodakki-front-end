@@ -3,9 +3,11 @@ import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/widgets/TD/event_calendar.dart';
 import 'package:domino/styles.dart';
 
-// TD 메인 페이지 
+// TD 메인 페이지
 class TdMain extends StatelessWidget {
   const TdMain({super.key});
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,7 @@ class TdMain extends StatelessWidget {
       ),
 
       //body
-      body: const Padding(
-        padding: fullPadding,
-        child: EventCalendar()),
+      body: const Padding(padding: fullPadding, child: EventCalendar()),
       bottomNavigationBar: const NavBar(),
     );
   }

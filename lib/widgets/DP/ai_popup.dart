@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/screens/DP/Create/dp_create3_page.dart';
-import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart'; // FlutterToast import 추가
@@ -89,163 +88,179 @@ class _AIPopupState extends State<AIPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Colors.transparent,
-      contentPadding: const EdgeInsets.all(0),
-      elevation: 30.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.0)),
-      content: IntrinsicHeight(
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-          decoration: const BoxDecoration(
-              color: Color(0xFF303030),
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-          child: Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset('assets/img/AIIcon.png', height: 15),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'Ask AI',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  width: 32,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 53, 53, 53),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                        offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                        blurRadius: 7, // 블러 7
-                        spreadRadius: 0, // 스프레드 0
-                      ),
-                    ],
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Icon(
-                      Icons.close,
-                      color: Color(0xff646464),
-                      size: 17,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            Column(
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AICard(
-                          goal: widget.subgoals[0],
-                          isSelected:
-                              selectedGoals.contains(widget.subgoals[0]),
-                          onTap: _toggleGoal,
-                        ),
-                        AICard(
-                          goal: widget.subgoals[1],
-                          isSelected:
-                              selectedGoals.contains(widget.subgoals[1]),
-                          onTap: _toggleGoal,
-                        ),
-                        AICard(
-                          goal: widget.subgoals[2],
-                          isSelected:
-                              selectedGoals.contains(widget.subgoals[2]),
-                          onTap: _toggleGoal,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AICard(
-                          goal: widget.subgoals[3],
-                          isSelected:
-                              selectedGoals.contains(widget.subgoals[3]),
-                          onTap: _toggleGoal,
-                        ),
-                        AICard(
-                          goal: widget.subgoals[4],
-                          isSelected:
-                              selectedGoals.contains(widget.subgoals[4]),
-                          onTap: _toggleGoal,
-                        ),
-                        AICard(
-                          goal: widget.subgoals[5],
-                          isSelected:
-                              selectedGoals.contains(widget.subgoals[5]),
-                          onTap: _toggleGoal,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                TextButton(
-                  onPressed: widget.onRefresh,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+    final currentWidth = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: 300,
+      child: AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: const EdgeInsets.all(0),
+        elevation: 30.0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.0)),
+        content: IntrinsicHeight(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+            decoration: const BoxDecoration(
+                color: Color(0xFF303030),
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.refresh,
-                        color: Color(0xFF5E5E5E),
-                        size: 20,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        '클릭하여 새로고침',
-                        style:
-                            TextStyle(color: Color(0xFF5E5E5E), fontSize: 13),
+                      Image.asset('assets/img/AIIcon.png', height: 15),
+                      const SizedBox(width: 5),
+                      const Text(
+                        'Ask AI',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 40,
-                child: TextButton(
-                  onPressed: _handleApply,
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    backgroundColor: const Color(0xFF8D3FFF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
+                  Container(
+                    width: 32,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 53, 53, 53),
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                          offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                          blurRadius: 7, // 블러 7
+                          spreadRadius: 0, // 스프레드 0
+                        ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: Color(0xff646464),
+                        size: 17,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 10),
+              Column(
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AICard(
+                            goal: widget.subgoals[0],
+                            isSelected:
+                                selectedGoals.contains(widget.subgoals[0]),
+                            onTap: _toggleGoal,
+                          ),
+                          SizedBox(
+                            width: currentWidth < 600 ? 3 : 5,
+                          ),
+                          AICard(
+                            goal: widget.subgoals[1],
+                            isSelected:
+                                selectedGoals.contains(widget.subgoals[1]),
+                            onTap: _toggleGoal,
+                          ),
+                          SizedBox(
+                            width: currentWidth < 600 ? 3 : 5,
+                          ),
+                          AICard(
+                            goal: widget.subgoals[2],
+                            isSelected:
+                                selectedGoals.contains(widget.subgoals[2]),
+                            onTap: _toggleGoal,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AICard(
+                            goal: widget.subgoals[3],
+                            isSelected:
+                                selectedGoals.contains(widget.subgoals[3]),
+                            onTap: _toggleGoal,
+                          ),
+                          SizedBox(
+                            width: currentWidth < 600 ? 3 : 5,
+                          ),
+                          AICard(
+                            goal: widget.subgoals[4],
+                            isSelected:
+                                selectedGoals.contains(widget.subgoals[4]),
+                            onTap: _toggleGoal,
+                          ),
+                          SizedBox(
+                            width: currentWidth < 600 ? 3 : 5,
+                          ),
+                          AICard(
+                            goal: widget.subgoals[5],
+                            isSelected:
+                                selectedGoals.contains(widget.subgoals[5]),
+                            onTap: _toggleGoal,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: widget.onRefresh,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.refresh,
+                          color: Color(0xFF5E5E5E),
+                          size: 20,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          '클릭하여 새로고침',
+                          style:
+                              TextStyle(color: Color(0xFF5E5E5E), fontSize: 13),
+                        ),
+                      ],
                     ),
                   ),
-                  child: const Text(
-                    '지금 바로 적용하기',
-                    style: TextStyle(
-                        color: Color(0xFFede0ff),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 40,
+                  child: TextButton(
+                    onPressed: _handleApply,
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      backgroundColor: const Color(0xFF8D3FFF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
+                    ),
+                    child: const Text(
+                      '지금 바로 적용하기',
+                      style: TextStyle(
+                          color: Color(0xFFede0ff),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ),
       ),
     );
@@ -283,8 +298,8 @@ class AICardState extends State<AICard> {
             padding: const EdgeInsets.all(3.0),
             child: Container(
               alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width * 0.23,
-              height: MediaQuery.of(context).size.width * 0.23,
+              width: MediaQuery.of(context).size.width * 0.2,
+              height: MediaQuery.of(context).size.width * 0.2,
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
                 color: widget.isSelected
@@ -296,7 +311,7 @@ class AICardState extends State<AICard> {
                 widget.goal,
                 maxLines: 3,
                 minFontSize: 6,
-                maxFontSize: 13,
+                maxFontSize: 12,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: TextStyle(

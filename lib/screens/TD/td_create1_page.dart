@@ -1,4 +1,5 @@
 import 'package:domino/apis/services/dp_services.dart';
+import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/TD/td_create2_page.dart';
@@ -25,11 +26,135 @@ class _AddPage1State extends State<AddPage1> {
   List<Map<String, dynamic>> emptyMainGoals = [];
   String firstColor = '0xff000000';
 
+  List<Map<String, String>> inProgressID = [];
+
+  final String message = "";
+  String nickname = '';
+  String description = '';
+  String selectedImage = "assets/img/profile_smp4.png";
+
+  int successNum = 0;
+  String mandaDescription = '';
+  String bookmark = 'UNBOOKMARK';
+  List<Map<String, String>> failedIDs = [];
+  List<Map<String, String>> inProgressIDs = [];
+  List<Map<String, String>> successIDs = [];
+  List<Map<String, String>> nameList = [];
+  List<Map<String, String>> statusList = [];
+  List<Map<String, String>> ddayList = [];
+  List<Map<String, String>> colorList = [];
+  List<Map<dynamic, dynamic>> successNums = [];
+  Map<String, List<Map<String, String>>> photos = {};
+  String? profile;
+  String defaultImage = 'assets/img/profile_smp4.png'; // 기본 이미지 경로
+
+  List<Map<String, String>> mandalarts = [];
+  List<Map<String, String>> bookmarks = [];
+
   @override
-  void initState() {
-    super.initState();
-    thirdGoalId = 0;
-    _mainGoalList();
+void initState() {
+  super.initState();
+  _initializeData();
+}
+
+Future<void> _initializeData() async {
+  await userMandaIdInfo(); // 데이터를 먼저 가져오기
+  setState(() {
+    thirdGoalId = 0; // 초기화
+  });
+  _mainGoalList(); // 데이터를 기반으로 호출
+}
+
+  Future<void> userMandaInfo(String mandalartId) async {
+    if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
+
+    try {
+      final data = await UserMandaInfoService.userMandaInfo(context,
+          mandalartId: int.parse(mandalartId));
+
+      if (data != null) {
+        String id = mandalartId;
+        String name = data['name'] ?? '';
+        String status = data['status']?.toString() ?? '';
+        String dday = data['dday']?.toString() ?? '0';
+        int successNum = data['statusNum']?['successNum'] ?? 0;
+
+        setState(() {
+          if (status == "FAIL") failedIDs.add({"id": id, "name": name});
+          if (status == "IN_PROGRESS") {
+            inProgressIDs.add({"id": id, "name": name});
+          }
+          if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
+
+          nameList.add({'mandalartId': id, 'name': name});
+          statusList.add({'mandalartId': id, 'status': status});
+          ddayList.add({'mandalartId': id, 'dday': dday});
+          successNums.add({'mandalartId': id, 'successNum': successNum});
+        });
+      } else {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('데이터 로드 실패: $e')),
+      );
+    }
+  }
+
+  Future<void> userMandaIdInfo() async {
+    if (mandalarts.isNotEmpty) return;
+
+    try {
+      final data = await UserMandaIdService.userManda();
+
+      if (data.isNotEmpty) {
+        setState(() {
+          mandalarts = data['mandalarts']!;
+          bookmarks = data['bookmarks']!;
+        });
+
+        // 비동기 작업 병렬 처리
+        final tasks = mandalarts.map((mandalart) async {
+          final String mandalartId = mandalart['id'] ?? '0';
+          await userMandaInfo(mandalartId);
+        });
+
+        await Future.wait(tasks); // 모든 작업 완료를 기다림
+
+        // id 값을 기준으로 오름차순 정렬
+        failedIDs.sort((a, b) {
+          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+        });
+
+        inProgressIDs.sort((a, b) {
+          // BOOKMARK 상태 확인
+          final aBookmark = bookmarks
+              .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
+          final bBookmark = bookmarks
+              .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
+
+          // BOOKMARK 상태 기준으로 정렬
+          if (aBookmark && !bBookmark) {
+            return -1; // a가 BOOKMARK 상태이고, b는 UNBOOKMARK 상태
+          }
+          if (!aBookmark && bBookmark) {
+            return 1; // b가 BOOKMARK 상태이고, a는 UNBOOKMARK 상태
+          }
+
+          // 같은 상태라면 id 값 기준 정렬 (오름차순)
+          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+        });
+
+        context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
+
+        successIDs.sort((a, b) {
+          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+        });
+      }
+    } catch (e) {
+      // 에러 발생 시 처리
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('데이터 로드 중 오류가 발생했습니다: $e')),
+      );
+    }
   }
 
   void _mainGoalList() async {
@@ -39,8 +164,10 @@ class _AddPage1State extends State<AddPage1> {
       List<Map<String, dynamic>> filteredGoals = [];
       List<Map<String, dynamic>> emptySecondGoals =
           []; // 비어 있는 secondGoals를 위한 리스트 추가
+      List<Map<String, String>> inProgressID =
+          Provider.of<GoalOrder>(context, listen: false).goalOrder;
 
-      for (var goal in goals) {
+      for (var goal in inProgressID) {
         final mandalartId = goal['id'].toString();
         final name = goal['name']; // 목표의 이름 가져오기
 
@@ -61,7 +188,6 @@ class _AddPage1State extends State<AddPage1> {
               'mandalartId': mandalartId,
               'name': name,
             });
-            print('empty = $emptySecondGoals');
           }
         }
       }
@@ -181,9 +307,9 @@ class _AddPage1State extends State<AddPage1> {
                                   value: goal['id'].toString(),
                                   child: Text(
                                     goalName,
-                                    style:  TextStyle(
-                                      color: Colors.white,
-                                      fontSize: currentWidth < 600 ? 13 : 15),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: currentWidth < 600 ? 13 : 15),
                                   ),
                                 );
                               }).toList(),
@@ -206,7 +332,7 @@ class _AddPage1State extends State<AddPage1> {
                                 }
                               },
                               isExpanded: true,
-                              dropdownColor: const Color(0xff262626),
+                              dropdownColor: Color(0xff222222),
                               style: const TextStyle(color: Colors.white),
                               iconEnabledColor: Colors.white,
                               underline: Container(),
@@ -223,24 +349,24 @@ class _AddPage1State extends State<AddPage1> {
                       ),
                     ),
                     if (selectedGoalName != "") ...[
-               SizedBox(height: currentWidth < 600 ? 28 : 32),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  DPGuideText('어떤 플랜과 관련됐나요?', currentWidth).dPGuideText(),
-                  SizedBox(height: currentWidth < 600 ? 20 : 25),
-                  Center(
-                    child: MandalartGrid2(
-                      mandalart: selectedGoalName,
-                      secondGoals: secondGoals,
-                      firstColor: firstColor,
-                    ),
-                  ),
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
-                ],
-              ),
-            ],
-            
+                      SizedBox(height: currentWidth < 600 ? 28 : 32),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          DPGuideText('어떤 플랜과 관련됐나요?', currentWidth)
+                              .dPGuideText(),
+                          SizedBox(height: currentWidth < 600 ? 20 : 25),
+                          Center(
+                            child: MandalartGrid2(
+                              mandalart: selectedGoalName,
+                              secondGoals: secondGoals,
+                              firstColor: firstColor,
+                            ),
+                          ),
+                          SizedBox(height: currentWidth < 600 ? 15 : 25),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -280,7 +406,6 @@ class _AddPage1State extends State<AddPage1> {
                     .newButton(),
               ],
             ),
-            
           ],
         ),
       ),
