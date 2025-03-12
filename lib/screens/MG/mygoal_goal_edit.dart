@@ -40,6 +40,7 @@ class _MygoalEditState extends State<MygoalEdit> {
   DateTime? selectedDate;
   DateTime? _selectedDate;
   List<String> goalImage = [];
+  bool _isDeleting = false; // 삭제 중인지 상태 저장
 
   @override
   void initState() {
@@ -96,25 +97,70 @@ class _MygoalEditState extends State<MygoalEdit> {
     }
   }
 
-  /*void _deleteImage(int index) {
+  void _deleteImage(int index) async {
+    if (_isDeleting) return; // 이미 삭제 중이면 중복 실행 방지
+    if (goalImage.isEmpty && _imageFiles.isEmpty) {
+      print("⚠️ 삭제할 이미지가 없습니다.");
+      return;
+    }
+
     setState(() {
-      if (index < goalImage.length) {
-        // ✅ 기존 저장된 이미지 리스트에서 삭제
-        goalImage.removeAt(index);
-      } else {
-        // ✅ 새로 추가한 이미지 리스트에서 삭제
-        int newIndex = index - goalImage.length;
-        if (newIndex < _imageFiles.length) {
-          _imageFiles.removeAt(newIndex);
-        }
-      }
+      _isDeleting = true; // 삭제 중 상태로 변경
     });
 
-    print("삭제 후 goalImage: $goalImage");
-    print("삭제 후 _imageFiles: $_imageFiles");
-  }*/
+    String imageToDelete;
+    bool isServerImage = index < goalImage.length; // 기존 저장된 이미지인지 여부 확인
 
-  void _deleteImage(int index) async {
+    if (isServerImage) {
+      imageToDelete = goalImage[index];
+    } else {
+      int newIndex = index - goalImage.length;
+      if (newIndex < _imageFiles.length) {
+        imageToDelete = _imageFiles[newIndex];
+      } else {
+        print("❌ 잘못된 index: $index");
+        setState(() {
+          _isDeleting = false; // 삭제 실패 시 다시 삭제 가능하도록 설정
+        });
+        return;
+      }
+    }
+
+    // ✅ 기존 저장된 이미지인 경우에만 서버에서 삭제 요청
+    bool success = true;
+    if (isServerImage) {
+      success = await DeleteFileService.deleteFile(imageToDelete);
+    }
+
+    if (success) {
+      setState(() {
+        if (isServerImage) {
+          goalImage.removeAt(index);
+          widget.goalImage.removeAt(index);
+        } else {
+          _imageFiles.removeAt(index - goalImage.length);
+        }
+      });
+
+      print("✅ 삭제 후 goalImage: $goalImage");
+      print("✅ 삭제 후 _imageFiles: $_imageFiles");
+    } else {
+      print("❌ 서버에서 이미지 삭제 실패");
+      Fluttertoast.showToast(
+        msg: "이미지 삭제 실패",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+
+    setState(() {
+      _isDeleting = false; // 삭제 완료 후 다시 삭제 가능하도록 설정
+    });
+  }
+
+  /*void _deleteImage(int index) async {
     if (goalImage.isEmpty && _imageFiles.isEmpty) {
       print("⚠️ 삭제할 이미지가 없습니다.");
       return;
@@ -158,7 +204,7 @@ class _MygoalEditState extends State<MygoalEdit> {
         textColor: Colors.white,
       );
     }
-  }
+  }*/
 
   Future<bool> _editName(String name, int mandalartId) async {
     try {

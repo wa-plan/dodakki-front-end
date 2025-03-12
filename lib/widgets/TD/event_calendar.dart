@@ -312,12 +312,14 @@ class _EventCalendarState extends State<EventCalendar> {
                         padding: currentWidth < 600
                             ? EdgeInsets.fromLTRB(10, 13, 25, 13)
                             : EdgeInsets.fromLTRB(20, 25, 30, 25),
+
                         decoration: BoxDecoration(
                           color: const Color(0xff2A2A2A),
                           borderRadius:
                               BorderRadius.circular(currentWidth < 600 ? 3 : 5),
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               width: currentWidth < 600 ? 11 : 14,
@@ -396,6 +398,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                     ),
                                   ),
                                 ),
+
                                 SizedBox(width: currentWidth < 600 ? 23 : 30),
                                 GestureDetector(
                                   onTap: () {
@@ -523,7 +526,13 @@ void editDialog(
                 width: currentWidth < 600 ? 13 : 15,
                 height: double.infinity,
                 decoration: BoxDecoration(
-                  color: mainRed,
+                  color: Color(int.parse(
+                          color
+                              .replaceAll('Color(', '')
+                              .replaceAll(')', '')
+                              .replaceAll('0x', ''),
+                          radix: 16) +
+                      0xFF000000),
                   borderRadius: BorderRadius.all(
                       Radius.circular(currentWidth < 600 ? 3 : 5)),
                 ),
@@ -539,12 +548,19 @@ void editDialog(
                         fontSize: currentWidth < 600 ? 11 : 17),
                   ),
                   SizedBox(height: currentWidth < 600 ? 5 : 7),
-                  Text(
-                    title,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: currentWidth < 600 ? 13 : 19,
-                        fontWeight: FontWeight.w500),
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: currentWidth < 600 ? 13 : 19,
+                          fontWeight: FontWeight.w500),
+                      maxLines: 2, // 👉 최대 2줄까지만 표시
+                      overflow:
+                          TextOverflow.ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
+                      softWrap: true, // 👉 자동 줄바꿈 허용
+                    ),
                   ),
                   SizedBox(height: currentWidth < 600 ? 20 : 25),
                   Text(

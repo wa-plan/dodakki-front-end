@@ -59,38 +59,36 @@ class EditPageState extends State<EditPage> {
   }
 
   //텍스트폼필드 함수 만들기
-  renderTextFormField({
-    required FormFieldSetter onSaved,
-    required FormFieldValidator validator,
-    required double currentWidth
-  }) {
+  renderTextFormField(
+      {required FormFieldSetter onSaved,
+      required FormFieldValidator validator,
+      required double currentWidth}) {
     return TextFormField(
       onSaved: onSaved,
       validator: validator,
       controller: dominoController,
       style: const TextStyle(color: Colors.white, fontSize: 14),
-        decoration: InputDecoration(
-          filled: true,
+      decoration: InputDecoration(
+        filled: true,
         fillColor: const Color(0xff2A2A2A),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(6),
         ),
-         contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-          
-          suffixIcon: dominoController.text.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    dominoController.clear();
-                  },
-                  icon:  Icon(
-                    Icons.cancel,
-                    size: currentWidth < 600 ? 14 : 16,
-                        color: const Color.fromARGB(255, 98, 98, 98),
-                  ),
-                )
-              : null,
-        ),
+        contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+        suffixIcon: dominoController.text.isNotEmpty
+            ? IconButton(
+                onPressed: () {
+                  dominoController.clear();
+                },
+                icon: Icon(
+                  Icons.cancel,
+                  size: currentWidth < 600 ? 14 : 16,
+                  color: const Color.fromARGB(255, 98, 98, 98),
+                ),
+              )
+            : null,
+      ),
     );
   }
 
@@ -117,7 +115,7 @@ class EditPageState extends State<EditPage> {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('도미노 만들기', currentWidth).dPTitleText(),
+          child: DPTitleText('도미노 수정하기', currentWidth).dPTitleText(),
         ),
         backgroundColor: backgroundColor,
       ),
@@ -151,42 +149,40 @@ class EditPageState extends State<EditPage> {
                     ),
                   ),
                   SizedBox(height: currentWidth < 600 ? 15 : 25),
-                    DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
-                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                  DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
+                  SizedBox(height: currentWidth < 600 ? 15 : 25),
 
                   Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 15),
                           decoration: BoxDecoration(
                             color: const Color(0xff2A2A2A),
                             borderRadius: BorderRadius.circular(3),
                           ),
                           width: currentWidth < 600 ? 300 : 500,
-                      child: EditCalendar(widget.date))), //추가할 때 달력
+                          child: EditCalendar(widget.date))), //추가할 때 달력
 
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
+                  SizedBox(height: 25),
 
                   //반복하기 기능
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end, //오른쪽 정렬
                     children: [
-                       Text(
+                      Text(
                         '반복하기',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: currentWidth < 600 ? 13 : 16),
                       ),
                       SizedBox(height: currentWidth < 600 ? 10 : 15),
-
-
                       SizedBox(
                         height: currentWidth < 600 ? 7 : 10,
                         child: Switch(
                           activeColor: Colors.white,
-                            activeTrackColor: const Color(0xff18AD00),
-                            inactiveTrackColor: const Color(0xff5D5D5D),
-                            inactiveThumbColor: Colors.white,
+                          activeTrackColor: const Color(0xff18AD00),
+                          inactiveTrackColor: const Color(0xff5D5D5D),
+                          inactiveThumbColor: Colors.white,
                           value: switchValue,
                           onChanged: (value) {
                             setState(() {
@@ -197,12 +193,15 @@ class EditPageState extends State<EditPage> {
                       ),
                     ],
                   ),
-                  
+
                   if (switchValue)
                     EditRepeatSettings(
                         everyDay, everyWeek, everyTwoWeek, everyMonth),
 
-                  
+                  SizedBox(
+                    height: 20,
+                  ),
+
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -224,6 +223,7 @@ class EditPageState extends State<EditPage> {
                         ), //취소 버튼
                         TextButton(
                           onPressed: () {
+                            print('골아이디 확인 ${widget.goalId}, ${widget.date}');
                             howDeleteDialog(
                                 context, widget.goalId, widget.date);
                           },
@@ -262,6 +262,7 @@ class EditPageState extends State<EditPage> {
                                 String repeatInfo = context
                                     .read<DateListProvider>()
                                     .repeatInfo();
+                                print('goalID=${widget.goalId}}');
                                 print('repeatInfo=$repeatInfo');
                                 EditDominoService.editDomino(
                                     goalId: widget.goalId,
