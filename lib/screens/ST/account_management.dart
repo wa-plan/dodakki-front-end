@@ -1,13 +1,11 @@
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:domino/styles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/change_password.dart';
 import 'package:domino/widgets/popup.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:domino/apis/services/lr_services.dart'; // Import the new service
+import 'package:domino/apis/services/lr_services.dart';
 
 class AccountManagement extends StatefulWidget {
   final String email;
@@ -198,9 +196,7 @@ class _AccountManagementState extends State<AccountManagement> {
                     onCancel: () {
                       Navigator.of(context).pop();
                     },
-                    onDelete: () {
-                      // 삭제 버튼을 눌렀을 때 실행할 코드
-                    },
+                    onDelete: () {},
                     onSignOut: () {
                       SignOutService.signOut(context);
                       Navigator.of(context).pop();

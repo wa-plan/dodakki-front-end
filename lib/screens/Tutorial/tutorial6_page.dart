@@ -76,11 +76,15 @@ class Tutorial6State extends State<Tutorial6> {
                     ),
                     SizedBox(height: currentWidth < 600 ? 10 : 15),
                     Center(
-                      child: Option3('스펙왕\n되기', currentWidth, const Color(0xffFCFF62)).option3(),
+                      child: Option3(
+                              '스펙왕\n되기', currentWidth, const Color(0xffFCFF62))
+                          .option3(),
                     ),
                     SizedBox(height: currentWidth < 600 ? 10 : 15),
                     Center(
-                      child: Option3('"도닦기"\n동아리\n들어가기', currentWidth, const Color(0xff72FF5B)).option3(),
+                      child: Option3('"도닦기"\n동아리\n들어가기', currentWidth,
+                              const Color(0xff72FF5B))
+                          .option3(),
                     ),
                     SizedBox(height: currentWidth < 600 ? 10 : 15),
                     Center(
@@ -103,7 +107,8 @@ class Tutorial6State extends State<Tutorial6> {
                   currentSelection == 0
                       ? Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Tutorial7()),
+                          MaterialPageRoute(
+                              builder: (context) => const Tutorial7()),
                         )
                       : null;
                 },
@@ -136,26 +141,25 @@ class Option {
 
   Widget option() {
     return Container(
-        width: currentWidth < 600 ? 190 : 400,
-        height: currentWidth < 600 ? 40 : 63,
-        padding: EdgeInsets.all(currentWidth < 600 ? 5 : 10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(currentWidth < 600 ? 6 : 8)),
-        child: Center(
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: backgroundColor,
-              fontSize: currentWidth < 600 ? 12 : 13,
-              fontWeight: FontWeight.w700,
-            ),
+      width: currentWidth < 600 ? 190 : 400,
+      height: currentWidth < 600 ? 40 : 63,
+      padding: EdgeInsets.all(currentWidth < 600 ? 5 : 10),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(currentWidth < 600 ? 6 : 8)),
+      child: Center(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: backgroundColor,
+            fontSize: currentWidth < 600 ? 12 : 13,
+            fontWeight: FontWeight.w700,
           ),
         ),
-      );
-    
+      ),
+    );
   }
 }
 
@@ -167,30 +171,28 @@ class Option2 {
   const Option2(this.text, this.currentWidth);
 
   Widget option2() {
-    return Container(
-          child: CircleAvatar(
-        radius: currentWidth < 600 ? 45 : 55,
-        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
-        child: Container(
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: mainRed,
-            ),
-      
-          child: Center(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: backgroundColor,
-                fontSize: currentWidth < 600 ? 12 : 13,
-                fontWeight: FontWeight.w700,
-              ),
+    return CircleAvatar(
+      radius: currentWidth < 600 ? 45 : 55,
+      backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
+      child: Container(
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: mainRed,
+        ),
+        child: Center(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: backgroundColor,
+              fontSize: currentWidth < 600 ? 12 : 13,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
-      ));
+      ),
+    );
   }
 }
 

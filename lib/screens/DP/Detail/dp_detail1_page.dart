@@ -56,88 +56,82 @@ class DPdetailPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 CustomIconButton(() {
-                      for (int i = 0; i < 9; i++) {
-                        context
-                            .read<SaveInputtedDetailGoalModel>()
-                            .updateDetailGoal(
-                                i.toString(),
-                                secondGoals.isNotEmpty &&
-                                        secondGoals[i]['secondGoal'] != ""
-                                    ? secondGoals[i]['secondGoal']
-                                    : "");
-                      }
-
-                      for (int i = 0; i < 9; i++) {
-                        context
-                            .read<SaveEditedDetailGoalIdModel>()
-                            .editDetailGoalId(
-                                i.toString(),
-                                secondGoals.isNotEmpty
-                                    ? secondGoals[i]['id']
-                                    : 0);
-                      }
-
-                      for (int i = 0; i < 9; i++) {
-                        context.read<GoalColor>().updateGoalColor(
+                  for (int i = 0; i < 9; i++) {
+                    context
+                        .read<SaveInputtedDetailGoalModel>()
+                        .updateDetailGoal(
                             i.toString(),
                             secondGoals.isNotEmpty &&
                                     secondGoals[i]['secondGoal'] != ""
-                                ? Color(int.parse(secondGoals[i]['color']
-                                    .replaceAll('Color(', '')
-                                    .replaceAll(')', '')))
-                                : Colors.transparent);
-                      }
+                                ? secondGoals[i]['secondGoal']
+                                : "");
+                  }
 
-                      for (int i = 0; i < 9; i++) {
-                        for (int j = 0; j < 9; j++) {
-                          context
-                              .read<SaveInputtedActionPlanModel>()
-                              .updateActionPlan(
-                                  i,
-                                  j.toString(),
-                                  secondGoals.isNotEmpty &&
-                                          secondGoals[i]['thirdGoals']
-                                              .isNotEmpty &&
-                                          secondGoals[i]['thirdGoals']
-                                              .asMap()
-                                              .containsKey(j)
-                                      ? secondGoals[i]['thirdGoals'][j]
-                                          ['thirdGoal']
-                                      : "");
-                        }
-                      }
+                  for (int i = 0; i < 9; i++) {
+                    context
+                        .read<SaveEditedDetailGoalIdModel>()
+                        .editDetailGoalId(i.toString(),
+                            secondGoals.isNotEmpty ? secondGoals[i]['id'] : 0);
+                  }
 
-                      for (int i = 0; i < 9; i++) {
-                        for (int j = 0; j < 9; j++) {
-                          context
-                              .read<SaveEditedActionPlanIdModel>()
-                              .editActionPlanId(
-                                  i,
-                                  j.toString(),
-                                  secondGoals.isNotEmpty &&
-                                          secondGoals[i]['thirdGoals']
-                                              .isNotEmpty &&
-                                          secondGoals[i]['thirdGoals']
-                                              .asMap()
-                                              .containsKey(j)
-                                      ? secondGoals[i]['thirdGoals'][j]['id']
-                                      : 0);
-                        }
-                      }
+                  for (int i = 0; i < 9; i++) {
+                    context.read<GoalColor>().updateGoalColor(
+                        i.toString(),
+                        secondGoals.isNotEmpty &&
+                                secondGoals[i]['secondGoal'] != ""
+                            ? Color(int.parse(secondGoals[i]['color']
+                                .replaceAll('Color(', '')
+                                .replaceAll(')', '')))
+                            : Colors.transparent);
+                  }
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Edit99Page(
-                            mandalart: mandalart,
-                            mandalartId: mandalartId,
-                            firstColor: firstColor,
-                            secondGoalIds: secondGoalIds2,
-                          ),
-                        ),
-                      ); // 함수 호출
-                    }, Icons.edit, currentWidth)
-                        .customIconButton()
+                  for (int i = 0; i < 9; i++) {
+                    for (int j = 0; j < 9; j++) {
+                      context
+                          .read<SaveInputtedActionPlanModel>()
+                          .updateActionPlan(
+                              i,
+                              j.toString(),
+                              secondGoals.isNotEmpty &&
+                                      secondGoals[i]['thirdGoals'].isNotEmpty &&
+                                      secondGoals[i]['thirdGoals']
+                                          .asMap()
+                                          .containsKey(j)
+                                  ? secondGoals[i]['thirdGoals'][j]['thirdGoal']
+                                  : "");
+                    }
+                  }
+
+                  for (int i = 0; i < 9; i++) {
+                    for (int j = 0; j < 9; j++) {
+                      context
+                          .read<SaveEditedActionPlanIdModel>()
+                          .editActionPlanId(
+                              i,
+                              j.toString(),
+                              secondGoals.isNotEmpty &&
+                                      secondGoals[i]['thirdGoals'].isNotEmpty &&
+                                      secondGoals[i]['thirdGoals']
+                                          .asMap()
+                                          .containsKey(j)
+                                  ? secondGoals[i]['thirdGoals'][j]['id']
+                                  : 0);
+                    }
+                  }
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Edit99Page(
+                        mandalart: mandalart,
+                        mandalartId: mandalartId,
+                        firstColor: firstColor,
+                        secondGoalIds: secondGoalIds2,
+                      ),
+                    ),
+                  ); // 함수 호출
+                }, Icons.edit, currentWidth)
+                    .customIconButton()
               ],
             ),
             const SizedBox(height: 20),
@@ -158,7 +152,7 @@ class DPdetailPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: currentWidth < 600 ? 20 : 23),
-             Text(
+            Text(
               "확대 및 클릭하여 자세히 볼 수 있어요.",
               style: TextStyle(
                   color: const Color(0xff717171),
@@ -166,11 +160,11 @@ class DPdetailPage extends StatelessWidget {
                   fontWeight: FontWeight.w300),
             ),
             const Spacer(),
-            NewButton(const Color.fromARGB(255, 133, 24, 17), Colors.white, '삭제',
-                () {
+            NewButton(
+                    const Color.fromARGB(255, 133, 24, 17), Colors.white, '삭제',
+                    () {
               // Create a list to store the second goal ids
               List<int> secondGoalIds = [];
-              print(secondGoalIds);
 
               // Extract the id values from secondGoals
               for (var goal in secondGoals) {
@@ -178,7 +172,6 @@ class DPdetailPage extends StatelessWidget {
               }
 
               // Debug: Print the extracted second goal ids
-              print(secondGoalIds);
               PopupDialog.show(
                 context,
                 '멋진 계획이었는데,\n이대로 보낼꺼야..?',
@@ -218,7 +211,8 @@ class DPdetailPage extends StatelessWidget {
                   }
                 },
               );
-            }, currentWidth).newButton(),
+            }, currentWidth)
+                .newButton(),
           ],
         ),
       ),

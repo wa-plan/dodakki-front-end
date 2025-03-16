@@ -24,10 +24,6 @@ class _EventCalendarState extends State<EventCalendar> {
     final data =
         await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
     if (data != null) {
-      setState(() {
-        String firstColor = data['color']; // name을 가져오기
-        print(firstColor);
-      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),
@@ -187,8 +183,7 @@ class _EventCalendarState extends State<EventCalendar> {
           headerStyle: HeaderStyle(
             titleCentered: true,
             titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
-            leftChevronIcon: 
-            Icon(
+            leftChevronIcon: Icon(
               Icons.arrow_back_ios,
               color: const Color(0xffD4D4D4),
               size: currentWidth < 600 ? 17 : 20,
@@ -268,13 +263,6 @@ class _EventCalendarState extends State<EventCalendar> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        print(
-                          value[index]
-                              .color
-                              .replaceAll('Color(', '') // 'Color(' 부분 제거
-                              .replaceAll(')', ''),
-                        );
-
                         // 롱 프레스 이벤트 처리
                         if (value[index].repetition != 'NONE') {
                           value[index].switchValue = true;
@@ -312,7 +300,6 @@ class _EventCalendarState extends State<EventCalendar> {
                         padding: currentWidth < 600
                             ? EdgeInsets.fromLTRB(10, 13, 25, 13)
                             : EdgeInsets.fromLTRB(20, 25, 30, 25),
-
                         decoration: BoxDecoration(
                           color: const Color(0xff2A2A2A),
                           borderRadius:
@@ -398,7 +385,6 @@ class _EventCalendarState extends State<EventCalendar> {
                                     ),
                                   ),
                                 ),
-
                                 SizedBox(width: currentWidth < 600 ? 23 : 30),
                                 GestureDetector(
                                   onTap: () {

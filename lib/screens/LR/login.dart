@@ -28,7 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final String? authToken = await storage.read(key: "token");
 
     if (authToken == null || authToken.isEmpty) {
-      print("로그인 토큰이 없습니다. 자동 로그인 불가능.");
       return; // 토큰이 없으면 자동 로그인하지 않음
     }
 
@@ -37,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // null 체크 후 할당 (null이면 빈 문자열로 초기화)
     userInfo = storedUserInfo ?? "";
-    print("Stored User Info: $userInfo");
 
     if (userInfo.isNotEmpty) {
       // userInfo에서 userId와 password 추출

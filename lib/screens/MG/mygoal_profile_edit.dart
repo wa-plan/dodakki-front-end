@@ -48,14 +48,12 @@ class _ProfileEditState extends State<ProfileEdit> {
       );
 
       if (pickedFile == null) {
-        print("❌ 오류: 사용자가 사진을 촬영하지 않음.");
         return;
       }
 
       File imageFile = File(pickedFile.path);
 
       if (!imageFile.existsSync()) {
-        print("❌ 오류: 촬영된 이미지 파일이 존재하지 않습니다.");
         Fluttertoast.showToast(
           msg: '촬영된 이미지가 저장되지 않았습니다.',
           toastLength: Toast.LENGTH_SHORT,
@@ -66,9 +64,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         return;
       }
 
-      print("✅ 촬영된 이미지 경로: ${imageFile.path}");
-      print("✅ 파일 크기: ${await imageFile.length()} bytes");
-
       // 📌 촬영한 사진을 서버에 업로드
       String uploadedUrl = await _uploadCamera(imageFile);
 
@@ -76,9 +71,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         setState(() {
           _imageFiles.add(uploadedUrl); // ✅ 업로드된 URL을 리스트에 추가
         });
-        print('✅ 업로드된 이미지 URL: $uploadedUrl');
       } else {
-        print("❌ 오류: 서버 업로드 실패");
         Fluttertoast.showToast(
           msg: '이미지 업로드에 실패했습니다.',
           toastLength: Toast.LENGTH_SHORT,
@@ -88,7 +81,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         );
       }
     } catch (e) {
-      print('❌ 카메라 사진 촬영 오류: $e');
       Fluttertoast.showToast(
         msg: '사진 촬영 오류 발생: $e',
         toastLength: Toast.LENGTH_SHORT,
@@ -103,12 +95,8 @@ class _ProfileEditState extends State<ProfileEdit> {
   Future<String> _uploadCamera(File imageFile) async {
     try {
       if (!imageFile.existsSync()) {
-        print("❌ 오류: 업로드할 이미지 파일이 존재하지 않음.");
         return "";
       }
-
-      print("📤 서버로 업로드 중: ${imageFile.path}");
-      print("📏 파일 크기: ${await imageFile.length()} bytes");
 
       /// 📌 File을 PlatformFile로 변환 (웹과 모바일 분리)
       PlatformFile platformFile = PlatformFile(
@@ -121,14 +109,11 @@ class _ProfileEditState extends State<ProfileEdit> {
       String uploadedUrl = await UploadFileService.uploadFiles([platformFile]);
 
       if (uploadedUrl.isNotEmpty) {
-        print("✅ 업로드 완료! URL: $uploadedUrl");
         return uploadedUrl;
       } else {
-        print("❌ 오류: 서버에서 업로드 URL을 반환하지 않음.");
         return "";
       }
     } catch (e) {
-      print("❌ 카메라 사진 업로드 오류: $e");
       return "";
     }
   }
@@ -142,13 +127,11 @@ class _ProfileEditState extends State<ProfileEdit> {
       );
 
       if (result == null || result.files.isEmpty) {
-        print('파일 선택이 취소됨.');
         return; // 파일을 선택하지 않았으면 함수 종료
       }
       String uploadedUrl = await UploadFileService.uploadFiles(result.files);
 
       if (uploadedUrl.isEmpty) {
-        print('파일 업로드 실패');
         Fluttertoast.showToast(
           msg: '파일 업로드에 실패했습니다. 다시 시도해주세요.',
           toastLength: Toast.LENGTH_SHORT,
@@ -163,8 +146,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         _imageFiles.add(uploadedUrl); // URL을 _imageFiles에 추가
       });
 
-      print('_imageFiles=$_imageFiles');
-
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -173,7 +154,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         ),
       );
     } catch (e) {
-      print('이미지 선택 오류: $e');
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
         toastLength: Toast.LENGTH_SHORT,
@@ -187,8 +167,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   Future<void> _uploadSelectedImage() async {
     try {
       if (widget.selectedImage.isNotEmpty) {
-        print('업로드할 selectedImage: ${widget.selectedImage}');
-
         // selectedImage를 File로 변환 (Flutter의 asset 이미지는 직접 File로 변환 불가하므로, ByteData로 변환 후 처리)
         ByteData byteData = await rootBundle.load(widget.selectedImage);
         Uint8List imageBytes = byteData.buffer.asUint8List();
@@ -204,20 +182,13 @@ class _ProfileEditState extends State<ProfileEdit> {
         String uploadedUrl = await UploadFileService.uploadFiles(fileList);
 
         if (uploadedUrl.isNotEmpty) {
-          print('업로드된 selectedImage URL: $uploadedUrl');
           setState(() {
             _imageFiles.clear();
             _imageFiles.add(uploadedUrl); // 업로드된 URL을 _imageFiles에 추가
-            print('_imageFiles=$_imageFiles');
           });
-        } else {
-          print('selectedImage 업로드 실패');
-        }
-      } else {
-        print('selectedImage가 비어 있습니다.');
-      }
+        } else {}
+      } else {}
     } catch (e) {
-      print('selectedImage 업로드 오류: $e');
       Fluttertoast.showToast(
         msg: '이미지 업로드 오류: $e',
         toastLength: Toast.LENGTH_SHORT,
@@ -284,9 +255,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   void initState() {
     super.initState();
     userInfo();
-    print('selectedImage=${widget.selectedImage}');
-    print('cameraImage=${widget.cameraImage}');
-    print('profileImage=${widget.profileImage}');
   }
 
   @override
