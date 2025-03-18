@@ -131,12 +131,6 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
               TextButton(
                 onPressed: () async {
                   setState(() {
-                    int howMany = Provider.of<TestInputtedActionPlanModel>(
-                                context,
-                                listen: false)
-                            .countEmptyValues(selectedDetailGoal) -
-                        1;
-                    print(howMany);
                     _isLoading = true; // 로딩 시작
                   });
                   await _fetchSubGoals();
@@ -158,7 +152,8 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset('assets/img/AIIcon.png', height: currentWidth < 600 ? 15 : 18),
+                          Image.asset('assets/img/AIIcon.png',
+                              height: currentWidth < 600 ? 15 : 18),
                           SizedBox(width: currentWidth < 600 ? 4 : 7),
                           Text(
                             'Ask AI',
@@ -199,120 +194,106 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                             currentWidth)
                         .dpMainGoal(),
                     SizedBox(height: currentWidth < 600 ? 10 : 15),
-                    
-                        Center(
-                          child: SizedBox(
-                            width: currentHeight*0.4,
-                            child: GridView.builder(
-                              shrinkWrap: true, // GridView를 자식으로 설정
-                              physics:
-                                  const NeverScrollableScrollPhysics(), 
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 1,
-                                mainAxisSpacing: 1,
-                              ),
-                              itemCount: 9,
-                              itemBuilder: (context, index) {
-                                if (index == 4) {
-                                  // 안전한 null 처리
-                                  final inputtedDetailGoal = context
-                                              .watch<SaveInputtedDetailGoalModel>()
-                                              .inputtedDetailGoal[
-                                          '$selectedDetailGoal'] ??
-                                      '';
-
-                                  return Container(
-                                    width: 80,
-                                    margin: const EdgeInsets.all(1.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(3),
-                                      color: const Color(0xff929292),
-                                    ),
-                                    child: Center(
-                                      child: AutoSizeText(
-                                            maxLines:
-                                                3, // 최대 줄 수 (필요에 따라 변경 가능)
-                                            minFontSize: 6,
-                                            maxFontSize: 16, // 최소 글씨 크기
-                                            overflow: TextOverflow
-                                                .ellipsis, // 내용이 너무 길 경우 생략 표시
-                                            inputtedDetailGoal,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              color: backgroundColor,
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                    ),
-                                  );
-                                } else {
-                                  return Input2(
-                                    actionPlanId: index,
-                                    selectedDetailGoalId: selectedDetailGoal,
-                                  );
-                                }
-                              },
-                            ),
+                    Center(
+                      child: SizedBox(
+                        width: currentHeight * 0.4,
+                        child: GridView.builder(
+                          shrinkWrap: true, // GridView를 자식으로 설정
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
                           ),
+                          itemCount: 9,
+                          itemBuilder: (context, index) {
+                            if (index == 4) {
+                              // 안전한 null 처리
+                              final inputtedDetailGoal = context
+                                          .watch<SaveInputtedDetailGoalModel>()
+                                          .inputtedDetailGoal[
+                                      '$selectedDetailGoal'] ??
+                                  '';
+
+                              return Container(
+                                width: 80,
+                                margin: const EdgeInsets.all(1.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(3),
+                                  color: const Color(0xff929292),
+                                ),
+                                child: Center(
+                                  child: AutoSizeText(
+                                      maxLines: 3, // 최대 줄 수 (필요에 따라 변경 가능)
+                                      minFontSize: 6,
+                                      maxFontSize: 16, // 최소 글씨 크기
+                                      overflow: TextOverflow
+                                          .ellipsis, // 내용이 너무 길 경우 생략 표시
+                                      inputtedDetailGoal,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: backgroundColor,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                ),
+                              );
+                            } else {
+                              return Input2(
+                                actionPlanId: index,
+                                selectedDetailGoalId: selectedDetailGoal,
+                              );
+                            }
+                          },
                         ),
-                   SizedBox(height: currentWidth < 600 ? 15 : 25),
-                      Description2(widget.firstColor, currentWidth)
-                          .description2(),
-                      SizedBox(height: currentWidth < 600 ? 15 : 25),
+                      ),
+                    ),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    Description2(widget.firstColor, currentWidth)
+                        .description2(),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
                   ],
                 ),
               ),
             ),
-           
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              NewButton(
-                Colors.black,
-                Colors.white,
-                '취소',
-                () {
-                  // TestInputtedActionPlanModel 초기화
-                  context
-                      .read<TestInputtedActionPlanModel>()
-                      .resetActionPlans();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DPcreate99Page(
-                              firstColor: widget.firstColor,
-                              mainGoalId: widget.mainGoalId,
-                            )),
-                  );
-                },currentWidth
-              ).newButton(),
-              NewButton(
-                Colors.black,
-                Colors.white,
-                '완료',
-                () {
-                  // 모델 가져오기
-                  final testModel = context.read<TestInputtedActionPlanModel>();
-                  final saveModel = context.read<SaveInputtedActionPlanModel>();
+              NewButton(Colors.black, Colors.white, '취소', () {
+                // TestInputtedActionPlanModel 초기화
+                context.read<TestInputtedActionPlanModel>().resetActionPlans();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DPcreate99Page(
+                            firstColor: widget.firstColor,
+                            mainGoalId: widget.mainGoalId,
+                          )),
+                );
+              }, currentWidth)
+                  .newButton(),
+              NewButton(Colors.black, Colors.white, '완료', () {
+                // 모델 가져오기
+                final testModel = context.read<TestInputtedActionPlanModel>();
+                final saveModel = context.read<SaveInputtedActionPlanModel>();
 
-                  // TestInputtedActionPlanModel의 데이터를 SaveInputtedActionPlanModel로 복사
-                  for (int goalId = 0;
-                      goalId < testModel.inputtedActionPlan.length;
-                      goalId++) {
-                    testModel.inputtedActionPlan[goalId].forEach((key, value) {
-                      saveModel.updateActionPlan(goalId, key, value);
-                    });
-                  }
+                // TestInputtedActionPlanModel의 데이터를 SaveInputtedActionPlanModel로 복사
+                for (int goalId = 0;
+                    goalId < testModel.inputtedActionPlan.length;
+                    goalId++) {
+                  testModel.inputtedActionPlan[goalId].forEach((key, value) {
+                    saveModel.updateActionPlan(goalId, key, value);
+                  });
+                }
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DPcreate99Page(
-                              firstColor: widget.firstColor,
-                              mainGoalId: widget.mainGoalId,
-                            )),
-                  );
-                },currentWidth
-              ).newButton(),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DPcreate99Page(
+                            firstColor: widget.firstColor,
+                            mainGoalId: widget.mainGoalId,
+                          )),
+                );
+              }, currentWidth)
+                  .newButton(),
             ]),
           ],
         ),

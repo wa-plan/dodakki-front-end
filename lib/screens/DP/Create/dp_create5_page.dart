@@ -39,7 +39,7 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
     final List<String> color = Provider.of<GoalColor>(context, listen: false)
         .selectedGoalColor
         .values
-        .map((color) => color.toString())
+        .map((color) => '0x${color.value.toRadixString(16)}')
         .toList();
 
     final success = await AddSecondGoalService.addSecondGoal(

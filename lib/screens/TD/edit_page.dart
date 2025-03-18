@@ -257,13 +257,7 @@ class EditPageState extends State<EditPage> {
                                 context
                                     .read<DateListProvider>()
                                     .setInterval(switchValue, pickedDate);
-                                List<DateTime> dateList =
-                                    context.read<DateListProvider>().dateList;
-                                String repeatInfo = context
-                                    .read<DateListProvider>()
-                                    .repeatInfo();
-                                print('goalID=${widget.goalId}}');
-                                print('repeatInfo=$repeatInfo');
+
                                 EditDominoService.editDomino(
                                     goalId: widget.goalId,
                                     newGoal: dominoController.text);

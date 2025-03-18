@@ -24,13 +24,12 @@ class ColorBox extends StatelessWidget {
         .inputtedActionPlan[actionPlanId];
 
     final detailGoal = context
-        .watch<SaveInputtedDetailGoalModel>()
-        .inputtedDetailGoal['$detailGoalId'] ?? '';
+            .watch<SaveInputtedDetailGoalModel>()
+            .inputtedDetailGoal['$detailGoalId'] ??
+        '';
 
     // ✅ detailGoal이 ""인지 확인 (디버깅용 print 추가)
     bool isDetailGoalEmpty = detailGoal.isEmpty;
-
-    print("[ColorBox] detailGoalId: $detailGoalId, isEmpty: $isDetailGoalEmpty");
 
     // ✅ 부모 위젯으로 값 전달
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -39,23 +38,22 @@ class ColorBox extends StatelessWidget {
 
     Color color1 = detailGoal.isEmpty
         ? Colors.transparent
-        : (context.watch<GoalColor>().selectedGoalColor['$goalColorId'] ?? const Color(0xff929292));
+        : (context.watch<GoalColor>().selectedGoalColor['$goalColorId'] ??
+            const Color(0xff929292));
 
     List<Widget> buildGridItems() {
       return List.generate(9, (index) {
         if (index == 4) {
-          return DPCreateGrid(
-            detailGoal, 
-            color1,
-            null).dPCreateGrid();
+          return DPCreateGrid(detailGoal, color1, null).dPCreateGrid();
         }
 
         return DPCreateGrid(
-          inputtedActionPlan['$index'] ?? '', 
-          inputtedActionPlan['$index']?.isEmpty == true
-              ? backgroundColor
-              : colorPalette[color1] ?? Colors.transparent,
-          null).dPCreateGrid();
+                inputtedActionPlan['$index'] ?? '',
+                inputtedActionPlan['$index']?.isEmpty == true
+                    ? backgroundColor
+                    : colorPalette[color1] ?? Colors.transparent,
+                null)
+            .dPCreateGrid();
       });
     }
 

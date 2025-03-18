@@ -18,7 +18,6 @@ class UploadFileService {
       // SharedPreferences에서 토큰 가져오기
       final prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('authToken');
-      print('저장된 토큰: $token');
 
       if (token == null || token.isEmpty) {
         Fluttertoast.showToast(
@@ -65,19 +64,13 @@ class UploadFileService {
       // 요청 보내기
       var response = await request.send();
 
-      // 서버 응답 상태 코드 출력
-      print('서버 응답 상태 코드: ${response.statusCode}');
-
       // 서버 응답 본문 읽기
       var responseBody = await response.stream.bytesToString();
-      print('서버 응답 본문: $responseBody');
 
       if (response.statusCode == 200) {
         // 서버 응답 본문은 URL이므로 해당 URL을 변수에 저장
         uploadedUrl = responseBody;
-        print('업로드된 파일 URL: $uploadedUrl');
       } else {
-        print('파일 업로드 실패: ${response.statusCode}');
         Fluttertoast.showToast(
           msg: '파일 업로드 실패: ${response.statusCode}',
           toastLength: Toast.LENGTH_SHORT,
@@ -88,7 +81,6 @@ class UploadFileService {
         return ''; // 업로드 실패 시 빈 문자열 반환
       }
     } catch (e) {
-      print('파일 업로드 오류: $e');
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
         toastLength: Toast.LENGTH_SHORT,
@@ -130,14 +122,9 @@ class DeleteFileService {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
-
       if (response.statusCode == 200) {
-        print("✅ 이미지 삭제 성공: $imageUrl");
         return true;
       } else {
-        print("❌ 이미지 삭제 실패: ${response.statusCode}");
         Fluttertoast.showToast(
           msg: '이미지 삭제 실패: ${response.statusCode}',
           toastLength: Toast.LENGTH_SHORT,
@@ -148,7 +135,6 @@ class DeleteFileService {
         return false;
       }
     } catch (e) {
-      print("❌ 서버 요청 오류: $e");
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
         toastLength: Toast.LENGTH_SHORT,

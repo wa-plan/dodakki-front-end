@@ -1,13 +1,11 @@
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:domino/styles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/change_password.dart';
 import 'package:domino/widgets/popup.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:domino/apis/services/lr_services.dart'; // Import the new service
+import 'package:domino/apis/services/lr_services.dart';
 
 class AccountManagement extends StatefulWidget {
   final String email;
@@ -37,21 +35,16 @@ class _AccountManagementState extends State<AccountManagement> {
           padding: appBarPadding,
           child: Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                color: const Color(0xffD4D4D4),
-                iconSize: 17,
-              ),
-              Text(
-                '내 계정',
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 18 : 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
+              CustomIconButton(() {
+                Navigator.of(context).pop();
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('내 계정',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -66,21 +59,29 @@ class _AccountManagementState extends State<AccountManagement> {
               child: ListView(
                 children: [
                   const SizedBox(height: 15),
-                  // Information Section
-
-                  _buildSettingItem(
-                    menu: '이메일',
+                  Text(
+                    '정보',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildSettingItem2(
                     title: widget.email,
                   ),
-                  _buildSettingItem(
-                    menu: '휴대폰 번호',
-                    title: widget.phoneNum,
+                  const SizedBox(height: 8),
+                  Text(
+                    '보안',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-
-                  // Security Section
-
+                  const SizedBox(height: 8),
                   _buildSettingItem(
-                    menu: '보안',
                     title: '비밀번호 변경',
                     onTap: () {
                       Navigator.push(
@@ -93,9 +94,16 @@ class _AccountManagementState extends State<AccountManagement> {
                       );
                     },
                   ),
-
-                  // End Section
-
+                  const SizedBox(height: 8),
+                  Text(
+                    '종료',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   _buildCombinedSwitchItem()
                 ],
               ),
@@ -106,8 +114,8 @@ class _AccountManagementState extends State<AccountManagement> {
     );
   }
 
-  Widget _buildSettingItem(
-      {required String menu, required String title, void Function()? onTap}) {
+  Widget _buildSettingItem({required String title, void Function()? onTap}) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -115,25 +123,23 @@ class _AccountManagementState extends State<AccountManagement> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         decoration: BoxDecoration(
           color: const Color(0xff2A2A2A),
-          borderRadius: BorderRadius.circular(3),
+          borderRadius: BorderRadius.circular(6),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(menu, style: const TextStyle(color: Color(0xff949494))),
-            const SizedBox(height: 9),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(title,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w600)),
+                    style: TextStyle(
+                        fontSize: currentWidth < 600 ? 12 : 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600)),
                 if (onTap != null)
-                  const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Color(0xffD4D4D4),
-                    size: 17,
-                  ),
+                  NewCustomIconButton(() {}, Icons.arrow_forward_ios_rounded,
+                          currentWidth, 16)
+                      .newCustomIconButton(),
               ],
             ),
           ],
@@ -142,7 +148,53 @@ class _AccountManagementState extends State<AccountManagement> {
     );
   }
 
+  Widget _buildSettingItem2({required String title, void Function()? onTap}) {
+    final currentWidth = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        decoration: BoxDecoration(
+          color: const Color(0xff2A2A2A),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                NewCustomIconButton(
+                        () {}, Icons.mail_outline_rounded, currentWidth, 13)
+                    .newCustomIconButton(),
+                const SizedBox(width: 8),
+                Text('이메일',
+                    style: TextStyle(
+                        fontSize: currentWidth < 600 ? 12 : 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600)),
+                Spacer(),
+                if (onTap != null)
+                  NewCustomIconButton(() {}, Icons.arrow_forward_ios_rounded,
+                          currentWidth, 16)
+                      .newCustomIconButton(),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(title,
+                style: TextStyle(
+                    fontSize: currentWidth < 600 ? 12 : 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildCombinedSwitchItem() {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -153,14 +205,14 @@ class _AccountManagementState extends State<AccountManagement> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('종료', style: TextStyle(color: Color(0xff949494))),
-          const SizedBox(height: 9),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('로그아웃',
+              Text('로그아웃',
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600)),
+                      fontSize: currentWidth < 600 ? 12 : 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600)),
               GestureDetector(
                 onTap: () {
                   _logout();
@@ -171,11 +223,9 @@ class _AccountManagementState extends State<AccountManagement> {
                     ),
                   );
                 },
-                child: const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Color(0xffD4D4D4),
-                  size: 17,
-                ),
+                child: NewCustomIconButton(() {},
+                        Icons.arrow_forward_ios_rounded, currentWidth, 16)
+                    .newCustomIconButton(),
               ),
             ],
           ),
@@ -183,9 +233,11 @@ class _AccountManagementState extends State<AccountManagement> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('탈퇴하기',
+              Text('탈퇴하기',
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600)),
+                      fontSize: currentWidth < 600 ? 12 : 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600)),
               GestureDetector(
                 onTap: () {
                   PopupDialog.show(
@@ -198,9 +250,7 @@ class _AccountManagementState extends State<AccountManagement> {
                     onCancel: () {
                       Navigator.of(context).pop();
                     },
-                    onDelete: () {
-                      // 삭제 버튼을 눌렀을 때 실행할 코드
-                    },
+                    onDelete: () {},
                     onSignOut: () {
                       SignOutService.signOut(context);
                       Navigator.of(context).pop();
@@ -213,11 +263,9 @@ class _AccountManagementState extends State<AccountManagement> {
                     },
                   );
                 },
-                child: const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Color(0xffD4D4D4),
-                  size: 17,
-                ),
+                child: NewCustomIconButton(() {},
+                        Icons.arrow_forward_ios_rounded, currentWidth, 16)
+                    .newCustomIconButton(),
               ),
             ],
           ),

@@ -18,7 +18,6 @@ class AddGoalService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null || token.isEmpty) {
       Fluttertoast.showToast(
@@ -50,9 +49,6 @@ class AddGoalService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -101,7 +97,6 @@ class EditGoalNameService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -127,9 +122,6 @@ class EditGoalNameService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -178,7 +170,6 @@ class EditGoalDateService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -204,9 +195,6 @@ class EditGoalDateService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -255,7 +243,6 @@ class EditGoalDescriptionService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -282,9 +269,6 @@ class EditGoalDescriptionService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -333,7 +317,6 @@ class EditGoalPhotoService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -359,9 +342,6 @@ class EditGoalPhotoService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -410,7 +390,6 @@ class EditGoalColorService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -436,9 +415,6 @@ class EditGoalColorService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -488,7 +464,6 @@ class EditProfileService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -518,10 +493,6 @@ class EditProfileService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('프로필 수정 완료');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -567,7 +538,6 @@ class UserInfoService {
   static Future<Map<String, dynamic>> userInfo() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -591,9 +561,6 @@ class UserInfoService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
         int id = data['id'];
@@ -608,13 +575,6 @@ class UserInfoService {
         String nightAlarm = data['nightAlarm'];
         String nickname = data['nickname'] ?? '당신은 어떤 사람인가요?';
 
-        /*Fluttertoast.showToast(
-          msg: '조회 성공',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );*/
         return {
           'id': id,
           'userId': userId,
@@ -663,7 +623,6 @@ class UserMandaIdService {
   static Future<Map<String, List<Map<String, String>>>> userManda() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -687,9 +646,6 @@ class UserMandaIdService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${jsonDecode(utf8.decode(response.bodyBytes))}');
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -704,9 +660,6 @@ class UserMandaIdService {
           String bookmark = item['bookmark'];
           return {'id': id, 'bookmark': bookmark};
         }).toList();
-
-        print('생성된 mandaList: $mandaList');
-        print('생성된 bookmarkList: $bookmarkList');
 
         return {
           'mandalarts': mandaList,
@@ -748,7 +701,6 @@ class UserMandaInfoService {
       {required int mandalartId}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -772,7 +724,6 @@ class UserMandaInfoService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
       final decodedResponse =
           jsonDecode(utf8.decode(response.bodyBytes)); // UTF-8로 디코딩
 
@@ -785,7 +736,6 @@ class UserMandaInfoService {
           textColor: Colors.white,
         );*/
 
-        print('서버 응답 데이터: $decodedResponse');
         return decodedResponse; // 성공 시 데이터 반환
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -825,7 +775,6 @@ class MandaBookmarkService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -854,10 +803,6 @@ class MandaBookmarkService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('프로필 수정 완료');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -906,7 +851,6 @@ class MandaProgressService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -935,10 +879,6 @@ class MandaProgressService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('프로필 수정 완료');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -984,7 +924,6 @@ class CheeringService {
   static Future<List<Map<String, String>>> cheering() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -1007,9 +946,6 @@ class CheeringService {
           'Authorization': 'Bearer $token',
         },
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${jsonDecode(utf8.decode(response.bodyBytes))}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -1059,73 +995,12 @@ class CheeringService {
   }
 }
 
-/*class DeleteMainGoalService {
-  static Future<bool> deleteMainGoal(
-    BuildContext context,
-    int mandalartId,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
-
-    if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return false;
-    }
-
-    final url = Uri.parse('$baseUrl/api/mandalart/$mandalartId');
-
-    try {
-      final response = await http.delete(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
-      if (response.statusCode == 204) {
-        // Handle successful deletion
-        return true;
-      } else {
-        Fluttertoast.showToast(
-          msg: '삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        return false;
-      }
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return false;
-    }
-  }
-}*/
-
 class UploadImage {
   static Future<bool> uploadImage({
     required String filePath,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -1193,7 +1068,6 @@ class DeleteFirstGoalService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -1216,9 +1090,6 @@ class DeleteFirstGoalService {
           'Authorization': 'Bearer $token',
         },
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
 
       if (response.statusCode == 204) {
         // Handle successful deletion

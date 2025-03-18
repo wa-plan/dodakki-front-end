@@ -110,11 +110,6 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
               TextButton(
                 onPressed: () async {
                   setState(() {
-                    int howMany = Provider.of<TestInputtedDetailGoalModel>(
-                            context,
-                            listen: false)
-                        .countEmptyKeys();
-                    print(howMany);
                     _isLoading = true; // 로딩 시작
                   });
                   await _fetchSubGoals();
@@ -260,12 +255,10 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                   // 현재 context를 통해 두 모델에 접근
                   final testModel = context.read<TestInputtedDetailGoalModel>();
                   final saveModel = context.read<SaveInputtedDetailGoalModel>();
-                  print('Test Model: ${testModel.testinputtedDetailGoal}');
                   // TestInputtedDetailGoalModel의 데이터를 SaveInputtedDetailGoalModel로 복사
                   testModel.testinputtedDetailGoal.forEach((key, value) {
                     saveModel.updateDetailGoal(key, value); // Save 모델에 값 저장
                   });
-                  print('Updated Save Model: ${saveModel.inputtedDetailGoal}');
 
                   Navigator.push(
                     context,

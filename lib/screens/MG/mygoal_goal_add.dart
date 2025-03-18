@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:domino/styles.dart';
 import 'package:domino/widgets/MG/calender.dart';
@@ -19,7 +18,6 @@ class MyGoalAdd extends StatefulWidget {
 
 class _MyGoalAddState extends State<MyGoalAdd> {
   bool _isChecked = false;
-  //XFile? _pickedFile;
   Color? _selectedColor;
   DateTime? selectedDate;
   final _nameController = TextEditingController();
@@ -40,17 +38,12 @@ class _MyGoalAddState extends State<MyGoalAdd> {
         String uploadedUrl = await UploadFileService.uploadFiles(result.files);
 
         if (uploadedUrl.isNotEmpty) {
-          print('업로드된 파일 URL: $uploadedUrl');
           setState(() {
             _imageFiles.add(uploadedUrl); // URL을 _imageFiles에 추가
           });
-          print('_imageFiles=$_imageFiles');
-        } else {
-          print('파일 업로드 실패');
-        }
+        } else {}
       }
     } catch (e) {
-      print('이미지 선택 오류: $e');
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
         toastLength: Toast.LENGTH_SHORT,

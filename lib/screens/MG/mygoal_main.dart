@@ -65,10 +65,6 @@ class _MyGoalState extends State<MyGoal> {
           bookmarks = data['bookmarks']!;
         });
 
-        print('로드된 mandalarts: $mandalarts');
-        print('로드된 bookmarks: $bookmarks');
-        print('bookmarks리스트는 빠밤 $bookmarks');
-
         // 비동기 작업 병렬 처리
         final tasks = mandalarts.map((mandalart) async {
           final String mandalartId = mandalart['id'] ?? '0';
@@ -77,7 +73,6 @@ class _MyGoalState extends State<MyGoal> {
         });
 
         await Future.wait(tasks); // 모든 작업 완료를 기다림
-        print('모든 mandalart 데이터가 성공적으로 로드되었습니다.');
 
         // id 값을 기준으로 오름차순 정렬
         failedIDs.sort((a, b) {
@@ -106,10 +101,7 @@ class _MyGoalState extends State<MyGoal> {
           return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
         });
 
-        print('inProgressIDs=$inProgressIDs');
-
         context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
-        print(inProgressIDs);
 
         successIDs.sort((a, b) {
           return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
@@ -117,7 +109,6 @@ class _MyGoalState extends State<MyGoal> {
       }
     } catch (e) {
       // 에러 발생 시 처리
-      print('userMandaIdInfo 에러 발생: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('데이터 로드 중 오류가 발생했습니다: $e')),
       );
@@ -163,12 +154,8 @@ class _MyGoalState extends State<MyGoal> {
             }
           }
         });
-        //print('userMandaInfo 성공: $name ($id)');
-      } else {
-        //print('userMandaInfo 실패: 데이터 없음 ($mandalartId)');
-      }
+      } else {}
     } catch (e) {
-      print('userMandaInfo 에러 발생: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('데이터 로드 실패: $e')),
       );
@@ -188,7 +175,6 @@ class _MyGoalState extends State<MyGoal> {
         setState(() {
           colorList.add({"id": mandalartId, "color": data["color"]});
         });
-        print('colorList=$colorList');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),
@@ -370,36 +356,35 @@ class _MyGoalState extends State<MyGoal> {
               SizedBox(
                 height: currentWidth < 600 ? 30 : 35,
               ),
-              Column(
-                children: [
-                  if (inProgressIDs.isEmpty)
-                    Container(
-                      height: currentWidth < 600 ? 200 : 220, // 높이 조정 가능
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff2A2A2A),
-                        borderRadius: BorderRadius.circular(20), // 모서리 둥글게
+              Column(children: [
+                if (inProgressIDs.isEmpty)
+                  Container(
+                    height: currentWidth < 600 ? 200 : 220, // 높이 조정 가능
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff2A2A2A),
+                      borderRadius: BorderRadius.circular(20), // 모서리 둥글게
+                    ),
+                    child: Text(
+                      "새로운 목표를 세워볼까요?",
+                      style: TextStyle(
+                        fontSize: currentWidth < 600 ? 14 : 16,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xffAAAAAA),
                       ),
-                      child: Text(
-                        "새로운 목표를 세워볼까요?",
-                        style: TextStyle(
-                          fontSize: currentWidth < 600 ? 14 : 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xffAAAAAA),
-                        ),
-                      ),
-                    )
-                  else ...[
-                    SizedBox(
-                      height: currentWidth < 600
-                          ? currentWidth * 0.6
-                          : currentWidth * 0.4,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: inProgressIDs.length,
-                        itemBuilder: (context, index) {
-                          String mandalartId =
-                              inProgressIDs[index]['id'] ?? ''; // id 값
+                    ),
+                  )
+                else ...[
+                  SizedBox(
+                    height: currentWidth < 600
+                        ? currentWidth * 0.6
+                        : currentWidth * 0.4,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: inProgressIDs.length,
+                      itemBuilder: (context, index) {
+                        String mandalartId =
+                            inProgressIDs[index]['id'] ?? ''; // id 값
 
                         String name =
                             inProgressIDs[index]['name'] ?? ''; // name 값
@@ -478,7 +463,7 @@ class _MyGoalState extends State<MyGoal> {
                           .pageIndicator(),
                     ),
                 ],
-            ]),
+              ]),
               const SizedBox(height: 35),
               MGSubTitle('이번주의 응원!').mgSubTitle(context),
               const SizedBox(height: 12),

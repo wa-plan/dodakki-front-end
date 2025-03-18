@@ -109,7 +109,6 @@ class AddDominoService {
       required String repetition}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -143,9 +142,6 @@ class AddDominoService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -194,7 +190,6 @@ class DominoStatusService {
       required String date}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -221,9 +216,6 @@ class DominoStatusService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -272,7 +264,6 @@ class EditDominoService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -301,10 +292,6 @@ class EditDominoService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
-      print('도미노수정api');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -354,7 +341,6 @@ class EditDominoNewService {
       required String repetition}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -386,10 +372,6 @@ class EditDominoNewService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
-      print('도미노수정api');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -435,7 +417,6 @@ class DeleteDominoService {
   static Future<bool> deleteDomino({required int goalId}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -463,9 +444,6 @@ class DeleteDominoService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -512,7 +490,6 @@ class DeleteTodayDominoService {
       {required int goalId, required String goalDate}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -539,9 +516,6 @@ class DeleteTodayDominoService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -588,7 +562,6 @@ class MandalartInfoService {
       {required int mandalartId}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -612,7 +585,6 @@ class MandalartInfoService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
       final decodedResponse =
           jsonDecode(utf8.decode(response.bodyBytes)); // UTF-8로 디코딩
 
@@ -656,7 +628,6 @@ class MandaIdListService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -679,9 +650,6 @@ class MandaIdListService {
           'Authorization': 'Bearer $token',
         },
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse =

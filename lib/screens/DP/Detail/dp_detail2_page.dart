@@ -21,7 +21,6 @@ class DPdetail3Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
-    final currentHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -62,31 +61,27 @@ class DPdetail3Page extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                height: currentWidth<600 ? 40 : 100,
-              ),
+                  height: currentWidth < 600 ? 40 : 100,
+                ),
                 // MandalartGrid4가 상호작용 가능한 영역
                 Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        // MandalartGrid4 내부는 아무 동작도 하지 않음
-                      },
-                      child: MandalartGrid5(
-                  mandalart: mandalart,
-                  secondGoals: secondGoals,
-                  selectedSecondGoal: selectedSecondGoal,
-                  firstColor: firstColor,
-                ),
+                  child: GestureDetector(
+                    onTap: () {
+                      // MandalartGrid4 내부는 아무 동작도 하지 않음
+                    },
+                    child: MandalartGrid5(
+                      mandalart: mandalart,
+                      secondGoals: secondGoals,
+                      selectedSecondGoal: selectedSecondGoal,
+                      firstColor: firstColor,
                     ),
                   ),
-                
+                ),
               ],
             ),
           ),
         ],
       ),
-      
-      
-      
     );
   }
 }

@@ -355,7 +355,8 @@ class DPGrid2 {
         borderRadius: BorderRadius.circular(3),
         color:
             secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
-                ? ColorTransform(secondGoals[hintNum]['color']).colorTransform()
+                ? NewColorTransform(secondGoals[hintNum]['color'])
+                    .newcolorTransform()
                 : Colors.transparent,
         border: border,
       ),
@@ -659,6 +660,19 @@ class ColorTransform {
   }
 }
 
+class NewColorTransform {
+  final String color;
+
+  const NewColorTransform(this.color);
+
+  Color newcolorTransform() {
+    Color newColor =
+        Color(int.parse(color.replaceAll('Color(', '').replaceAll(')', '')));
+    print('이게맞니:$newColor');
+    return newColor;
+  }
+}
+
 //TextFormField
 class CustomTextField {
   final String hintText;
@@ -948,6 +962,46 @@ class CustomIconButton {
           icon,
           color: const Color(0xff646464),
           size: currentWidth < 600 ? 18 : 25,
+        ),
+      ),
+    );
+  }
+}
+
+//icon button
+class NewCustomIconButton {
+  final Function function;
+  final IconData icon;
+  final double currentWidth;
+  final double size;
+
+  const NewCustomIconButton(
+      this.function, this.icon, this.currentWidth, this.size);
+
+  Widget newCustomIconButton() {
+    return Container(
+      width: currentWidth < 600 ? 33 : 50,
+      height: currentWidth < 600 ? 22 : 35,
+      decoration: BoxDecoration(
+        color: const Color(0xff303030),
+        borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+            offset: const Offset(0, 0), // X, Y 위치 (0,0)
+            blurRadius: 7, // 블러 7
+            spreadRadius: 0, // 스프레드 0
+          ),
+        ],
+      ),
+      child: GestureDetector(
+        onTap: () {
+          function(); // 함수 호출
+        },
+        child: Icon(
+          icon,
+          color: const Color(0xff646464),
+          size: currentWidth < 600 ? size : size + 7,
         ),
       ),
     );

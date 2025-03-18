@@ -58,7 +58,6 @@ class _MygoalEditState extends State<MygoalEdit> {
     _descriptcontroller.text = widget.description; // 목표 설명 초기값 설정
 
     goalImage = List.from(widget.goalImage);
-    print("초기 goalImage: $goalImage");
   }
 
   // 문자열을 Color로 변환하는 함수
@@ -92,15 +91,12 @@ class _MygoalEditState extends State<MygoalEdit> {
           });
         }
       }
-    } catch (e) {
-      print('이미지 선택 오류: $e');
-    }
+    } catch (e) {}
   }
 
   void _deleteImage(int index) async {
     if (_isDeleting) return; // 이미 삭제 중이면 중복 실행 방지
     if (goalImage.isEmpty && _imageFiles.isEmpty) {
-      print("⚠️ 삭제할 이미지가 없습니다.");
       return;
     }
 
@@ -118,7 +114,6 @@ class _MygoalEditState extends State<MygoalEdit> {
       if (newIndex < _imageFiles.length) {
         imageToDelete = _imageFiles[newIndex];
       } else {
-        print("❌ 잘못된 index: $index");
         setState(() {
           _isDeleting = false; // 삭제 실패 시 다시 삭제 가능하도록 설정
         });
@@ -141,11 +136,7 @@ class _MygoalEditState extends State<MygoalEdit> {
           _imageFiles.removeAt(index - goalImage.length);
         }
       });
-
-      print("✅ 삭제 후 goalImage: $goalImage");
-      print("✅ 삭제 후 _imageFiles: $_imageFiles");
     } else {
-      print("❌ 서버에서 이미지 삭제 실패");
       Fluttertoast.showToast(
         msg: "이미지 삭제 실패",
         toastLength: Toast.LENGTH_SHORT,
@@ -413,7 +404,6 @@ class _MygoalEditState extends State<MygoalEdit> {
                                 _selectedDate = selectedDate; // 상위 화면의 변수에 저장
                               });
                             }
-                            print(_selectedDate); // 선택된 날짜 확인
                           });
                         },
                       ).button(),

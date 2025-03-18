@@ -94,9 +94,6 @@ Future<List<String>> generateThirdGoals(
   Map<String, dynamic> responseData =
       jsonDecode(utf8.decode(response.bodyBytes));
 
-  // 디버그 콘솔에 API 응답 데이터 출력
-  print("OpenAI Response: $responseData");
-
   if (responseData['choices'] == null || responseData['choices'].isEmpty) {
     throw Exception('Invalid API response: ${response.body}');
   }
