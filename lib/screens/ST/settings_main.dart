@@ -156,7 +156,7 @@ class _SettingsMainState extends State<SettingsMain> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ContactUs(),
+                      builder: (context) => ContactUs(email: email!),
                     ),
                   );
                 },

@@ -46,17 +46,16 @@ class _DPMainState extends State<DPMain> {
   List<Map<String, String>> mandalarts = [];
   List<Map<String, String>> bookmarks = [];
 
-@override
-void initState() {
-  super.initState();
-  _initializeData();
-}
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
 
-Future<void> _initializeData() async {
-  await userMandaIdInfo(); // 데이터를 먼저 가져오기
-  _mainGoalList(); // 데이터를 기반으로 호출
-}
-
+  Future<void> _initializeData() async {
+    await userMandaIdInfo(); // 데이터를 먼저 가져오기
+    _mainGoalList(); // 데이터를 기반으로 호출
+  }
 
   Future<void> userMandaIdInfo() async {
     if (mandalarts.isNotEmpty) return;

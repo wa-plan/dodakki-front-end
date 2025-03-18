@@ -355,7 +355,8 @@ class DPGrid2 {
         borderRadius: BorderRadius.circular(3),
         color:
             secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
-                ? ColorTransform(secondGoals[hintNum]['color']).colorTransform()
+                ? NewColorTransform(secondGoals[hintNum]['color'])
+                    .newcolorTransform()
                 : Colors.transparent,
         border: border,
       ),
@@ -656,6 +657,19 @@ class ColorTransform {
     }
 
     return Color(int.parse(processedColor));
+  }
+}
+
+class NewColorTransform {
+  final String color;
+
+  const NewColorTransform(this.color);
+
+  Color newcolorTransform() {
+    Color newColor =
+        Color(int.parse(color.replaceAll('Color(', '').replaceAll(')', '')));
+    print('이게맞니:$newColor');
+    return newColor;
   }
 }
 
