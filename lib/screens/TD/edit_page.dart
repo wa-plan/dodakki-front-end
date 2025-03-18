@@ -16,9 +16,10 @@ class EditPage extends StatefulWidget {
   final bool switchValue;
   final int interval;
   final int goalId;
+  final int thirdGoalId;
 
   const EditPage(this.date, this.title, this.content, this.switchValue,
-      this.interval, this.goalId,
+      this.interval, this.goalId, this.thirdGoalId,
       {super.key});
   @override
   State<EditPage> createState() => EditPageState();
@@ -35,9 +36,36 @@ class EditPageState extends State<EditPage> {
   String dominoValue = '';
   late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
 
-  void editDomino(int goalId, String newGoal) async {
+  /*void editDomino(int goalId, String newGoal) async {
     final success =
         await EditDominoService.editDomino(goalId: goalId, newGoal: newGoal);
+
+    if (success) {
+      // 성공적으로 서버에 전송된 경우에 처리할 코드
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('도미노가 삭제되었습니다.')),
+      );
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const TdMain(),
+          ));
+    } else {
+      // 실패한 경우에 처리할 코드
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
+      );
+    }
+  }*/
+
+  void editDominoNew(int thirdGoalId, String name, List<DateTime> dates,
+      String repetition) async {
+    final success = await EditDominoNewService.editDomino(
+        thirdGoalId: thirdGoalId,
+        name: name,
+        dates: dates,
+        repetition: repetition);
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
@@ -223,6 +251,17 @@ class EditPageState extends State<EditPage> {
                         ), //취소 버튼
                         TextButton(
                           onPressed: () {
+                            DateTime? pickedDate =
+                                context.read<DateProvider>().pickedDate;
+                            context
+                                .read<DateListProvider>()
+                                .setInterval(switchValue, pickedDate!);
+                            List<DateTime> dateList =
+                                context.read<DateListProvider>().dateList;
+                            String repeatInfo =
+                                context.read<DateListProvider>().repeatInfo();
+                            print('dateList=$dateList');
+                            print('repeatInfo=$repeatInfo');
                             print('골아이디 확인 ${widget.goalId}, ${widget.date}');
                             howDeleteDialog(
                                 context, widget.goalId, widget.date);
@@ -240,38 +279,74 @@ class EditPageState extends State<EditPage> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (formKey.currentState!.validate()) {
                               formKey.currentState!.save();
 
                               DateTime? pickedDate =
                                   context.read<DateProvider>().pickedDate;
 
-                              print(pickedDate);
-
                               if (pickedDate == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(content: Text('날짜를 선택해 주세요.')),
                                 );
                               } else {
-                                context
-                                    .read<DateListProvider>()
-                                    .setInterval(switchValue, pickedDate);
-                                List<DateTime> dateList =
-                                    context.read<DateListProvider>().dateList;
-                                String repeatInfo = context
+                                // 🔹 반복 설정을 적용
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  if (mounted) {
+                                    context
+                                        .read<DateListProvider>()
+                                        .setInterval(switchValue, pickedDate);
+                                  }
+                                });
+
+                                // 🔹 반복 정보 가져오기
+                                String repetition = context
                                     .read<DateListProvider>()
                                     .repeatInfo();
-                                print('goalID=${widget.goalId}}');
-                                print('repeatInfo=$repeatInfo');
-                                EditDominoService.editDomino(
-                                    goalId: widget.goalId,
-                                    newGoal: dominoController.text);
-                                Navigator.push(
+                                List<DateTime> dateList =
+                                    context.read<DateListProvider>().dateList;
+
+                                // 🔹 날짜 리스트가 비어 있으면 기본값 설정
+                                if (dateList.isEmpty) {
+                                  dateList = [pickedDate];
+                                }
+
+                                print('전송값 테스트!!');
+                                print(widget.goalId);
+                                print(dominoController.text);
+                                print(dateList);
+                                print(repetition);
+
+                                // 🔹 수정 요청 후 성공 여부 확인
+                                bool success =
+                                    await EditDominoNewService.editDomino(
+                                  thirdGoalId: widget.goalId,
+                                  name: dominoController.text,
+                                  dates: dateList,
+                                  repetition: repetition,
+                                );
+
+                                if (success) {
+                                  // 성공 메시지 출력 후 페이지 이동
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('도미노가 수정되었습니다.')),
+                                  );
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => const TdMain(),
-                                    ));
+                                    ),
+                                  );
+                                } else {
+                                  // 실패 메시지 출력
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('도미노 수정에 실패했습니다.')),
+                                  );
+                                }
                               }
                             }
                           },

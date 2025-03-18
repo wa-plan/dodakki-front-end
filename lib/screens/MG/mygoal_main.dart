@@ -183,6 +183,8 @@ class _MyGoalState extends State<MyGoal> {
       // 서버에서 데이터 가져오기
       final data = await MandalartInfoService.mandalartInfo(
           mandalartId: int.parse(mandalartId));
+      print('이건 만다라아이디디 $mandalartId');
+      print('이건 되나? $data');
       if (data != null) {
         // 반환된 데이터를 colorList에 추가
         setState(() {
@@ -370,36 +372,35 @@ class _MyGoalState extends State<MyGoal> {
               SizedBox(
                 height: currentWidth < 600 ? 30 : 35,
               ),
-              Column(
-                children: [
-                  if (inProgressIDs.isEmpty)
-                    Container(
-                      height: currentWidth < 600 ? 200 : 220, // 높이 조정 가능
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff2A2A2A),
-                        borderRadius: BorderRadius.circular(20), // 모서리 둥글게
+              Column(children: [
+                if (inProgressIDs.isEmpty)
+                  Container(
+                    height: currentWidth < 600 ? 200 : 220, // 높이 조정 가능
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff2A2A2A),
+                      borderRadius: BorderRadius.circular(20), // 모서리 둥글게
+                    ),
+                    child: Text(
+                      "새로운 목표를 세워볼까요?",
+                      style: TextStyle(
+                        fontSize: currentWidth < 600 ? 14 : 16,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xffAAAAAA),
                       ),
-                      child: Text(
-                        "새로운 목표를 세워볼까요?",
-                        style: TextStyle(
-                          fontSize: currentWidth < 600 ? 14 : 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xffAAAAAA),
-                        ),
-                      ),
-                    )
-                  else ...[
-                    SizedBox(
-                      height: currentWidth < 600
-                          ? currentWidth * 0.6
-                          : currentWidth * 0.4,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: inProgressIDs.length,
-                        itemBuilder: (context, index) {
-                          String mandalartId =
-                              inProgressIDs[index]['id'] ?? ''; // id 값
+                    ),
+                  )
+                else ...[
+                  SizedBox(
+                    height: currentWidth < 600
+                        ? currentWidth * 0.55
+                        : currentWidth * 0.4,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: inProgressIDs.length,
+                      itemBuilder: (context, index) {
+                        String mandalartId =
+                            inProgressIDs[index]['id'] ?? ''; // id 값
 
                         String name =
                             inProgressIDs[index]['name'] ?? ''; // name 값
@@ -478,7 +479,7 @@ class _MyGoalState extends State<MyGoal> {
                           .pageIndicator(),
                     ),
                 ],
-            ]),
+              ]),
               const SizedBox(height: 35),
               MGSubTitle('이번주의 응원!').mgSubTitle(context),
               const SizedBox(height: 12),

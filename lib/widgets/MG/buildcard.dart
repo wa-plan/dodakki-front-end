@@ -72,9 +72,7 @@ class _GoalCardState extends State<GoalCard> {
     final colorValue =
         int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', ''));
     int ddayParsed = int.parse(widget.dday);
-    //double screenWidth = MediaQuery.of(context).size.width;
-    //double imageSize = screenWidth * 0.14;
-    //final List<Color> colors = _getColorsByCondition(Color(colorValue));
+
     final currentWidth = MediaQuery.of(context).size.width;
     double imageSize = currentWidth < 600 ? 70 : 110;
     final List<Color> colors = _getColorsByCondition(Color(colorValue));
@@ -97,7 +95,6 @@ class _GoalCardState extends State<GoalCard> {
         );
       },
       child: Container(
-        //padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
         color: Colors.transparent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -20,7 +20,7 @@ class _EventCalendarState extends State<EventCalendar> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   bool _isExpanded = false; // 달력 확장 상태
 
-  void mandalartInfo(context, int mandalartId) async {
+  /*void mandalartInfo(context, int mandalartId) async {
     final data =
         await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
     if (data != null) {
@@ -33,14 +33,51 @@ class _EventCalendarState extends State<EventCalendar> {
         const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),
       );
     }
-  }
+  }*/
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier([]);
-    dominoInfo(_selectedDay!);
+  /*Future<void> mandaColor(String mandalartId) async {
+// 중복 방지
+    if (colorList.any((item) => item['id'] == mandalartId)) return;
+
+    try {
+      // 서버에서 데이터 가져오기
+      final data = await MandalartInfoService.mandalartInfo(
+          mandalartId: int.parse(mandalartId));
+      if (data != null) {
+        // 반환된 데이터를 colorList에 추가
+        setState(() {
+          colorList.add({"id": mandalartId, "color": data["color"]});
+        });
+        print('colorList=$colorList');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('오류 발생: $e')),
+      );
+    }
+  }*/
+
+  Future<int?> getThirdGoalId(int mandalartId, String targetThirdGoal) async {
+    print('만다라트아이디=$mandalartId');
+    Map<String, dynamic>? mandalartData =
+        await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
+
+    print('레츠고: $mandalartData');
+
+    if (mandalartData == null) return null;
+
+    for (var secondGoal in mandalartData['secondGoals']) {
+      for (var thirdGoal in secondGoal['thirdGoals']) {
+        if (thirdGoal['thirdGoal'] == targetThirdGoal) {
+          return thirdGoal['id'];
+        }
+      }
+    }
+    return null;
   }
 
   Future<void> dominoInfo(DateTime date) async {
@@ -98,6 +135,14 @@ class _EventCalendarState extends State<EventCalendar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _selectedDay = _focusedDay;
+    _selectedEvents = ValueNotifier([]);
+    dominoInfo(_selectedDay!);
+  }
+
+  @override
   void dispose() {
     _selectedEvents.dispose();
     super.dispose();
@@ -109,11 +154,6 @@ class _EventCalendarState extends State<EventCalendar> {
     return Column(
       children: [
         TableCalendar<Event>(
-          /*calendarBuilders: CalendarBuilders(
-            outsideBuilder: (context, date, _) {
-              return SizedBox.shrink(); // 다른 달의 날짜를 숨김
-            },
-          ),*/
           rowHeight: 35,
           firstDay: DateTime.utc(2014, 1, 1),
           lastDay: DateTime.utc(2034, 12, 31),
@@ -187,8 +227,7 @@ class _EventCalendarState extends State<EventCalendar> {
           headerStyle: HeaderStyle(
             titleCentered: true,
             titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
-            leftChevronIcon: 
-            Icon(
+            leftChevronIcon: Icon(
               Icons.arrow_back_ios,
               color: const Color(0xffD4D4D4),
               size: currentWidth < 600 ? 17 : 20,
@@ -267,7 +306,7 @@ class _EventCalendarState extends State<EventCalendar> {
                   itemCount: value.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         print(
                           value[index]
                               .color
@@ -295,6 +334,12 @@ class _EventCalendarState extends State<EventCalendar> {
                           value[index].interval = 0;
                         }
 
+                        print('만달달아이디: ${value[index].id}');
+
+                        int? thirdGoalId = await getThirdGoalId(
+                            value[index].id, value[index].thirdGoal);
+                        print('thirdGoalId=$thirdGoalId');
+
                         editDialog(
                             context,
                             _focusedDay,
@@ -312,7 +357,6 @@ class _EventCalendarState extends State<EventCalendar> {
                         padding: currentWidth < 600
                             ? EdgeInsets.fromLTRB(10, 13, 25, 13)
                             : EdgeInsets.fromLTRB(20, 25, 30, 25),
-
                         decoration: BoxDecoration(
                           color: const Color(0xff2A2A2A),
                           borderRadius:
@@ -398,7 +442,6 @@ class _EventCalendarState extends State<EventCalendar> {
                                     ),
                                   ),
                                 ),
-
                                 SizedBox(width: currentWidth < 600 ? 23 : 30),
                                 GestureDetector(
                                   onTap: () {
@@ -517,7 +560,7 @@ void editDialog(
               color: const Color.fromARGB(255, 26, 26, 26),
               borderRadius: BorderRadius.all(
                   Radius.circular(currentWidth < 600 ? 5 : 8))),
-          height: currentWidth < 600 ? 150 : 220,
+          height: currentWidth < 600 ? 170 : 270,
           width: currentWidth < 600 ? 400 : 400,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -582,8 +625,8 @@ void editDialog(
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditPage(
-                        date, content, title, switchvalue, interval, goalId),
+                    builder: (context) => EditPage(date, content, title,
+                        switchvalue, interval, goalId, goalId),
                   ),
                 );
               }, Icons.edit, currentWidth)
