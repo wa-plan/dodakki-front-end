@@ -34,8 +34,6 @@ class _EditInput1PageState extends State<EditInput1Page> {
     // context.watch를 통해 goal 업데이트
     final updatedGoal = widget.mandalart;
 
-    print("Updated Goal: $updatedGoal");
-
     if (goal != updatedGoal) {
       setState(() {
         goal = updatedGoal; // goal 값을 업데이트
@@ -113,11 +111,6 @@ class _EditInput1PageState extends State<EditInput1Page> {
                 TextButton(
                   onPressed: () async {
                     setState(() {
-                      int howMany = Provider.of<TestInputtedDetailGoalModel>(
-                              context,
-                              listen: false)
-                          .countEmptyKeys();
-                      print(howMany);
                       _isLoading = true; // 로딩 시작
                     });
                     await _fetchSubGoals();
@@ -183,8 +176,9 @@ class _EditInput1PageState extends State<EditInput1Page> {
                             child: SizedBox(
                                 width: currentHeight * 0.4,
                                 child: GridView(
-                                  shrinkWrap: true, // GridView를 자식으로 설정
-                                  physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true, // GridView를 자식으로 설정
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 3,
@@ -202,52 +196,49 @@ class _EditInput1PageState extends State<EditInput1Page> {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(3),
-                                            color: ColorTransform(widget.firstColor)
-                                            .colorTransform()),
+                                            color: ColorTransform(
+                                                    widget.firstColor)
+                                                .colorTransform()),
                                         child: Center(
-                                            child: AutoSizeText(
-                                            maxLines:
-                                                3, // 최대 줄 수 (필요에 따라 변경 가능)
-                                            minFontSize: 6,
-                                            maxFontSize: 16, // 최소 글씨 크기
-                                            overflow: TextOverflow
-                                                .ellipsis, // 내용이 너무 길 경우 생략 표시
-                                            widget.mandalart,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              color: backgroundColor,
-                                              fontWeight: FontWeight.w600,
-                                            )),),
+                                          child: AutoSizeText(
+                                              maxLines:
+                                                  3, // 최대 줄 수 (필요에 따라 변경 가능)
+                                              minFontSize: 6,
+                                              maxFontSize: 16, // 최소 글씨 크기
+                                              overflow: TextOverflow
+                                                  .ellipsis, // 내용이 너무 길 경우 생략 표시
+                                              widget.mandalart,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                color: backgroundColor,
+                                                fontWeight: FontWeight.w600,
+                                              )),
+                                        ),
                                       ),
                                       const EditInput1(selectedDetailGoalId: 5),
                                       const EditInput1(selectedDetailGoalId: 6),
                                       const EditInput1(selectedDetailGoalId: 7),
                                       const EditInput1(selectedDetailGoalId: 8),
                                     ]))),
-                                    SizedBox(height: currentWidth < 600 ? 15 : 25),
-                      Description2(widget.firstColor, currentWidth)
-                          .description2(),
-                      SizedBox(height: currentWidth < 600 ? 15 : 25),
+                        SizedBox(height: currentWidth < 600 ? 15 : 25),
+                        Description2(widget.firstColor, currentWidth)
+                            .description2(),
+                        SizedBox(height: currentWidth < 600 ? 15 : 25),
                       ],
                     ),
                   ),
                 ),
-                
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      NewButton(
-                        Colors.black,
-                        Colors.white,
-                        '취소',
-                        () {
-                          // TestInputtedDetailGoalModel만 초기화
-                          context
-                              .read<TestInputtedDetailGoalModel>()
-                              .resetDetailGoals();
-                          Navigator.pop(context);
-                        },currentWidth
-                      ).newButton(),
+                      NewButton(Colors.black, Colors.white, '취소', () {
+                        // TestInputtedDetailGoalModel만 초기화
+                        context
+                            .read<TestInputtedDetailGoalModel>()
+                            .resetDetailGoals();
+                        Navigator.pop(context);
+                      }, currentWidth)
+                          .newButton(),
                       NewButton(Colors.black, Colors.white, '저장', () {
                         // 현재 context를 통해 두 모델에 접근
                         final testModel =
@@ -262,7 +253,8 @@ class _EditInput1PageState extends State<EditInput1Page> {
                         });
 
                         Navigator.pop(context);
-                      }, currentWidth).newButton()
+                      }, currentWidth)
+                          .newButton()
                     ])
               ],
             )));

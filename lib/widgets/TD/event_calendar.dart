@@ -24,10 +24,6 @@ class _EventCalendarState extends State<EventCalendar> {
     final data =
         await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
     if (data != null) {
-      setState(() {
-        String firstColor = data['color']; // name을 가져오기
-        print(firstColor);
-      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),

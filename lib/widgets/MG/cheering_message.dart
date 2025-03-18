@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:domino/styles.dart';
-import 'package:intl/intl.dart';
 
 class CheeringMessage extends StatefulWidget {
   const CheeringMessage({super.key});

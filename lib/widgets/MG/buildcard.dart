@@ -41,10 +41,7 @@ class _GoalCardState extends State<GoalCard> {
       bookmark: bookmark,
     );
     if (success) {
-      print('북마크 상태 업데이트 성공');
-    } else {
-      print('북마크 상태 업데이트 실패');
-    }
+    } else {}
   }
 
   void _toggleBookmark() {

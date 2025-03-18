@@ -40,20 +40,6 @@ class LoginService {
             await prefs.setString('authToken', accessToken);
 
             if (context.mounted) {
-              /*Message(
-                "환영합니다. $userId님!",
-                const Color(0xff00FF2F), // 텍스트 색상
-                const Color(0xff00370A), // 배경 색상
-                borderColor: const Color(0xff00FF2F), // 테두리 색상
-                icon: Icons.check_circle, // 아이콘
-              ).message(context);*/
-
-              /*Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TdMain(),
-                ),
-              );*/
               return true;
             }
           } else {
@@ -112,7 +98,6 @@ class ChangePasswordService {
       {required String currentPassword, required String newPassword}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -141,8 +126,6 @@ class ChangePasswordService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -202,9 +185,6 @@ class RegistrationService {
         body: body,
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
           Navigator.pushReplacement(
@@ -260,9 +240,6 @@ class IdFindService {
         body: body,
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         //final responseData = jsonDecode(response.body);
         return response.body; // Adjust based on your API response
@@ -309,9 +286,6 @@ class PwFindService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
     } catch (e) {
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
@@ -328,7 +302,6 @@ class SignOutService {
   static Future<String?> signOut(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       if (context.mounted) {
@@ -353,8 +326,6 @@ class SignOutService {
           'Authorization': 'Bearer $token',
         },
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
@@ -407,7 +378,6 @@ class MorningAlertService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null || token.isEmpty) {
       Fluttertoast.showToast(
@@ -432,9 +402,6 @@ class MorningAlertService {
             'Authorization': 'Bearer $token',
           },
           body: body);
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(
@@ -472,7 +439,6 @@ class NightAlertService {
   static Future<bool> nightAlert({required String alarm}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null || token.isEmpty) {
       Fluttertoast.showToast(
@@ -497,8 +463,6 @@ class NightAlertService {
             'Authorization': 'Bearer $token',
           },
           body: body);
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Fluttertoast.showToast(

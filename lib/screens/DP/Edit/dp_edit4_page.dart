@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/Edit/dp_edit5_page.dart';
-import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:domino/widgets/DP/color_Grid23.dart';
 import 'package:domino/widgets/DP/color_Grid2.dart';
@@ -298,7 +297,6 @@ class EditColorPageState extends State<EditColorPage> {
                         DPGuideText('나만의 스타일로 만다라트를 꾸며요.', currentWidth)
                             .dPGuideText(),
                         SizedBox(height: currentWidth < 600 ? 14 : 20),
-                        
                         Center(
                           child: Container(
                             width: currentHeight * 0.4,
@@ -418,7 +416,7 @@ class EditColorPageState extends State<EditColorPage> {
                               width: currentWidth < 600 ? 400 : 410,
                               child: GridView(
                                 gridDelegate:
-                                     SliverGridDelegateWithFixedCrossAxisCount(
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 6,
                                   crossAxisSpacing:
                                       currentWidth < 600 ? 20 : 23,
@@ -444,7 +442,7 @@ class EditColorPageState extends State<EditColorPage> {
                                           ),
                                         ),
                                         if (selectColorIndex == index + 1)
-                                           Icon(
+                                          Icon(
                                             Icons.check_circle_rounded,
                                             color: const Color(0xff303030),
                                             size: currentWidth < 600 ? 20 : 22,
@@ -463,14 +461,10 @@ class EditColorPageState extends State<EditColorPage> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      NewButton(
-                        Colors.black,
-                        Colors.white,
-                        '이전',
-                        () {
-                          Navigator.pop(context);
-                        }, currentWidth
-                      ).newButton(),
+                      NewButton(Colors.black, Colors.white, '이전', () {
+                        Navigator.pop(context);
+                      }, currentWidth)
+                          .newButton(),
                       NewButton(Colors.black, Colors.white, '완료', () async {
                         // Execute _addSecondGoal and wait for the result
                         final secondGoalSuccess = await _editSecondGoal();
@@ -480,7 +474,6 @@ class EditColorPageState extends State<EditColorPage> {
                               final thirdGoalSuccess = await _editThirdGoal();*/
 
                         if (secondGoalSuccess) {
-                          print('제2목표 저장 성공');
                           final goalColorSuccess = await _editColor();
 
                           if (goalColorSuccess) {
@@ -488,7 +481,6 @@ class EditColorPageState extends State<EditColorPage> {
 
                             // If both are successful, navigate to DPlistPage
                             if (thirdGoalSuccess) {
-                              print('제3목표 저장 성공');
                               for (int i = 0; i < 9; i++) {
                                 context
                                     .read<SaveInputtedDetailGoalModel>()
@@ -510,12 +502,14 @@ class EditColorPageState extends State<EditColorPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const EditCompletePage()),
+                                    builder: (context) =>
+                                        const EditCompletePage()),
                               );
                             }
                           }
                         }
-                      }, currentWidth).newButton(),
+                      }, currentWidth)
+                          .newButton(),
                     ]),
               ],
             )));

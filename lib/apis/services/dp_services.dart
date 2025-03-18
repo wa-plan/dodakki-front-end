@@ -13,7 +13,6 @@ class MainGoalListService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -37,9 +36,6 @@ class MainGoalListService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse =
             json.decode(utf8.decode(response.bodyBytes));
@@ -50,7 +46,6 @@ class MainGoalListService {
                   'name': item['name'],
                 })
             .toList();
-        print('mainGoals: $mainGoals');
         return mainGoals;
       } else {
         Fluttertoast.showToast(
@@ -83,7 +78,6 @@ class AddSecondGoalService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -117,9 +111,6 @@ class AddSecondGoalService {
           },
           body: body,
         );
-
-        //print('서버 응답 상태 코드: ${response.statusCode}');
-        //print('서버 응답 본문: ${response.body}');
 
         if (response.statusCode == 200 || response.statusCode == 201) {
         } else {
@@ -155,7 +146,6 @@ class SecondGoalListService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -168,8 +158,7 @@ class SecondGoalListService {
       return null;
     }
 
-    final url = Uri.parse(
-        '$baseUrl/api/mandalart/all/$mandalartId'); // Insert mandalartId here
+    final url = Uri.parse('$baseUrl/api/mandalart/all/$mandalartId');
 
     try {
       final response = await http.get(
@@ -180,14 +169,10 @@ class SecondGoalListService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse =
             json.decode(utf8.decode(response.bodyBytes));
 
-        // Parsing the response to match the desired structure
         final List<Map<String, dynamic>> mainGoals = [
           {
             "mandalart": jsonResponse["mandalart"],
@@ -208,7 +193,6 @@ class SecondGoalListService {
           }
         ];
 
-        print('mainGoals: $mainGoals');
         return mainGoals;
       } else {
         Fluttertoast.showToast(
@@ -248,7 +232,6 @@ class AddThirdGoalService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -265,7 +248,6 @@ class AddThirdGoalService {
 
     bool allSuccess = true;
 
-    // List of all thirdGoals
     List<List<String>> allThirdGoals = [
       third0,
       third1,
@@ -279,7 +261,6 @@ class AddThirdGoalService {
     ];
 
     for (int i = 0; i < secondGoalId.length; i++) {
-      // Check if we have more thirdGoals than secondGoals
       if (i >= allThirdGoals.length) break;
 
       List<String> currentThirdGoals = allThirdGoals[i];
@@ -301,9 +282,6 @@ class AddThirdGoalService {
             },
             body: body,
           );
-
-          print('서버 응답 상태 코드: ${response.statusCode}');
-          print('서버 응답 본문: ${response.body}');
 
           if (response.statusCode == 200 || response.statusCode == 201) {
           } else {
@@ -340,7 +318,6 @@ class DeleteMandalartService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -364,11 +341,7 @@ class DeleteMandalartService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 204) {
-        // Handle successful deletion
         return true;
       } else {
         Fluttertoast.showToast(
@@ -400,7 +373,6 @@ class EditSecondGoalService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -437,11 +409,6 @@ class EditSecondGoalService {
           },
           body: body,
         );
-
-        print('서버 응답 상태 코드: ${response.statusCode}');
-        print('서버 응답 본문: ${response.body}');
-        print(secondGoalId);
-        print(newSecondGoal);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           Fluttertoast.showToast(
@@ -484,7 +451,6 @@ class EditGoalColorService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -520,9 +486,6 @@ class EditGoalColorService {
           },
           body: body,
         );
-
-        print('서버 응답 상태 코드: ${response.statusCode}');
-        print('서버 응답 본문: ${response.body}');
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           Fluttertoast.showToast(
@@ -581,7 +544,6 @@ class EditThirdGoalService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -597,7 +559,6 @@ class EditThirdGoalService {
     final url = Uri.parse('$baseUrl/api/thirdgoal');
     bool allSuccess = true;
 
-    // List of all thirdGoalIds and corresponding goals
     List<List<int>> allThirdGoalIds = [
       third0id,
       third1id,
@@ -622,10 +583,8 @@ class EditThirdGoalService {
       third8
     ];
 
-    // Loop through all the goal lists and send them one by one
     for (int i = 0; i < allThirdGoalIds.length; i++) {
       for (int j = 0; j < allThirdGoalIds[i].length; j++) {
-        // For each thirdGoalId and newThirdGoal pair, make a request
         final body = json.encode({
           "thirdGoalId": allThirdGoalIds[i][j],
           "newThirdGoal": allThirdGoals[i][j],
@@ -640,11 +599,6 @@ class EditThirdGoalService {
             },
             body: body,
           );
-
-          print('서버 응답 상태 코드: ${response.statusCode}');
-          print('서버 응답 본문: ${response.body}');
-          print(allThirdGoals);
-          print(allThirdGoalIds);
 
           if (response.statusCode == 200 || response.statusCode == 201) {
             Fluttertoast.showToast(
@@ -687,7 +641,6 @@ class MainGoalDetailService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -711,9 +664,6 @@ class MainGoalDetailService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse =
             json.decode(utf8.decode(response.bodyBytes));
@@ -727,7 +677,6 @@ class MainGoalDetailService {
                   'repetition': item['repetition'],
                 })
             .toList();
-        print('mainGoalsDetail: $mainGoalsDetail');
         return mainGoalsDetail;
       } else {
         Fluttertoast.showToast(

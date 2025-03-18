@@ -22,7 +22,6 @@ class MandalartGrid5 extends StatefulWidget {
 class _MandalartGrid5 extends State<MandalartGrid5> {
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
     return SizedBox(
       width: currentHeight * 0.4,
