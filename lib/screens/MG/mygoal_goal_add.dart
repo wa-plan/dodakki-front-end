@@ -126,21 +126,16 @@ class _MyGoalAddState extends State<MyGoalAdd> {
           padding: appBarPadding,
           child: Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                color: const Color(0xffD4D4D4),
-                iconSize: 17,
-              ),
-              Text(
-                '목표 세우기',
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 20 : 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
+              CustomIconButton(() {
+                Navigator.of(context).pop();
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('목표 세우기',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -152,33 +147,41 @@ class _MyGoalAddState extends State<MyGoalAdd> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 목표 설명
+              // 어떤 목표인가요?
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 13),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Question(question: '어떤 목표인가요?'),
-                      const Tag(Color.fromARGB(255, 59, 59, 59),
-                              Colors.transparent, '필수')
+                      const Tag(Colors.transparent, Color(0xffFF7E7E), '필수')
                           .tag()
                     ],
                   ),
-                  const SizedBox(height: 13),
-                  SizedBox(
+                  const SizedBox(height: 8),
+                  Container(
                       height: 40,
-                      child: CustomTextField('Ex. 환상적인 세계여행', _nameController,
-                              (value) {
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                            offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                            blurRadius: 7, // 블러 7
+                            spreadRadius: 0, // 스프레드 0
+                          ),
+                        ],
+                      ),
+                      child: NewCustomTextField('', _nameController, (value) {
                         return null;
-                      }, false, 1)
-                          .textField()),
+                      }, false, 1, currentWidth)
+                          .newtextField()),
                 ],
               ),
 
               const SizedBox(height: 40),
-
+              //언제까지 목표를 이루고 싶나요?
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -186,12 +189,11 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Question(question: '언제까지 목표를 이루고 싶나요?'),
-                      const Tag(Color.fromARGB(255, 59, 59, 59),
-                              Colors.transparent, '필수')
+                      const Tag(Colors.transparent, Color(0xffFF7E7E), '필수')
                           .tag()
                     ],
                   ),
-                  const SizedBox(height: 13),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -199,9 +201,18 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                         child: Container(
                           alignment: Alignment.centerLeft,
                           height: 40,
-                          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black
+                                      .withOpacity(0.05), // 검은색 10% 투명도
+                                  offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                                  blurRadius: 7, // 블러 7
+                                  spreadRadius: 0, // 스프레드 0
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(6),
                               color: const Color(0xff2A2A2A)),
                           child: Text(
                             _selectedDate != null
@@ -213,40 +224,51 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                             style: TextStyle(
                               color: _selectedDate != null
                                   ? Colors.white
-                                  : const Color.fromARGB(255, 113, 113, 113),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
+                                  : Color(0xffAAAAAA),
+                              fontSize: currentWidth < 600 ? 12 : 14,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Button(
-                        Colors.black,
-                        Colors.white,
-                        '달력',
-                        () {
+                      const SizedBox(width: 9),
+                      SizedBox(
+                        height: 40,
+                        child: NewButton(Color(0xff161616), Colors.white, '달력',
+                                () {
                           showCalendarPopup(context, (DateTime? selectedDate) {
                             if (selectedDate != null) {
                               setState(() {
                                 _selectedDate = selectedDate; // 상위 화면의 변수에 저장
                               });
                             }
-                            print(_selectedDate); // 선택된 날짜 확인
                           });
-                        },
-                      ).button(),
+                        }, currentWidth)
+                            .newButton(),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 13),
+                  const SizedBox(height: 10),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Checkbox(
-                        checkColor: backgroundColor,
-                        activeColor: mainRed,
+                        checkColor: Color(0xffFF7E7E),
+                        activeColor: Color(0xff323232),
+                        fillColor:
+                            WidgetStateProperty.resolveWith<Color>((states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return Color(0xff323232); // 체크됐을 때 색상
+                          }
+                          return Color(0xff323232); // 체크 해제 상태 색상
+                        }),
                         visualDensity: VisualDensity.compact,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6), // 모서리 둥글기 조정
+                        ),
                         value: _isChecked,
+                        materialTapTargetSize:
+                            MaterialTapTargetSize.shrinkWrap, // 여백 제거
                         onChanged: (value) {
                           setState(() {
                             _isChecked = value!;
@@ -259,21 +281,26 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                           });
                         },
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 3),
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             "확실하지 않아요",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                                fontFamily: "Pretendard",
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
                           ),
                           SizedBox(height: 5),
                           Text(
                             '그럼 오늘부터 날짜를 세어나갈게요.',
                             style: TextStyle(
+                                fontFamily: "Pretendard",
                                 color: Color(0xff909090),
                                 fontSize: 10,
-                                fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
@@ -283,31 +310,41 @@ class _MyGoalAddState extends State<MyGoalAdd> {
               ),
 
               const SizedBox(height: 40),
-
+              //목표에 대해서 더 알려주세요.
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Question(question: '목표에 대해서 더 알려주세요.'),
-                  const SizedBox(height: 13),
-                  SizedBox(
+                  const SizedBox(height: 8),
+                  Container(
                       height: 80,
-                      child: CustomTextField(
-                              'Ex. 유럽, 아프리카, 아시아 등 전세계 구석구석을 배낭 하나로 여행하기!',
-                              _descriptionController, (value) {
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                            offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                            blurRadius: 7, // 블러 7
+                            spreadRadius: 0, // 스프레드 0
+                          ),
+                        ],
+                      ),
+                      child: NewCustomTextField('', _descriptionController,
+                              (value) {
                         return null;
-                      }, false, 5)
-                          .textField()),
+                      }, false, 5, currentWidth)
+                          .newtextField()),
                 ],
               ),
 
               const SizedBox(height: 40),
 
-              // 목표 사진 선택
+              // 목표를 보여주는 사진이 있나요?
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Question(question: '목표를 보여주는 사진이 있나요?'),
-                  const SizedBox(height: 13),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
@@ -325,41 +362,51 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(right: 10.0),
-                                      child: CircleAvatar(
-                                        radius: 40,
-                                        backgroundColor: Colors
-                                            .grey[300], // ✅ 로드 실패 대비 배경 설정
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              40), // ✅ 원형 이미지 유지
-                                          child: imageData.startsWith("http")
-                                              ? Image.network(
-                                                  imageData, // ✅ URL이면 NetworkImage 사용
-                                                  width: 80,
-                                                  height: 80,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (context, error,
-                                                      stackTrace) {
-                                                    return const Center(
-                                                      child: Text(
-                                                        '로드 실패', // ✅ 이미지 로드 실패 시 표시
-                                                        style: TextStyle(
-                                                            color: Colors.red),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    );
-                                                  },
-                                                )
-                                              : const Center(
-                                                  child: Text(
-                                                    '로드 실패', // ✅ URL이 아니면 기본적으로 표시
-                                                    style: TextStyle(
-                                                        color: Colors.red),
-                                                    textAlign: TextAlign.center,
-                                                  ),
+                                      child: Container(
+                                        width: 80,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(
+                                                    0.05), // 검은색 10% 투명도
+                                                offset: const Offset(
+                                                    0, 0), // X, Y 위치 (0,0)
+                                                blurRadius: 7, // 블러 7
+                                                spreadRadius: 0, // 스프레드 0
+                                              ),
+                                            ],
+                                            color: Color(
+                                                0xff2A2A2A), // ✅ 로드 실패 대비 배경 설정
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: imageData.startsWith("http")
+                                            ? Image.network(
+                                                imageData, // ✅ URL이면 NetworkImage 사용
+                                                width: 80,
+                                                height: 80,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return const Center(
+                                                    child: Text(
+                                                      '로드 실패', // ✅ 이미지 로드 실패 시 표시
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : const Center(
+                                                child: Text(
+                                                  '로드 실패', // ✅ URL이 아니면 기본적으로 표시
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                        ),
+                                              ),
                                       ),
                                     ),
                                     // ❗ 삭제 버튼 (Positioned 유지)
@@ -385,13 +432,25 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                               if (_imageFiles.length < 3)
                                 GestureDetector(
                                   onTap: _pickImages, // 🔹 이미지 선택 함수 호출
-                                  child: const CircleAvatar(
-                                    radius: 40,
-                                    backgroundColor:
-                                        Color.fromARGB(255, 79, 79, 79),
+                                  child: Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                                0.05), // 검은색 10% 투명도
+                                            offset: const Offset(
+                                                0, 0), // X, Y 위치 (0,0)
+                                            blurRadius: 7, // 블러 7
+                                            spreadRadius: 0, // 스프레드 0
+                                          ),
+                                        ],
+                                        color: Color(0xff2A2A2A),
+                                        borderRadius: BorderRadius.circular(6)),
                                     child: Icon(Icons.add_a_photo,
-                                        color:
-                                            Color.fromARGB(255, 173, 173, 173)),
+                                        color: Color(0xffAAAAAA),
+                                        size: 20,),
                                   ),
                                 ),
                             ],
@@ -405,7 +464,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
               const SizedBox(height: 40),
 
-              // 목표 색상 선택
+              // 목표를 색깔로 표현해주세요.
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -413,85 +472,93 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Question(question: '목표를 색깔로 표현해주세요.'),
-                      const Tag(Color.fromARGB(255, 59, 59, 59),
-                              Colors.transparent, '필수')
+                      const Tag(Colors.transparent, Color(0xffFF7E7E), '필수')
                           .tag()
                     ],
                   ),
                   const SizedBox(
-                    height: 13,
+                    height: 8,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ColorOption2(
-                        colorCode: const Color(0xffFF7A7A),
-                        isSelected: _selectedColor == const Color(0xffFF7A7A),
-                        onTap: () => _onColorSelected(const Color(0xffFF7A7A)),
-                      ),
-                      ColorOption2(
-                        colorCode: const Color(0xffFFB82D),
-                        isSelected: _selectedColor == const Color(0xffFFB82D),
-                        onTap: () => _onColorSelected(const Color(0xffFFB82D)),
-                      ),
-                      ColorOption2(
-                        colorCode: const Color(0xffFCFF62),
-                        isSelected: _selectedColor == const Color(0xffFCFF62),
-                        onTap: () => _onColorSelected(const Color(0xffFCFF62)),
-                      ),
-                      ColorOption2(
-                        colorCode: const Color(0xff72FF5B),
-                        isSelected: _selectedColor == const Color(0xff72FF5B),
-                        onTap: () => _onColorSelected(const Color(0xff72FF5B)),
-                      ),
-                      ColorOption2(
-                        colorCode: const Color(0xff5DD8FF),
-                        isSelected: _selectedColor == const Color(0xff5DD8FF),
-                        onTap: () => _onColorSelected(const Color(0xff5DD8FF)),
-                      ),
-                      ColorOption2(
-                        colorCode: const Color(0xffffffff),
-                        isSelected: _selectedColor == const Color(0xffffffff),
-                        onTap: () => _onColorSelected(const Color(0xffffffff)),
-                      ),
-                    ],
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: Color(0xff2A2A2A)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ColorOption2(
+                          colorCode: const Color(0xffFF7A7A),
+                          isSelected: _selectedColor == const Color(0xffFF7A7A),
+                          onTap: () =>
+                              _onColorSelected(const Color(0xffFF7A7A)),
+                        ),
+                        ColorOption2(
+                          colorCode: const Color(0xffFFB82D),
+                          isSelected: _selectedColor == const Color(0xffFFB82D),
+                          onTap: () =>
+                              _onColorSelected(const Color(0xffFFB82D)),
+                        ),
+                        ColorOption2(
+                          colorCode: const Color(0xffFCFF62),
+                          isSelected: _selectedColor == const Color(0xffFCFF62),
+                          onTap: () =>
+                              _onColorSelected(const Color(0xffFCFF62)),
+                        ),
+                        ColorOption2(
+                          colorCode: const Color(0xff72FF5B),
+                          isSelected: _selectedColor == const Color(0xff72FF5B),
+                          onTap: () =>
+                              _onColorSelected(const Color(0xff72FF5B)),
+                        ),
+                        ColorOption2(
+                          colorCode: const Color(0xff5DD8FF),
+                          isSelected: _selectedColor == const Color(0xff5DD8FF),
+                          onTap: () =>
+                              _onColorSelected(const Color(0xff5DD8FF)),
+                        ),
+                        ColorOption2(
+                          colorCode: const Color(0xffffffff),
+                          isSelected: _selectedColor == const Color(0xffffffff),
+                          onTap: () =>
+                              _onColorSelected(const Color(0xffffffff)),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
 
               const SizedBox(
-                height: 60,
+                height: 45,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //취소버튼
-                  Button(Colors.black, Colors.white, '취소',
-                      () => Navigator.pop(context)).button(),
+                  NewButton(Colors.black, Colors.white, '취소',
+                          () => Navigator.pop(context), currentWidth)
+                      .newButton(),
 
                   //완료버튼
-                  Button(
-                    Colors.black,
-                    Colors.white,
-                    '완료',
-                    () {
-                      if (_nameController.text == '') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('목표를 입력해 주세요.')),
-                        );
-                      } else if (!_isChecked && _selectedDate == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
-                        );
-                      } else if (_selectedColor == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('색상을 선택해 주세요.')),
-                        );
-                      } else {
-                        _addGoal();
-                      }
-                    },
-                  ).button(),
+                  NewButton(Colors.black, Colors.white, '완료', () {
+                    if (_nameController.text == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('목표를 입력해 주세요.')),
+                      );
+                    } else if (!_isChecked && _selectedDate == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
+                      );
+                    } else if (_selectedColor == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('색상을 선택해 주세요.')),
+                      );
+                    } else {
+                      _addGoal();
+                    }
+                  }, currentWidth)
+                      .newButton(),
                 ],
               ),
             ],

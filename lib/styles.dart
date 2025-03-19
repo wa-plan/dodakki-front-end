@@ -106,7 +106,7 @@ class Button {
   }
 }
 
-//Button
+//NewButton
 class NewButton {
   final Color buttonColor;
   final Color textColor;
@@ -760,12 +760,13 @@ class NewCustomTextField {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(6),
         ),
+        
         hintText: hintText,
         contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
         hintStyle: TextStyle(
             color: Color(0xffAAAAAA),
             fontSize: currentWidth < 600 ? 12 : 14,
-            fontWeight: FontWeight.w400),
+            fontWeight: FontWeight.w500),
         suffixIcon: controller.text.isNotEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
@@ -805,7 +806,8 @@ class Question extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(question,
         style: const TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16));
+          fontFamily: "Pretendard",
+            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13));
   }
 }
 
@@ -830,8 +832,8 @@ class ColorOption2 extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(currentWidth < 600 ? 5 : 10),
         child: Container(
-          width: currentWidth < 600 ? 35 : 50,
-          height: currentWidth < 600 ? 35 : 50,
+          width: currentWidth < 600 ? 30 : 50,
+          height: currentWidth < 600 ? 30 : 50,
           decoration: BoxDecoration(
             color: colorCode,
             borderRadius: BorderRadius.circular(6),
@@ -862,15 +864,18 @@ class Tag {
 
   Widget tag() {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: borderColor, width: 0.5), // 테두리 색상
+          border: Border.all(
+            color: borderColor
+          )
         ),
         child: Text(
           text,
-          style: const TextStyle(color: Color(0xff979797), fontSize: 11),
+          style: const TextStyle(color: Color(0xffFF7E7E), fontSize: 9,fontFamily: "Pretendard",
+          fontWeight: FontWeight.w600),
         ));
   }
 }

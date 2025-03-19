@@ -331,8 +331,8 @@ class _MygoalEditState extends State<MygoalEdit> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Question(question: '어떤 목표인가요?'),
-                      const Tag(Color.fromARGB(255, 59, 59, 59),
-                              Colors.transparent, '필수')
+                      const Tag(Color.fromARGB(255, 59, 59, 59), Colors.black,
+                               '필수')
                           .tag()
                     ],
                   ),
@@ -358,8 +358,8 @@ class _MygoalEditState extends State<MygoalEdit> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Question(question: '언제까지 목표를 이루고 싶나요?'),
-                      const Tag(Color.fromARGB(255, 59, 59, 59),
-                              Colors.transparent, '필수')
+                      const Tag(Color.fromARGB(255, 59, 59, 59), Colors.black,
+                               '필수')
                           .tag()
                     ],
                   ),

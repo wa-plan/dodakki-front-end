@@ -78,7 +78,7 @@ class _CheeringMessageState extends State<CheeringMessage> {
                 currentMessage,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 12 : 20,
+                  fontSize: currentWidth < 600 ? 10 : 17,
                   fontWeight: FontWeight.w400,
                 ),
                 textAlign: TextAlign.center,

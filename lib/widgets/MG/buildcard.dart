@@ -165,7 +165,7 @@ class _GoalCardState extends State<GoalCard> {
                           if (widget.photoList.isEmpty)
                             Container(
                               decoration: BoxDecoration(
-                                color: const Color(0xff303030),
+                                color: const Color(0xff323232),
                                 borderRadius: BorderRadius.circular(3.0),
                               ),
                               width: double.infinity,
