@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 //color
-const backgroundColor = Color(0xff222222);
+const backgroundColor = Color(0xff262626);
 const mainRed = Color(0xffFF7A7A);
 const mainTextColor = Colors.white;
 const mainGold = Color(0xffF6C92B);
@@ -150,8 +150,8 @@ class MGSubTitle {
       text,
       style: TextStyle(
         color: const Color.fromARGB(255, 178, 178, 178),
-        fontSize: MediaQuery.of(context).size.width * 0.035,
-        fontWeight: FontWeight.w400,
+        fontSize: MediaQuery.of(context).size.width * 0.039,
+        fontWeight: FontWeight.w700,
       ),
     );
   }
@@ -668,7 +668,6 @@ class NewColorTransform {
   Color newcolorTransform() {
     Color newColor =
         Color(int.parse(color.replaceAll('Color(', '').replaceAll(')', '')));
-    print('이게맞니:$newColor');
     return newColor;
   }
 }
@@ -920,11 +919,12 @@ class PageIndicator {
     return SmoothPageIndicator(
       controller: controller,
       count: goals.length,
-      effect: const ColorTransitionEffect(
+      effect: const SlideEffect(
         dotHeight: 8.0,
+        radius: 2.0,
         dotWidth: 8.0,
         activeDotColor: Colors.white,
-        dotColor: Colors.grey,
+        dotColor: Color(0xff3C3C3C),
       ),
     );
   }

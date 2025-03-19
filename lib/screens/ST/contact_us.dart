@@ -15,46 +15,47 @@ class _ContactUsState extends State<ContactUs> {
     final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        backgroundColor: backgroundColor,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          titleSpacing: 0.0,
-          title: Padding(
-            padding: appBarPadding,
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  color: const Color(0xffD4D4D4),
-                  iconSize: 17,
-                ),
-                Text(
-                  '문의하기',
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
+        title: Padding(
+          padding: appBarPadding,
+          child: Row(
+            children: [
+              CustomIconButton(() {
+                Navigator.of(context).pop();
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('문의하기',
                   style: TextStyle(
-                      fontSize: currentWidth < 600 ? 20 : 24,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
+            ],
           ),
-          backgroundColor: backgroundColor,
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: fullPadding,
-            child: Column(
-              children: [
-                const SizedBox(height: 15),
-                Container(
-                    color: const Color(0xff2A2A2A),
-                    height: 400,
-                    width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-                    child: Column(
+        backgroundColor: backgroundColor,
+      ),
+      body: Padding(
+        padding: fullPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
+            Container(
+                height: 250,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: const Color(0xff2A2A2A),
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -72,33 +73,42 @@ class _ContactUsState extends State<ContactUs> {
                               fontSize: currentWidth < 600 ? 13 : 18),
                         ),
                         Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                NewCustomIconButton(
-                                        () {},
-                                        Icons.mail_outline_rounded,
-                                        currentWidth,
-                                        13)
-                                    .newCustomIconButton(),
-                                const SizedBox(width: 8),
-                                Text(widget.email,
-                                    style: TextStyle(
-                                        fontSize: currentWidth < 600 ? 12 : 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600)),
-                              ],
-                            ),
-                          ],
-                        )
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              NewCustomIconButton(
+                                      () {},
+                                      Icons.mail_outline_rounded,
+                                      currentWidth,
+                                      13)
+                                  .newCustomIconButton(),
+                              const SizedBox(width: 20),
+                              Text(widget.email,
+                                  style: TextStyle(
+                                      fontSize: currentWidth < 600 ? 12 : 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                        ),
                       ],
-                    )),
-              ],
-            ),
-          ),
-        ));
+                    ),
+                    Column(
+                      children: [
+                        Spacer(),
+                        Image.asset(
+                          height: 170,
+                          "assets/img/tr_1.png",
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }
