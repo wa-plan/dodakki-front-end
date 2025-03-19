@@ -170,6 +170,8 @@ class _MyGoalState extends State<MyGoal> {
       // 서버에서 데이터 가져오기
       final data = await MandalartInfoService.mandalartInfo(
           mandalartId: int.parse(mandalartId));
+      print('이건 만다라아이디디 $mandalartId');
+      print('이건 되나? $data');
       if (data != null) {
         // 반환된 데이터를 colorList에 추가
         setState(() {
@@ -352,7 +354,7 @@ class _MyGoalState extends State<MyGoal> {
                 else ...[
                   SizedBox(
                     height: currentWidth < 600
-                        ? currentWidth * 0.6
+                        ? currentWidth * 0.55
                         : currentWidth * 0.4,
                     child: PageView.builder(
                       controller: _pageController,

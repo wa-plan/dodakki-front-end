@@ -242,12 +242,19 @@ class _ProfileEditState extends State<ProfileEdit> {
     final data = await UserInfoService.userInfo();
     if (data.isNotEmpty) {
       setState(() {
-        nickname = data['nickname'];
-        description = data['description'];
+        nickname = data['nickname'] ?? "도민호";
+        description = data['description'] ?? "매일의 목표: 행보칸 하루 살기";
         profile = widget.profileImage;
-        _nicknamecontroller.text = nickname ?? '';
-        _explaincontroller.text = description ?? '';
       });
+
+      _nicknamecontroller.text = nickname!;
+      _explaincontroller.text = description!;
+    }
+  }
+
+  void _onNicknameChanged() {
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -255,10 +262,13 @@ class _ProfileEditState extends State<ProfileEdit> {
   void initState() {
     super.initState();
     userInfo();
+    "null check";
+    _nicknamecontroller.addListener(_onNicknameChanged);
   }
 
   @override
   void dispose() {
+    _nicknamecontroller.removeListener(_onNicknameChanged);
     _nicknamecontroller.dispose();
     _explaincontroller.dispose();
     super.dispose();
@@ -343,8 +353,26 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     ? 70
                                     : 125, //imageSize / 2.4,
                                 backgroundImage: (() {
+                                  String? imageToShow = profile?.isNotEmpty ==
+                                          true
+                                      ? profile
+                                      : (widget.selectedImage.isNotEmpty == true
+                                          ? widget.selectedImage
+                                          : widget.cameraImage);
+
+                                  // ✅ imageToShow가 null이거나 빈 문자열이면 기본 이미지 사용
+                                  if (imageToShow == null ||
+                                      imageToShow.isEmpty) {
+                                    imageToShow = defaultImage;
+                                  }
+
+                                  return imageToShow.startsWith("http")
+                                      ? NetworkImage(imageToShow)
+                                          as ImageProvider
+                                      : AssetImage(imageToShow)
+                                          as ImageProvider;
                                   // 값이 있는 이미지 찾기
-                                  String? imageToShow = profile != ""
+                                  /*String? imageToShow = profile != ""
                                       ? profile
                                       : (widget.selectedImage != ""
                                           ? widget.selectedImage
@@ -355,7 +383,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       ? NetworkImage(imageToShow)
                                           as ImageProvider // 네트워크 이미지 (profile 또는 cameraImage)
                                       : AssetImage(imageToShow)
-                                          as ImageProvider; // 로컬 asset 이미지 (selectedImage)
+                                          as ImageProvider;*/ // 로컬 asset 이미지 (selectedImage)
                                 })(),
                                 backgroundColor: Colors.transparent,
                               ),

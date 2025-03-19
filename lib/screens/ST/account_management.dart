@@ -6,6 +6,7 @@ import 'package:domino/screens/ST/change_password.dart';
 import 'package:domino/widgets/popup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:domino/apis/services/lr_services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AccountManagement extends StatefulWidget {
   final String email;
@@ -275,7 +276,12 @@ class _AccountManagementState extends State<AccountManagement> {
   }
 
   void _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('authToken');
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // 모든 SharedPreferences 데이터 삭제
+
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    await storage.deleteAll();
+    /*SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('authToken');*/
   }
 }
