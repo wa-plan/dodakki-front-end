@@ -235,21 +235,35 @@ class _MyGoalState extends State<MyGoal> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      //프로필 이미지
                       Container(
-                        padding: const EdgeInsets.all(5),
-                        width: 95 / 1.2, // CircleAvatar의 전체 크기
-                        height: 95 / 1.2,
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xff575757), // 원하는 테두리 색
-                            width: 0.5, // 테두리 두께
-                          ),
+                          color: Color(0xff303030),
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                              offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                              blurRadius: 7, // 블러 7
+                              spreadRadius: 0, // 스프레드 0
+                            ),
+                          ],
                         ),
                         child: Container(
-                          width: 95,
-                          height: 95,
+                          width: 75,
+                          height: 75,
                           decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black
+                                    .withOpacity(0.05), // 검은색 10% 투명도
+                                offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                                blurRadius: 7, // 블러 7
+                                spreadRadius: 0, // 스프레드 0
+                              ),
+                            ],
                             shape: BoxShape.circle,
                             image: DecorationImage(
                               image: AssetImage(selectedImage),
@@ -262,101 +276,62 @@ class _MyGoalState extends State<MyGoal> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          //프로필 닉네임
                           Text(nickname,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: currentWidth < 600 ? 12 : 14,
-                                  fontWeight: FontWeight.w500)),
-                          const SizedBox(height: 11),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5.0, vertical: 5.0),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff303030),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              description,
-                              style: TextStyle(
-                                  height: 1.5,
-                                  color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 10 : 12,
-                                  fontWeight: FontWeight.w200),
-                            ),
+                                  fontWeight: FontWeight.w600)),
+                          const SizedBox(height: 8),
+                          //프로필 설명
+                          Text(
+                            description,
+                            style: TextStyle(
+                                height: 1.5,
+                                color: Colors.white,
+                                fontSize: currentWidth < 600 ? 10 : 12,
+                                fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
                     ],
                   ),
                   const Spacer(),
-                  Container(
-                    width: 33,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff303030),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                          color: const Color(0xff575757), width: 0.5), // 테두리 색상
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileEdit(
-                                selectedImage: "",
-                                profileImage: profile ?? defaultImage,
-                                cameraImage: ""),
-                          ),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.edit,
-                        color: Color.fromARGB(255, 106, 106, 106),
-                        size: 15,
+                  //프로필 편집 버튼
+                  NewCustomIconButton(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileEdit(
+                            selectedImage: "",
+                            profileImage: profile ?? defaultImage,
+                            cameraImage: ""),
                       ),
-                    ),
-                  ),
+                    );
+                  }, Icons.edit, currentWidth, 17)
+                      .newCustomIconButton(),
                 ],
               ),
-              SizedBox(height: currentWidth < 600 ? 10 : 30),
-              Divider(
-                color: const Color.fromARGB(255, 114, 114, 114),
-                thickness: currentWidth < 600 ? 0.5 : 0.3,
-              ),
-              const SizedBox(height: 10),
+              SizedBox(height: currentWidth < 600 ? 40 : 50),
+              //쓰러뜨릴 목표
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   MGSubTitle('쓰러뜨릴 목표').mgSubTitle(context),
-                  Container(
-                    width: currentWidth < 600 ? 33 : 48,
-                    height: currentWidth < 600 ? 25 : 36,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 44, 44, 44),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                          color: const Color(0xff575757), width: 0.5), // 테두리 색상
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyGoalAdd()),
-                        );
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: const Color.fromARGB(255, 106, 106, 106),
-                        size: currentWidth < 600 ? 18 : 28,
-                      ),
-                    ),
-                  ),
+                  //목표 추가 버튼
+                  NewCustomIconButton(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MyGoalAdd()),
+                    );
+                  }, Icons.add, currentWidth, 19)
+                      .newCustomIconButton(),
                 ],
               ),
               SizedBox(
-                height: currentWidth < 600 ? 30 : 35,
+                height: currentWidth < 600 ? 10 : 25,
               ),
               Column(children: [
                 if (inProgressIDs.isEmpty)
@@ -442,8 +417,6 @@ class _MyGoalState extends State<MyGoal> {
                             )['bookmark'] ??
                             'UNBOOKMARK';
 
-                        print('$mandalartId $name의 북마크 상태는 $bookmark입니다');
-
                         return GoalCard(
                           mandalartId: mandalartId,
                           name: name,
@@ -458,7 +431,7 @@ class _MyGoalState extends State<MyGoal> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 18),
                   if (inProgressIDs.length != 1 && inProgressIDs.isNotEmpty)
                     Center(
                       child: PageIndicator(_pageController, inProgressIDs)
@@ -466,13 +439,13 @@ class _MyGoalState extends State<MyGoal> {
                     ),
                 ],
               ]),
-              const SizedBox(height: 35),
+              const SizedBox(height: 40),
               MGSubTitle('이번주의 응원!').mgSubTitle(context),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               const CheeringMessage(),
               const SizedBox(height: 40),
               MGSubTitle('쓰러뜨린 목표').mgSubTitle(context),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               if (successIDs.isEmpty)
                 Image.asset('assets/img/completed_goals.png')
               else
@@ -513,40 +486,38 @@ class _MyGoalState extends State<MyGoal> {
                       final colorValue = Color(int.parse(
                           color!.replaceAll('Color(', '').replaceAll(')', '')));
 
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyGoalDetail(
-                                        id: item['id']!,
-                                        name: item['name']!,
-                                        status: status,
-                                        photoList: photoList,
-                                        dday: int.parse(dday),
-                                        color: color,
-                                        colorValue: colorValue.value,
-                                      )),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: colorValue,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            height: currentWidth < 600 ? 35 : 70,
-                            child: Center(
-                              child: Text(
-                                item['name']!,
-                                style: TextStyle(
-                                    color: backgroundColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: currentWidth < 600 ? 12 : 20),
-                              ),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyGoalDetail(
+                                      id: item['id']!,
+                                      name: item['name']!,
+                                      status: status,
+                                      photoList: photoList,
+                                      dday: int.parse(dday),
+                                      color: color,
+                                      colorValue: colorValue.value,
+                                    )),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 7, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: colorValue,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          height: currentWidth < 600 ? 35 : 70,
+                          child: Center(
+                            child: Text(
+                              item['name']!,
+                              style: TextStyle(
+                                  color: backgroundColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: currentWidth < 600 ? 12 : 20),
                             ),
                           ),
                         ),
@@ -556,7 +527,7 @@ class _MyGoalState extends State<MyGoal> {
                 ),
               const SizedBox(height: 40),
               MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               if (failedIDs.isEmpty)
                 Image.asset('assets/img/failed_goals.png')
               else
@@ -596,43 +567,37 @@ class _MyGoalState extends State<MyGoal> {
                       final colorValue = Color(int.parse(
                           color!.replaceAll('Color(', '').replaceAll(')', '')));
 
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyGoalDetail(
-                                        id: item['id']!,
-                                        name: item['name']!,
-                                        status: status,
-                                        photoList: photoList,
-                                        dday: int.parse(dday),
-                                        color: color,
-                                        colorValue: colorValue.value,
-                                      )),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              decoration: BoxDecoration(
-                                color: colorValue,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              height: currentWidth < 600 ? 35 : 70,
-                              child: Center(
-                                child: Text(
-                                  item['name']!,
-                                  style: TextStyle(
-                                      color: backgroundColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: currentWidth < 600 ? 12 : 20),
-                                ),
-                              ),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyGoalDetail(
+                                      id: item['id']!,
+                                      name: item['name']!,
+                                      status: status,
+                                      photoList: photoList,
+                                      dday: int.parse(dday),
+                                      color: color,
+                                      colorValue: colorValue.value,
+                                    )),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 7, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: colorValue,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          child: Center(
+                            child: Text(
+                              item['name']!,
+                              style: TextStyle(
+                                  color: backgroundColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: currentWidth < 600 ? 12 : 20),
                             ),
                           ),
                         ),

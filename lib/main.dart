@@ -63,8 +63,8 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             // all > appBar의 메뉴 텍스트
             titleLarge: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.045,
-                fontWeight: FontWeight.w600,
+                fontSize: MediaQuery.of(context).size.width * 0.047,
+                fontWeight: FontWeight.w700,
                 color: Colors.white),
             // all > 메뉴 설명
             titleMedium: const TextStyle(

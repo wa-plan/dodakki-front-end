@@ -56,60 +56,47 @@ class _ChangePasswordState extends State<ChangePassword> {
           padding: appBarPadding,
           child: Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                color: const Color(0xffD4D4D4),
-                iconSize: 17,
-              ),
-              Text(
-                '비밀번호 변경',
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 20 : 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
+              CustomIconButton(() {
+                Navigator.of(context).pop();
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('비밀번호 변경',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
             ],
           ),
         ),
         backgroundColor: backgroundColor,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: fullPadding,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: currentWidth < 600 ? 15 : 30),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '현재 비밀번호',
-                          style: TextStyle(
-                              fontSize: currentWidth < 600 ? 14 : 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          width: currentWidth < 600 ? 140 : 330,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    SizedBox(
-                      height: currentWidth < 600 ? 30 : 45,
-                      width: currentWidth < 600 ? 210 : 350,
-                      child: CustomTextField(
+      body: Padding(
+        padding: fullPadding,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: currentWidth < 600 ? 40 : 70),
+              Text(
+                "현재 비밀번호",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: currentWidth < 600 ? 14 : 20,
+                    fontWeight: FontWeight.w700,
+                    height: 1.4),
+              ),
+              SizedBox(height: currentWidth < 600 ? 20 : 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: currentWidth < 600 ? 38 : 70,
+                      child: NewCustomTextField(
                               '현재 비밀번호를 입력해주세요.', _currentkeycontroller,
                               (value) {
                         if (value == null || value.isEmpty) {
@@ -118,126 +105,123 @@ class _ChangePasswordState extends State<ChangePassword> {
                         return null;
                       },
                               true, // 비밀번호 필드이므로 obscureText = true
-                              1)
-                          .textField(),
+                              1,
+                              currentWidth)
+                          .newtextField(),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: currentWidth < 600 ? 120 : 250,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const LoginregisterFindPassword(),
-                                ));
-                          },
-                          child: Text(
-                            '비밀번호를 잊으셨나요?',
-                            style: TextStyle(
-                                color: const Color(0xff949494),
-                                fontSize: currentWidth < 600 ? 10 : 13),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: currentWidth < 600 ? 20 : 40,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '새 비밀번호',
-                          style: TextStyle(
-                              fontSize: currentWidth < 600 ? 14 : 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          width: currentWidth < 600 ? 160 : 345,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    SizedBox(
-                      width: currentWidth < 600 ? 290 : 350,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: currentWidth < 600 ? 30 : 45,
-                            width: currentWidth < 600 ? 210 : 350,
-                            child: CustomTextField(
-                                    '8~16자를 입력해 주세요.', _newkeycontroller,
-                                    (value) {
-                              if (value == null ||
-                                  value.length < 8 ||
-                                  value.length > 16) {
-                                return '비밀번호는 8~16자리여야 해요.';
-                              }
-                              return null;
-                            },
-                                    true, // 비밀번호 필드이므로 obscureText = true
-                                    1)
-                                .textField(),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: currentWidth < 600 ? 30 : 45,
-                            width: currentWidth < 600 ? 210 : 350,
-                            child: CustomTextField(
-                                    '비밀번호를 확인해주세요.', _checkkeycontroller,
-                                    (value) {
-                              if (value != _newkeycontroller.text) {
-                                return '비밀번호가 일치하지 않습니다.';
-                              }
-                              return null;
-                            },
-                                    true, // 비밀번호 필드이므로 obscureText = true
-                                    1)
-                                .textField(),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Button(Colors.black, Colors.white, '완료', () {
-                                if (_formKey.currentState!.validate()) {
-                                  if (_newkeycontroller.text ==
-                                      _newkeycontroller.text) {
-                                    _changePassword(_currentkeycontroller.text,
-                                        _newkeycontroller.text);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SettingsMain()),
-                                    );
-                                  }
-                                }
-                              }).button(),
-                            ],
-                          ),
-                        ],
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const LoginregisterFindPassword(),
+                          ));
+                    },
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                    child: Text(
+                      '비밀번호를 잊으셨나요?',
+                      style: TextStyle(
+                        color: const Color(0xffAAAAAA),
+                        fontSize: currentWidth < 600 ? 12.5 : 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "새 비밀번호",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: currentWidth < 600 ? 14 : 20,
+                    fontWeight: FontWeight.w700,
+                    height: 1.4),
+              ),
+              SizedBox(height: currentWidth < 600 ? 20 : 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: currentWidth < 600 ? 38 : 70,
+                      child: NewCustomTextField(
+                              '8~16자를 입력해 주세요.', _newkeycontroller, (value) {
+                        if (value == null ||
+                            value.length < 8 ||
+                            value.length > 16) {
+                          return '비밀번호는 8~16자리여야 해요.';
+                        }
+                        return null;
+                      },
+                              true, // 비밀번호 필드이므로 obscureText = true
+                              1,
+                              currentWidth)
+                          .newtextField(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: currentWidth < 600 ? 15 : 0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: currentWidth < 600 ? 38 : 70,
+                      child: NewCustomTextField(
+                              '비밀번호를 확인해주세요.', _checkkeycontroller, (value) {
+                        if (value != _newkeycontroller.text) {
+                          return '비밀번호가 일치하지 않습니다.';
+                        }
+                        return null;
+                      },
+                              true, // 비밀번호 필드이므로 obscureText = true
+                              1,
+                              currentWidth)
+                          .newtextField(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: currentWidth < 600 ? 20 : 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  NewButton(Colors.black, Colors.white, '완료', () {
+                    if (_formKey.currentState!.validate()) {
+                      if (_newkeycontroller.text == _newkeycontroller.text) {
+                        _changePassword(
+                            _currentkeycontroller.text, _newkeycontroller.text);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SettingsMain()),
+                        );
+                      }
+                    }
+                  }, currentWidth)
+                      .newButton(),
+                ],
+              ),
+            ],
           ),
         ),
       ),

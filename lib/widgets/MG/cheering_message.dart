@@ -55,9 +55,8 @@ class _CheeringMessageState extends State<CheeringMessage> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xff303030),
+        color: const Color(0xff2B2B2B),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xff575757), width: 0.5),
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -79,7 +78,7 @@ class _CheeringMessageState extends State<CheeringMessage> {
                 currentMessage,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 12 : 20,
+                  fontSize: currentWidth < 600 ? 10 : 17,
                   fontWeight: FontWeight.w400,
                 ),
                 textAlign: TextAlign.center,

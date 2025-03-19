@@ -244,7 +244,7 @@ class Option2 {
   Widget option2() {
     return Container(
         child: CircleAvatar(
-      radius: currentWidth < 600 ? 35 : 62.5,
+      radius: currentWidth < 600 ? 38 : 62.5,
       backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
       child: Container(
         alignment: Alignment.center,

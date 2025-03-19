@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 //color
-const backgroundColor = Color(0xff222222);
+const backgroundColor = Color(0xff262626);
 const mainRed = Color(0xffFF7A7A);
 const mainTextColor = Colors.white;
 const mainGold = Color(0xffF6C92B);
@@ -106,7 +106,7 @@ class Button {
   }
 }
 
-//Button
+//NewButton
 class NewButton {
   final Color buttonColor;
   final Color textColor;
@@ -150,8 +150,8 @@ class MGSubTitle {
       text,
       style: TextStyle(
         color: const Color.fromARGB(255, 178, 178, 178),
-        fontSize: MediaQuery.of(context).size.width * 0.035,
-        fontWeight: FontWeight.w400,
+        fontSize: MediaQuery.of(context).size.width * 0.039,
+        fontWeight: FontWeight.w700,
       ),
     );
   }
@@ -668,7 +668,6 @@ class NewColorTransform {
   Color newcolorTransform() {
     Color newColor =
         Color(int.parse(color.replaceAll('Color(', '').replaceAll(')', '')));
-    print('이게맞니:$newColor');
     return newColor;
   }
 }
@@ -761,12 +760,13 @@ class NewCustomTextField {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(6),
         ),
+        
         hintText: hintText,
         contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
         hintStyle: TextStyle(
             color: Color(0xffAAAAAA),
             fontSize: currentWidth < 600 ? 12 : 14,
-            fontWeight: FontWeight.w400),
+            fontWeight: FontWeight.w500),
         suffixIcon: controller.text.isNotEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
@@ -806,7 +806,8 @@ class Question extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(question,
         style: const TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16));
+          fontFamily: "Pretendard",
+            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13));
   }
 }
 
@@ -831,8 +832,8 @@ class ColorOption2 extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(currentWidth < 600 ? 5 : 10),
         child: Container(
-          width: currentWidth < 600 ? 35 : 50,
-          height: currentWidth < 600 ? 35 : 50,
+          width: currentWidth < 600 ? 30 : 50,
+          height: currentWidth < 600 ? 30 : 50,
           decoration: BoxDecoration(
             color: colorCode,
             borderRadius: BorderRadius.circular(6),
@@ -863,15 +864,18 @@ class Tag {
 
   Widget tag() {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: borderColor, width: 0.5), // 테두리 색상
+          border: Border.all(
+            color: borderColor
+          )
         ),
         child: Text(
           text,
-          style: const TextStyle(color: Color(0xff979797), fontSize: 11),
+          style: const TextStyle(color: Color(0xffFF7E7E), fontSize: 9,fontFamily: "Pretendard",
+          fontWeight: FontWeight.w600),
         ));
   }
 }
@@ -920,11 +924,12 @@ class PageIndicator {
     return SmoothPageIndicator(
       controller: controller,
       count: goals.length,
-      effect: const ColorTransitionEffect(
+      effect: const SlideEffect(
         dotHeight: 8.0,
+        radius: 2.0,
         dotWidth: 8.0,
         activeDotColor: Colors.white,
-        dotColor: Colors.grey,
+        dotColor: Color(0xff3C3C3C),
       ),
     );
   }
