@@ -84,7 +84,7 @@ class PieChart extends CustomPainter {
       style: TextStyle(
         fontSize: labelFontSize, // ✅ "달성률" 작은 크기
         fontWeight: FontWeight.w500,
-        color: Colors.white,
+        color: Color(0xffAAAAAA),
         height: 2.0,
       ),
       text: "달성률\n", // ✅ 개행 추가

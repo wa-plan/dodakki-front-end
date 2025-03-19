@@ -167,39 +167,25 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                       dday < 0 ? 'D+${dday * -1}' : 'D-$dday',
                       style: TextStyle(
                         color: Color(0xff5F5F5F),
-                        fontSize: currentWidth < 600 ? 13 : 17,
-                        fontWeight: FontWeight.w600,
+                        fontSize: currentWidth < 600 ? 11 : 17,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 13.0, vertical: 5.0),
-                  decoration: BoxDecoration(
-                    color: const Color(0xff303030),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MygoalEdit(
-                                  id: widget.id,
-                                  dday: dday,
-                                  name: name,
-                                  description: mandaDescription,
-                                  color: color,
-                                  goalImage: goalImage)));
-                    },
-                    child: const Icon(
-                      Icons.edit,
-                      size: 18,
-                      color: Color(0xff646464),
-                    ),
-                  ),
-                ),
+                CustomIconButton(() {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MygoalEdit(
+                              id: widget.id,
+                              dday: dday,
+                              name: name,
+                              description: mandaDescription,
+                              color: color,
+                              goalImage: goalImage)));
+                }, Icons.edit, currentWidth)
+                    .customIconButton()
               ],
             ),
           ),
@@ -214,7 +200,11 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               Center(
                 child: Text(
                   name,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: TextStyle(
+                      fontFamily: "Pretendard",
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
               const SizedBox(
@@ -253,7 +243,6 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             if (index < goalImage.length) {
-                              print('goalImage=$goalImage');
                               return ClipRRect(
                                 borderRadius:
                                     BorderRadius.circular(15), // 둥근 네모 형태로 설정
@@ -317,126 +306,128 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
                     height: currentWidth < 600 ? 30 : 50,
-                    width: currentWidth < 600 ? 85 : 120,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: DropdownButton<String>(
-                      underline: const SizedBox.shrink(),
-                      dropdownColor: const Color(0xff303030),
-                      iconEnabledColor: const Color(0xff646464),
-                      value: _selectedStatus,
-                      items: _status
-                          .map(
-                            (e) => DropdownMenuItem<String>(
-                              value: e,
-                              child: Center(
-                                child: Text(e),
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0xff303030)),
+                    child: Center(
+                      child: DropdownButton<String>(
+                        underline: const SizedBox.shrink(),
+                        dropdownColor: const Color(0xff303030),
+                        iconEnabledColor: const Color(0xff646464),
+                        value: _selectedStatus,
+                        items: _status
+                            .map(
+                              (e) => DropdownMenuItem<String>(
+                                value: e,
+                                child: Center(
+                                  child: Text(e),
+                                ),
                               ),
-                            ),
-                          )
-                          .toList(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: currentWidth < 600 ? 12 : 18,
-                          fontWeight: FontWeight.w600),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedStatus = value;
-                          if (_selectedStatus == '달성 완료') {
-                            PopupDialog.show(
-                              context,
-                              '대박! 이 목표 정말 \n달성 완료한거야?',
-                              true, // cancel
-                              false, // delete
-                              false, // signout
-                              true, //success
-                              onCancel: () {
-                                // 취소 버튼을 눌렀을 때 실행할 코드
-                                Navigator.of(context).pop();
-                              },
+                            )
+                            .toList(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: currentWidth < 600 ? 11 : 16,
+                            fontWeight: FontWeight.w500),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedStatus = value;
+                            if (_selectedStatus == '달성 완료') {
+                              PopupDialog.show(
+                                context,
+                                '대박! 이 목표 정말 \n달성 완료한거야?',
+                                true, // cancel
+                                false, // delete
+                                false, // signout
+                                true, //success
+                                onCancel: () {
+                                  // 취소 버튼을 눌렀을 때 실행할 코드
+                                  Navigator.of(context).pop();
+                                },
 
-                              onDelete: () {
-                                // 삭제 버튼을 눌렀을 때 실행할 코드
-                              },
-                              onSignOut: () {
-                                // 탈퇴 버튼을 눌렀을 때 실행할 코드
-                              },
-                              onSuccess: () {
-                                _mandaProgress(int.parse(widget.id), "SUCCESS");
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        EventPage(domino: successNum),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                          if (_selectedStatus == '진행 중') {
-                            PopupDialog.show(
-                              context,
-                              '잘 생각했어! 다시 도전해보는거야?',
-                              true, // cancel
-                              false, // delete
-                              false, // signout
-                              true, //success
-                              onCancel: () {
-                                // 취소 버튼을 눌렀을 때 실행할 코드
-                                Navigator.of(context).pop();
-                              },
+                                onDelete: () {
+                                  // 삭제 버튼을 눌렀을 때 실행할 코드
+                                },
+                                onSignOut: () {
+                                  // 탈퇴 버튼을 눌렀을 때 실행할 코드
+                                },
+                                onSuccess: () {
+                                  _mandaProgress(
+                                      int.parse(widget.id), "SUCCESS");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          EventPage(domino: successNum),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                            if (_selectedStatus == '진행 중') {
+                              PopupDialog.show(
+                                context,
+                                '잘 생각했어! 다시 도전해보는거야?',
+                                true, // cancel
+                                false, // delete
+                                false, // signout
+                                true, //success
+                                onCancel: () {
+                                  // 취소 버튼을 눌렀을 때 실행할 코드
+                                  Navigator.of(context).pop();
+                                },
 
-                              onDelete: () {
-                                // 삭제 버튼을 눌렀을 때 실행할 코드
-                              },
-                              onSignOut: () {
-                                // 탈퇴 버튼을 눌렀을 때 실행할 코드
-                              },
-                              onSuccess: () {
-                                _mandaProgress(
-                                    int.parse(widget.id), "IN_PROGRESS");
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MyGoal(),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                          if (_selectedStatus == '달성 실패') {
-                            PopupDialog.show(
-                              context,
-                              '아쉬워! 이 목표는 \n달성 실패인거야?',
-                              true, // cancel
-                              false, // delete
-                              false, // signout
-                              true, //success
-                              onCancel: () {
-                                // 취소 버튼을 눌렀을 때 실행할 코드
-                                Navigator.of(context).pop();
-                              },
+                                onDelete: () {
+                                  // 삭제 버튼을 눌렀을 때 실행할 코드
+                                },
+                                onSignOut: () {
+                                  // 탈퇴 버튼을 눌렀을 때 실행할 코드
+                                },
+                                onSuccess: () {
+                                  _mandaProgress(
+                                      int.parse(widget.id), "IN_PROGRESS");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const MyGoal(),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                            if (_selectedStatus == '달성 실패') {
+                              PopupDialog.show(
+                                context,
+                                '아쉬워! 이 목표는 \n달성 실패인거야?',
+                                true, // cancel
+                                false, // delete
+                                false, // signout
+                                true, //success
+                                onCancel: () {
+                                  // 취소 버튼을 눌렀을 때 실행할 코드
+                                  Navigator.of(context).pop();
+                                },
 
-                              onDelete: () {
-                                // 삭제 버튼을 눌렀을 때 실행할 코드
-                              },
-                              onSignOut: () {
-                                // 탈퇴 버튼을 눌렀을 때 실행할 코드
-                              },
-                              onSuccess: () {
-                                _mandaProgress(int.parse(widget.id), "FAIL");
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MyGoal(),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        });
-                      },
+                                onDelete: () {
+                                  // 삭제 버튼을 눌렀을 때 실행할 코드
+                                },
+                                onSignOut: () {
+                                  // 탈퇴 버튼을 눌렀을 때 실행할 코드
+                                },
+                                onSuccess: () {
+                                  _mandaProgress(int.parse(widget.id), "FAIL");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const MyGoal(),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -444,9 +435,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MGSubTitle('할 일 달성 통계').mgSubTitle(context),
                   const SizedBox(
-                    height: 30,
+                    height: 80,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -463,134 +453,61 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                         ),
                       ),
                       const SizedBox(
-                        height: 50,
+                        height: 85,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             flex: 1,
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 15.0, vertical: 7.0),
+                                  horizontal: 24, vertical: 10),
                               decoration: BoxDecoration(
-                                color: const Color(0xff303030),
-                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xff2A2A2A),
+                                borderRadius: BorderRadius.circular(6),
                               ),
                               child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.circle_outlined,
-                                          color: Color(widget.colorValue),
-                                          size: currentWidth < 600 ? 20 : 24,
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                currentWidth < 600 ? 10 : 18),
-                                        Text(
-                                          '$successRate%',
-                                          style: TextStyle(
-                                              color: Color(widget.colorValue),
-                                              fontSize:
-                                                  currentWidth < 600 ? 16 : 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                currentWidth < 600 ? 10 : 18),
-                                        Text(
-                                          '$successNum개',
-                                          style: TextStyle(
-                                              color: Color(widget.colorValue),
-                                              fontSize:
-                                                  currentWidth < 600 ? 16 : 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
+                                    Text(
+                                      '할 일 달성 통계',
+                                      style: TextStyle(
+                                          color: Color(0xffAAAAAA),
+                                          fontSize:
+                                              currentWidth < 600 ? 12 : 20,
+                                          fontWeight: FontWeight.w600),
                                     ),
-                                    const SizedBox(height: 9),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.change_history_outlined,
-                                          color: Colors.white,
-                                          size: currentWidth < 600 ? 20 : 24,
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                currentWidth < 600 ? 10 : 18),
-                                        Text(
-                                          '$inProgressRate%',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  currentWidth < 600 ? 16 : 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                currentWidth < 600 ? 10 : 18),
-                                        Text(
-                                          '$inProgressNum개',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  currentWidth < 600 ? 16 : 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 9),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.clear_outlined,
-                                          color: const Color(0xff626161),
-                                          size: currentWidth < 600 ? 20 : 24,
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                currentWidth < 600 ? 10 : 18),
-                                        Text(
-                                          '${failedRate == 100 ? 0 : failedRate}%',
-                                          style: TextStyle(
-                                              color: const Color(0xff626161),
-                                              fontSize:
-                                                  currentWidth < 600 ? 16 : 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                currentWidth < 600 ? 10 : 18),
-                                        Text(
-                                          '$failedNum개',
-                                          style: TextStyle(
-                                              color: const Color(0xff626161),
-                                              fontSize:
-                                                  currentWidth < 600 ? 16 : 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
+                                    SizedBox(height: 8),
+                                    statistics(
+                                        rate: successRate,
+                                        num: successRate,
+                                        icon: Icons.circle_outlined,
+                                        iconColor: Color(widget.colorValue)),
+                                    const SizedBox(height: 6),
+                                    statistics(
+                                        rate: inProgressRate,
+                                        num: inProgressNum,
+                                        icon: Icons.change_history_outlined,
+                                        iconColor: Color(0xff8C8C8C)),
+                                    const SizedBox(height: 6),
+                                    statistics(
+                                        rate:
+                                            failedRate == 100 ? 0 : failedRate,
+                                        num: failedNum,
+                                        icon: Icons.clear_outlined,
+                                        iconColor: Colors.black)
                                   ]),
                             ),
                           ),
-                          SizedBox(width: currentWidth < 600 ? 10 : 30),
+                          SizedBox(width: 7),
                           Expanded(
                             flex: 1,
                             child: Container(
-                              height: 150,
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0, vertical: 6.0),
+                                  horizontal: 24, vertical: 10),
                               decoration: BoxDecoration(
                                 color: const Color(0xff2A2A2A),
                                 borderRadius: BorderRadius.circular(6),
@@ -602,16 +519,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          '나의 도미노',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  currentWidth < 600 ? 13 : 20,
-                                              fontWeight: FontWeight.w500),
-                                        ),
+                                      Text(
+                                        '나의 도미노',
+                                        style: TextStyle(
+                                            color: Color(0xffAAAAAA),
+                                            fontSize:
+                                                currentWidth < 600 ? 12 : 20,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       GestureDetector(
                                         onTap: () {
@@ -622,15 +536,15 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                         child: Icon(
                                           Icons.help,
                                           key: _iconKey,
-                                          color: const Color(0xff323232),
+                                          color: const Color.fromARGB(
+                                              255, 57, 57, 57),
                                           size: 17,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
+                                  SizedBox(height: 8),
+                                  Row(
                                       children: [
                                         Image.asset(
                                           'assets/img/domino.png',
@@ -642,7 +556,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                           style: TextStyle(
                                               color: Color(0xffAAAAAA),
                                               fontSize:
-                                                  currentWidth < 600 ? 20 : 26,
+                                                  currentWidth < 600 ? 16 : 26,
                                               fontWeight: FontWeight.w500),
                                         ),
                                         const SizedBox(width: 5),
@@ -656,7 +570,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  
                                 ],
                               ),
                             ),
@@ -674,6 +588,62 @@ class MyGoalDetailState extends State<MyGoalDetail> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget statistics(
+      {required int rate,
+      required int num,
+      required IconData icon,
+      required Color iconColor}) {
+    final currentWidth = MediaQuery.of(context).size.width;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Icon(
+          icon,
+          color: iconColor,
+          size: currentWidth < 600 ? 15 : 24,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              '$rate',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: currentWidth < 600 ? 14 : 24,
+                  fontWeight: FontWeight.w600),
+            ),
+            Text(
+              '%',
+              style: TextStyle(
+                  color: Color(0xffAAAAAA),
+                  fontSize: currentWidth < 600 ? 11 : 24,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              '$num',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: currentWidth < 600 ? 14 : 24,
+                  fontWeight: FontWeight.w600),
+            ),
+            Text(
+              '개',
+              style: TextStyle(
+                  color: Color(0xffAAAAAA),
+                  fontSize: currentWidth < 600 ? 11 : 24,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

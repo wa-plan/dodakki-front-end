@@ -169,7 +169,7 @@ class _GoalCardState extends State<GoalCard> {
                                 borderRadius: BorderRadius.circular(3.0),
                               ),
                               width: double.infinity,
-                              height: currentWidth < 600 ? 77 : 120,
+                              height: currentWidth < 600 ? 70 : 120,
                               child: Center(
                                 child: Text(
                                   '이미지를 추가해보세요',
@@ -228,7 +228,7 @@ class _GoalCardState extends State<GoalCard> {
                                 },
                               ),
                             ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 10),
                           //세 번째 줄
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -249,7 +249,7 @@ class _GoalCardState extends State<GoalCard> {
                                     style: TextStyle(
                                       color: const Color(0xffFCFF62),
                                       fontWeight: FontWeight.w600,
-                                      fontSize: currentWidth < 600 ? 16 : 24,
+                                      fontSize: currentWidth < 600 ? 14 : 24,
                                     ),
                                   ),
                                 ],
@@ -263,7 +263,7 @@ class _GoalCardState extends State<GoalCard> {
                                     radius: 6,
                                   ),
                                   SizedBox(
-                                    width: currentWidth < 600 ? 13 : 25,
+                                    width: currentWidth < 600 ? 11 : 25,
                                   ),
                                   // 첫 번째 색상
                                   Container(
@@ -277,7 +277,7 @@ class _GoalCardState extends State<GoalCard> {
                                         : 12, // 첫 번째 높이 (6.0으로 고정)
                                   ),
                                   SizedBox(
-                                    width: currentWidth < 600 ? 13 : 25,
+                                    width: currentWidth < 600 ? 11 : 25,
                                   ),
                                   // 두 번째 색상
                                   Container(
@@ -291,7 +291,7 @@ class _GoalCardState extends State<GoalCard> {
                                     height: currentWidth < 600 ? 16 : 22, //16
                                   ),
                                   SizedBox(
-                                    width: currentWidth < 600 ? 13 : 25,
+                                    width: currentWidth < 600 ? 11 : 25,
                                   ),
                                   // 세 번째 색상
                                   Container(
@@ -307,7 +307,7 @@ class _GoalCardState extends State<GoalCard> {
                                         : 36, // 세 번째 높이 (예: 20 추가)
                                   ),
                                   SizedBox(
-                                    width: currentWidth < 600 ? 13 : 25,
+                                    width: currentWidth < 600 ? 11 : 25,
                                   ),
                                   // 네 번째 색상
                                   Container(
@@ -329,7 +329,7 @@ class _GoalCardState extends State<GoalCard> {
                         ]),
                   ),
                   SizedBox(
-                    width: currentWidth < 600 ? 13 : 25,
+                    width: currentWidth < 600 ? 11 : 25,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -339,8 +339,8 @@ class _GoalCardState extends State<GoalCard> {
                           color: Color(colorValue),
                           borderRadius: BorderRadius.circular(2.0),
                         ),
-                        width: currentWidth < 600 ? 12 : 19,
-                        height: currentWidth < 600 ? 133 : 160,
+                        width: currentWidth < 600 ? 10 : 19,
+                        height: currentWidth < 600 ? 118 : 160,
                       ),
                     ],
                   ),
