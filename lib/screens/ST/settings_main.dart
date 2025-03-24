@@ -6,6 +6,8 @@ import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 class SettingsMain extends StatefulWidget {
   const SettingsMain({super.key});
@@ -54,6 +56,7 @@ class _SettingsMainState extends State<SettingsMain> {
       });
     }
   }
+  
 
   void _updateMorningAlarm(bool isMorningAlarmOn) async {
     if (isMorningAlarmOn) {
