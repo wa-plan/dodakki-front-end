@@ -2,7 +2,7 @@ flutter_native_splash:
   color: "#1E1E1E"  # 배경 색상을 검은색으로 설정
   # background_image: "assets/img/splash.png"  # 원하는 배경 이미지 경로 설정 (옵션)
 
-  image: "assets/img/new2_splash.png"  # 사용하려는 이미지 파일 경로 (옵션)
+  image: "assets/img/icon.png"  # 사용하려는 이미지 파일 경로 (옵션)
 
   android_12:
     color: "#1E1E1E"  # Android 12에서의 배경 색상 설정

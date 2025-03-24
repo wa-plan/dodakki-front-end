@@ -58,13 +58,13 @@ dependencies:
   path_provider: ^2.1.5
 
 flutter_native_splash:
-  color: "#FFFFFF" # 스플래시 화면의 배경색 설정 (흰색)
-  image: "assets/img/splash(2).png" # 스플래시 화면에 표시될 이미지 설정 (앱 로고)
+  color: "#1E1E1E" # 스플래시 화면의 배경색 설정 (흰색)
+  image: "assets/img/icon.png" # 스플래시 화면에 표시될 이미지 설정 (앱 로고)
   android: true # 안드로이드 플랫폼에 스플래시 화면 적용
   ios: true # iOS 플랫폼에 스플래시 화면 적용
   android_12: # Android 12 이상을 위한 추가 설정
-    color: "#FFFFFF" # Android 12 이상 스플래시 화면의 배경색 (흰색)
-    image: "assets/img/splash(2).png" # Android 12 이상 스플래시 화면에 표시될 이미지
+    color: "#1E1E1E" # Android 12 이상 스플래시 화면의 배경색 (흰색)
+    image: "assets/img/icon.png" # Android 12 이상 스플래시 화면에 표시될 이미지
 
 dev_dependencies:
   flutter_test:
@@ -133,6 +133,7 @@ flutter:
     - assets/img/confetti.png
     - assets/img/tr_1.png
     - assets/img/emptyDominho.png
+    - assets/img/icon.png
 
     
 
