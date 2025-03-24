@@ -10,6 +10,8 @@ import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 //import 'package:domino/widgets/alarm.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 void main() async {
   // 앱 실행 전에 NotificationService 인스턴스 생성
@@ -17,7 +19,7 @@ void main() async {
   // Flutter 엔진 초기화
   WidgetsFlutterBinding.ensureInitialized();
   // 로컬 푸시 알림 초기화
-  // await notificationService.init();
+  tz.initializeTimeZones();
   await initializeDateFormatting();
   await dotenv.load(fileName: 'assets/config/.env');
   runApp(
