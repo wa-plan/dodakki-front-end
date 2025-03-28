@@ -214,10 +214,7 @@ class _MyGoalState extends State<MyGoal> {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: Text(
-            '나의 목표',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          child: DPTitleText('나의 목표', currentWidth).dPTitleText(),
         ),
         backgroundColor: backgroundColor,
       ),
@@ -280,16 +277,16 @@ class _MyGoalState extends State<MyGoal> {
                           Text(nickname,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 12 : 14,
+                                  fontSize: currentWidth < 600 ? 13 : 14,
                                   fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 5),
                           //프로필 설명
                           Text(
                             description,
                             style: TextStyle(
                                 height: 1.5,
                                 color: Colors.white,
-                                fontSize: currentWidth < 600 ? 10 : 12,
+                                fontSize: currentWidth < 600 ? 11 : 12,
                                 fontWeight: FontWeight.w400),
                           ),
                         ],
@@ -318,7 +315,7 @@ class _MyGoalState extends State<MyGoal> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  MGSubTitle('쓰러뜨릴 목표').mgSubTitle(context),
+                  MGSubTitle('쓰러뜨릴 목표', currentWidth).mgSubTitle(context),
                   //목표 추가 버튼
                   NewCustomIconButton(() {
                     Navigator.push(
@@ -326,7 +323,7 @@ class _MyGoalState extends State<MyGoal> {
                       MaterialPageRoute(
                           builder: (context) => const MyGoalAdd()),
                     );
-                  }, Icons.add, currentWidth, 19)
+                  }, Icons.add, currentWidth, 22)
                       .newCustomIconButton(),
                 ],
               ),
@@ -440,11 +437,11 @@ class _MyGoalState extends State<MyGoal> {
                 ],
               ]),
               const SizedBox(height: 40),
-              MGSubTitle('이번주의 응원!').mgSubTitle(context),
+              MGSubTitle('이번주의 응원!',currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               const CheeringMessage(),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨린 목표').mgSubTitle(context),
+              MGSubTitle('쓰러뜨린 목표',currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (successIDs.isEmpty)
                 Image.asset('assets/img/completed_goals.png')
@@ -508,7 +505,7 @@ class _MyGoalState extends State<MyGoal> {
                               vertical: 7, horizontal: 10),
                           decoration: BoxDecoration(
                             color: colorValue,
-                            borderRadius: BorderRadius.circular(3),
+                            borderRadius: BorderRadius.circular(4),
                           ),
                           height: currentWidth < 600 ? 35 : 70,
                           child: Center(
@@ -516,7 +513,7 @@ class _MyGoalState extends State<MyGoal> {
                               item['name']!,
                               style: TextStyle(
                                   color: backgroundColor,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: currentWidth < 600 ? 12 : 20),
                             ),
                           ),
@@ -526,7 +523,7 @@ class _MyGoalState extends State<MyGoal> {
                   ],
                 ),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
+              MGSubTitle('쓰러뜨리지 못한 목표',currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (failedIDs.isEmpty)
                 Image.asset('assets/img/failed_goals.png')
@@ -586,17 +583,17 @@ class _MyGoalState extends State<MyGoal> {
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
                           padding: const EdgeInsets.symmetric(
-                              vertical: 7, horizontal: 10),
+                              vertical: 10, horizontal: 10),
                           decoration: BoxDecoration(
                             color: colorValue,
-                            borderRadius: BorderRadius.circular(3),
+                            borderRadius: BorderRadius.circular(4),
                           ),
                           child: Center(
                             child: Text(
                               item['name']!,
                               style: TextStyle(
                                   color: backgroundColor,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: currentWidth < 600 ? 12 : 20),
                             ),
                           ),
