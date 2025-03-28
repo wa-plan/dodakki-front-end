@@ -45,7 +45,7 @@ class DPTitleText {
     return Text(text,
         style: TextStyle(
             color: Colors.white,
-            fontSize: currentWidth < 600 ? 15 : 23,
+            fontSize: currentWidth < 600 ? 17 : 23,
             fontWeight: FontWeight.w600));
   }
 }
@@ -142,16 +142,17 @@ class NewButton {
 //MG Sub Title
 class MGSubTitle {
   final String text;
+  final double currentWidth;
 
-  MGSubTitle(this.text);
+  MGSubTitle(this.text, this.currentWidth);
 
   Widget mgSubTitle(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
         color: const Color.fromARGB(255, 178, 178, 178),
-        fontSize: MediaQuery.of(context).size.width * 0.039,
-        fontWeight: FontWeight.w700,
+        fontSize: currentWidth < 600 ? 14 : 15,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -807,7 +808,7 @@ class Question extends StatelessWidget {
     return Text(question,
         style: const TextStyle(
           fontFamily: "Pretendard",
-            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13));
+            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14));
   }
 }
 
@@ -988,7 +989,7 @@ class NewCustomIconButton {
       width: currentWidth < 600 ? 33 : 50,
       height: currentWidth < 600 ? 22 : 35,
       decoration: BoxDecoration(
-        color: const Color(0xff303030),
+        color: Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(

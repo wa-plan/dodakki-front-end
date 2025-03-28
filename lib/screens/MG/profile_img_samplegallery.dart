@@ -61,13 +61,11 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
     _selectedImage = widget.selectedImage;
 
     _profileImage = widget.profileImage;
-    print("selectedImage: $_selectedImage");
-    print("profileImage: ${widget.profileImage}");
   }
 
   @override
   Widget build(BuildContext context) {
-    final imageSize = MediaQuery.of(context).size.width / 3.5;
+    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -79,21 +77,16 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
           padding: appBarPadding,
           child: Row(
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Color(0xffD4D4D4),
-                  size: 17,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                '프로필 이미지',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
+              CustomIconButton(() {
+                Navigator.of(context).pop();
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('기본 이미지',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -104,23 +97,34 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 20),
             Center(
               child: Container(
-                padding: const EdgeInsets.all(5),
-                width: imageSize / 1.2, // CircleAvatar의 전체 크기
-                height: imageSize / 1.2,
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color:
-                        const Color.fromARGB(255, 147, 147, 147), // 원하는 테두리 색
-                    width: 0.5, // 테두리 두께
-                  ),
+                  color: Color(0xff303030),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                      offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                      blurRadius: 7, // 블러 7
+                      spreadRadius: 0, // 스프레드 0
+                    ),
+                  ],
                 ),
                 child: Container(
-                  width: imageSize,
-                  height: imageSize,
+                  width: 130,
+                  height: 130,
                   decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
+                        offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                        blurRadius: 7, // 블러 7
+                        spreadRadius: 0, // 스프레드 0
+                      ),
+                    ],
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       image: getImageProvider(
@@ -131,81 +135,58 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: const Color(0xff2A2A2A),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-                child: Column(
-                  children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '도민호씨 갤러리',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 0.3,
-                    ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 20.0,
-                              crossAxisSpacing: 20.0,
-                            ),
-                            padding: const EdgeInsets.all(5.0),
-                            itemCount: _imageUrls.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedImage = _imageUrls[index];
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: _imageUrls[index].isNotEmpty
-                                          ? AssetImage(_imageUrls[index])
-                                              as ImageProvider
-                                          : AssetImage(defaultImage),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+            const SizedBox(height: 45),
+            Center(
+              child: SizedBox(
+                height: 300,
+                width: 300,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 30.0,
+                        crossAxisSpacing: 30.0,
                       ),
-                    ),
-                  ],
+                      padding: const EdgeInsets.all(3.0),
+                      itemCount: _imageUrls.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedImage = _imageUrls[index];
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: _imageUrls[index].isNotEmpty
+                                    ? AssetImage(_imageUrls[index])
+                                        as ImageProvider
+                                    : AssetImage(defaultImage),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            Spacer(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Button(Colors.black, Colors.white, '완료', () {
-                  print('갤러리선택이미지=$_selectedImage');
+                NewButton(Colors.black, Colors.white, '취소', () {
+                  Navigator.pop(
+                    context,
+                  );
+                }, currentWidth)
+                    .newButton(),
+                NewButton(Colors.black, Colors.white, '완료', () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -216,7 +197,8 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
                           cameraImage: ""),
                     ),
                   );
-                }).button()
+                }, currentWidth)
+                    .newButton()
               ],
             ),
           ],

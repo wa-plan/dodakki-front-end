@@ -60,27 +60,13 @@ class _AccountManagementState extends State<AccountManagement> {
               child: ListView(
                 children: [
                   const SizedBox(height: 15),
-                  Text(
-                    '정보',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  MGSubTitle('정보', currentWidth).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildSettingItem2(
                     title: widget.email,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '보안',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  const SizedBox(height: 14),
+                  MGSubTitle('보안', currentWidth).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildSettingItem(
                     title: '비밀번호 변경',
@@ -95,15 +81,8 @@ class _AccountManagementState extends State<AccountManagement> {
                       );
                     },
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '종료',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  const SizedBox(height: 14),
+                  MGSubTitle('종료', currentWidth).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildCombinedSwitchItem()
                 ],
@@ -134,11 +113,11 @@ class _AccountManagementState extends State<AccountManagement> {
               children: [
                 Text(title,
                     style: TextStyle(
-                        fontSize: currentWidth < 600 ? 12 : 16,
+                        fontSize: currentWidth < 600 ? 13 : 16,
                         color: Colors.white,
                         fontWeight: FontWeight.w600)),
                 if (onTap != null)
-                  NewCustomIconButton(() {}, Icons.arrow_forward_ios_rounded,
+                  NewCustomIconButton(onTap, Icons.arrow_forward_ios_rounded,
                           currentWidth, 16)
                       .newCustomIconButton(),
               ],
@@ -167,27 +146,23 @@ class _AccountManagementState extends State<AccountManagement> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 NewCustomIconButton(
-                        () {}, Icons.mail_outline_rounded, currentWidth, 13)
+                        () {}, Icons.mail_outline_rounded, currentWidth, 16)
                     .newCustomIconButton(),
-                const SizedBox(width: 8),
+                const SizedBox(width: 4),
                 Text('이메일',
                     style: TextStyle(
-                        fontSize: currentWidth < 600 ? 12 : 16,
+                        fontSize: currentWidth < 600 ? 13 : 16,
                         color: Colors.white,
                         fontWeight: FontWeight.w600)),
                 Spacer(),
-                if (onTap != null)
-                  NewCustomIconButton(() {}, Icons.arrow_forward_ios_rounded,
-                          currentWidth, 16)
-                      .newCustomIconButton(),
+                Text(title,
+                style: TextStyle(
+                    fontSize: currentWidth < 600 ? 13 : 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(title,
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 12 : 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600)),
+            
           ],
         ),
       ),
@@ -221,10 +196,16 @@ class _AccountManagementState extends State<AccountManagement> {
               children: [
                 Text('로그아웃',
                     style: TextStyle(
-                        fontSize: currentWidth < 600 ? 12 : 16,
+                        fontSize: currentWidth < 600 ? 13 : 16,
                         color: Colors.white,
                         fontWeight: FontWeight.w600)),
-                NewCustomIconButton(() {}, Icons.arrow_forward_ios_rounded,
+                NewCustomIconButton(() { _logout();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ),
+        );}, Icons.arrow_forward_ios_rounded,
                         currentWidth, 16)
                     .newCustomIconButton(),
               ],
@@ -260,10 +241,31 @@ class _AccountManagementState extends State<AccountManagement> {
                 children: [
                   Text('탈퇴하기',
                       style: TextStyle(
-                          fontSize: currentWidth < 600 ? 12 : 16,
+                          fontSize: currentWidth < 600 ? 13 : 16,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  NewCustomIconButton(() {}, Icons.arrow_forward_ios_rounded,
+                  NewCustomIconButton(() {PopupDialog.show(
+                  context,
+                  '이건 아니야.. \n정말 떠날거야...?',
+                  true, // cancel
+                  false, // delete
+                  true, //signout
+                  false, // success
+                  onCancel: () {
+                    Navigator.of(context).pop();
+                  },
+                  onDelete: () {},
+                  onSignOut: () {
+                    SignOutService.signOut(context);
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MyApp(),
+                      ),
+                    );
+                  },
+                );}, Icons.arrow_forward_ios_rounded,
                           currentWidth, 16)
                       .newCustomIconButton(),
                 ],

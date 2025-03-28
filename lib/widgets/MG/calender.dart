@@ -5,6 +5,8 @@ import 'package:domino/styles.dart';
 
 
 void showCalendarPopup(BuildContext context, Function(DateTime?) onDateSelected) {
+   final currentWidth = MediaQuery.of(context).size.width;
+
   showDialog(
     context: context,
     builder: (context) {
@@ -21,9 +23,10 @@ void showCalendarPopup(BuildContext context, Function(DateTime?) onDateSelected)
             builder: (context, setState) {
               return SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
-                height: 350,
+                height: 330,
                 child: TableCalendar(
                   locale: 'ko_KR',
+                  rowHeight: 40,
                   firstDay: DateTime(2024),
                   lastDay: DateTime(2050),
                   focusedDay: focusedDay,
@@ -35,41 +38,60 @@ void showCalendarPopup(BuildContext context, Function(DateTime?) onDateSelected)
                       focusedDay = focusedDay; // 포커스된 날짜 업데이트
                     });
                   },
-                  calendarStyle: const CalendarStyle(
+                  calendarStyle:  CalendarStyle(
+                    markerSize: 0.0,
+
                     selectedTextStyle: TextStyle(
-                      color: backgroundColor, // 선택된 날짜의 텍스트 색상
-                      fontWeight: FontWeight.w600, // 텍스트 굵기
-                    ),
-                    selectedDecoration: BoxDecoration(
-                      color: mainRed, // 선택된 날짜의 배경색
-                      shape: BoxShape.circle,
-                    ),
-                    todayTextStyle: TextStyle(
-                      color: backgroundColor, // 선택된 날짜의 텍스트 색상
-                      fontWeight: FontWeight.w600, // 텍스트 굵기
-                    ),
-                    todayDecoration: BoxDecoration(
-                      color: Color(0xFF5B5B5B), // 오늘 날짜의 배경색
-                      shape: BoxShape.circle,
-                    ),
-                    weekendTextStyle:
-                        TextStyle(color: Colors.grey), // 주말 텍스트 색상
+                    fontSize: 12, // 선택된 날짜의 폰트 크기 고정
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white, // 선택된 날짜의 텍스트 색상
+                  ),
+
+                     selectedDecoration: const BoxDecoration(
+                    color: mainRed,
+                    shape: BoxShape.circle,
+                  ),
+
+                     todayTextStyle: TextStyle(
+                    fontSize: 12, // 오늘 날짜 폰트 크기
+                    fontWeight: FontWeight.w700, // 오늘 날짜 폰트 굵기
+                    color: Colors.white, // 오늘 날짜 텍스트 색상
+                  ),
+                    outsideTextStyle: TextStyle(
+                    color:  Color.fromARGB(255, 125, 125, 125),
+                    fontSize: currentWidth < 600 ? 12 : 16,
+                  ),
+                   defaultTextStyle: TextStyle(
+                    color: mainTextColor,
+                    fontSize: currentWidth < 600 ? 13 : 16,
+                  ),
+
+
+
+                     todayDecoration: BoxDecoration(
+                      color: Color(0xff575757), shape: BoxShape.circle),
+
+                     weekendTextStyle: TextStyle(
+                    color: mainTextColor,
+                    fontSize: currentWidth < 600 ? 12 : 16,
+                  ),
+// 주말 텍스트 색상
                   ),
                   headerStyle: const HeaderStyle(
                     formatButtonVisible: false, // 주/월 변경 버튼 숨기기
                     titleCentered: true, // 헤더의 날짜 중앙 정렬
                     leftChevronIcon: Icon(
                       Icons.arrow_back_ios,
-                      color: Color(0xffD4D4D4),
+                      color: Color.fromARGB(255, 150, 150, 150),
                       size: 17,
                     ),
                     rightChevronIcon: Icon(
                       Icons.arrow_forward_ios,
-                      color: Color(0xffD4D4D4),
+                      color: Color.fromARGB(255, 150, 150, 150),
                       size: 17,
                     ),
                     titleTextStyle: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 17.0,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -85,18 +107,18 @@ void showCalendarPopup(BuildContext context, Function(DateTime?) onDateSelected)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Button(Colors.black, Colors.white, '취소', () {
+                NewButton(Colors.black, Colors.white, '취소', () {
                   Navigator.pop(context); // 팝업 닫기
-                }).button(),
-                Button(
+                }, currentWidth).newButton(),
+                NewButton(
                   Colors.black,
                   Colors.white,
                   '완료',
                   () {
                   onDateSelected(tempSelectedDate); // 콜백 호출
                   Navigator.pop(context); // 팝업 닫기
-                },
-                ).button(),
+                },currentWidth
+                ).newButton(),
               ],
             )
           ],

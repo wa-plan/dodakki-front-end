@@ -59,38 +59,39 @@ class _CheeringMessageState extends State<CheeringMessage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.fromLTRB(25, 14, 25, 14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min, // 자식 위젯 크기만큼만 높이를 조정
           children: [
             const Text(
               '"',
               style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xffAAAAAA),
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   fontFamily: "NotoSansKR"),
             ),
-            const SizedBox(width: 15),
-            Expanded(
+            SizedBox(
+              width: 205,
               child: Text(
-                currentMessage,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 17,
-                  fontWeight: FontWeight.w400,
+                  currentMessage,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: currentWidth < 600 ? 11.5 : 17,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2, // 최대 두 줄로 제한
+                  overflow: TextOverflow.ellipsis, // 텍스트가 넘칠 경우 말줄임표(...) 표시
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2, // 최대 두 줄로 제한
-                overflow: TextOverflow.ellipsis, // 텍스트가 넘칠 경우 말줄임표(...) 표시
-              ),
             ),
-            const SizedBox(width: 15),
+            
             const Text(
               '"',
               style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xffAAAAAA),
                   fontSize: 19,
                   fontWeight: FontWeight.w700,
                   fontFamily: "NotoSansKR"),

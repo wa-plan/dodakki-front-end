@@ -75,16 +75,15 @@ class _ContactUsState extends State<ContactUs> {
                         Spacer(),
                         Container(
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
                             children: [
                               NewCustomIconButton(
                                       () {},
                                       Icons.mail_outline_rounded,
                                       currentWidth,
-                                      13)
+                                      16)
                                   .newCustomIconButton(),
-                              const SizedBox(width: 20),
+                                  SizedBox(width: 5,),
                               Text(widget.email,
                                   style: TextStyle(
                                       fontSize: currentWidth < 600 ? 12 : 16,
@@ -99,7 +98,7 @@ class _ContactUsState extends State<ContactUs> {
                       children: [
                         Spacer(),
                         Image.asset(
-                          height: 170,
+                          height: 220,
                           "assets/img/tr_1.png",
                         ),
                       ],

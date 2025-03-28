@@ -6,7 +6,10 @@ import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 
 class SettingsMain extends StatefulWidget {
@@ -83,8 +86,40 @@ class _SettingsMainState extends State<SettingsMain> {
   @override
   void initState() {
     super.initState();
+    _requestNotificationPermissions(); // 알림 권한 요청
+    NotificationService().init();
     userInfo();
   }
+
+  void _requestNotificationPermissions() async {
+    //알림 권한 요청
+    final status = await NotificationService().requestNotificationPermissions();
+    if (status.isDenied && context.mounted) {
+      showDialog(
+        // 알림 권한이 거부되었을 경우 다이얼로그 출력
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('알림 권한이 거부되었습니다.'),
+          content: const Text('알림을 받으려면 앱 설정에서 권한을 허용해야 합니다.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('설정'), //다이얼로그 버튼의 죄측 텍스트
+              onPressed: () {
+                Navigator.of(context).pop();
+                openAppSettings(); //설정 클릭시 권한설정 화면으로 이동
+              },
+            ),
+            TextButton(
+              child: const Text('취소'), //다이얼로그 버튼의 우측 텍스트
+              onPressed: () => Navigator.of(context).pop(), //다이얼로그 닫기
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -108,14 +143,7 @@ class _SettingsMainState extends State<SettingsMain> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              Text(
-                '계정',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              MGSubTitle('계정', currentWidth).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '내 계정',
@@ -132,26 +160,12 @@ class _SettingsMainState extends State<SettingsMain> {
                   );
                 },
               ),
-              const SizedBox(height: 8),
-              Text(
-                '알림',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              const SizedBox(height: 14),
+              MGSubTitle('알림', currentWidth).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildCombinedSwitchItem(),
-              const SizedBox(height: 8),
-              Text(
-                '문의',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              const SizedBox(height: 14),
+              MGSubTitle('문의', currentWidth).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '문의하기',
@@ -164,15 +178,8 @@ class _SettingsMainState extends State<SettingsMain> {
                   );
                 },
               ),
-              const SizedBox(height: 8),
-              Text(
-                '도움',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              const SizedBox(height: 14),
+              MGSubTitle('도움', currentWidth).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '앱 사용설명서',
@@ -211,11 +218,10 @@ class _SettingsMainState extends State<SettingsMain> {
               children: [
                 Text(title,
                     style: TextStyle(
-                        fontSize: currentWidth < 600 ? 12 : 16,
+                        fontSize: currentWidth < 600 ? 13 : 16,
                         color: Colors.white,
                         fontWeight: FontWeight.w600)),
-                if (onTap != null)
-                  NewCustomIconButton(() {}, Icons.arrow_forward_ios_rounded,
+                  NewCustomIconButton(onTap as Function, Icons.arrow_forward_ios_rounded,
                           currentWidth, 16)
                       .newCustomIconButton(),
               ],
@@ -243,14 +249,14 @@ class _SettingsMainState extends State<SettingsMain> {
             children: [
               Text('동기부여 알림',
                   style: TextStyle(
-                      fontSize: currentWidth < 600 ? 12 : 16,
+                      fontSize: currentWidth < 600 ? 13 : 16,
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
               const SizedBox(width: 13),
               Text('아침 9시',
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
-                      fontSize: currentWidth < 600 ? 12 : 16,
+                      fontSize: currentWidth < 600 ? 12.5 : 16,
                       fontWeight: FontWeight.w300)),
               const Spacer(),
               customSwitch(time: "morning")
@@ -260,14 +266,14 @@ class _SettingsMainState extends State<SettingsMain> {
             children: [
               Text('리마인드 알림',
                   style: TextStyle(
-                      fontSize: currentWidth < 600 ? 12 : 16,
+                      fontSize: currentWidth < 600 ? 13 : 16,
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
               const SizedBox(width: 13),
               Text('저녁 8시',
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
-                      fontSize: currentWidth < 600 ? 12 : 16,
+                      fontSize: currentWidth < 600 ? 12.5 : 16,
                       fontWeight: FontWeight.w300)),
               const Spacer(),
               customSwitch(time: "night")
@@ -305,6 +311,10 @@ class _SettingsMainState extends State<SettingsMain> {
                   ? isMorningAlarmOn = value
                   : isNightAlarmOn = value;
             });
+            
+            time == 'morning' && isMorningAlarmOn == true ? NotificationService().scheduleNotification(time) : null;
+            time == 'night' && isNightAlarmOn == true ? NotificationService().scheduleNotification(time) : null;
+
             time == 'morning'
                 ? _updateMorningAlarm(isMorningAlarmOn!)
                 : await _updateNightAlarm(isMorningAlarmOn!);
@@ -312,5 +322,86 @@ class _SettingsMainState extends State<SettingsMain> {
         ),
       ),
     );
+  }
+}
+
+
+class NotificationService {
+  static final NotificationService _instance = NotificationService._();
+  factory NotificationService() => _instance;
+  NotificationService._();
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  // Initialize the time zone data before using it
+  Future<void> init() async {
+    // Initialize time zones data
+    await _initializeTimezone();
+    
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  // Ensuring time zone data is initialized properly
+  Future<void> _initializeTimezone() async {
+    tz.initializeTimeZones();
+    // Explicitly set the local timezone once timezones are initialized
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul')); // Adjust the location as needed (this is for Seoul)
+  }
+
+  Future<void> scheduleNotification(String time) async {
+    const int notificationId = 0;
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      'counter_channel',
+      'Counter Channel',
+      channelDescription:
+          'This channel is used for counter-related notifications',
+      importance: Importance.high,
+      icon: '@mipmap/ic_launcher',
+    );
+
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+
+    final tz.TZDateTime scheduledTime = _getScheduledTime(time);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      notificationId,
+      '알람 on',
+      '$time 푸시알림 on 성공',
+      scheduledTime,
+      notificationDetails,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
+
+  tz.TZDateTime _getScheduledTime(String time) {
+    final now = tz.TZDateTime.now(tz.local); // Make sure tz.local is initialized correctly
+    int hour = (time == "morning") ? 9 : 21; // 9 AM for "morning", 9 PM for "night"
+
+    tz.TZDateTime scheduledTime =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, 0);
+
+    // If the time is in the past, schedule for the next day
+    if (scheduledTime.isBefore(now)) {
+      scheduledTime = scheduledTime.add(Duration(days: 1));
+    }
+
+    return scheduledTime;
+  }
+
+  Future<PermissionStatus> requestNotificationPermissions() async {
+    final status = await Permission.notification.request();
+    return status;
   }
 }
