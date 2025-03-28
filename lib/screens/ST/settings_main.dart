@@ -11,7 +11,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-
 class SettingsMain extends StatefulWidget {
   const SettingsMain({super.key});
 
@@ -59,7 +58,6 @@ class _SettingsMainState extends State<SettingsMain> {
       });
     }
   }
-  
 
   void _updateMorningAlarm(bool isMorningAlarmOn) async {
     if (isMorningAlarmOn) {
@@ -118,8 +116,6 @@ class _SettingsMainState extends State<SettingsMain> {
       );
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +201,18 @@ class _SettingsMainState extends State<SettingsMain> {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
         decoration: BoxDecoration(
           color: const Color(0xff2A2A2A),
           borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+              offset: const Offset(0, 0), // X, Y 위치 (0,0)
+              blurRadius: 15, // 블러 7
+              spreadRadius: 0, // 스프레드 0
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,9 +225,9 @@ class _SettingsMainState extends State<SettingsMain> {
                         fontSize: currentWidth < 600 ? 13 : 16,
                         color: Colors.white,
                         fontWeight: FontWeight.w600)),
-                  NewCustomIconButton(onTap as Function, Icons.arrow_forward_ios_rounded,
-                          currentWidth, 16)
-                      .newCustomIconButton(),
+                NewCustomIconButton(onTap as Function,
+                        Icons.arrow_forward_ios_rounded, currentWidth, 14)
+                    .newCustomIconButton(),
               ],
             ),
           ],
@@ -237,15 +241,24 @@ class _SettingsMainState extends State<SettingsMain> {
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 24),
       decoration: BoxDecoration(
         color: const Color(0xff2A2A2A),
         borderRadius: BorderRadius.circular(6),
+        boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+              offset: const Offset(0, 0), // X, Y 위치 (0,0)
+              blurRadius: 15, // 블러 7
+              spreadRadius: 0, // 스프레드 0
+            ),
+          ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text('동기부여 알림',
                   style: TextStyle(
@@ -253,16 +266,17 @@ class _SettingsMainState extends State<SettingsMain> {
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
               const SizedBox(width: 13),
-              Text('아침 9시',
+              Text('아침 9시, 도민호의 응원',
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
-                      fontSize: currentWidth < 600 ? 12.5 : 16,
+                      fontSize: currentWidth < 600 ? 12 : 16,
                       fontWeight: FontWeight.w300)),
               const Spacer(),
               customSwitch(time: "morning")
             ],
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text('리마인드 알림',
                   style: TextStyle(
@@ -270,10 +284,10 @@ class _SettingsMainState extends State<SettingsMain> {
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
               const SizedBox(width: 13),
-              Text('저녁 8시',
+              Text('저녁 9시, 도민호의 할일 체크',
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
-                      fontSize: currentWidth < 600 ? 12.5 : 16,
+                      fontSize: currentWidth < 600 ? 12 : 16,
                       fontWeight: FontWeight.w300)),
               const Spacer(),
               customSwitch(time: "night")
@@ -297,7 +311,13 @@ class _SettingsMainState extends State<SettingsMain> {
           activeTrackColor: const Color(0xff00C300),
           inactiveTrackColor: const Color(0xff474747),
           inactiveThumbColor: Colors.white,
-          trackOutlineColor: null,
+          trackOutlineColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              if (true) {
+                return Colors.transparent;
+              }
+            },
+          ),
           value: time == "morning"
               ? isMorningAlarmOn != false
                   ? true
@@ -311,9 +331,13 @@ class _SettingsMainState extends State<SettingsMain> {
                   ? isMorningAlarmOn = value
                   : isNightAlarmOn = value;
             });
-            
-            time == 'morning' && isMorningAlarmOn == true ? NotificationService().scheduleNotification(time) : null;
-            time == 'night' && isNightAlarmOn == true ? NotificationService().scheduleNotification(time) : null;
+
+            time == 'morning' && isMorningAlarmOn == true
+                ? NotificationService().scheduleNotification(time)
+                : null;
+            time == 'night' && isNightAlarmOn == true
+                ? NotificationService().scheduleNotification(time)
+                : null;
 
             time == 'morning'
                 ? _updateMorningAlarm(isMorningAlarmOn!)
@@ -324,7 +348,6 @@ class _SettingsMainState extends State<SettingsMain> {
     );
   }
 }
-
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._();
@@ -338,7 +361,7 @@ class NotificationService {
   Future<void> init() async {
     // Initialize time zones data
     await _initializeTimezone();
-    
+
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -352,7 +375,8 @@ class NotificationService {
   Future<void> _initializeTimezone() async {
     tz.initializeTimeZones();
     // Explicitly set the local timezone once timezones are initialized
-    tz.setLocalLocation(tz.getLocation('Asia/Seoul')); // Adjust the location as needed (this is for Seoul)
+    tz.setLocalLocation(tz.getLocation(
+        'Asia/Seoul')); // Adjust the location as needed (this is for Seoul)
   }
 
   Future<void> scheduleNotification(String time) async {
@@ -386,8 +410,10 @@ class NotificationService {
   }
 
   tz.TZDateTime _getScheduledTime(String time) {
-    final now = tz.TZDateTime.now(tz.local); // Make sure tz.local is initialized correctly
-    int hour = (time == "morning") ? 9 : 21; // 9 AM for "morning", 9 PM for "night"
+    final now = tz.TZDateTime.now(
+        tz.local); // Make sure tz.local is initialized correctly
+    int hour =
+        (time == "morning") ? 9 : 21; // 9 AM for "morning", 9 PM for "night"
 
     tz.TZDateTime scheduledTime =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, 0);

@@ -36,10 +36,10 @@ class _AccountManagementState extends State<AccountManagement> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
+              NewCustomIconButton(() {
                 Navigator.of(context).pop();
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
+              }, Icons.arrow_back_ios_rounded, currentWidth, 12)
+                  .newCustomIconButton(),
               SizedBox(width: currentWidth < 600 ? 10 : 14),
               Text('내 계정',
                   style: TextStyle(
@@ -69,7 +69,7 @@ class _AccountManagementState extends State<AccountManagement> {
                   MGSubTitle('보안', currentWidth).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildSettingItem(
-                    title: '비밀번호 변경',
+                    title: '비밀번호 변경하기',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -104,6 +104,14 @@ class _AccountManagementState extends State<AccountManagement> {
         decoration: BoxDecoration(
           color: const Color(0xff2A2A2A),
           borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+              offset: const Offset(0, 0), // X, Y 위치 (0,0)
+              blurRadius: 15, // 블러 7
+              spreadRadius: 0, // 스프레드 0
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +126,7 @@ class _AccountManagementState extends State<AccountManagement> {
                         fontWeight: FontWeight.w600)),
                 if (onTap != null)
                   NewCustomIconButton(onTap, Icons.arrow_forward_ios_rounded,
-                          currentWidth, 16)
+                          currentWidth, 14)
                       .newCustomIconButton(),
               ],
             ),
@@ -138,6 +146,14 @@ class _AccountManagementState extends State<AccountManagement> {
         decoration: BoxDecoration(
           color: const Color(0xff2A2A2A),
           borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+              offset: const Offset(0, 0), // X, Y 위치 (0,0)
+              blurRadius: 15, // 블러 7
+              spreadRadius: 0, // 스프레드 0
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +164,7 @@ class _AccountManagementState extends State<AccountManagement> {
                 NewCustomIconButton(
                         () {}, Icons.mail_outline_rounded, currentWidth, 16)
                     .newCustomIconButton(),
-                const SizedBox(width: 4),
+                const SizedBox(width: 7),
                 Text('이메일',
                     style: TextStyle(
                         fontSize: currentWidth < 600 ? 13 : 16,
@@ -156,13 +172,12 @@ class _AccountManagementState extends State<AccountManagement> {
                         fontWeight: FontWeight.w600)),
                 Spacer(),
                 Text(title,
-                style: TextStyle(
-                    fontSize: currentWidth < 600 ? 13 : 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500)),
+                    style: TextStyle(
+                        fontSize: currentWidth < 600 ? 13 : 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300)),
               ],
             ),
-            
           ],
         ),
       ),
@@ -171,71 +186,86 @@ class _AccountManagementState extends State<AccountManagement> {
 
   Widget _buildCombinedSwitchItem() {
     final currentWidth = MediaQuery.of(context).size.width;
-    return GestureDetector(
-      onTap: () {
-        _logout();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      decoration: BoxDecoration(
+        color: const Color(0xff2A2A2A),
+        borderRadius: BorderRadius.circular(3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+            offset: const Offset(0, 0), // X, Y 위치 (0,0)
+            blurRadius: 15, // 블러 7
+            spreadRadius: 0, // 스프레드 0
           ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        decoration: BoxDecoration(
-          color: const Color(0xff2A2A2A),
-          borderRadius: BorderRadius.circular(3),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('로그아웃',
-                    style: TextStyle(
-                        fontSize: currentWidth < 600 ? 13 : 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600)),
-                NewCustomIconButton(() { _logout();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ),
-        );}, Icons.arrow_forward_ios_rounded,
-                        currentWidth, 16)
-                    .newCustomIconButton(),
-              ],
-            ),
-            const SizedBox(height: 13),
-            GestureDetector(
-              onTap: () {
-                PopupDialog.show(
-                  context,
-                  '이건 아니야.. \n정말 떠날거야...?',
-                  true, // cancel
-                  false, // delete
-                  true, //signout
-                  false, // success
-                  onCancel: () {
-                    Navigator.of(context).pop();
-                  },
-                  onDelete: () {},
-                  onSignOut: () {
-                    SignOutService.signOut(context);
-                    Navigator.of(context).pop();
-                    Navigator.push(
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              _logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('로그아웃',
+                      style: TextStyle(
+                          fontSize: currentWidth < 600 ? 13 : 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600)),
+                  NewCustomIconButton(() {
+                    _logout();
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MyApp(),
+                        builder: (context) => const LoginScreen(),
                       ),
                     );
-                  },
-                );
-              },
+                  }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
+                      .newCustomIconButton(),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 13),
+          GestureDetector(
+            onTap: () {
+              PopupDialog.show(
+                context,
+                '이건 아니야.. \n정말 떠날거야...?',
+                true, // cancel
+                false, // delete
+                true, //signout
+                false, // success
+                onCancel: () {
+                  Navigator.of(context).pop();
+                },
+                onDelete: () {},
+                onSignOut: () {
+                  SignOutService.signOut(context);
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MyApp(),
+                    ),
+                  );
+                },
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -244,35 +274,36 @@ class _AccountManagementState extends State<AccountManagement> {
                           fontSize: currentWidth < 600 ? 13 : 16,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  NewCustomIconButton(() {PopupDialog.show(
-                  context,
-                  '이건 아니야.. \n정말 떠날거야...?',
-                  true, // cancel
-                  false, // delete
-                  true, //signout
-                  false, // success
-                  onCancel: () {
-                    Navigator.of(context).pop();
-                  },
-                  onDelete: () {},
-                  onSignOut: () {
-                    SignOutService.signOut(context);
-                    Navigator.of(context).pop();
-                    Navigator.push(
+                  NewCustomIconButton(() {
+                    PopupDialog.show(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const MyApp(),
-                      ),
+                      '이건 아니야..\n정말 떠날거야...?',
+                      true, // cancel
+                      false, // delete
+                      true, //signout
+                      false, // success
+                      onCancel: () {
+                        Navigator.of(context).pop();
+                      },
+                      onDelete: () {},
+                      onSignOut: () {
+                        SignOutService.signOut(context);
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyApp(),
+                          ),
+                        );
+                      },
                     );
-                  },
-                );}, Icons.arrow_forward_ios_rounded,
-                          currentWidth, 16)
+                  }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
                       .newCustomIconButton(),
                 ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

@@ -15,21 +15,30 @@ class NavBar extends StatelessWidget {
     final navBarProvider = Provider.of<NavBarProvider>(context);
     final int selectedIndex = navBarProvider.selectedIndex;
 
-    return BottomAppBar(
-      color: backgroundColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(
-              context, 'assets/img/vector1.png', '나의 목표', 0, selectedIndex),
-          _buildNavItem(
-              context, 'assets/img/vector2.png', '도미노 플랜', 1, selectedIndex),
-          _buildNavItem(
-              context, 'assets/img/vector3.png', '오늘의 도미노', 2, selectedIndex),
-          _buildNavItem(
-              context, 'assets/img/vector4.png', '설정', 3, selectedIndex),
-        ],
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12.0),
+        topRight: Radius.circular(12.0),
       ),
+      child: BottomAppBar(
+        height: 77,
+          color: Color(0xff2D2D2D),
+          shadowColor: Colors.black,
+          elevation: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(
+                  context, 'assets/img/vector1.png', '나의 목표', 0, selectedIndex),
+              _buildNavItem(
+                  context, 'assets/img/vector2.png', '도미노 플랜', 1, selectedIndex),
+              _buildNavItem(
+                  context, 'assets/img/vector3.png', '오늘의 도미노', 2, selectedIndex),
+              _buildNavItem(
+                  context, 'assets/img/vector4.png', '설정', 3, selectedIndex),
+            ],
+          ),
+        ),
     );
   }
 
@@ -49,24 +58,23 @@ class NavBar extends StatelessWidget {
         behavior: HitTestBehavior.opaque, // 빈 공간도 터치 인식
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 5.0),
+              padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
               child: Image.asset(
                 iconPath,
-                width: isSelected ? 25 : 21, // 선택된 아이콘 크기 조정
-                height: isSelected ? 25 : 21,
-                color: isSelected ? mainGold : const Color(0xffE5E5E5), // 선택된 색상 조정
+                scale:1.15,
+                color: isSelected ? mainGold : const Color(0xffAAAAAA), // 선택된 색상 조정
               ),
             ),
             Text(
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 10,
-                color: isSelected ? mainGold : const Color(0xffE5E5E5),
-                fontWeight: FontWeight.w300,
+                fontSize: 10.5,
+                color: isSelected ? mainGold : const Color(0xffAAAAAA),
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],

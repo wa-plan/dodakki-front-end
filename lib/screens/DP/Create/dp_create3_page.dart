@@ -33,7 +33,6 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
     // context.watch를 통해 goal 업데이트
     final updatedGoal = context.watch<SelectFinalGoalModel>().selectedFinalGoal;
 
-    print("Updated Goal: $updatedGoal");
 
     if (goal != updatedGoal) {
       setState(() {
