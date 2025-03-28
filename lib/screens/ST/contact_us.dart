@@ -23,10 +23,10 @@ class _ContactUsState extends State<ContactUs> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
+              NewCustomIconButton(() {
                 Navigator.of(context).pop();
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
+              }, Icons.arrow_back_ios_rounded, currentWidth, 12)
+                  .newCustomIconButton(),
               SizedBox(width: currentWidth < 600 ? 10 : 14),
               Text('문의하기',
                   style: TextStyle(
@@ -51,7 +51,7 @@ class _ContactUsState extends State<ContactUs> {
                   borderRadius: BorderRadius.circular(6),
                   color: const Color(0xff2A2A2A),
                 ),
-                padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -66,15 +66,16 @@ class _ContactUsState extends State<ContactUs> {
                         ),
                         const SizedBox(height: 15),
                         Text(
-                          '궁금한 점이나,\n개선하고 싶은 점이 있으면\n내 이메일은 24시간 열려있어!',
+                          '궁금한 점이나\n개선하고 싶은 점이 있다면\n내 이메일은 24시간 열려있어!',
                           style: TextStyle(
                               color: Color(0xff6C6C6C),
                               fontWeight: FontWeight.w500,
-                              fontSize: currentWidth < 600 ? 13 : 18),
+                              height: 1.7,
+                              fontSize: currentWidth < 600 ? 13.5 : 18),
                         ),
                         Spacer(),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
                           child: Row(
                             children: [
                               NewCustomIconButton(
@@ -83,7 +84,7 @@ class _ContactUsState extends State<ContactUs> {
                                       currentWidth,
                                       16)
                                   .newCustomIconButton(),
-                                  SizedBox(width: 5,),
+                                  SizedBox(width: 10),
                               Text(widget.email,
                                   style: TextStyle(
                                       fontSize: currentWidth < 600 ? 12 : 16,

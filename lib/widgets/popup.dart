@@ -27,59 +27,60 @@ class PopupDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     // Determine which button to display based on the flags
     List<Widget> buttons = [];
     if (delete) {
       buttons.add(
-        Button(
-          const Color.fromARGB(255, 255, 69, 56),
-          Colors.black,
+        NewButton(
+          const Color.fromARGB(255, 128, 22, 15),
+          Colors.white,
           '삭제',
-          () => onDelete != null ? onDelete!() : Navigator.of(context).pop(),
-        ).button(),
+          () => onDelete != null ? onDelete!() : Navigator.of(context).pop(),currentWidth
+        ).newButton(),
       );
     }
     if (signout) {
       buttons.add(
-        Button(
-          const Color.fromARGB(255, 255, 69, 56),
-          Colors.black,
+        NewButton(
+          const Color.fromARGB(255, 128, 22, 15),
+          Colors.white,
           '탈퇴',
-          () => onSignOut != null ? onSignOut!() : Navigator.of(context).pop(),
-        ).button(),
+          () => onSignOut != null ? onSignOut!() : Navigator.of(context).pop(),currentWidth
+        ).newButton(),
       );
     }
     if (success) {
       buttons.add(
-        Button(
+        NewButton(
           Colors.black,
           Colors.white,
           '확인',
-          () => onSuccess != null ? onSuccess!() : Navigator.of(context).pop(),
-        ).button(),
+          () => onSuccess != null ? onSuccess!() : Navigator.of(context).pop(), currentWidth
+        ).newButton(),
       );
     }
 
-    final currentWidth = MediaQuery.of(context).size.width;
+    
 
     return AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: const EdgeInsets.all(0),
       elevation: 30.0,
       content: Container(
-        padding: const EdgeInsets.fromLTRB(20, 30, 30, 0),
+        padding: const EdgeInsets.fromLTRB(10, 30, 30, 0),
         decoration: const BoxDecoration(
             color: Color.fromARGB(255, 26, 26, 26),
-            borderRadius: BorderRadius.all(Radius.circular(5))),
-        height: currentWidth < 600 ? 155 : 220,
-        width: currentWidth < 600 ? 260 : 400,
+            borderRadius: BorderRadius.all(Radius.circular(7))),
+        height: currentWidth < 600 ? 160 : 220,
+        width: currentWidth < 600 ? 340 : 400,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Image.asset('assets/img/Dominho2.png',
-                width: currentWidth < 600 ? 50 : 110),
-            SizedBox(width: currentWidth < 600 ? 11 : 50),
+                width: currentWidth < 600 ? 95 : 110),
+            SizedBox(width: currentWidth < 600 ? 30 : 50),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,19 +89,19 @@ class PopupDialog extends StatelessWidget {
                     content,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: currentWidth < 600 ? 14 : 20,
+                        fontSize: currentWidth < 600 ? 15 : 20,
                         fontWeight: FontWeight.w500,
                         height: 1.7),
                   ),
                   const SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (cancel)
-                        Button(Colors.black, Colors.white, '취소',
-                            () => Navigator.of(context).pop()).button(),
+                        NewButton(Colors.black, Colors.white, '취소',
+                            () => Navigator.of(context).pop(), currentWidth).newButton(),
                       ...buttons,
                     ],
                   ),

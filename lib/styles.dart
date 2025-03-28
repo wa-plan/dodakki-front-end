@@ -11,7 +11,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 const backgroundColor = Color(0xff262626);
 const mainRed = Color(0xffFF7A7A);
 const mainTextColor = Colors.white;
-const mainGold = Color(0xffF6C92B);
+const mainGold = Color.fromARGB(255, 255, 217, 79);
 
 //padding
 const appBarPadding = EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20);
@@ -45,7 +45,7 @@ class DPTitleText {
     return Text(text,
         style: TextStyle(
             color: Colors.white,
-            fontSize: currentWidth < 600 ? 17 : 23,
+            fontSize: currentWidth < 600 ? 18 : 23,
             fontWeight: FontWeight.w600));
   }
 }
@@ -750,11 +750,27 @@ class NewCustomTextField {
     void Function()? onClear,
   }) {
     return TextFormField(
+      cursorColor: Color(0xffAAAAAA),
       controller: controller,
       obscureText: obscureText,
       maxLines: maxLines,
       style: const TextStyle(color: Colors.white, fontSize: 14),
       decoration: InputDecoration(
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: mainRed)
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: mainRed)
+        ),
+        errorStyle: TextStyle(
+          color: mainRed,
+          fontSize: 13,
+          fontWeight: FontWeight.w400
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xffAAAAAA))
+        ),
+        isDense: true,
         filled: true,
         fillColor: const Color(0xff2A2A2A),
         enabledBorder: OutlineInputBorder(
@@ -763,11 +779,11 @@ class NewCustomTextField {
         ),
         
         hintText: hintText,
-        contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+        contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
         hintStyle: TextStyle(
             color: Color(0xffAAAAAA),
-            fontSize: currentWidth < 600 ? 12 : 14,
-            fontWeight: FontWeight.w500),
+            fontSize: currentWidth < 600 ? 13 : 14,
+            fontWeight: FontWeight.w400),
         suffixIcon: controller.text.isNotEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
@@ -778,10 +794,10 @@ class NewCustomTextField {
                           controller.clear();
                         },
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 13, 10, 10),
+                      padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
                       child: const Icon(
                         Icons.cancel,
-                        size: 14,
+                        size: 16,
                         color: Color.fromARGB(255, 98, 98, 98),
                       ),
                     ),
@@ -993,11 +1009,11 @@ class NewCustomIconButton {
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-            offset: const Offset(0, 0), // X, Y 위치 (0,0)
-            blurRadius: 7, // 블러 7
-            spreadRadius: 0, // 스프레드 0
-          ),
+              color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+              offset: const Offset(0, 0), // X, Y 위치 (0,0)
+              blurRadius: 15, // 블러 7
+              spreadRadius: 0, // 스프레드 0
+            ),
         ],
       ),
       child: GestureDetector(

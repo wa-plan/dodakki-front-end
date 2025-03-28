@@ -336,14 +336,14 @@ class _MyGoalState extends State<MyGoal> {
                     height: currentWidth < 600 ? 200 : 220, // 높이 조정 가능
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: const Color(0xff2A2A2A),
-                      borderRadius: BorderRadius.circular(20), // 모서리 둥글게
+                      color: const Color(0xff2B2B2B),
+                      borderRadius: BorderRadius.circular(8), // 모서리 둥글게
                     ),
                     child: Text(
                       "새로운 목표를 세워볼까요?",
                       style: TextStyle(
                         fontSize: currentWidth < 600 ? 14 : 16,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: const Color(0xffAAAAAA),
                       ),
                     ),

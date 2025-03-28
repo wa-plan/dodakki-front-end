@@ -128,32 +128,14 @@ class ChangePasswordService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '새 비밀번호가 이메일로 전송되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+       
         return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '비밀번호 변경 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -270,6 +252,7 @@ class PwFindService {
   static Future<void> findPassword({
     required String userId,
     required String email,
+    required BuildContext context,
   }) async {
     final url = Uri.parse('$baseUrl/api/user/reset_password');
 
@@ -286,6 +269,34 @@ class PwFindService {
         },
         body: body,
       );
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            '새로 발급된 비밀번호를 이메일로 발송하였습니다',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13.5,
+              fontWeight: FontWeight.w600
+            ),),
+          backgroundColor: Colors.green,),
+      );
+       
+
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            '입력한 정보를 다시 한번 확인해주세요.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13.5,
+              fontWeight: FontWeight.w600
+            ),),
+          backgroundColor: Colors.red,),
+      );
+         
+      }
     } catch (e) {
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
