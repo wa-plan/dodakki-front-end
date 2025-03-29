@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:domino/screens/LR/register.dart';
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _idcontroller = TextEditingController();
   final TextEditingController _pwcontroller = TextEditingController();
+  final _formKey = GlobalKey<FormState>(); // Form key 추가
   final storage = const FlutterSecureStorage();
   String userInfo = ""; //user의 정보를 저장하기 위한 변수
 
@@ -75,13 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _pwcontroller.text;
 
     if (userId.isEmpty || password.isEmpty) {
-      Message(
-        "아이디와 비밀번호를 모두 입력해주세요.",
-        const Color(0xffFF6767), // 텍스트 색상
-        const Color(0xff412C2C), // 배경 색상
-        borderColor: const Color(0xffFF6767), // 테두리 색상
-        icon: Icons.block, // 아이콘
-      ).message(context);
       return;
     }
 
@@ -102,12 +95,15 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } else {
-      Fluttertoast.showToast(
-        msg: "로그인에 실패했습니다.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            '입력하신 정보를 다시한번 확인해주세요.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -121,6 +117,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void dispose() {
+    _idcontroller.dispose();
+    _pwcontroller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
@@ -129,196 +132,203 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Color(0xff222222),
       body: Padding(
         padding: currentWidth < 600
-            ? const EdgeInsets.fromLTRB(25, 30, 0, 15)
+            ? const EdgeInsets.fromLTRB(25, 20, 0, 20)
             : const EdgeInsets.fromLTRB(50, 60, 0, 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
-            Text(
-              '도닦기에 오신 것을\n환영합니다:)',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: currentWidth < 600 ? 18 : 24,
-                  fontWeight: FontWeight.w700,
-                  height: 1.4),
-            ),
-            SizedBox(height: currentWidth < 600 ? 30 : 45),
-            Padding(
-              padding: currentWidth < 600
-                  ? const EdgeInsets.fromLTRB(0, 0, 25, 0)
-                  : const EdgeInsets.fromLTRB(0, 0, 50, 0),
-              child: Column(
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            'ID',
-                            style: TextStyle(
-                                color: const Color(0xffAAAAAA),
-                                fontFamily: "Pretendard",
-                                fontSize: currentWidth < 600 ? 16 : 20,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: SizedBox(
-                            height: currentWidth < 600 ? 38 : 70,
-                            child: NewCustomTextField(
-                                    '아이디를 입력해 주세요.', _idcontroller, (value) {
-                              if (value == null || value.isEmpty) {
-                                return '아이디를 입력해 주세요.';
-                              }
-                              return null;
-                            }, false, 1, currentWidth)
-                                .newtextField(),
-                          ),
-                        )
-                      ]),
-                  SizedBox(height: currentWidth < 600 ? 15 : 0),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            'PW',
-                            style: TextStyle(
-                                color: const Color(0xffAAAAAA),
-                                fontSize: currentWidth < 600 ? 16 : 20,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: SizedBox(
-                            height: currentWidth < 600 ? 38 : 70,
-                            child: NewCustomTextField(
-                                    '비밀번호를 입력해 주세요.', _pwcontroller, (value) {
-                              if (value == null || value.isEmpty) {
-                                return '비밀번호를 입력해 주세요.';
-                              }
-                              return null;
-                            }, false, 1, currentWidth)
-                                .newtextField(),
-                          ),
-                        )
-                      ]),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: currentWidth < 600 ? 40 : 50,
-                    child: TextButton(
-                        onPressed: () async {
-                          // SecureStorage에 데이터 저장
-                          await storage.write(
-                            key: "login",
-                            value:
-                                "id ${_idcontroller.text} password ${_pwcontroller.text}",
-                          );
-                          _login();
-                        },
-                        style: TextButton.styleFrom(
-                          padding:
-                              const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
-                          backgroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                        child: Text(
-                          '로그인',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: currentWidth < 600 ? 13 : 16),
-                        )),
-                  ),
-                  SizedBox(
-                    height: currentWidth < 600 ? 5 : 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const LoginregisterFindPassword(),
-                            ),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          padding:
-                              const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
-                          backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                          ),
-                        ),
-                        child: Text(
-                          '아이디/비밀번호 찾기',
-                          style: TextStyle(
-                            color: const Color(0xffAAAAAA),
-                            fontSize: currentWidth < 600 ? 12.5 : 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 1.3,
-                        height: 15,
-                        color: const Color(0xffAAAAAA),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
-                            ),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          padding:
-                              const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
-                          backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                          ),
-                        ),
-                        child: Text(
-                          '계정생성하기',
-                          style: TextStyle(
-                            color: const Color(0xffAAAAAA),
-                            fontSize: currentWidth < 600 ? 12.5 : 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+              Text(
+                '도닦기에 오신 것을\n환영합니다:)',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: currentWidth < 600 ? 17 : 24,
+                    fontWeight: FontWeight.w700,
+                    height: 1.4),
               ),
-            ),
-            SizedBox(
-              height: currentWidth < 600 ? 5 : 20,
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Image.asset("assets/img/tr_1.png",
-                  height: currentWidth < 1000 ? currentHeight * 0.4 : 0),
-            )
-          ],
+              SizedBox(height: currentWidth < 600 ? 35 : 45),
+              Padding(
+                padding: currentWidth < 600
+                    ? const EdgeInsets.fromLTRB(0, 0, 25, 0)
+                    : const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                child: Column(
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ID',
+                              style: TextStyle(
+                                  color: const Color(0xffAAAAAA),
+                                  fontFamily: "Pretendard",
+                                  fontSize: currentWidth < 600 ? 15 : 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: SizedBox(
+                              child: NewCustomTextField(
+                                      '아이디를 입력해 주세요.', _idcontroller, (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '아이디를 입력해 주세요.';
+                                }
+                                return null;
+                              }, false, 1, currentWidth)
+                                  .newtextField(),
+                            ),
+                          )
+                        ]),
+                    SizedBox(height: currentWidth < 600 ? 15 : 0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'PW',
+                              style: TextStyle(
+                                  color: const Color(0xffAAAAAA),
+                                  fontSize: currentWidth < 600 ? 13 : 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: SizedBox(
+                              child: NewCustomTextField(
+                                      '비밀번호를 입력해 주세요.', _pwcontroller, (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '비밀번호를 입력해 주세요.';
+                                }
+                                return null;
+                              }, true, 1, currentWidth)
+                                  .newtextField(),
+                            ),
+                          )
+                        ]),
+                    SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      height: currentWidth < 600 ? 40 : 50,
+                      child: TextButton(
+                          onPressed: () async {
+                            // SecureStorage에 데이터 저장
+                            if (_formKey.currentState!.validate()) {
+                              if (_idcontroller.text.isNotEmpty &&
+                                  _pwcontroller.text.isNotEmpty) {
+                                await storage.write(
+                                  key: "login",
+                                  value:
+                                      "id ${_idcontroller.text} password ${_pwcontroller.text}",
+                                );
+                                _login();
+                              }
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            padding:
+                                const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
+                            backgroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                          ),
+                          child: Text(
+                            '로그인',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: currentWidth < 600 ? 13 : 16),
+                          )),
+                    ),
+                    SizedBox(
+                      height: currentWidth < 600 ? 5 : 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const LoginregisterFindPassword(),
+                              ),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            overlayColor: Colors.black,
+                            padding:
+                                const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                          ),
+                          child: Text(
+                            '아이디/비밀번호 찾기',
+                            style: TextStyle(
+                              color: const Color(0xffAAAAAA),
+                              fontSize: currentWidth < 600 ? 12.5 : 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1.3,
+                          height: 15,
+                          color: const Color(0xffAAAAAA),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterScreen(),
+                              ),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            overlayColor: Colors.black,
+                            padding:
+                                const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                          ),
+                          child: Text(
+                            '계정생성하기',
+                            style: TextStyle(
+                              color: const Color(0xffAAAAAA),
+                              fontSize: currentWidth < 600 ? 12.5 : 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 25),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Image.asset("assets/img/tr_1.png",
+                    height: currentWidth < 1000 ? currentHeight * 0.32 : 0),
+              ),
+            ],
+          ),
         ),
       ),
     );
