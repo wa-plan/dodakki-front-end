@@ -1,6 +1,5 @@
 import 'package:domino/screens/Tutorial/tutorial4_page.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/styles.dart';
 
 class Tutorial3 extends StatefulWidget {
@@ -11,19 +10,21 @@ class Tutorial3 extends StatefulWidget {
 }
 
 class Tutorial3State extends State<Tutorial3> {
-  int currentSelection = 0;
+  int currentSelection = 90;
 
   final int correctIndex = 1; // 정답 위치 (두 번째 그리드)
 
-  void wrongAnswer(int index) {
-    Fluttertoast.showToast(
-      msg: "틀렸어!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
+  void wrongAnswer() {
+    ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              '아닌데..! 다시한번 생각해봐!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
   }
 
   @override
@@ -54,9 +55,9 @@ class Tutorial3State extends State<Tutorial3> {
                     ),
                     SizedBox(height: currentWidth < 600 ? 8 : 13),
                     Text(
-                      "나는 이번 학기에\n스펙을 많이 쌓고 싶어!",
+                      "그러기 위해선\n스펙도 많이 쌓아야지!",
                       style: TextStyle(
-                        fontSize: currentWidth < 600 ? 15 : 22,
+                        fontSize: currentWidth < 600 ? 16 : 22,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
@@ -88,7 +89,6 @@ class Tutorial3State extends State<Tutorial3> {
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('나 자신을\n찾아가기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 2;
                           });
@@ -110,7 +110,6 @@ class Tutorial3State extends State<Tutorial3> {
                         Option2('뿌듯한\n학교생활하기', currentWidth).option2(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('완벽하게\n자기관리하기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 5;
                           });
@@ -130,7 +129,6 @@ class Tutorial3State extends State<Tutorial3> {
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('다양한 사람\n만나보기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 7;
                           });
@@ -138,7 +136,6 @@ class Tutorial3State extends State<Tutorial3> {
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('돈 많이\n모으기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 8;
                           });
@@ -166,7 +163,7 @@ class Tutorial3State extends State<Tutorial3> {
                           MaterialPageRoute(
                               builder: (context) => const Tutorial4()),
                         )
-                      : null;
+                      : wrongAnswer();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -204,8 +201,8 @@ class Option {
         function();
       },
       child: Container(
-        width: currentWidth < 600 ? 75 : 125,
-        height: currentWidth < 600 ? 75 : 125,
+        width: currentWidth < 600 ? 90 : 125,
+        height: currentWidth < 600 ? 90 : 125,
         padding: EdgeInsets.all(currentWidth < 600 ? 7 : 20),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -225,7 +222,7 @@ class Option {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: currentWidth < 600 ? 11 : 16,
+              fontSize: currentWidth < 600 ? 12 : 16,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -244,7 +241,7 @@ class Option2 {
   Widget option2() {
     return Container(
         child: CircleAvatar(
-      radius: currentWidth < 600 ? 38 : 62.5,
+      radius: currentWidth < 600 ? 45 : 62.5,
       backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
       child: Container(
         alignment: Alignment.center,
@@ -258,7 +255,7 @@ class Option2 {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: backgroundColor,
-              fontSize: currentWidth < 600 ? 10 : 15,
+              fontSize: currentWidth < 600 ? 12 : 15,
               fontWeight: FontWeight.w700,
             ),
           ),

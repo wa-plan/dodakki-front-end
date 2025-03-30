@@ -31,18 +31,19 @@ class Tutorial1State extends State<Tutorial1> {
                         Text(
                           "안녕, 난 도민호야!",
                           style: TextStyle(
-                            fontSize: currentWidth < 600 ? 16 : 22,
+                            fontSize: currentWidth < 600 ? 20 : 22,
                             fontWeight: FontWeight.w700,
                             color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
                           ),
                         ),
-                        SizedBox(height: currentWidth < 600 ? 8 : 13),
+                        SizedBox(height: currentWidth < 600 ? 15 : 13),
                         Text(
-                          "내가 목표를 달성할 수 있도록\n플랜 짜는걸 도와줄래?",
+                          "내가 목표를 달성할 수 있도록\n도와줄 수 있겠니?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: currentWidth < 600 ? 13 : 19,
+                            fontSize: currentWidth < 600 ? 16 : 19,
                             fontWeight: FontWeight.w400,
+                            height: 1.7,
                             color: const Color(0xffD9D9D9), // 이미지 위에 잘 보이도록 텍스트 색상 설정
                           ),
                         ),
@@ -93,7 +94,7 @@ class Tutorial1State extends State<Tutorial1> {
                         ),
                       ),
                       child: Text(
-                        '도와줄게!',
+                        '당연하지!',
                         style: TextStyle(
                             color: backgroundColor,
                             fontSize: currentWidth < 600 ? 15 : 21,

@@ -1,7 +1,6 @@
 import 'package:domino/screens/Tutorial/tutorial3_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Tutorial2 extends StatefulWidget {
   const Tutorial2({super.key});
@@ -14,14 +13,16 @@ class Tutorial2State extends State<Tutorial2> {
   int currentSelection = 0;
 
   void wrongAnswer() {
-    Fluttertoast.showToast(
-      msg: "틀렸어!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
+    ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              '아닌데..! 다시한번 생각해봐!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
   }
 
   @override
@@ -52,9 +53,9 @@ class Tutorial2State extends State<Tutorial2> {
                     ),
                     SizedBox(height: currentWidth < 600 ? 8 : 13),
                     Text(
-                      "내 최종 목표는\n뿌듯한 학교생활하기야.",
+                      "나는 이번 학기에\n학교 생활을 잘 하고싶어!",
                       style: TextStyle(
-                        fontSize: currentWidth < 600 ? 15 : 22,
+                        fontSize: currentWidth < 600 ? 16 : 22,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
@@ -80,7 +81,6 @@ class Tutorial2State extends State<Tutorial2> {
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('알찬 방학\n보내기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 2;
                           });
@@ -93,7 +93,6 @@ class Tutorial2State extends State<Tutorial2> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Option('행복한\n휴학생활하기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 3;
                           });
@@ -101,7 +100,6 @@ class Tutorial2State extends State<Tutorial2> {
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('돈 많은\n백수되기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 4;
                           });
@@ -128,7 +126,7 @@ class Tutorial2State extends State<Tutorial2> {
                           context,
                           MaterialPageRoute(builder: (context) => const Tutorial3()),
                         )
-                      : null;
+                      : wrongAnswer();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
