@@ -27,7 +27,7 @@ class Tutorial7State extends State<Tutorial7> {
                     children: [
                       Image.asset(
                         "assets/img/confetti.png",
-                        height: currentWidth < 600 ? 200 : 310,
+                        height: currentWidth < 600 ? 210 : 310,
                         fit: BoxFit.cover, 
                       ),
                   
@@ -41,17 +41,18 @@ class Tutorial7State extends State<Tutorial7> {
                             Text(
                               "이제 함께 시작해볼까?",
                               style: TextStyle(
-                                fontSize: currentWidth < 600 ? 16 : 25,
+                                fontSize: currentWidth < 600 ? 18 : 25,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 12),
                             Text(
                               "상상도 못할 만큼 큰\n도미노를 쓰러뜨려봐!",
                               style: TextStyle(
-                                fontSize: currentWidth < 600 ? 14 : 23,
+                                fontSize: currentWidth < 600 ? 15 : 23,
                                 fontWeight: FontWeight.w400,
+                                height: 1.7,
                                 color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
                               ),
                             ),
@@ -68,7 +69,7 @@ class Tutorial7State extends State<Tutorial7> {
                 child: Center(
                   child: Image.asset(
                     "assets/img/Complete.png", 
-                    height: currentWidth < 600 ? 270 : 400))),
+                    height: currentWidth < 600 ? 180 : 300))),
         
                
             ],
