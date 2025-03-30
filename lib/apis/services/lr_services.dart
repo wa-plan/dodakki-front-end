@@ -166,6 +166,16 @@ class RegistrationService {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                '계정생성이 완료되었습니다.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -175,23 +185,29 @@ class RegistrationService {
         }
       } else {
         if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '서버 오류: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                '계정생성에 실패했습니다.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+              ),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       }
     } catch (e) {
       if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              '계정생성에 실패했습니다.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }

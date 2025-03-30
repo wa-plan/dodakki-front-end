@@ -21,7 +21,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
   final _pwEmailController = TextEditingController();
 
   void _idFind() async {
-    final phoneNum = '01027666866';
+    final phoneNum = _phoneController.text;
     final email = _idEmailController.text;
 
     final result = await IdFindService.findUserId(
@@ -105,8 +105,8 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                       "아이디 찾기",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: currentWidth < 600 ? 14 : 20,
-                          fontWeight: FontWeight.w700,
+                          fontSize: currentWidth < 600 ? 13 : 20,
+                          fontWeight: FontWeight.w600,
                           height: 1.4),
                     ),
                     SizedBox(height: currentWidth < 600 ? 20 : 30),
@@ -114,23 +114,45 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                       children: [
                         Form(
                           key: _formKey,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: SizedBox(
-                                  child: NewCustomTextField(
-                                          '이메일을 입력해 주세요.', _idEmailController,
-                                          (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return '이메일을 입력해 주세요.';
-                                    }
-                                    return null;
-                                  }, false, 1, currentWidth)
-                                      .newtextField(),
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      child: NewCustomTextField(
+                                              '전화번호를 입력해 주세요.',
+                                              _phoneController, (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return '전화번호를 입력해 주세요.';
+                                        }
+                                        return null;
+                                      }, false, 1, currentWidth)
+                                          .newtextField(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: currentWidth < 600 ? 15 : 0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      child: NewCustomTextField('이메일을 입력해 주세요.',
+                                              _idEmailController, (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return '이메일을 입력해 주세요.';
+                                        }
+                                        return null;
+                                      }, false, 1, currentWidth)
+                                          .newtextField(),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -149,7 +171,8 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                             SizedBox(width: currentWidth < 600 ? 20 : 35),
                             NewButton(Colors.black, Colors.white, '찾기', () {
                               if (_formKey.currentState!.validate()) {
-                                if (_idEmailController.text.isNotEmpty) {
+                                if (_idEmailController.text.isNotEmpty &&
+                                    _phoneController.text.isNotEmpty) {
                                   _idFind();
                                 }
                               }
@@ -164,8 +187,8 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                       "비밀번호 찾기",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: currentWidth < 600 ? 14 : 20,
-                          fontWeight: FontWeight.w700,
+                          fontSize: currentWidth < 600 ? 13 : 20,
+                          fontWeight: FontWeight.w600,
                           height: 1.4),
                     ),
                     SizedBox(height: currentWidth < 600 ? 20 : 30),
