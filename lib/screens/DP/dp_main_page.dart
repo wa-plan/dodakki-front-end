@@ -240,7 +240,7 @@ class _DPMainState extends State<DPMain> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   //만다라트 추가 버튼
-                  CustomIconButton(() {
+                  NewCustomIconButton(() {
                     //기존 Create 기능에 저장된 secondGoal 초기화
                     for (int i = 0; i < 9; i++) {
                       context
@@ -270,8 +270,8 @@ class _DPMainState extends State<DPMain> {
                         ),
                       ),
                     );
-                  }, Icons.add, currentWidth)
-                      .customIconButton(),
+                  }, Icons.add, currentWidth, 21)
+                      .newCustomIconButton(),
                 ],
               ),
               SizedBox(height: currentWidth < 600 ? 10 : 15),
@@ -375,7 +375,7 @@ class _DPMainState extends State<DPMain> {
                                       const SizedBox(height: 15),
                                       Container(
                                         padding: const EdgeInsets.fromLTRB(
-                                            15, 7, 0, 7),
+                                            15, 10, 0, 10),
                                         decoration: BoxDecoration(
                                           color: const Color(0xff2B2B2B),
                                           borderRadius:
@@ -388,7 +388,7 @@ class _DPMainState extends State<DPMain> {
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize:
-                                                currentWidth < 600 ? 12 : 17,
+                                                currentWidth < 600 ? 13 : 17,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),

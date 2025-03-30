@@ -31,7 +31,7 @@ class GoalOrder with ChangeNotifier {
 }
 
 class SelectAPModel with ChangeNotifier {
-  String _selectedAPName = "플랜선택없음"; // 초기값 설정
+  String _selectedAPName = "제3목표를 클릭하여 선택해주세요."; // 초기값 설정
   String get selectedAPName => _selectedAPName;
   int? _selectedAPID; // 초기값 설정
   int? get selectedAPID => _selectedAPID;
@@ -40,6 +40,36 @@ class SelectAPModel with ChangeNotifier {
     _selectedAPName = name;
     _selectedAPID = ID;
     notifyListeners();
+  }
+}
+
+class SelectRepeatModel with ChangeNotifier {
+  bool _everyDay = false;
+  bool get everyDay => _everyDay;
+
+  bool _everyWeek = false;
+  bool get everyWeek => _everyWeek;
+
+  bool _everyTwoWeek = false;
+  bool get everyTwoWeek => _everyTwoWeek;
+
+  bool _everyMonth = false;
+  bool get everyMonth => _everyMonth;
+
+  bool _result = false;
+  bool get result => _result;
+
+  void selectRepeat(bool everyDay, bool everyWeek, bool everyTwoWeek, bool everyMonth) {
+    _everyDay = everyDay;
+    _everyWeek = everyWeek;
+    _everyTwoWeek = everyTwoWeek;
+    _everyMonth = everyMonth;
+    notifyListeners();
+  }
+
+  bool repeatedResult() {
+    _result = _everyDay && _everyWeek && _everyTwoWeek && _everyMonth == false ? false : true;
+    return _result;
   }
 }
 

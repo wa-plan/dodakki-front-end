@@ -57,42 +57,57 @@ class AddCalendarState extends State<AddCalendar> {
       calendarStyle: CalendarStyle(
         
             markerSize: 0.0,
-            isTodayHighlighted: true,
-            todayDecoration: const BoxDecoration(
-                color: Color(0xFF5B5B5B), shape: BoxShape.circle),
-            selectedDecoration: const BoxDecoration(
-              color: mainRed,
-              shape: BoxShape.circle,
-            ),
-            defaultTextStyle: TextStyle(
-              color: mainTextColor,
-              fontSize: currentWidth < 600 ? 12 : 16,
-            ),
-            weekendTextStyle: TextStyle(
-              color: mainTextColor,
-              fontSize: currentWidth < 600 ? 12 : 16,
-            ),
+              isTodayHighlighted: true,
+              todayDecoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 56, 56, 56), shape: BoxShape.circle),
+              selectedDecoration: const BoxDecoration(
+                color: mainRed,
+                shape: BoxShape.circle,
+              ),
+              selectedTextStyle: TextStyle(
+                fontSize: 12, // 선택된 날짜의 폰트 크기 고정
+                fontWeight: FontWeight.w700,
+                color: Colors.white, // 선택된 날짜의 텍스트 색상
+              ),
+              todayTextStyle: TextStyle(
+                fontSize: 12, // 오늘 날짜 폰트 크기
+                fontWeight: FontWeight.w700, // 오늘 날짜 폰트 굵기
+                color: Colors.white, // 오늘 날짜 텍스트 색상
+              ),
+              outsideTextStyle: TextStyle(
+                color: const Color.fromARGB(255, 125, 125, 125),
+                fontSize: currentWidth < 600 ? 12 : 16,
+              ),
+              defaultTextStyle: TextStyle(
+                color: mainTextColor,
+                fontSize: currentWidth < 600 ? 12 : 16,
+              ),
+              weekendTextStyle: TextStyle(
+                color: mainTextColor,
+                fontSize: currentWidth < 600 ? 12 : 16,
+              ),
           ),
-      daysOfWeekStyle: const DaysOfWeekStyle(
-            weekdayStyle: TextStyle(color: Color(0xffD4D4D4)), // 평일 색상
-            weekendStyle: TextStyle(color: Color(0xffD4D4D4)), // 주말 색상
-          ),
-          headerStyle: HeaderStyle(
-            titleCentered: true,
-            titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
-            leftChevronIcon: Icon(
-              Icons.arrow_back_ios,
-              color: const Color(0xffD4D4D4),
-              size: currentWidth < 600 ? 17 : 20,
+     daysOfWeekStyle: const DaysOfWeekStyle(
+              weekdayStyle: TextStyle(color: Color(0xffD4D4D4)), // 평일 색상
+              weekendStyle: TextStyle(color: Color(0xffD4D4D4)), // 주말 색상
             ),
-            rightChevronIcon: Icon(
-              Icons.arrow_forward_ios,
-              color: const Color(0xffD4D4D4),
-              size: currentWidth < 600 ? 17 : 20,
+            headerStyle: HeaderStyle(
+              titleCentered: true,
+              titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
+              leftChevronIcon: Icon(
+                Icons.arrow_back_ios,
+                color: const Color.fromARGB(255, 170, 170, 170),
+                size: currentWidth < 600 ? 17 : 20,
+              ),
+              rightChevronIcon: Icon(
+                Icons.arrow_forward_ios,
+                color: const Color.fromARGB(255, 170, 170, 170),
+                size: currentWidth < 600 ? 17 : 20,
+              ),
+              formatButtonVisible:
+                  false, //원래 달력 열고 닫는 버튼. 지금은 화살표 아이콘이 역할을 대신하고 있음.
             ),
-            formatButtonVisible:
-                false, //원래 달력 열고 닫는 버튼. 지금은 화살표 아이콘이 역할을 대신하고 있음.
-          ),
+          
       firstDay: DateTime.utc(2014, 1, 1),
       lastDay: DateTime.utc(2034, 12, 31),
     );

@@ -1,3 +1,4 @@
+import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit4_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit2_page.dart';
@@ -15,13 +16,15 @@ class Edit99Page extends StatelessWidget {
   final int mandalartId;
   final String firstColor;
   final List<int> secondGoalIds;
+  final List<Map<String, dynamic>> secondGoals;
 
   const Edit99Page(
       {super.key,
       required this.mandalart,
       required this.mandalartId,
       required this.firstColor,
-      required this.secondGoalIds});
+      required this.secondGoalIds,
+      required this.secondGoals});
 
   @override
   Widget build(BuildContext context) {
@@ -294,6 +297,59 @@ class Edit99Page extends StatelessWidget {
                                   );
                                 },currentWidth
                               ).newButton(),
+                              NewButton(
+                    const Color.fromARGB(255, 133, 24, 17), Colors.white, '삭제',
+                    () {
+              // Create a list to store the second goal ids
+              List<int> secondGoalIds = [];
+
+              // Extract the id values from secondGoals
+              for (var goal in secondGoals) {
+                secondGoalIds.add(goal['id']);
+              }
+
+              // Debug: Print the extracted second goal ids
+              PopupDialog.show(
+                context,
+                '멋진 계획이었는데,\n이대로 보낼꺼야..?',
+                true, // cancel
+                true, // delete
+                false, // signout
+                false, //success
+                onCancel: () {
+                  // 취소 버튼을 눌렀을 때 실행할 코드
+                  Navigator.of(context).pop();
+                },
+
+                onDelete: () async {
+                  // Iterate through the secondGoalIds list and delete each goal
+                  for (int secondGoalId in secondGoalIds) {
+                    bool success = await DeleteMandalartService.deleteMandalart(
+                      context,
+                      secondGoalId,
+                    );
+
+                    if (success) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DPMain(),
+                        ),
+                      ); // 함수 호출
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: '목표 삭제 실패: $secondGoalId',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                      );
+                    }
+                  }
+                },
+              );
+            }, currentWidth)
+                .newButton(),
                               NewButton(Colors.black, Colors.white, '다음', () {
                                 // isAllEmpty 검사를 실행
                                 final isAllEmpty = context

@@ -62,36 +62,41 @@ class AddPage2State extends State<AddPage2> {
   }
 
   // 텍스트폼필드 함수
-  Widget renderTextFormField({
-    required FormFieldSetter onSaved,
-    required FormFieldValidator validator,
-    required double currentWidth
-  }) {
+  Widget renderTextFormField(
+      {required FormFieldSetter onSaved,
+      required FormFieldValidator validator,
+      required double currentWidth}) {
     return SizedBox(
-      height: currentWidth < 600 ? 45 : 50,
       child: TextFormField(
         onSaved: onSaved,
         validator: validator,
         controller: dominoController,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
+        style: const TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w400, fontSize: 14),
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(17, 10, 17, 10),
           filled: true,
-        fillColor: const Color(0xff2A2A2A),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(6),
-        ),
-         contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-          
+          fillColor: const Color(0xff2A2A2A),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+          ),
+          errorBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
+          focusedErrorBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xffAAAAAA))),
+          errorStyle: TextStyle(
+              color: mainRed, fontSize: 12, fontWeight: FontWeight.w400),
           suffixIcon: dominoController.text.isNotEmpty
               ? IconButton(
                   onPressed: () {
                     dominoController.clear();
                   },
-                  icon:  Icon(
+                  icon: Icon(
                     Icons.cancel,
                     size: currentWidth < 600 ? 14 : 16,
-                        color: const Color.fromARGB(255, 98, 98, 98),
+                    color: const Color.fromARGB(255, 98, 98, 98),
                   ),
                 )
               : null,
@@ -119,7 +124,53 @@ class AddPage2State extends State<AddPage2> {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('도미노 만들기', currentWidth).dPTitleText(),
+          child: Row(
+            children: [
+              CustomIconButton(() {
+                context
+                    .read<SelectAPModel>()
+                    .selectAP("제3목표를 클릭하여 선택해주세요.", null);
+                context
+                    .read<SelectRepeatModel>()
+                    .selectRepeat(false, false, false, false);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('도미노 만들기',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
+              const Spacer(),
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xff515151), // 첫 번째 색상
+                      borderRadius:
+                          BorderRadius.circular(currentWidth < 600 ? 2 : 3),
+                    ),
+                    width: currentWidth < 600 ? 8 : 12,
+                    height: currentWidth < 600 ? 8 : 12,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xffD9D9D9), // 첫 번째 색상
+                      borderRadius:
+                          BorderRadius.circular(currentWidth < 600 ? 2 : 3),
+                    ),
+                    width: currentWidth < 600 ? 8 : 12,
+                    height: currentWidth < 600 ? 8 : 12,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         backgroundColor: backgroundColor,
       ),
@@ -127,18 +178,15 @@ class AddPage2State extends State<AddPage2> {
         padding: fullPadding,
         child: Column(
           children: [
-            const SizedBox(height: 5),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
-                    DPGuideText('더 구체적으로 바꿀 수 있어요.', currentWidth).dPGuideText(),
+                    DPGuideText('더 구체적으로 바꿔보세요.', currentWidth).dPGuideText(),
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
 
-                    
-          
                     Form(
                       key: formKey,
                       child: renderTextFormField(
@@ -156,44 +204,54 @@ class AddPage2State extends State<AddPage2> {
                         },
                       ),
                     ),
-                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    SizedBox(height: currentWidth < 600 ? 40 : 40),
                     DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
                     Center(
                       child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 15),
                           decoration: BoxDecoration(
-                            color: const Color(0xff2A2A2A),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                          width: currentWidth < 600 ? 300 : 500,
+                              borderRadius: BorderRadius.circular(4),
+                              color: Color(0xff2A2A2A)),
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          width: currentWidth < 600 ? 400 : 500,
                           child: const AddCalendar()),
                     ),
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                         Text(
+                        Text(
                           '반복하기',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: currentWidth < 600 ? 13 : 16),
+                              color: Colors.white,
+                              fontSize: currentWidth < 600 ? 13 : 16),
                         ),
-                        SizedBox(height: currentWidth < 600 ? 10 : 15),
+                        SizedBox(width: currentWidth < 600 ? 10 : 15),
                         SizedBox(
-                          height: currentWidth < 600 ? 7 : 10,
-                          child: Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: const Color(0xff18AD00),
-                            inactiveTrackColor: const Color(0xff5D5D5D),
-                            inactiveThumbColor: Colors.white,
-                            value: switchValue,
-                            onChanged: (value) {
-                              setState(() {
-                                switchValue = value;
-                              });
-                            },
+                          height: currentWidth < 600 ? 35 : 45,
+                          width: currentWidth < 600 ? 45 : 55,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Switch(
+                              activeColor: Colors.white,
+                              activeTrackColor: const Color(0xff00C300),
+                              inactiveTrackColor: const Color(0xff474747),
+                              inactiveThumbColor: Colors.white,
+                              trackOutlineColor:
+                                  WidgetStateProperty.resolveWith<Color?>(
+                                (Set<WidgetState> states) {
+                                  if (true) {
+                                    return Colors.transparent;
+                                  }
+                                },
+                              ),
+                              value: switchValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  switchValue = value;
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -203,64 +261,71 @@ class AddPage2State extends State<AddPage2> {
                 ),
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xff131313),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                ),
-                child: const Text(
-                  '이전',
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
-
-                    DateTime? pickedDate =
-                        context.read<DateProvider>().pickedDate;
-
-                    if (pickedDate == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('날짜를 선택해 주세요.')),
-                      );
-                    } else {
-                      context
-                          .read<DateListProvider>()
-                          .setInterval(switchValue, pickedDate);
-                      List<DateTime> dateList =
-                          context.read<DateListProvider>().dateList;
-                      repeatInfo =
-                          context.read<DateListProvider>().repeatInfo();
-                      print('repeatInfo=$repeatInfo');
-                      addDomino(widget.thirdGoalId, dominoController.text,
-                          dateList, repeatInfo);
-                      context.read<SelectAPModel>().selectAP("", null);
-                    }
-                    context.read<SelectAPModel>().selectAP("플랜선택없음", null);
-                  }
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                ),
-                child: const Text(
-                  '완료',
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-              ),
-            ]),
           ],
         ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          NewButton(Colors.black, Colors.white, '이전', () {
+            Navigator.of(context).pop();
+            context
+                .read<SelectRepeatModel>()
+                .selectRepeat(false, false, false, false);
+          }, currentWidth)
+              .newButton(),
+          NewButton(Colors.black, Colors.white, '저장', () {
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
+
+              DateTime? pickedDate = context.read<DateProvider>().pickedDate;
+              repeatInfo = context.read<DateListProvider>().repeatInfo();
+
+              if (pickedDate == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      '실행 날짜를 선택해주세요.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 13.5, fontWeight: FontWeight.w600),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              } else if (repeatInfo == "NONE") {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      '반복 종류를 선택해주세요.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 13.5, fontWeight: FontWeight.w600),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              } else {
+                context
+                    .read<DateListProvider>()
+                    .setInterval(switchValue, pickedDate);
+                List<DateTime> dateList =
+                    context.read<DateListProvider>().dateList;
+                addDomino(widget.thirdGoalId, dominoController.text, dateList,
+                    repeatInfo);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TdMain(),
+                  ),
+                );
+              }
+            }
+          }, currentWidth)
+              .newButton(),
+        ]),
       ),
     );
   }

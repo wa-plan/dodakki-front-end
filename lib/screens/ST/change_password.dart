@@ -201,10 +201,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 ],
               ),
-              SizedBox(height: currentWidth < 600 ? 20 : 10),
+              Spacer(),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  NewButton(Colors.black, Colors.white, '취소', () {
+                    Navigator.pop(context);
+                  }, currentWidth)
+                      .newButton(),
                   NewButton(Colors.black, Colors.white, '완료', () {
                     if (_formKey.currentState!.validate()) {
                       if (_newkeycontroller.text == _newkeycontroller.text) {

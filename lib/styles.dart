@@ -996,8 +996,8 @@ class NewCustomIconButton {
 
   Widget newCustomIconButton() {
     return Container(
-      width: currentWidth < 600 ? 33 : 50,
-      height: currentWidth < 600 ? 22 : 35,
+      width: currentWidth < 600 ? 35 : 50,
+      height: currentWidth < 600 ? 24 : 35,
       decoration: BoxDecoration(
         color: Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
