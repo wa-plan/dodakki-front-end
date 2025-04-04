@@ -437,11 +437,11 @@ class _MyGoalState extends State<MyGoal> {
                 ],
               ]),
               const SizedBox(height: 40),
-              MGSubTitle('이번주의 응원!',currentWidth).mgSubTitle(context),
+              MGSubTitle('이번주의 응원!', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               const CheeringMessage(),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨린 목표',currentWidth).mgSubTitle(context),
+              MGSubTitle('쓰러뜨린 목표', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (successIDs.isEmpty)
                 Image.asset('assets/img/completed_goals.png')
@@ -523,7 +523,7 @@ class _MyGoalState extends State<MyGoal> {
                   ],
                 ),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨리지 못한 목표',currentWidth).mgSubTitle(context),
+              MGSubTitle('쓰러뜨리지 못한 목표', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (failedIDs.isEmpty)
                 Image.asset('assets/img/failed_goals.png')

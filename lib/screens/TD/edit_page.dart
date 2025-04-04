@@ -126,11 +126,14 @@ class EditPageState extends State<EditPage> {
     dominoController = TextEditingController(text: widget.content);
     switchValue = widget.switchValue;
     interval = widget.interval;
-    context.read<DateListProvider>().updateRepeatSettings(interval);
-    everyDay = context.read<DateListProvider>().everyDay;
-    everyWeek = context.read<DateListProvider>().everyWeek;
-    everyTwoWeek = context.read<DateListProvider>().everyTwoWeek;
-    everyMonth = context.read<DateListProvider>().everyMonth;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<DateListProvider>();
+      provider.updateRepeatSettings(interval);
+      everyDay = provider.everyDay;
+      everyWeek = provider.everyWeek;
+      everyTwoWeek = provider.everyTwoWeek;
+      everyMonth = provider.everyMonth;
+    });
   }
 
   @override

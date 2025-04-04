@@ -756,20 +756,13 @@ class NewCustomTextField {
       maxLines: maxLines,
       style: const TextStyle(color: Colors.white, fontSize: 14),
       decoration: InputDecoration(
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: mainRed)
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: mainRed)
-        ),
+        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
+        focusedErrorBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
         errorStyle: TextStyle(
-          color: mainRed,
-          fontSize: 13,
-          fontWeight: FontWeight.w400
-        ),
+            color: mainRed, fontSize: 13, fontWeight: FontWeight.w400),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xffAAAAAA))
-        ),
+            borderSide: BorderSide(color: Color(0xffAAAAAA))),
         isDense: true,
         filled: true,
         fillColor: const Color(0xff2A2A2A),
@@ -777,7 +770,6 @@ class NewCustomTextField {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(6),
         ),
-        
         hintText: hintText,
         contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
         hintStyle: TextStyle(
@@ -797,7 +789,7 @@ class NewCustomTextField {
                       padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
                       child: const Icon(
                         Icons.cancel,
-                        size: 16,
+                        size: 15,
                         color: Color.fromARGB(255, 98, 98, 98),
                       ),
                     ),
@@ -823,8 +815,10 @@ class Question extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(question,
         style: const TextStyle(
-          fontFamily: "Pretendard",
-            color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14));
+            fontFamily: "Pretendard",
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 14));
   }
 }
 
@@ -883,16 +877,16 @@ class Tag {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
         decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: borderColor
-          )
-        ),
+            color: bgColor,
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(color: borderColor)),
         child: Text(
           text,
-          style: const TextStyle(color: Color(0xffFF7E7E), fontSize: 9,fontFamily: "Pretendard",
-          fontWeight: FontWeight.w600),
+          style: const TextStyle(
+              color: Color(0xffFF7E7E),
+              fontSize: 9,
+              fontFamily: "Pretendard",
+              fontWeight: FontWeight.w600),
         ));
   }
 }
@@ -978,7 +972,7 @@ class CustomIconButton {
       ),
       child: GestureDetector(
         onTap: () {
-          function(); // 함수 호출
+          Future.microtask(() => function()); // 아주 다음 이벤트 큐로 미뤄서 실행
         },
         child: Icon(
           icon,
@@ -1009,11 +1003,11 @@ class NewCustomIconButton {
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
-              offset: const Offset(0, 0), // X, Y 위치 (0,0)
-              blurRadius: 15, // 블러 7
-              spreadRadius: 0, // 스프레드 0
-            ),
+            color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+            offset: const Offset(0, 0), // X, Y 위치 (0,0)
+            blurRadius: 15, // 블러 7
+            spreadRadius: 0, // 스프레드 0
+          ),
         ],
       ),
       child: GestureDetector(

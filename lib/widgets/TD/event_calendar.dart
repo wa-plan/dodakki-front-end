@@ -332,9 +332,16 @@ class _EventCalendarState extends State<EventCalendar> {
 
                         print('만달달아이디: ${value[index].id}');
 
-                        int? thirdGoalId = await getThirdGoalId(
-                            value[index].id, value[index].thirdGoal);
-                        print('thirdGoalId=$thirdGoalId');
+                        //int? thirdGoalId = await getThirdGoalId(
+                        //    value[index].id, value[index].thirdGoal);
+                        //print('thirdGoalId=$thirdGoalId');
+                        print('주목!');
+                        print(value[index].goalName);
+                        print(value[index].thirdGoal);
+                        print(value[index].switchValue);
+                        print(value[index].interval);
+                        print(value[index].id);
+                        print(value[index].color);
 
                         editDialog(
                             context,
@@ -368,145 +375,142 @@ class _EventCalendarState extends State<EventCalendar> {
                           ],
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Container(
+                              width: currentWidth < 600 ? 13 : 14,
+                              height: currentWidth < 600 ? 54 : 55,
+                              margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
+                              decoration: BoxDecoration(
+                                color: Color(int.parse(
+                                  value[index]
+                                      .color
+                                      .replaceAll('Color(', '')
+                                      .replaceAll(')', ''),
+                                )),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            ),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: currentWidth < 600 ? 13 : 14,
-                                  height: currentWidth < 600 ? 54 : 55,
-                                  margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
-                                  decoration: BoxDecoration(
-                                    color: Color(int.parse(
-                                      value[index]
-                                          .color
-                                          .replaceAll('Color(', '')
-                                          .replaceAll(')', ''),
-                                    )),
-                                    borderRadius: BorderRadius.circular(3),
+                                SizedBox(
+                                  width: currentWidth < 600 ? 90 : 200,
+                                  child: Text(
+                                    value[index].thirdGoal,
+                                    overflow:
+                                        TextOverflow.ellipsis, // 길면 ...으로 생략
+                                    maxLines: 1, // 한 줄로 제한
+                                    style: TextStyle(
+                                        fontSize:
+                                            currentWidth < 600 ? 11.5 : 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xffAAAAAA)),
                                   ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: currentWidth < 600 ? 90 : 200,
-                                      child: Text(
-                                        value[index].thirdGoal,
-                                        overflow:
-                                            TextOverflow.ellipsis, // 길면 ...으로 생략
-                                        maxLines: 1, // 한 줄로 제한
-                                        style: TextStyle(
-                                            fontSize: currentWidth < 600 ? 11.5 : 14,
-                                            fontWeight: FontWeight.w500,
-                                            color: const Color(0xffAAAAAA)),
-                                      ),
-                                    ),
-                                    SizedBox(height: currentWidth < 600 ? 2 : 5),
-                                    SizedBox(
-                                      width: currentWidth < 600 ? 90 : 200,
-                                      child: Text(
-                                        value[index].goalName,
-                                        overflow:
-                                            TextOverflow.ellipsis, // 길면 ...으로 생략
-                                        maxLines: 1, // 한 줄로 제한
-                                        style: TextStyle(
-                                            fontSize: currentWidth < 600 ? 14 : 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
+                                SizedBox(height: currentWidth < 600 ? 2 : 5),
+                                SizedBox(
+                                  width: currentWidth < 600 ? 90 : 200,
+                                  child: Text(
+                                    value[index].goalName,
+                                    overflow:
+                                        TextOverflow.ellipsis, // 길면 ...으로 생략
+                                    maxLines: 1, // 한 줄로 제한
+                                    style: TextStyle(
+                                        fontSize: currentWidth < 600 ? 14 : 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white),
+                                  ),
                                 ),
-                                Spacer(),
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          value[index].didZero =
-                                              !value[index].didZero;
-                                          value[index].didHalf = false;
-                                          value[index].didAll = false;
-                                        });
-                                        String formattedDate =
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(_selectedDay!);
-                                        dominoStatus(
-                                            value[index].id, "FAIL", formattedDate);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.zero, // 패딩 최소화
-                                        constraints:
-                                            BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
-                                        child: Icon(
-                                          Icons.clear_outlined,
-                                          size: currentWidth < 600 ? 18 : 25,
-                                          color: value[index].didZero
-                                              ? mainGold
-                                              : const Color(0xff646464),
-                                        ),
-                                      ),
+                              ],
+                            ),
+                            Spacer(),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      value[index].didZero =
+                                          !value[index].didZero;
+                                      value[index].didHalf = false;
+                                      value[index].didAll = false;
+                                    });
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd').format(
+                                            _selectedDay ?? DateTime.now());
+                                    dominoStatus(
+                                        value[index].id, "FAIL", formattedDate);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.zero, // 패딩 최소화
+                                    constraints:
+                                        BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                    child: Icon(
+                                      Icons.clear_outlined,
+                                      size: currentWidth < 600 ? 18 : 25,
+                                      color: value[index].didZero
+                                          ? mainGold
+                                          : const Color(0xff646464),
                                     ),
-                                    SizedBox(width: currentWidth < 600 ? 23 : 30),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          value[index].didHalf =
-                                              !value[index].didHalf;
-                                          value[index].didZero = false;
-                                          value[index].didAll = false;
-                                        });
-                                        String formattedDate =
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(_selectedDay!);
-                                        dominoStatus(value[index].id, "IN_PROGRESS",
-                                            formattedDate);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.zero, // 패딩 최소화
-                                        constraints:
-                                            BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
-                                        child: Icon(
-                                          Icons.change_history_outlined,
-                                          size: currentWidth < 600 ? 18 : 25,
-                                          color: value[index].didHalf
-                                              ? mainGold
-                                              : const Color(0xff646464),
-                                        ),
-                                      ),
+                                  ),
+                                ),
+                                SizedBox(width: currentWidth < 600 ? 23 : 30),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      value[index].didHalf =
+                                          !value[index].didHalf;
+                                      value[index].didZero = false;
+                                      value[index].didAll = false;
+                                    });
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(_selectedDay!);
+                                    dominoStatus(value[index].id, "IN_PROGRESS",
+                                        formattedDate);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.zero, // 패딩 최소화
+                                    constraints:
+                                        BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                    child: Icon(
+                                      Icons.change_history_outlined,
+                                      size: currentWidth < 600 ? 18 : 25,
+                                      color: value[index].didHalf
+                                          ? mainGold
+                                          : const Color(0xff646464),
                                     ),
-                                    SizedBox(width: currentWidth < 600 ? 23 : 30),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          value[index].didAll =
-                                              !value[index].didAll;
-                                          value[index].didZero = false;
-                                          value[index].didHalf = false;
-                                        });
-                                        String formattedDate =
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(_selectedDay!);
-                                        dominoStatus(value[index].id, "SUCCESS",
-                                            formattedDate);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.zero, // 패딩 최소화
-                                        constraints:
-                                            BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
-                                        child: Icon(
-                                          Icons.circle_outlined,
-                                          size: currentWidth < 600 ? 18 : 25,
-                                          color: value[index].didAll
-                                              ? mainGold
-                                              : const Color(0xff646464),
-                                        ),
-                                      ),
+                                  ),
+                                ),
+                                SizedBox(width: currentWidth < 600 ? 23 : 30),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      value[index].didAll =
+                                          !value[index].didAll;
+                                      value[index].didZero = false;
+                                      value[index].didHalf = false;
+                                    });
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(_selectedDay!);
+                                    dominoStatus(value[index].id, "SUCCESS",
+                                        formattedDate);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.zero, // 패딩 최소화
+                                    constraints:
+                                        BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                    child: Icon(
+                                      Icons.circle_outlined,
+                                      size: currentWidth < 600 ? 18 : 25,
+                                      color: value[index].didAll
+                                          ? mainGold
+                                          : const Color(0xff646464),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ],
                             ),
