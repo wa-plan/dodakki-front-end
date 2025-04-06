@@ -760,7 +760,7 @@ class NewCustomTextField {
         focusedErrorBorder:
             OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
         errorStyle: TextStyle(
-            color: mainRed, fontSize: 13, fontWeight: FontWeight.w400),
+            color: mainRed, fontSize: 12, fontWeight: FontWeight.w400),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xffAAAAAA))),
         isDense: true,
@@ -771,7 +771,7 @@ class NewCustomTextField {
           borderRadius: BorderRadius.circular(6),
         ),
         hintText: hintText,
-        contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+        contentPadding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
         hintStyle: TextStyle(
             color: Color(0xffAAAAAA),
             fontSize: currentWidth < 600 ? 13 : 14,

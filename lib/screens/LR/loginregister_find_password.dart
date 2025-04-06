@@ -13,6 +13,8 @@ class LoginregisterFindPassword extends StatefulWidget {
 class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
   final _phoneController = TextEditingController();
   final _idEmailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>(); // Form key 추가
+  final _formKey2 = GlobalKey<FormState>(); // Form key 추가
   String _responseId = '';
 
   final _userIdController = TextEditingController();
@@ -30,6 +32,19 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
     setState(() {
       _responseId = result;
     });
+
+    if (result == "실패") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            '아이디를 찾을 수 없습니다.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {}
   }
 
   void _pwFind() async {
@@ -37,12 +52,15 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
     final email = _pwEmailController.text;
 
     await PwFindService.findPassword(
-      userId: userId,
-      email: email,
-      context: context
-    );
+        userId: userId, email: email, context: context);
+  }
 
-    
+  @override
+  void dispose() {
+    _idEmailController.dispose();
+    _pwEmailController.dispose();
+    _userIdController.dispose();
+    super.dispose();
   }
 
   @override
@@ -87,65 +105,96 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                       "아이디 찾기",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: currentWidth < 600 ? 14 : 20,
-                          fontWeight: FontWeight.w700,
+                          fontSize: currentWidth < 600 ? 13 : 20,
+                          fontWeight: FontWeight.w600,
                           height: 1.4),
                     ),
                     SizedBox(height: currentWidth < 600 ? 20 : 30),
                     Column(
-                        children: [
-                          
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Form(
+                          key: _formKey,
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: SizedBox(
-                                  child: NewCustomTextField(
-                                          '이메일을 입력해 주세요.', _idEmailController,
-                                          (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return '이메일을 입력해 주세요.';
-                                    }
-                                    return null;
-                                  }, false, 1, currentWidth)
-                                      .newtextField(),
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      child: NewCustomTextField(
+                                              '전화번호를 입력해 주세요.',
+                                              _phoneController, (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return '전화번호를 입력해 주세요.';
+                                        }
+                                        return null;
+                                      }, false, 1, currentWidth)
+                                          .newtextField(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: currentWidth < 600 ? 15 : 0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      child: NewCustomTextField('이메일을 입력해 주세요.',
+                                              _idEmailController, (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return '이메일을 입력해 주세요.';
+                                        }
+                                        return null;
+                                      }, false, 1, currentWidth)
+                                          .newtextField(),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          SizedBox(height: currentWidth < 600 ? 20 : 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                _responseId,
-                                style: TextStyle(
-                                    color: mainRed,
-                                    fontSize: currentWidth < 600 ? 13 : 15,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(width: currentWidth < 600 ? 20 : 35),
-                              NewButton(Colors.black, Colors.white, '찾기',
-                                      _idFind, currentWidth)
-                                  .newButton(),
-                            ],
-                          ),
-                        ],
-                      ),
-                    
+                        ),
+                        SizedBox(height: currentWidth < 600 ? 20 : 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              _responseId == '실패' ? '' : _responseId,
+                              style: TextStyle(
+                                  color: mainRed,
+                                  fontSize: currentWidth < 600 ? 13 : 15,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(width: currentWidth < 600 ? 20 : 35),
+                            NewButton(Colors.black, Colors.white, '찾기', () {
+                              if (_formKey.currentState!.validate()) {
+                                if (_idEmailController.text.isNotEmpty &&
+                                    _phoneController.text.isNotEmpty) {
+                                  _idFind();
+                                }
+                              }
+                            }, currentWidth)
+                                .newButton(),
+                          ],
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 20),
                     Text(
                       "비밀번호 찾기",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: currentWidth < 600 ? 14 : 20,
-                          fontWeight: FontWeight.w700,
+                          fontSize: currentWidth < 600 ? 13 : 20,
+                          fontWeight: FontWeight.w600,
                           height: 1.4),
                     ),
                     SizedBox(height: currentWidth < 600 ? 20 : 30),
-                    Column(
+                    Form(
+                      key: _formKey2,
+                      child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,14 +241,20 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              NewButton(Colors.black, Colors.white, '찾기',
-                                      _pwFind, currentWidth)
+                              NewButton(Colors.black, Colors.white, '찾기', () {
+                                if (_formKey2.currentState!.validate()) {
+                                  if (_userIdController.text.isNotEmpty &&
+                                      _pwEmailController.text.isNotEmpty) {
+                                    _pwFind();
+                                  }
+                                }
+                              }, currentWidth)
                                   .newButton(),
                             ],
                           ),
                         ],
                       ),
-                  
+                    ),
                   ],
                 ),
               ),

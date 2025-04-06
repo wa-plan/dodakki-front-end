@@ -1,6 +1,5 @@
 import 'package:domino/screens/Tutorial/tutorial6_page.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/styles.dart';
 
 class Tutorial5 extends StatefulWidget {
@@ -11,19 +10,21 @@ class Tutorial5 extends StatefulWidget {
 }
 
 class Tutorial5State extends State<Tutorial5> {
-  int currentSelection = 0;
+  int currentSelection = 90;
 
   final int correctIndex = 1; // 정답 위치 (두 번째 그리드)
 
-  void wrongAnswer(int index) {
-    Fluttertoast.showToast(
-      msg: "틀렸어!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
+  void wrongAnswer() {
+    ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              '아닌데..! 다시한번 생각해봐!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
   }
 
   @override
@@ -54,9 +55,9 @@ class Tutorial5State extends State<Tutorial5> {
                     ),
                     SizedBox(height: currentWidth < 600 ? 8 : 13),
                     Text(
-                      "동아리에 들어갈래!\n어떤 것부터 준비하지?",
+                      "동아리에 들어가려면\n어떤 것부터 준비해야 하지?",
                       style: TextStyle(
-                        fontSize: currentWidth < 600 ? 15 : 22,
+                        fontSize: currentWidth < 600 ? 16 : 22,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
@@ -91,7 +92,6 @@ class Tutorial5State extends State<Tutorial5> {
                     SizedBox(height: currentWidth < 600 ? 10 : 15),
                     Center(
                       child: Option('면접 준비하기', () {
-                        wrongAnswer;
                         setState(() {
                           currentSelection = 2;
                         });
@@ -117,7 +117,7 @@ class Tutorial5State extends State<Tutorial5> {
                           context,
                           MaterialPageRoute(builder: (context) => const Tutorial6()),
                         )
-                      : null;
+                      : wrongAnswer();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -176,7 +176,7 @@ class Option {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: currentWidth < 600 ? 12 : 17,
+              fontSize: currentWidth < 600 ? 13 : 17,
               fontWeight: FontWeight.w500,
             ),
           ),

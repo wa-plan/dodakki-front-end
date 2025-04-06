@@ -9,6 +9,7 @@ String? baseUrl = dotenv.env['BASE_URL'];
 
 class Event {
   final int id;
+  final int thirdGoalId;
   final String goalName;
   final String color;
   final String thirdGoal;
@@ -22,6 +23,7 @@ class Event {
 
   Event({
     required this.id,
+    required this.thirdGoalId,
     required this.goalName,
     required this.color,
     required this.thirdGoal,
@@ -42,6 +44,7 @@ class Event {
     bool didAll = attainment == "SUCCESS";
     return Event(
       id: json['id'] ?? 0,
+      thirdGoalId: json['thirdGoalId'] ?? 0,
       goalName: json['goalName'] ?? 'Unknown',
       color: json['color'] ?? 'white',
       thirdGoal: json['thridGoal'] ?? 'No content',

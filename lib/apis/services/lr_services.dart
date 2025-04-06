@@ -128,14 +128,11 @@ class ChangePasswordService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-       
         return true;
       } else {
-        
         return false;
       }
     } catch (e) {
-      
       return false;
     }
   }
@@ -169,6 +166,16 @@ class RegistrationService {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                '계정생성이 완료되었습니다.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -178,23 +185,29 @@ class RegistrationService {
         }
       } else {
         if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '서버 오류: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                '계정생성에 실패했습니다.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+              ),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       }
     } catch (e) {
       if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              '계정생성에 실패했습니다.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -226,14 +239,7 @@ class IdFindService {
         //final responseData = jsonDecode(response.body);
         return response.body; // Adjust based on your API response
       } else {
-        Fluttertoast.showToast(
-          msg: '사용자 ID를 찾을 수 없습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        return '';
+        return '실패';
       }
     } catch (e) {
       Fluttertoast.showToast(
@@ -243,7 +249,7 @@ class IdFindService {
         backgroundColor: Colors.red,
         textColor: Colors.white,
       );
-      return '';
+      return '실패';
     }
   }
 }
@@ -271,31 +277,26 @@ class PwFindService {
       );
       if (response.statusCode >= 200 && response.statusCode < 300) {
         ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            '새로 발급된 비밀번호를 이메일로 발송하였습니다',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13.5,
-              fontWeight: FontWeight.w600
-            ),),
-          backgroundColor: Colors.green,),
-      );
-       
-
+          const SnackBar(
+            content: Text(
+              '새로 발급된 비밀번호를 이메일로 발송하였습니다',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            '입력한 정보를 다시 한번 확인해주세요.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13.5,
-              fontWeight: FontWeight.w600
-            ),),
-          backgroundColor: Colors.red,),
-      );
-         
+          const SnackBar(
+            content: Text(
+              '입력한 정보를 다시 한번 확인해주세요.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } catch (e) {
       Fluttertoast.showToast(

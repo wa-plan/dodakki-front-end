@@ -56,7 +56,7 @@ class Tutorial6State extends State<Tutorial6> {
                     Text(
                       "고마워! 덕분에 완벽한 플랜을\n세울 수 있었어.",
                       style: TextStyle(
-                        fontSize: currentWidth < 600 ? 15 : 22,
+                        fontSize: currentWidth < 600 ? 16 : 22,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
@@ -141,7 +141,7 @@ class Option {
 
   Widget option() {
     return Container(
-      width: currentWidth < 600 ? 190 : 400,
+      width: currentWidth < 600 ? 210 : 400,
       height: currentWidth < 600 ? 40 : 63,
       padding: EdgeInsets.all(currentWidth < 600 ? 5 : 10),
       alignment: Alignment.center,

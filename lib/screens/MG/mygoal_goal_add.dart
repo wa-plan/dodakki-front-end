@@ -77,6 +77,12 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     // 이미지 업로드
     List<String> uploadedImageUrls = _imageFiles;
 
+    print('name: $name');
+    print('description: $description');
+    print('colorHex: $colorHex');
+    print('date: $date');
+    print('uploadedImageUrls: $uploadedImageUrls');
+
     // AddGoalService.addGoal API 호출, 업로드된 이미지 URL 리스트를 전달
     final success = await AddGoalService.addGoal(
       name: name,
@@ -448,9 +454,11 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                         ],
                                         color: Color(0xff2A2A2A),
                                         borderRadius: BorderRadius.circular(6)),
-                                    child: Icon(Icons.add_a_photo,
-                                        color: Color(0xffAAAAAA),
-                                        size: 20,),
+                                    child: Icon(
+                                      Icons.add_a_photo,
+                                      color: Color(0xffAAAAAA),
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
                             ],
@@ -555,6 +563,11 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                         const SnackBar(content: Text('색상을 선택해 주세요.')),
                       );
                     } else {
+                      print('name: ${_nameController.text}');
+                      print('description: ${_descriptionController.text}');
+                      print('colorHex: $_selectedColor');
+                      print('date: $_selectedDate');
+                      print('uploadedImageUrls: $_imageFiles');
                       _addGoal();
                     }
                   }, currentWidth)

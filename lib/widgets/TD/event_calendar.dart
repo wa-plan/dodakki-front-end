@@ -337,6 +337,7 @@ class _EventCalendarState extends State<EventCalendar> {
                         //print('thirdGoalId=$thirdGoalId');
                         print('주목!');
                         print(value[index].goalName);
+                        print('thirdgoalId: ${value[index].thirdGoalId}');
                         print(value[index].thirdGoal);
                         print(value[index].switchValue);
                         print(value[index].interval);
@@ -351,6 +352,7 @@ class _EventCalendarState extends State<EventCalendar> {
                             value[index].switchValue,
                             value[index].interval,
                             value[index].id,
+                            value[index].thirdGoalId,
                             value[index].color,
                             currentWidth);
                       },
@@ -536,7 +538,8 @@ void editDialog(
     String content,
     bool switchvalue,
     int interval,
-    int goalId,
+    int mandalartId,
+    int thirdGoalId,
     String color,
     double currentWidth) {
   String getIntervalText() {

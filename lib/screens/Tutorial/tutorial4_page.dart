@@ -1,6 +1,5 @@
 import 'package:domino/screens/Tutorial/tutorial5_page.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/styles.dart';
 
 class Tutorial4 extends StatefulWidget {
@@ -11,19 +10,21 @@ class Tutorial4 extends StatefulWidget {
 }
 
 class Tutorial4State extends State<Tutorial4> {
-  int currentSelection = 0;
+  int currentSelection = 90;
 
   final int correctIndex = 1; // 정답 위치 (두 번째 그리드)
 
-  void wrongAnswer(int index) {
-    Fluttertoast.showToast(
-      msg: "틀렸어!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
+  void wrongAnswer() {
+    ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              '아닌데..! 다시한번 생각해봐!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
   }
 
   @override
@@ -54,9 +55,9 @@ class Tutorial4State extends State<Tutorial4> {
                     ),
                     SizedBox(height: currentWidth < 600 ? 8 : 13),
                     Text(
-                      "동아리나 학회는 어떨까?",
+                      "스펙을 쌓기 위해서\n동아리나 학회에 들어갈까?",
                       style: TextStyle(
-                        fontSize: currentWidth < 600 ? 15 : 22,
+                        fontSize: currentWidth < 600 ? 16 : 22,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
@@ -88,7 +89,6 @@ class Tutorial4State extends State<Tutorial4> {
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('"도닦기"\n동아리\n들어가기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 2;
                           });
@@ -110,7 +110,6 @@ class Tutorial4State extends State<Tutorial4> {
                         Option2('스펙왕 되기', currentWidth).option2(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('공모전\n우승하기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 5;
                           });
@@ -129,8 +128,7 @@ class Tutorial4State extends State<Tutorial4> {
                         }, currentWidth, 6, currentSelection)
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('포트폴리오 만들기', () {
-                          wrongAnswer;
+                        Option('포트폴리오\n만들기', () {
                           setState(() {
                             currentSelection = 7;
                           });
@@ -138,7 +136,6 @@ class Tutorial4State extends State<Tutorial4> {
                             .option(),
                         SizedBox(width: currentWidth < 600 ? 10 : 15),
                         Option('장학생 되기', () {
-                          wrongAnswer;
                           setState(() {
                             currentSelection = 8;
                           });
@@ -165,7 +162,7 @@ class Tutorial4State extends State<Tutorial4> {
                           context,
                           MaterialPageRoute(builder: (context) => const Tutorial5()),
                         )
-                      : null;
+                      : wrongAnswer();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -203,8 +200,8 @@ class Option {
         function();
       },
       child: Container(
-        width: currentWidth < 600 ? 75 : 125,
-        height: currentWidth < 600 ? 75 : 125,
+        width: currentWidth < 600 ? 90 : 125,
+        height: currentWidth < 600 ? 90 : 125,
         padding: EdgeInsets.all(currentWidth < 600 ? 7 : 20),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -224,7 +221,7 @@ class Option {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: currentWidth < 600 ? 11 : 16,
+              fontSize: currentWidth < 600 ? 12 : 16,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -242,8 +239,8 @@ class Option2 {
 
   Widget option2() {
     return Container(
-      width: currentWidth < 600 ? 75 : 125,
-      height: currentWidth < 600 ? 75 : 125,
+      width: currentWidth < 600 ? 90 : 125,
+      height: currentWidth < 600 ? 90 : 125,
       padding: EdgeInsets.all(currentWidth < 600 ? 7 : 20),
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -256,7 +253,7 @@ class Option2 {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: backgroundColor,
-            fontSize: currentWidth < 600 ? 10 : 15,
+            fontSize: currentWidth < 600 ? 12 : 15,
             fontWeight: FontWeight.w700,
           ),
         ),
