@@ -358,6 +358,7 @@ class _DPMainState extends State<DPMain> {
 
                                 return GestureDetector(
                                   onTap: () {
+                                    print(secondGoals);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

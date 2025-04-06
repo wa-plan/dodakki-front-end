@@ -166,58 +166,95 @@ class DPdetailPage extends StatelessWidget {
             ),
             const Spacer(),
             NewButton(
-                    const Color.fromARGB(255, 133, 24, 17), Colors.white, '삭제',
-                    () {
-              // Create a list to store the second goal ids
-              List<int> secondGoalIds = [];
+              const Color.fromARGB(255, 133, 24, 17),
+              Colors.white,
+              '삭제',
+              () {
+                // 1. secondGoal ID 리스트 만들기
+                List<int> secondGoalIds = [];
+                for (var goal in secondGoals) {
+                  secondGoalIds.add(goal['id']);
+                }
+                print('Second Goal IDs: $secondGoalIds');
 
-              // Extract the id values from secondGoals
-              for (var goal in secondGoals) {
-                secondGoalIds.add(goal['id']);
-              }
-
-              // Debug: Print the extracted second goal ids
-              PopupDialog.show(
-                context,
-                '멋진 계획이었는데,\n이대로 보낼꺼야..?',
-                true, // cancel
-                true, // delete
-                false, // signout
-                false, //success
-                onCancel: () {
-                  // 취소 버튼을 눌렀을 때 실행할 코드
-                  Navigator.of(context).pop();
-                },
-
-                onDelete: () async {
-                  // Iterate through the secondGoalIds list and delete each goal
-                  for (int secondGoalId in secondGoalIds) {
-                    bool success = await DeleteMandalartService.deleteMandalart(
-                      context,
-                      secondGoalId,
-                    );
-
-                    if (success) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DPMain(),
-                        ),
-                      ); // 함수 호출
-                    } else {
-                      Fluttertoast.showToast(
-                        msg: '목표 삭제 실패: $secondGoalId',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                      );
-                    }
+                // 2. thirdGoal ID 리스트 만들고 중복 제거
+                Set<int> thirdGoalIds = {}; // Set으로 중복 제거
+                for (var goal in secondGoals) {
+                  for (var third in goal['thirdGoals']) {
+                    thirdGoalIds.add(third['id']);
                   }
-                },
-              );
-            }, currentWidth)
-                .newButton(),
+                }
+                print('Third Goal IDs: $thirdGoalIds');
+
+                // 3. 삭제 다이얼로그 띄우기
+                PopupDialog.show(
+                  context,
+                  '멋진 계획이었는데,\n이대로 보낼꺼야..?',
+                  true, // cancel
+                  true, // delete
+                  false, // signout
+                  false, // success
+                  onCancel: () {
+                    Navigator.of(context).pop(); // 닫기
+                  },
+                  onDelete: () async {
+                    // 1) secondGoal 먼저 삭제
+                    bool allSecondDeleted = true;
+                    for (int secondGoalId in secondGoalIds) {
+                      bool success =
+                          await DeleteMandalartService.deleteMandalart(
+                        context,
+                        secondGoalId,
+                      );
+                      if (!success) {
+                        allSecondDeleted = false;
+                        Fluttertoast.showToast(
+                          msg: '목표 삭제 실패: $secondGoalId',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                        );
+                      }
+                    }
+
+                    // 2) secondGoal이 모두 성공했을 때만 thirdGoal 삭제
+                    if (allSecondDeleted) {
+                      bool allThirdDeleted = true;
+                      for (int thirdGoalId in thirdGoalIds) {
+                        bool thirdDeleted =
+                            await DeleteThirdGoalService.deleteThirdGoal(
+                          context,
+                          thirdGoalId,
+                        );
+                        if (!thirdDeleted) {
+                          allThirdDeleted = false;
+                          Fluttertoast.showToast(
+                            msg: '세부 목표 삭제 실패: $thirdGoalId',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                          );
+                          break;
+                        }
+                      }
+
+                      // 3) 모두 성공하면 메인으로 이동
+                      if (allThirdDeleted) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DPMain(),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                );
+              },
+              currentWidth,
+            ).newButton(),
           ],
         ),
       ),

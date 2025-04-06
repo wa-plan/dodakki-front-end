@@ -349,83 +349,91 @@ class _MyGoalState extends State<MyGoal> {
                     ),
                   )
                 else ...[
-                  Center(
-                    child: SizedBox(
-                      height: 240,
-                              width: currentWidth < 600 ? double.infinity : 350,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: inProgressIDs.length,
-                        itemBuilder: (context, index) {
-                          String mandalartId =
-                              inProgressIDs[index]['id'] ?? ''; // id 값
-                    
-                          String name =
-                              inProgressIDs[index]['name'] ?? ''; // name 값
-                    
-                          String status = statusList.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () =>
-                                    {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['status'] ??
-                              '';
-                    
-                          String dday = ddayList.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () =>
-                                    {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['dday'] ??
-                              '0';
-                    
-                          String color = colorList.firstWhere(
-                                (element) =>
-                                    element['id'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'color': '0xff000000'
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['color'] ??
-                              '0xff000000';
-                    
-                          int successNum = successNums.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () =>
-                                    {'successNum': 0}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['successNum'] ??
-                              0;
-                    
-                          List<String> photoList = (photos[mandalartId] ?? [])
-                              .map<String>((photo) => photo['path'].toString())
-                              .toList();
-                    
-                          String bookmark = bookmarks.firstWhere(
-                                (element) =>
-                                    element['id'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'bookmark': 'UNBOOKMARK'
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['bookmark'] ??
-                              'UNBOOKMARK';
-                    
-                          return GoalCard(
-                            mandalartId: mandalartId,
-                            name: name,
-                            status: status,
-                            photoList: photoList,
-                            dday: dday,
-                            color: color,
-                            successNum: successNum,
-                            bookmark: bookmark,
-                            onBookmarkToggle: (id, action) {},
-                          );
-                        },
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xff2B2B2B),
+                        borderRadius: BorderRadius.circular(6)),
+                    child: Center(
+                      child: SizedBox(
+                        height: 240,
+                        width: 320,
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: inProgressIDs.length,
+                          itemBuilder: (context, index) {
+                            String mandalartId =
+                                inProgressIDs[index]['id'] ?? ''; // id 값
+
+                            String name =
+                                inProgressIDs[index]['name'] ?? ''; // name 값
+
+                            String status = statusList.firstWhere(
+                                  (element) =>
+                                      element['mandalartId'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () =>
+                                      {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['status'] ??
+                                '';
+
+                            String dday = ddayList.firstWhere(
+                                  (element) =>
+                                      element['mandalartId'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () =>
+                                      {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['dday'] ??
+                                '0';
+
+                            String color = colorList.firstWhere(
+                                  (element) =>
+                                      element['id'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () => {
+                                    'color': '0xff000000'
+                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['color'] ??
+                                '0xff000000';
+
+                            int successNum = successNums.firstWhere(
+                                  (element) =>
+                                      element['mandalartId'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () => {
+                                    'successNum': 0
+                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['successNum'] ??
+                                0;
+
+                            List<String> photoList = (photos[mandalartId] ?? [])
+                                .map<String>(
+                                    (photo) => photo['path'].toString())
+                                .toList();
+
+                            String bookmark = bookmarks.firstWhere(
+                                  (element) =>
+                                      element['id'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () => {
+                                    'bookmark': 'UNBOOKMARK'
+                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['bookmark'] ??
+                                'UNBOOKMARK';
+
+                            return GoalCard(
+                              mandalartId: mandalartId,
+                              name: name,
+                              status: status,
+                              photoList: photoList,
+                              dday: dday,
+                              color: color,
+                              successNum: successNum,
+                              bookmark: bookmark,
+                              onBookmarkToggle: (id, action) {},
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -438,11 +446,11 @@ class _MyGoalState extends State<MyGoal> {
                 ],
               ]),
               const SizedBox(height: 40),
-              MGSubTitle('이번주의 응원!',currentWidth).mgSubTitle(context),
+              MGSubTitle('이번주의 응원!', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               const CheeringMessage(),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨린 목표',currentWidth).mgSubTitle(context),
+              MGSubTitle('쓰러뜨린 목표', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (successIDs.isEmpty)
                 Image.asset('assets/img/completed_goals.png')
@@ -524,7 +532,7 @@ class _MyGoalState extends State<MyGoal> {
                   ],
                 ),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨리지 못한 목표',currentWidth).mgSubTitle(context),
+              MGSubTitle('쓰러뜨리지 못한 목표', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (failedIDs.isEmpty)
                 Image.asset('assets/img/failed_goals.png')
