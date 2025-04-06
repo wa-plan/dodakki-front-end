@@ -82,7 +82,7 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
         minScale: 0.5, // Minimum zoom scale (50%)
         maxScale: 3.0, // Maximum zoom scale (300%)
       child: SizedBox(
-        width: widget.currentHeight*0.5,
+        width: widget.currentHeight*0.7,
         child: GridView.builder(
           shrinkWrap: true, // GridView will be wrapped in the available space
           physics: const NeverScrollableScrollPhysics(),

@@ -13,16 +13,19 @@ class Tutorial2State extends State<Tutorial2> {
   int currentSelection = 0;
 
   void wrongAnswer() {
-    ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              '아닌데..! 다시한번 생각해봐!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
+    Message("아닌데...다시 한번 잘 생각해봐!", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
+  }
+
+  void noAnswer() {
+    Message("어떤 계획을 세워야할 지 선택해줘!", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
   }
 
   @override
@@ -121,12 +124,16 @@ class Tutorial2State extends State<Tutorial2> {
             width: double.infinity,
             child: TextButton(
                 onPressed: () {
-                  currentSelection == 1
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Tutorial3()),
-                        )
-                      : wrongAnswer();
+                  if (currentSelection == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Tutorial3()),
+                    );
+                  } else if (currentSelection == 0) {
+                    noAnswer();
+                  } else
+                    wrongAnswer();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -187,7 +194,7 @@ class Option {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: currentWidth < 600 ? 14 : 22,
+                fontSize: currentWidth < 600 ? 14 : 19,
                 fontWeight: FontWeight.w500,
               ),
             ),

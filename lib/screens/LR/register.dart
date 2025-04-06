@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text('계정생성',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontSize: currentWidth < 600 ? 17 : 21,
                       fontWeight: FontWeight.w600)),
             ],
           ),
@@ -121,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: currentWidth < 600 ? 15 : 0),
+                        SizedBox(height: currentWidth < 600 ? 15 : 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -204,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: currentWidth < 600 ? 15 : 0),
+                          SizedBox(height: currentWidth < 600 ? 15 : 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.baseline,

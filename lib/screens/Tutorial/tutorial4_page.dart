@@ -15,16 +15,19 @@ class Tutorial4State extends State<Tutorial4> {
   final int correctIndex = 1; // 정답 위치 (두 번째 그리드)
 
   void wrongAnswer() {
-    ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              '아닌데..! 다시한번 생각해봐!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
+    Message("아닌데...다시 한번 잘 생각해봐!", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
+  }
+
+  void noAnswer() {
+    Message("어떤 계획을 세워야할 지 선택해줘!", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
   }
 
   @override
@@ -157,12 +160,16 @@ class Tutorial4State extends State<Tutorial4> {
             width: double.infinity,
             child: TextButton(
                 onPressed: () {
-                  currentSelection == 2
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Tutorial5()),
-                        )
-                      : wrongAnswer();
+                  if (currentSelection == 2) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Tutorial5()),
+                    );
+                  } else if (currentSelection == 90) {
+                    noAnswer();
+                  } else
+                    wrongAnswer();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -200,8 +207,8 @@ class Option {
         function();
       },
       child: Container(
-        width: currentWidth < 600 ? 90 : 125,
-        height: currentWidth < 600 ? 90 : 125,
+        width: currentWidth < 600 ? currentWidth*0.25 : 125,
+        height: currentWidth < 600 ? currentWidth*0.25 : 125,
         padding: EdgeInsets.all(currentWidth < 600 ? 7 : 20),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -221,7 +228,7 @@ class Option {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: currentWidth < 600 ? 12 : 16,
+              fontSize: currentWidth < 600 ? 12 : 14,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -239,8 +246,8 @@ class Option2 {
 
   Widget option2() {
     return Container(
-      width: currentWidth < 600 ? 90 : 125,
-      height: currentWidth < 600 ? 90 : 125,
+      width: currentWidth < 600 ? currentWidth*0.25 : 125,
+        height: currentWidth < 600 ? currentWidth*0.25 : 125,
       padding: EdgeInsets.all(currentWidth < 600 ? 7 : 20),
       alignment: Alignment.center,
       decoration: BoxDecoration(

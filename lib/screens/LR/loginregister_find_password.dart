@@ -34,16 +34,13 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
     });
 
     if (result == "실패") {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            '아이디를 찾을 수 없습니다.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      Message(
+              '아이디를 찾을 수 없습니다.',
+              const Color(0xffFF6767), // 텍스트 색상
+              const Color(0xff412C2C), // 배경 색상
+              borderColor: const Color(0xffFF6767), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
     } else {}
   }
 
@@ -73,7 +70,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
-          padding: appBarPadding,
+          padding: currentWidth < 600 ? appBarPadding : tabletPadding,
           child: Row(
             children: [
               NewCustomIconButton(() {
@@ -84,7 +81,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
               Text('아이디/비밀번호 찾기',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontSize: currentWidth < 600 ? 17 : 21,
                       fontWeight: FontWeight.w600)),
             ],
           ),
@@ -92,7 +89,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
         backgroundColor: backgroundColor,
       ),
       body: Padding(
-        padding: fullPadding,
+        padding: currentWidth < 600 ? fullPadding : tabletFullPadding,
         child: Column(
           children: [
             Expanded(
@@ -133,7 +130,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: currentWidth < 600 ? 15 : 0),
+                              SizedBox(height: currentWidth < 600 ? 15 : 15),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -216,7 +213,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                               ),
                             ],
                           ),
-                          SizedBox(height: currentWidth < 600 ? 15 : 0),
+                          SizedBox(height: currentWidth < 600 ? 15 : 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.baseline,

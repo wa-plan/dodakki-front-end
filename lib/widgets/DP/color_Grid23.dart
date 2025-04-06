@@ -37,7 +37,7 @@ class ColorBox extends StatelessWidget {
     });
 
     Color color1 = detailGoal.isEmpty
-        ? Colors.transparent
+        ? backgroundColor
         : (context.watch<GoalColor>().selectedGoalColor['$goalColorId'] ??
             const Color(0xff929292));
 

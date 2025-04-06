@@ -95,16 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            '입력하신 정보를 다시한번 확인해주세요.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      
     }
   }
 
@@ -187,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             )
                           ]),
-                      SizedBox(height: currentWidth < 600 ? 15 : 0),
+                      SizedBox(height: currentWidth < 600 ? 15 : 15),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -326,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Image.asset("assets/img/tr_1.png",
-                      height: currentWidth < 1000 ? currentHeight * 0.32 : 0),
+                      height: currentWidth < 1000 ? currentHeight * 0.37 : 0),
                 ),
               ],
             ),

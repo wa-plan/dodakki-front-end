@@ -1,6 +1,5 @@
 import 'package:domino/screens/Tutorial/tutorial7_page.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/styles.dart';
 
 class Tutorial6 extends StatefulWidget {
@@ -11,20 +10,7 @@ class Tutorial6 extends StatefulWidget {
 }
 
 class Tutorial6State extends State<Tutorial6> {
-  int currentSelection = 0;
 
-  final int correctIndex = 1; // 정답 위치 (두 번째 그리드)
-
-  void wrongAnswer(int index) {
-    Fluttertoast.showToast(
-      msg: "틀렸어!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 14.0,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,13 +90,13 @@ class Tutorial6State extends State<Tutorial6> {
             width: double.infinity,
             child: TextButton(
                 onPressed: () {
-                  currentSelection == 0
-                      ? Navigator.push(
+                  
+                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const Tutorial7()),
-                        )
-                      : null;
+                        );
+                      
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),

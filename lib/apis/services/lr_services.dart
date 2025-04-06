@@ -276,27 +276,21 @@ class PwFindService {
         body: body,
       );
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              '새로 발급된 비밀번호를 이메일로 발송하였습니다',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
+        Message('임시 비밀번호를 이메일에서 확인해주세요.', const Color(0xff00DB00),
+            Color(0xff31412C), // 배경 색상
+            borderColor: const Color(0xff00DB00), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
+
+       
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              '입력한 정보를 다시 한번 확인해주세요.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
+        Message('입력한 정보를 다시 한번 확인해주세요.', const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
+
+      
       }
     } catch (e) {
       Fluttertoast.showToast(
@@ -416,13 +410,7 @@ class MorningAlertService {
           body: body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '아침알람이 업데이트되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else {
         Fluttertoast.showToast(
@@ -477,13 +465,7 @@ class NightAlertService {
           body: body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '저녁알람이 업데이트되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-        );
+        
         return true; //성공한 경우 'on' 또는 'off' 값을 반환
       } else {
         Fluttertoast.showToast(

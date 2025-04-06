@@ -41,8 +41,12 @@ class DPdetailPage extends StatelessWidget {
                 Navigator.of(context).pop();
               }, Icons.keyboard_arrow_left_rounded, currentWidth)
                   .customIconButton(),
-              const SizedBox(width: 10),
-              DPTitleText(mandalart, currentWidth).dPTitleText()
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text(mandalart,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -55,7 +59,7 @@ class DPdetailPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CustomIconButton(() {
+                NewCustomIconButton(() {
                   for (int i = 0; i < 9; i++) {
                     context
                         .read<SaveInputtedDetailGoalModel>()
@@ -127,18 +131,19 @@ class DPdetailPage extends StatelessWidget {
                         mandalartId: mandalartId,
                         firstColor: firstColor,
                         secondGoalIds: secondGoalIds2,
+                        secondGoals: secondGoals,
                       ),
                     ),
                   ); // 함수 호출
-                }, Icons.edit, currentWidth)
-                    .customIconButton()
+                }, Icons.edit, currentWidth, 18)
+                    .newCustomIconButton()
               ],
             ),
             const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               decoration: BoxDecoration(
-                color: const Color(0xff2B2B2B),
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(3),
               ),
               child: Center(
@@ -156,8 +161,8 @@ class DPdetailPage extends StatelessWidget {
               "확대 및 클릭하여 자세히 볼 수 있어요.",
               style: TextStyle(
                   color: const Color(0xff717171),
-                  fontSize: currentWidth < 600 ? 12 : 15,
-                  fontWeight: FontWeight.w300),
+                  fontSize: currentWidth < 600 ? 13 : 15,
+                  fontWeight: FontWeight.w500),
             ),
             const Spacer(),
             NewButton(

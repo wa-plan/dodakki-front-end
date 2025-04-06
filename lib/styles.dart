@@ -16,6 +16,8 @@ const mainGold = Color.fromARGB(255, 255, 217, 79);
 //padding
 const appBarPadding = EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20);
 const fullPadding = EdgeInsets.fromLTRB(20.0, 10, 20.0, 20.0);
+const tabletPadding = EdgeInsets.fromLTRB(40.0, 30, 40.0, 20);
+const tabletFullPadding = EdgeInsets.fromLTRB(40.0, 10, 40.0, 20);
 
 //colorPalette
 Map<Color, Color> colorPalette = {
@@ -45,7 +47,7 @@ class DPTitleText {
     return Text(text,
         style: TextStyle(
             color: Colors.white,
-            fontSize: currentWidth < 600 ? 18 : 23,
+            fontSize: currentWidth < 600 ? 18 : 21,
             fontWeight: FontWeight.w600));
   }
 }
@@ -167,11 +169,11 @@ class Message {
   final IconData? icon; // 아이콘 추가
 
   Message(
-    this.text,
-    this.textColor,
-    this.bgColor, {
-    this.borderColor = Colors.transparent, // 기본 테두리 색상
-    this.icon,
+     this.text,
+     this.textColor,
+     this.bgColor, {
+    required this.borderColor, // 기본 테두리 색상
+    required this.icon,
   });
 
   Future<bool?> message(BuildContext context) {
@@ -182,11 +184,11 @@ class Message {
 
     // 커스텀 토스트 위젯
     Widget toast = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: borderColor, width: 0.8), // 테두리 색상
+        border: Border.all(color: borderColor, width: 1.5), // 테두리 색상
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -197,7 +199,7 @@ class Message {
             child: Text(
               text,
               style: TextStyle(
-                  color: textColor, fontSize: 14, fontWeight: FontWeight.w400),
+                  color: textColor, fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -786,7 +788,7 @@ class NewCustomTextField {
                           controller.clear();
                         },
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                      padding: const EdgeInsets.fromLTRB(10, 12, 10, 10),
                       child: const Icon(
                         Icons.cancel,
                         size: 16,
@@ -996,8 +998,8 @@ class NewCustomIconButton {
 
   Widget newCustomIconButton() {
     return Container(
-      width: currentWidth < 600 ? 33 : 50,
-      height: currentWidth < 600 ? 22 : 35,
+      width: currentWidth < 600 ? 35 : 50,
+      height: currentWidth < 600 ? 24 : 35,
       decoration: BoxDecoration(
         color: Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
