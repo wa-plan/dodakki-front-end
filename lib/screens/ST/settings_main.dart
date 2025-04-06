@@ -266,7 +266,7 @@ class _SettingsMainState extends State<SettingsMain> {
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
               const SizedBox(width: 13),
-              Text('아침 9시, 도민호의 응원',
+              Text('아침 9시',
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
                       fontSize: currentWidth < 600 ? 12 : 16,
@@ -284,7 +284,7 @@ class _SettingsMainState extends State<SettingsMain> {
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
               const SizedBox(width: 13),
-              Text('저녁 9시, 도민호의 할일 체크',
+              Text('저녁 9시',
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
                       fontSize: currentWidth < 600 ? 12 : 16,
@@ -389,7 +389,9 @@ class NotificationService {
       channelDescription:
           'This channel is used for counter-related notifications',
       importance: Importance.high,
-      icon: '@mipmap/ic_launcher',
+      icon: '@drawable/ic_notification',
+
+      
     );
 
     const NotificationDetails notificationDetails =
@@ -399,8 +401,8 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       notificationId,
-      '알람 on',
-      '$time 푸시알림 on 성공',
+      time == 'morning' ? '도민호의 동기부여' : '도민호의 리마인드',
+      time == 'morning' ? '오늘도 아자아자! 도미노를 쓰러뜨리자!!!' : '아직 쓰러뜨리지 못한 도미노가 있는지 체크해보자!',
       scheduledTime,
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -416,7 +418,7 @@ class NotificationService {
         (time == "morning") ? 9 : 21; // 9 AM for "morning", 9 PM for "night"
 
     tz.TZDateTime scheduledTime =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, 0);
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, 12);
 
     // If the time is in the past, schedule for the next day
     if (scheduledTime.isBefore(now)) {

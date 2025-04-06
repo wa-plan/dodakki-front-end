@@ -79,7 +79,7 @@ class PopupDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Image.asset('assets/img/Dominho2.png',
-                width: currentWidth < 600 ? 95 : 110),
+                width: currentWidth < 600 ? 95 : 130),
             SizedBox(width: currentWidth < 600 ? 30 : 50),
             Expanded(
               child: Column(
@@ -90,12 +90,13 @@ class PopupDialog extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: currentWidth < 600 ? 15 : 20,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         height: 1.7),
                   ),
                   const SizedBox(
                     height: 15,
                   ),
+                  Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -104,6 +105,9 @@ class PopupDialog extends StatelessWidget {
                             () => Navigator.of(context).pop(), currentWidth).newButton(),
                       ...buttons,
                     ],
+                  ),
+                   SizedBox(
+                    height: currentWidth < 600 ? 15 : 20,
                   ),
                 ],
               ),

@@ -420,7 +420,7 @@ class _DPMainState extends State<DPMain> {
                       ),
                     ),
               const SizedBox(height: 40),
-              if (mainGoals.length != 1)
+              if (mainGoals.length > 1)
                 PageIndicator(_pageController, mainGoals).pageIndicator(),
               const SizedBox(height: 20),
             ],

@@ -15,16 +15,19 @@ class Tutorial5State extends State<Tutorial5> {
   final int correctIndex = 1; // 정답 위치 (두 번째 그리드)
 
   void wrongAnswer() {
-    ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              '아닌데..! 다시한번 생각해봐!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
+    Message("아닌데...다시 한번 잘 생각해봐!", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
+  }
+
+  void noAnswer() {
+    Message("어떤 계획을 세워야할 지 선택해줘!", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
   }
 
   @override
@@ -112,12 +115,16 @@ class Tutorial5State extends State<Tutorial5> {
             width: double.infinity,
             child: TextButton(
                 onPressed: () {
-                  currentSelection == 0
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Tutorial6()),
-                        )
-                      : wrongAnswer();
+                  if (currentSelection == 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Tutorial6()),
+                    );
+                  } else if (currentSelection == 90) {
+                    noAnswer();
+                  } else
+                    wrongAnswer();
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),

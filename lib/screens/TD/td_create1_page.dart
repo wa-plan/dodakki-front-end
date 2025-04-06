@@ -488,17 +488,11 @@ class _AddPage1State extends State<AddPage1> {
                       ),
                     );
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          '제3목표를 선택해주세요.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 13.5, fontWeight: FontWeight.w600),
-                        ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
+                    Message("목표를 선택해 주세요.", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
                   }
                 }, currentWidth)
                     .newButton(),
