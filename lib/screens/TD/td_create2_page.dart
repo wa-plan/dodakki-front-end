@@ -283,29 +283,21 @@ class AddPage2State extends State<AddPage2> {
               repeatInfo = context.read<DateListProvider>().repeatInfo();
 
               if (pickedDate == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      '실행 날짜를 선택해주세요.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 13.5, fontWeight: FontWeight.w600),
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              } else if (repeatInfo == "NONE") {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      '반복 종류를 선택해주세요.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 13.5, fontWeight: FontWeight.w600),
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+                Message(
+                        "실행날짜를 선택해주세요.",
+                        const Color(0xffFF6767), // 텍스트 색상
+                        const Color(0xff412C2C), // 배경 색상
+                        borderColor: const Color(0xffFF6767), // 테두리 색상
+                        icon: Icons.block)
+                    .message(context);
+              } else if (switchValue == true && repeatInfo == "NONE") {
+                Message(
+                        "반복 종류를 선택해주세요.",
+                        const Color(0xffFF6767), // 텍스트 색상
+                        const Color(0xff412C2C), // 배경 색상
+                        borderColor: const Color(0xffFF6767), // 테두리 색상
+                        icon: Icons.block)
+                    .message(context);
               } else {
                 context
                     .read<DateListProvider>()

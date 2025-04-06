@@ -69,7 +69,6 @@ class _GoalCardState extends State<GoalCard> {
         int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', ''));
     int ddayParsed = int.parse(widget.dday);
 
-    final currentWidth = MediaQuery.of(context).size.width;
     final List<Color> colors = _getColorsByCondition(Color(colorValue));
 
     return GestureDetector(
@@ -90,15 +89,12 @@ class _GoalCardState extends State<GoalCard> {
           );
         },
         child: Container(
-      
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
               color: Color(0xff2B2B2B), borderRadius: BorderRadius.circular(6)),
           child: Column(children: [
             //첫번째 줄 (북마크/제1목표/디데이)
-            Expanded(
-              flex: 1,
-              child:
+            
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 //북마크
                 GestureDetector(
@@ -146,12 +142,10 @@ class _GoalCardState extends State<GoalCard> {
                   ),
                 ),
               ]),
-            ),
+          
             SizedBox(height: 13),
             //두 번째 + 세 번째 줄
-            Expanded(
-              flex: 6,
-              child: Row(
+            Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //첫번째 열
@@ -167,7 +161,7 @@ class _GoalCardState extends State<GoalCard> {
                                 color: const Color(0xff323232),
                                 borderRadius: BorderRadius.circular(3.0),
                               ),
-                              width: 308,
+                              width: 260,
                               height: 105,
                               child: Center(
                                 child: Text(
@@ -182,7 +176,7 @@ class _GoalCardState extends State<GoalCard> {
                           else
                             SizedBox(
                               height: 105, // 이미지 높이 설정
-                              width: 250, // 가로 크기 제한 (화면의 80%)
+                              width: 260, // 가로 크기 제한 (화면의 80%)
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal, // 가로 스크롤 가능
                                 itemCount: widget.photoList.length
@@ -225,11 +219,11 @@ class _GoalCardState extends State<GoalCard> {
                           const SizedBox(height: 17),
                           //세 번째 줄
                           SizedBox(
-                            width: 250,
+                            width: 260,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(width: 14),
+                                SizedBox(width: 10),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,7 +250,6 @@ class _GoalCardState extends State<GoalCard> {
                                     ),
                                   ],
                                 ),
-                                
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -272,7 +265,8 @@ class _GoalCardState extends State<GoalCard> {
                                     Container(
                                       decoration: BoxDecoration(
                                         color: colors[0], // 첫 번째 색상
-                                        borderRadius: BorderRadius.circular(2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
                                       ),
                                       width: 12, //13
                                       height: 6, // 첫 번째 높이 (6.0으로 고정)
@@ -286,7 +280,8 @@ class _GoalCardState extends State<GoalCard> {
                                         color: colors.length > 1
                                             ? colors[1]
                                             : Colors.transparent, // 두 번째 색상
-                                        borderRadius: BorderRadius.circular(2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
                                       ),
                                       width: 12,
                                       height: 16, //16
@@ -300,7 +295,8 @@ class _GoalCardState extends State<GoalCard> {
                                         color: colors.length > 2
                                             ? colors[2]
                                             : Colors.transparent, // 세 번째 색상
-                                        borderRadius: BorderRadius.circular(2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
                                       ),
                                       width: 12,
                                       height: 26, // 세 번째 높이 (예: 20 추가)
@@ -341,7 +337,7 @@ class _GoalCardState extends State<GoalCard> {
                   ),
                 ],
               ),
-            ),
+         
           ]),
         ));
   }

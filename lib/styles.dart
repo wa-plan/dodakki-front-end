@@ -852,10 +852,10 @@ class ColorOption2 extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
           ),
           child: isSelected
-              ? const Icon(
-                  Icons.check,
-                  color: Colors.black,
-                  size: 24,
+              ? Icon(
+                  Icons.check_circle_rounded,
+                  color: const Color(0xff303030),
+                  size: currentWidth < 600 ? 20 : 22,
                 )
               : null,
         ),

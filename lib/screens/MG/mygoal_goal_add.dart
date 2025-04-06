@@ -529,10 +529,14 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                 ],
               ),
 
-              const SizedBox(
-                height: 45,
-              ),
-              Row(
+              
+              
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(padding: fullPadding,
+      child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //취소버튼
@@ -560,11 +564,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   }, currentWidth)
                       .newButton(),
                 ],
-              ),
-            ],
-          ),
-        ),
-      ),
+              ),),
     );
   }
 }

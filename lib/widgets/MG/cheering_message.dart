@@ -74,12 +74,12 @@ class _CheeringMessageState extends State<CheeringMessage> {
                   fontFamily: "NotoSansKR"),
             ),
             SizedBox(
-              width: 205,
+              width: currentWidth < 600 ? 205 : 250,
               child: Text(
                   currentMessage,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: currentWidth < 600 ? 11.5 : 17,
+                    fontSize: currentWidth < 600 ? 11.5 : 14,
                     fontWeight: FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
