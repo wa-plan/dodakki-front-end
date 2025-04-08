@@ -164,7 +164,6 @@ class DPdetailPage extends StatelessWidget {
                   fontSize: currentWidth < 600 ? 13 : 15,
                   fontWeight: FontWeight.w500),
             ),
-            const Spacer(),
             NewButton(
               const Color.fromARGB(255, 133, 24, 17),
               Colors.white,

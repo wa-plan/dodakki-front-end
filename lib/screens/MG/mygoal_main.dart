@@ -342,10 +342,10 @@ class _MyGoalState extends State<MyGoal> {
                     child: Text(
                       "새로운 목표를 세워볼까요?",
                       style: TextStyle(
-                        fontSize: currentWidth < 600 ? 14 : 16,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xffAAAAAA),
-                      ),
+                            color: Color(0xff6C6C6C),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
                   )
                 else ...[
@@ -453,7 +453,41 @@ class _MyGoalState extends State<MyGoal> {
               MGSubTitle('쓰러뜨린 목표', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (successIDs.isEmpty)
-                Image.asset('assets/img/completed_goals.png')
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff2B2B2B),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25, 0, 10, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min, // 자식 위젯 크기만큼만 높이를 조정
+                      children: [
+                        Text(
+                          "함께 목표를 쓰러뜨려봐요!",
+                          style: TextStyle(
+                            color: Color(0xff6C6C6C),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          
+                          
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(height: 15),
+                            Image.asset(
+                              'assets/img/haha.png',
+                              scale: 2),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )
               else
                 Column(
                   children: [
@@ -535,7 +569,41 @@ class _MyGoalState extends State<MyGoal> {
               MGSubTitle('쓰러뜨리지 못한 목표', currentWidth).mgSubTitle(context),
               const SizedBox(height: 10),
               if (failedIDs.isEmpty)
-                Image.asset('assets/img/failed_goals.png')
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff2B2B2B),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25, 0, 10, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min, // 자식 위젯 크기만큼만 높이를 조정
+                      children: [
+                        Text(
+                          "쓰러뜨리지 못한 목표가 없어요~!",
+                          style: TextStyle(
+                            color: Color(0xff6C6C6C),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          
+                          
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(height: 15),
+                            Image.asset(
+                              'assets/img/haha.png',
+                              scale: 2),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )
               else
                 Column(
                   children: [
