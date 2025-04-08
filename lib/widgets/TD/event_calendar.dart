@@ -375,6 +375,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                   value[index].switchValue,
                                   value[index].interval,
                                   value[index].id,
+                                  value[index].thirdGoalId,
                                   value[index].color,
                                   currentWidth);
                             },
@@ -409,7 +410,6 @@ class _EventCalendarState extends State<EventCalendar> {
                                       Container(
                                         width: currentWidth < 600 ? 13 : 14,
                                         height: currentWidth < 600 ? 60 : 55,
-                                      
                                         decoration: BoxDecoration(
                                           color: Color(int.parse(
                                             value[index]
@@ -421,7 +421,9 @@ class _EventCalendarState extends State<EventCalendar> {
                                               BorderRadius.circular(3),
                                         ),
                                       ),
-                                      SizedBox(width: currentWidth < 600 ? 10 : 15,),
+                                      SizedBox(
+                                        width: currentWidth < 600 ? 10 : 15,
+                                      ),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -582,7 +584,8 @@ void editDialog(
     String content,
     bool switchvalue,
     int interval,
-    int goalId,
+    int mandalartId,
+    int thirdGoalId,
     String color,
     double currentWidth) {
   String getIntervalText() {
@@ -615,135 +618,139 @@ void editDialog(
         insetPadding: EdgeInsets.all(0),
         child: SizedBox(
           height: currentWidth < 600 ? 210 : 250,
-              width: currentWidth < 600 ? 300 : 480,
+          width: currentWidth < 600 ? 300 : 480,
           child: Container(
-              padding: EdgeInsets.all(currentWidth < 600 ? 25 : 30),
-              decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(currentWidth < 600 ? 10 : 13))),
-              
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: currentWidth < 600 ? 16 : 18,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(int.parse(
-                                    color
-                                        .replaceAll('Color(', '')
-                                        .replaceAll(')', '')
-                                        .replaceAll('0x', ''),
-                                    radix: 16) +
-                                0xFF000000),
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(currentWidth < 600 ? 3 : 5)),
-                          ),
+            padding: EdgeInsets.all(currentWidth < 600 ? 25 : 30),
+            decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(currentWidth < 600 ? 10 : 13))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: currentWidth < 600 ? 16 : 18,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Color(int.parse(
+                                  color
+                                      .replaceAll('Color(', '')
+                                      .replaceAll(')', '')
+                                      .replaceAll('0x', ''),
+                                  radix: 16) +
+                              0xFF000000),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(currentWidth < 600 ? 3 : 5)),
                         ),
-                        SizedBox(width: currentWidth < 600 ? 16 : 20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      content,
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: currentWidth < 600 ? 13 : 17),
-                                    ),
-                                    SizedBox(height: currentWidth < 600 ? 5 : 7),
-                                    SizedBox(
-                                      width: 140,
-                                      child: Text(
-                                        title,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: currentWidth < 600 ? 17 : 19,
-                                            fontWeight: FontWeight.w600),
-                                        maxLines: 1, // 👉 최대 2줄까지만 표시
-                                        overflow: TextOverflow
-                                            .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
-                                        softWrap: true, // 👉 자동 줄바꿈 허용
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                
-                              ],
-                            ),
-                            SizedBox(height: currentWidth < 600 ? 20 : 25),
-                            Container(
-                              height: 82,
-                              width: currentWidth < 600 ? 170 : 250,
-                              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  color: Color(0xff292929)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                      SizedBox(width: currentWidth < 600 ? 16 : 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '반복',
+                                    content,
                                     style: TextStyle(
                                         color: Colors.grey,
-                                        fontSize: currentWidth < 600 ? 13 : 14,
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: currentWidth < 600 ? 13 : 17),
                                   ),
+                                  SizedBox(height: currentWidth < 600 ? 5 : 7),
                                   SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    getIntervalText(),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: currentWidth < 600 ? 15 : 17,
-                                        fontWeight: FontWeight.w600),
+                                    width: 140,
+                                    child: Text(
+                                      title,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              currentWidth < 600 ? 17 : 19,
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1, // 👉 최대 2줄까지만 표시
+                                      overflow: TextOverflow
+                                          .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
+                                      softWrap: true, // 👉 자동 줄바꿈 허용
+                                    ),
                                   ),
                                 ],
                               ),
+                            ],
+                          ),
+                          SizedBox(height: currentWidth < 600 ? 20 : 25),
+                          Container(
+                            height: 82,
+                            width: currentWidth < 600 ? 170 : 250,
+                            padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Color(0xff292929)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '반복',
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: currentWidth < 600 ? 13 : 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  getIntervalText(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: currentWidth < 600 ? 15 : 17,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        NewCustomIconButton(() {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditPage(date, content, title,
-                                          switchvalue, interval, goalId, goalId),
-                                    ),
-                                  );
-                                }, Icons.edit, currentWidth, 19)
-                                    .newCustomIconButton(),
-                      ],
-                    ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      NewCustomIconButton(() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditPage(
+                                date,
+                                content,
+                                title,
+                                switchvalue,
+                                interval,
+                                mandalartId,
+                                thirdGoalId),
+                          ),
+                        );
+                      }, Icons.edit, currentWidth, 19)
+                          .newCustomIconButton(),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-      
+          ),
         ),
       );
     },

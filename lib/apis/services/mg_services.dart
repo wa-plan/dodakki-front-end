@@ -18,6 +18,7 @@ class AddGoalService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
+    print("🔐 저장된 authToken: $token");
 
     if (token == null || token.isEmpty) {
       Fluttertoast.showToast(

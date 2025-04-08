@@ -112,6 +112,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     status = widget.status;
     photoList = widget.photoList;
 
+    print('photoList: $photoList');
+
     userMandaInfo(mandalartId);
 
     goalImage = photoList.map((photo) => photo).toList();
@@ -545,32 +547,31 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                   ),
                                   SizedBox(height: 8),
                                   Row(
-                                      children: [
-                                        Image.asset(
-                                          'assets/img/domino.png',
-                                          width: currentWidth < 600 ? 25 : 40,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          'x',
-                                          style: TextStyle(
-                                              color: Color(0xffAAAAAA),
-                                              fontSize:
-                                                  currentWidth < 600 ? 16 : 26,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          '$successNum',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  currentWidth < 600 ? 18 : 24,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    ),
-                                  
+                                    children: [
+                                      Image.asset(
+                                        'assets/img/domino.png',
+                                        width: currentWidth < 600 ? 25 : 40,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        'x',
+                                        style: TextStyle(
+                                            color: Color(0xffAAAAAA),
+                                            fontSize:
+                                                currentWidth < 600 ? 16 : 26,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        '$successNum',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                currentWidth < 600 ? 18 : 24,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),

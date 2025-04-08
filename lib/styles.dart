@@ -791,7 +791,7 @@ class NewCustomTextField {
                       padding: const EdgeInsets.fromLTRB(10, 12, 10, 10),
                       child: const Icon(
                         Icons.cancel,
-                        size: 16,
+                        size: 15,
                         color: Color.fromARGB(255, 98, 98, 98),
                       ),
                     ),
@@ -974,7 +974,7 @@ class CustomIconButton {
       ),
       child: GestureDetector(
         onTap: () {
-          function(); // 함수 호출
+          Future.microtask(() => function()); // 아주 다음 이벤트 큐로 미뤄서 실행
         },
         child: Icon(
           icon,

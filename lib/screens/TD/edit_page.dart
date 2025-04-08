@@ -126,11 +126,14 @@ class EditPageState extends State<EditPage> {
     dominoController = TextEditingController(text: widget.content);
     switchValue = widget.switchValue;
     interval = widget.interval;
-    context.read<DateListProvider>().updateRepeatSettings(interval);
-    everyDay = context.read<DateListProvider>().everyDay;
-    everyWeek = context.read<DateListProvider>().everyWeek;
-    everyTwoWeek = context.read<DateListProvider>().everyTwoWeek;
-    everyMonth = context.read<DateListProvider>().everyMonth;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<DateListProvider>();
+      provider.updateRepeatSettings(interval);
+      everyDay = provider.everyDay;
+      everyWeek = provider.everyWeek;
+      everyTwoWeek = provider.everyTwoWeek;
+      everyMonth = provider.everyMonth;
+    });
   }
 
   @override
@@ -324,7 +327,7 @@ class EditPageState extends State<EditPage> {
                                 // 🔹 수정 요청 후 성공 여부 확인
                                 bool success =
                                     await EditDominoNewService.editDomino(
-                                  thirdGoalId: widget.goalId,
+                                  thirdGoalId: widget.thirdGoalId,
                                   name: dominoController.text,
                                   dates: dateList,
                                   repetition: repetition,
@@ -360,9 +363,9 @@ class EditPageState extends State<EditPage> {
   }
 }
 
-void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
-  void deleteDomino(int goalId) async {
-    final success = await DeleteDominoService.deleteDomino(goalId: goalId);
+void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
+  void deleteDomino(int thirdGoalId) async {
+    final success = await DeleteDominoService.deleteDomino(goalId: thirdGoalId);
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
@@ -383,9 +386,9 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
     }
   }
 
-  void deleteTodayDomino(int goalId, String goalDate) async {
+  void deleteTodayDomino(int thirdGoalId, String goalDate) async {
     final success = await DeleteTodayDominoService.deleteTodayDomino(
-        goalId: goalId, goalDate: goalDate);
+        goalId: thirdGoalId, goalDate: goalDate);
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
@@ -420,7 +423,7 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
             children: [
               TextButton(
                   onPressed: () {
-                    deleteDomino(goalId);
+                    deleteDomino(thirdGoalId);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -441,7 +444,7 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
                         DateFormat('yyyy-MM-dd').format(date);
                     print(formattedDate);
                     //date.toIso8601String()
-                    deleteTodayDomino(goalId, formattedDate);
+                    deleteTodayDomino(thirdGoalId, formattedDate);
                     Navigator.push(
                         context,
                         MaterialPageRoute(

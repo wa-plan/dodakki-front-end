@@ -42,25 +42,6 @@ class _MygoalEditState extends State<MygoalEdit> {
   List<String> goalImage = [];
   bool _isDeleting = false; // 삭제 중인지 상태 저장
 
-  @override
-  void initState() {
-    super.initState();
-
-    // dday 계산
-    calculatedDate = DateTime.now().add(Duration(days: widget.dday));
-    _selectedDate = calculatedDate;
-
-    // 전달받은 색상 설정
-    _selectedColor = Color(
-        int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', '')));
-
-    // 🔹 초깃값 설정
-    _namecontroller.text = widget.name; // widget.name을 초깃값으로 설정
-    _descriptcontroller.text = widget.description; // 목표 설명 초기값 설정
-
-    goalImage = List.from(widget.goalImage);
-  }
-
   Future<void> _pickImages() async {
     try {
       // ✅ 이미지 개수 제한: 3개 이상 추가할 수 없도록 버튼이 비활성화됨
@@ -270,6 +251,26 @@ class _MygoalEditState extends State<MygoalEdit> {
     setState(() {
       _selectedColor = color;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // dday 계산
+    calculatedDate = DateTime.now().add(Duration(days: widget.dday));
+    _selectedDate = calculatedDate;
+
+    // 전달받은 색상 설정
+    _selectedColor = Color(
+        int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', '')));
+
+    // 🔹 초깃값 설정
+    _namecontroller.text = widget.name; // widget.name을 초깃값으로 설정
+    _descriptcontroller.text = widget.description; // 목표 설명 초기값 설정
+
+    goalImage = List.from(widget.goalImage);
+    print('goalImage=$goalImage');
   }
 
   @override

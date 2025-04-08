@@ -77,6 +77,12 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     // 이미지 업로드
     List<String> uploadedImageUrls = _imageFiles;
 
+    print('name: $name');
+    print('description: $description');
+    print('colorHex: $colorHex');
+    print('date: $date');
+    print('uploadedImageUrls: $uploadedImageUrls');
+
     // AddGoalService.addGoal API 호출, 업로드된 이미지 URL 리스트를 전달
     final success = await AddGoalService.addGoal(
       name: name,
@@ -448,9 +454,11 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                         ],
                                         color: Color(0xff2A2A2A),
                                         borderRadius: BorderRadius.circular(6)),
-                                    child: Icon(Icons.add_a_photo,
-                                        color: Color(0xffAAAAAA),
-                                        size: 20,),
+                                    child: Icon(
+                                      Icons.add_a_photo,
+                                      color: Color(0xffAAAAAA),
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
                             ],
@@ -528,43 +536,42 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   ),
                 ],
               ),
-
-              
-              
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(padding: fullPadding,
-      child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //취소버튼
-                  NewButton(Colors.black, Colors.white, '취소',
-                          () => Navigator.pop(context), currentWidth)
-                      .newButton(),
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //취소버튼
+            NewButton(Colors.black, Colors.white, '취소',
+                    () => Navigator.pop(context), currentWidth)
+                .newButton(),
 
-                  //완료버튼
-                  NewButton(Colors.black, Colors.white, '완료', () {
-                    if (_nameController.text == '') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표를 입력해 주세요.')),
-                      );
-                    } else if (!_isChecked && _selectedDate == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
-                      );
-                    } else if (_selectedColor == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('색상을 선택해 주세요.')),
-                      );
-                    } else {
-                      _addGoal();
-                    }
-                  }, currentWidth)
-                      .newButton(),
-                ],
-              ),),
+            //완료버튼
+            NewButton(Colors.black, Colors.white, '완료', () {
+              if (_nameController.text == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표를 입력해 주세요.')),
+                );
+              } else if (!_isChecked && _selectedDate == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
+                );
+              } else if (_selectedColor == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('색상을 선택해 주세요.')),
+                );
+              } else {
+                _addGoal();
+              }
+            }, currentWidth)
+                .newButton(),
+          ],
+        ),
+      ),
     );
   }
 }
