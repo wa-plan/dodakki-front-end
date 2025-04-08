@@ -389,7 +389,10 @@ class NotificationService {
       channelDescription:
           'This channel is used for counter-related notifications',
       importance: Importance.high,
-      icon: '@drawable/ic_notification',
+      icon: '@drawable/smallicon',
+      largeIcon: DrawableResourceAndroidBitmap('@drawable/ic_notification'), // 컬러 이미지 표시
+      enableVibration: true,
+      playSound: true
 
       
     );
@@ -399,7 +402,15 @@ class NotificationService {
 
     final tz.TZDateTime scheduledTime = _getScheduledTime(time);
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
+
+await flutterLocalNotificationsPlugin.show(
+  notificationId,
+  '도민호의 동기부여',
+  '오늘도 아자아자! 도미노를 쓰러뜨리자!!!',
+  notificationDetails,
+);
+
+    /*await flutterLocalNotificationsPlugin.zonedSchedule(
       notificationId,
       time == 'morning' ? '도민호의 동기부여' : '도민호의 리마인드',
       time == 'morning' ? '오늘도 아자아자! 도미노를 쓰러뜨리자!!!' : '아직 쓰러뜨리지 못한 도미노가 있는지 체크해보자!',
@@ -408,17 +419,17 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-    );
+    );*/
   }
 
   tz.TZDateTime _getScheduledTime(String time) {
     final now = tz.TZDateTime.now(
         tz.local); // Make sure tz.local is initialized correctly
     int hour =
-        (time == "morning") ? 9 : 21; // 9 AM for "morning", 9 PM for "night"
+        (time == "morning") ? 24 : 24; // 9 AM for "morning", 9 PM for "night"
 
     tz.TZDateTime scheduledTime =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, 12);
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, 11);
 
     // If the time is in the past, schedule for the next day
     if (scheduledTime.isBefore(now)) {

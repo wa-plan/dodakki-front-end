@@ -298,6 +298,7 @@ class Edit99Page extends StatelessWidget {
                                 },currentWidth
                               ).newButton(),
                               
+                              
                               NewButton(Colors.black, Colors.white, '다음', () {
                                 // isAllEmpty 검사를 실행
                                 final isAllEmpty = context

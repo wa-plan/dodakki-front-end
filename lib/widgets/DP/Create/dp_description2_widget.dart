@@ -35,7 +35,7 @@ class Description2 {
                 'S',
                 style: TextStyle(
                   color: ColorTransform(color).colorTransform(),
-                  fontSize: currentWidth < 600 ? 12 : 17,
+                  fontSize: currentWidth < 600 ? 13 : 17,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -57,7 +57,7 @@ class Description2 {
                 '명확하고 구체적인 목표',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -72,7 +72,7 @@ class Description2 {
                 'M',
                 style: TextStyle(
                   color: ColorTransform(color).colorTransform(),
-                  fontSize: currentWidth < 600 ? 12 : 17,
+                  fontSize: currentWidth < 600 ? 13 : 17,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -94,7 +94,7 @@ class Description2 {
                 '측정 가능한 목표',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -109,7 +109,7 @@ class Description2 {
                 'A',
                 style: TextStyle(
                   color: ColorTransform(color).colorTransform(),
-                  fontSize: currentWidth < 600 ? 12 : 17,
+                  fontSize: currentWidth < 600 ? 13 : 17,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -131,7 +131,7 @@ class Description2 {
                 '달성 가능한 목표',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -147,7 +147,7 @@ class Description2 {
                 'R',
                 style: TextStyle(
                   color: ColorTransform(color).colorTransform(),
-                  fontSize: currentWidth < 600 ? 12 : 17,
+                  fontSize: currentWidth < 600 ? 13 : 17,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -169,7 +169,7 @@ class Description2 {
                 '현실적인 목표',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -185,7 +185,7 @@ class Description2 {
                 'T',
                 style: TextStyle(
                   color: ColorTransform(color).colorTransform(),
-                  fontSize: currentWidth < 600 ? 12 : 17,
+                  fontSize: currentWidth < 600 ? 13 : 17,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -207,7 +207,7 @@ class Description2 {
                 '마감기한이 있는 목표',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),

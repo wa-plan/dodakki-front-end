@@ -55,7 +55,7 @@ class Description {
                 currentWidth < 600 ? '이루고자 하는 최종목표':'이루고자 하는 최종목표에요.',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -92,7 +92,7 @@ class Description {
                 currentWidth < 600 ? '최종목표를 위한 세부목표':'최종목표를 위한 세부목표에요.',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -129,7 +129,7 @@ class Description {
                 currentWidth < 600 ? '세부목표를 위한 실행계획' : '세부목표를 위한 구체적인 계획이에요.',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 10 : 16,
+                  fontSize: currentWidth < 600 ? 12 : 16,
                   fontWeight: FontWeight.w300,
                 ),
               ),
