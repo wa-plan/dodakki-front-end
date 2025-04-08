@@ -1,3 +1,4 @@
+import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit4_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit2_page.dart';
@@ -15,13 +16,15 @@ class Edit99Page extends StatelessWidget {
   final int mandalartId;
   final String firstColor;
   final List<int> secondGoalIds;
+  final List<Map<String, dynamic>> secondGoals;
 
   const Edit99Page(
       {super.key,
       required this.mandalart,
       required this.mandalartId,
       required this.firstColor,
-      required this.secondGoalIds});
+      required this.secondGoalIds,
+      required this.secondGoals});
 
   @override
   Widget build(BuildContext context) {
@@ -294,6 +297,7 @@ class Edit99Page extends StatelessWidget {
                                   );
                                 },currentWidth
                               ).newButton(),
+                              
                               NewButton(Colors.black, Colors.white, '다음', () {
                                 // isAllEmpty 검사를 실행
                                 final isAllEmpty = context

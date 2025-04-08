@@ -642,8 +642,13 @@ class _MygoalEditState extends State<MygoalEdit> {
                   ),
                 ],
               ),
-              const SizedBox(height: 45),
-              Row(
+              
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(padding: fullPadding,
+      child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //취소버튼
@@ -771,11 +776,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   }, currentWidth)
                       .newButton(),
                 ],
-              ),
-            ],
-          ),
-        ),
-      ),
+              ),),
     );
   }
 }

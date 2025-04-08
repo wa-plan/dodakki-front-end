@@ -146,21 +146,33 @@ class EditPageState extends State<EditPage> {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('도미노 수정하기', currentWidth).dPTitleText(),
+          child: Row(
+            children: [
+              CustomIconButton(() {
+                Navigator.pop(context);
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('도미노 수정하기',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
+            ],
+          ),
         ),
         backgroundColor: backgroundColor,
       ),
       body: Padding(
         padding: fullPadding,
         child: Column(children: [
-          const SizedBox(height: 5),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: currentWidth < 600 ? 15 : 25),
-                  DPGuideText('더 구체적으로 바꿀 수 있어요.', currentWidth).dPGuideText(),
+                  DPGuideText('더 구체적으로 바꿔보세요.', currentWidth).dPGuideText(),
                   SizedBox(height: currentWidth < 600 ? 15 : 25),
                   Form(
                     key: formKey,
@@ -179,22 +191,20 @@ class EditPageState extends State<EditPage> {
                       },
                     ),
                   ),
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
-                  DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
+                  SizedBox(height: currentWidth < 600 ? 40 : 40),
+                    DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
+                    SizedBox(height: currentWidth < 600 ? 15 : 25),
 
                   Center(
                       child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 15),
                           decoration: BoxDecoration(
-                            color: const Color(0xff2A2A2A),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                          width: currentWidth < 600 ? 300 : 500,
+                              borderRadius: BorderRadius.circular(4),
+                              color: Color(0xff2A2A2A)),
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          width: currentWidth < 600 ? 400 : 500,
                           child: EditCalendar(widget.date))), //추가할 때 달력
 
-                  SizedBox(height: 25),
+                  SizedBox(height: currentWidth < 600 ? 15 : 25),
 
                   //반복하기 기능
                   Row(
@@ -208,18 +218,29 @@ class EditPageState extends State<EditPage> {
                       ),
                       SizedBox(height: currentWidth < 600 ? 10 : 15),
                       SizedBox(
-                        height: currentWidth < 600 ? 7 : 10,
-                        child: Switch(
-                          activeColor: Colors.white,
-                          activeTrackColor: const Color(0xff18AD00),
-                          inactiveTrackColor: const Color(0xff5D5D5D),
-                          inactiveThumbColor: Colors.white,
-                          value: switchValue,
-                          onChanged: (value) {
-                            setState(() {
-                              switchValue = value;
-                            });
-                          },
+                        height: currentWidth < 600 ? 35 : 45,
+                          width: currentWidth < 600 ? 45 : 55,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Switch(
+                            activeTrackColor: const Color(0xff00C300),
+                              inactiveTrackColor: const Color(0xff474747),
+                              inactiveThumbColor: Colors.white,
+                              trackOutlineColor:
+                                  WidgetStateProperty.resolveWith<Color?>(
+                                (Set<WidgetState> states) {
+                                  if (true) {
+                                    return Colors.transparent;
+                                  }
+                                },
+                              ),
+                            value: switchValue,
+                            onChanged: (value) {
+                              setState(() {
+                                switchValue = value;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -229,32 +250,25 @@ class EditPageState extends State<EditPage> {
                     EditRepeatSettings(
                         everyDay, everyWeek, everyTwoWeek, everyMonth),
 
-                  SizedBox(
-                    height: 20,
-                  ),
+                  
 
-                  Row(
+                  
+                ],
+              ),
+            ),
+          ),
+        ]),
+      ),
+      bottomNavigationBar: Padding(padding: fullPadding,
+      child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: TextButton.styleFrom(
-                              backgroundColor: const Color(0xff131313),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0))),
-                          child: const Text(
-                            '이전',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ), //취소 버튼
-                        TextButton(
-                          onPressed: () {
-                            DateTime? pickedDate =
+                        NewButton(Colors.black, Colors.white, '이전', (){
+                          Navigator.pop(context);
+                        }, currentWidth).newButton(),
+
+                        NewButton(Color(0xff6A1B1B), Colors.white, '삭제', (){
+                          DateTime? pickedDate =
                                 context.read<DateProvider>().pickedDate;
                             context
                                 .read<DateListProvider>()
@@ -268,22 +282,10 @@ class EditPageState extends State<EditPage> {
                             print('골아이디 확인 ${widget.goalId}, ${widget.date}');
                             howDeleteDialog(
                                 context, widget.goalId, widget.date);
-                          },
-                          style: TextButton.styleFrom(
-                              backgroundColor: const Color(0xFFFF6767),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0))),
-                          child: const Text(
-                            '삭제',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
+                        }, currentWidth).newButton(),
+
+                        NewButton(Colors.black, Colors.white, '완료', ()async{
+                          if (formKey.currentState!.validate()) {
                               formKey.currentState!.save();
 
                               DateTime? pickedDate =
@@ -352,26 +354,11 @@ class EditPageState extends State<EditPage> {
                                 }
                               }
                             }
-                          },
-                          style: TextButton.styleFrom(
-                              backgroundColor: const Color(0xff131313),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0))),
-                          child: const Text(
-                            '완료',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ]),
-                ],
-              ),
-            ),
-          ),
-        ]),
-      ),
+                        }, currentWidth).newButton(),
+                       
+                        
+                        
+                      ]),),
     );
   }
 }

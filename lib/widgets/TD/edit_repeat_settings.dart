@@ -32,6 +32,7 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Row(
@@ -40,14 +41,19 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
             Row(
               children: [
                 Transform.scale(
-                  scale: 0.7,
+                  scale: 1,
                   child: Checkbox(
-                    side: WidgetStateBorderSide.resolveWith((states) =>
-                        const BorderSide(
-                            width: 1.5,
-                            color: Colors.white)), //체크박스 테두리의 두께와 색깔 지정
-                    activeColor: const Color(0xff262626),
-                    checkColor: const Color(0xffFF6767),
+                    visualDensity: VisualDensity.compact,
+                fillColor: WidgetStateProperty.resolveWith<Color>(
+                    (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.disabled)) {
+                    return Color(0xff323232);
+                  }
+                  return Color(0xff323232);
+                }),
+                activeColor: Colors.transparent,
+                side: BorderSide(color: Colors.transparent),
+                checkColor: const Color(0xffFF6767),
                     value: everyDay,
                     onChanged: (value) {
                       setState(() {
@@ -60,24 +66,29 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                     },
                   ),
                 ),
-                const Text(
+                 Text(
                   '매일',
-                  style: TextStyle(color: Colors.white),
+                  style:  TextStyle(
+                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),
             Row(
               children: [
                 Transform.scale(
-                  scale: 0.7,
+                  scale: 1,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
-                    side: WidgetStateBorderSide.resolveWith((states) =>
-                        const BorderSide(
-                            width: 1.5,
-                            color: Colors.white)), //체크박스 테두리의 두께와 색깔 지정
-                    activeColor: const Color(0xff262626),
-                    checkColor: const Color(0xffFF6767),
+                fillColor: WidgetStateProperty.resolveWith<Color>(
+                    (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.disabled)) {
+                    return Color(0xff323232);
+                  }
+                  return Color(0xff323232);
+                }),
+                activeColor: Colors.transparent,
+                side: BorderSide(color: Colors.transparent),
+                checkColor: const Color(0xffFF6767),
                     value: everyWeek,
                     onChanged: (value) {
                       setState(() {
@@ -90,24 +101,29 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                     },
                   ),
                 ),
-                const Text(
+                 Text(
                   '매주',
-                  style: TextStyle(color: Colors.white),
+                  style:  TextStyle(
+                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),
             Row(
               children: [
                 Transform.scale(
-                  scale: 0.7,
+                  scale: 1,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
-                    side: WidgetStateBorderSide.resolveWith((states) =>
-                        const BorderSide(
-                            width: 1.5,
-                            color: Colors.white)), //체크박스 테두리의 두께와 색깔 지정
-                    activeColor: const Color(0xff262626),
-                    checkColor: const Color(0xffFF6767),
+                fillColor: WidgetStateProperty.resolveWith<Color>(
+                    (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.disabled)) {
+                    return Color(0xff323232);
+                  }
+                  return Color(0xff323232);
+                }),
+                activeColor: Colors.transparent,
+                side: BorderSide(color: Colors.transparent),
+                checkColor: const Color(0xffFF6767),
                     value: everyTwoWeek,
                     onChanged: (value) {
                       setState(() {
@@ -122,24 +138,29 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                     },
                   ),
                 ),
-                const Text(
+                 Text(
                   '격주',
-                  style: TextStyle(color: Colors.white),
+                  style:  TextStyle(
+                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),
             Row(
               children: [
                 Transform.scale(
-                  scale: 0.7,
+                  scale: 1,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
-                    side: WidgetStateBorderSide.resolveWith((states) =>
-                        const BorderSide(
-                            width: 1.5,
-                            color: Colors.white)), //체크박스 테두리의 두께와 색깔 지정
-                    activeColor: const Color(0xff262626),
-                    checkColor: const Color(0xffFF6767),
+                fillColor: WidgetStateProperty.resolveWith<Color>(
+                    (Set<WidgetState> states) {
+                  if (states.contains(WidgetState.disabled)) {
+                    return Color(0xff323232);
+                  }
+                  return Color(0xff323232);
+                }),
+                activeColor: Colors.transparent,
+                side: BorderSide(color: Colors.transparent),
+                checkColor: const Color(0xffFF6767),
                     value: everyMonth,
                     onChanged: (value) {
                       setState(() {
@@ -152,9 +173,10 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                     },
                   ),
                 ),
-                const Text(
+                 Text(
                   '매월',
-                  style: TextStyle(color: Colors.white),
+                  style:  TextStyle(
+                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),

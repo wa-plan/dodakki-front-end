@@ -1,4 +1,5 @@
 import 'package:domino/screens/DP/dp_main_page.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -85,7 +86,7 @@ class Tutorial7State extends State<Tutorial7> {
                 onPressed: () {
                   Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const DPMain()),
+                          MaterialPageRoute(builder: (context) => const TdMain()),
                         );
                       
                 },

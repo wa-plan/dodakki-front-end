@@ -536,46 +536,40 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   ),
                 ],
               ),
-
-              const SizedBox(
-                height: 45,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //취소버튼
-                  NewButton(Colors.black, Colors.white, '취소',
-                          () => Navigator.pop(context), currentWidth)
-                      .newButton(),
-
-                  //완료버튼
-                  NewButton(Colors.black, Colors.white, '완료', () {
-                    if (_nameController.text == '') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표를 입력해 주세요.')),
-                      );
-                    } else if (!_isChecked && _selectedDate == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
-                      );
-                    } else if (_selectedColor == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('색상을 선택해 주세요.')),
-                      );
-                    } else {
-                      print('name: ${_nameController.text}');
-                      print('description: ${_descriptionController.text}');
-                      print('colorHex: $_selectedColor');
-                      print('date: $_selectedDate');
-                      print('uploadedImageUrls: $_imageFiles');
-                      _addGoal();
-                    }
-                  }, currentWidth)
-                      .newButton(),
-                ],
-              ),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //취소버튼
+            NewButton(Colors.black, Colors.white, '취소',
+                    () => Navigator.pop(context), currentWidth)
+                .newButton(),
+
+            //완료버튼
+            NewButton(Colors.black, Colors.white, '완료', () {
+              if (_nameController.text == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표를 입력해 주세요.')),
+                );
+              } else if (!_isChecked && _selectedDate == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
+                );
+              } else if (_selectedColor == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('색상을 선택해 주세요.')),
+                );
+              } else {
+                _addGoal();
+              }
+            }, currentWidth)
+                .newButton(),
+          ],
         ),
       ),
     );

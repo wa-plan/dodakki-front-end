@@ -147,13 +147,7 @@ class AddDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '도미노가 성공적으로 저장되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode == 401) {
         Fluttertoast.showToast(
@@ -613,13 +607,7 @@ class MandalartInfoService {
       }
       return null; // 실패 시 null 반환
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null; // 오류 발생 시 null 반환
     }
   }
@@ -673,13 +661,7 @@ class MandaIdListService {
         return null;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
   }

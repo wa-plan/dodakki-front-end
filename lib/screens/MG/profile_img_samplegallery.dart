@@ -187,14 +187,19 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
                 }, currentWidth)
                     .newButton(),
                 NewButton(Colors.black, Colors.white, '완료', () {
+                  print(_selectedImage);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfileEdit(
-                          selectedImage: _selectedImage,
-                          profileImage:
-                              _selectedImage.isEmpty ? widget.profileImage : "",
-                          cameraImage: ""),
+                        selectedImage: _selectedImage,
+                        profileImage: _selectedImage.isEmpty
+                            ? (widget.profileImage.isNotEmpty
+                                ? widget.profileImage
+                                : "")
+                            : "",
+                        cameraImage: "",
+                      ),
                     ),
                   );
                 }, currentWidth)

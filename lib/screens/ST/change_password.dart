@@ -25,13 +25,26 @@ class _ChangePasswordState extends State<ChangePassword> {
     final success = await ChangePasswordService.changePassword(
         currentPassword: currentPassword, newPassword: newPassword);
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('비밀번호가 성공적으로 변경되었습니다.')),
-      );
+      Message('비밀번호가 성공적으로 변경되었습니다.', const Color(0xff00DB00),
+            Color(0xff31412C), // 배경 색상
+            borderColor: const Color(0xff00DB00), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
+      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SettingsMain()),
+                        );
+
+      
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('기존 비밀번호와 일치하지 않습니다.')),
-      );
+      Message('기존 비밀번호와 일치하지 않습니다.', const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
+
+      
     }
   }
 
@@ -95,7 +108,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: currentWidth < 600 ? 38 : 70,
                       child: NewCustomTextField(
                               '현재 비밀번호를 입력해주세요.', _currentkeycontroller,
                               (value) {
@@ -159,7 +171,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: currentWidth < 600 ? 38 : 70,
                       child: NewCustomTextField(
                               '8~16자를 입력해 주세요.', _newkeycontroller, (value) {
                         if (value == null ||
@@ -185,7 +196,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: currentWidth < 600 ? 38 : 70,
                       child: NewCustomTextField(
                               '비밀번호를 확인해주세요.', _checkkeycontroller, (value) {
                         if (value != _newkeycontroller.text) {
@@ -201,20 +211,20 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 ],
               ),
-              SizedBox(height: currentWidth < 600 ? 20 : 10),
+              Spacer(),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  NewButton(Colors.black, Colors.white, '취소', () {
+                    Navigator.pop(context);
+                  }, currentWidth)
+                      .newButton(),
                   NewButton(Colors.black, Colors.white, '완료', () {
                     if (_formKey.currentState!.validate()) {
                       if (_newkeycontroller.text == _newkeycontroller.text) {
                         _changePassword(
                             _currentkeycontroller.text, _newkeycontroller.text);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SettingsMain()),
-                        );
+                        
                       }
                     }
                   }, currentWidth)

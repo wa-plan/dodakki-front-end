@@ -52,18 +52,18 @@ class _AddPage1State extends State<AddPage1> {
   List<Map<String, String>> bookmarks = [];
 
   @override
-void initState() {
-  super.initState();
-  _initializeData();
-}
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
 
-Future<void> _initializeData() async {
-  await userMandaIdInfo(); // 데이터를 먼저 가져오기
-  setState(() {
-    thirdGoalId = 0; // 초기화
-  });
-  _mainGoalList(); // 데이터를 기반으로 호출
-}
+  Future<void> _initializeData() async {
+    await userMandaIdInfo(); // 데이터를 먼저 가져오기
+    setState(() {
+      thirdGoalId = 0; // 초기화
+    });
+    _mainGoalList(); // 데이터를 기반으로 호출
+  }
 
   Future<void> userMandaInfo(String mandalartId) async {
     if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
@@ -236,7 +236,52 @@ Future<void> _initializeData() async {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('도미노 만들기', currentWidth).dPTitleText(),
+          child: Row(
+            children: [
+              CustomIconButton(() {
+                context
+                    .read<SelectAPModel>()
+                    .selectAP("제3목표를 클릭하여 선택해주세요.", null);
+                    context
+                      .read<SelectRepeatModel>()
+                      .selectRepeat(false, false, false, false);
+                Navigator.pop(context);
+              }, Icons.keyboard_arrow_left_rounded, currentWidth)
+                  .customIconButton(),
+              SizedBox(width: currentWidth < 600 ? 10 : 14),
+              Text('도미노 만들기',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 17 : 27,
+                      fontWeight: FontWeight.w600)),
+              const Spacer(),
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xffD9D9D9), // 첫 번째 색상
+                      borderRadius:
+                          BorderRadius.circular(currentWidth < 600 ? 2 : 3),
+                    ),
+                    width: currentWidth < 600 ? 8 : 12,
+                    height: currentWidth < 600 ? 8 : 12,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xff515151), // 첫 번째 색상
+                      borderRadius:
+                          BorderRadius.circular(currentWidth < 600 ? 2 : 3),
+                    ),
+                    width: currentWidth < 600 ? 8 : 12,
+                    height: currentWidth < 600 ? 8 : 12,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         backgroundColor: backgroundColor,
       ),
@@ -250,11 +295,11 @@ Future<void> _initializeData() async {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
-                    DPGuideText('어떤 목표를 달성하고 싶나요?', currentWidth).dPGuideText(),
+                    DPGuideText('어떤 목표와 관련됐나요?', currentWidth).dPGuideText(),
                     SizedBox(height: currentWidth < 600 ? 15 : 25),
                     Container(
                       padding: const EdgeInsets.fromLTRB(17, 0, 17, 0),
-                      height: currentWidth < 600 ? 40 : 55,
+                      height: currentWidth < 600 ? 40 : 53,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -266,10 +311,7 @@ Future<void> _initializeData() async {
                           ),
                         ],
                         borderRadius: BorderRadius.circular(6),
-                        shape: BoxShape.rectangle,
-                        border: Border.all(
-                          color: const Color(0xff2A2A2A),
-                        ),
+                        color: const Color(0xff2A2A2A),
                       ),
                       child: FutureBuilder(
                         future: MainGoalListService.mainGoalList(context),
@@ -292,7 +334,7 @@ Future<void> _initializeData() async {
 
                             // 기본 옵션을 시작으로 추가
                             List<Map<String, dynamic>> options = [
-                              {'id': '0', 'name': '목표를 선택해 주세요.'},
+                              {'id': '0', 'name': '클릭해서 목표를 선택해 주세요.'},
                               ...goals
                             ];
 
@@ -303,13 +345,18 @@ Future<void> _initializeData() async {
                               items:
                                   options.map<DropdownMenuItem<String>>((goal) {
                                 final goalName = goal['name'] ?? 'Unknown Goal';
+                                final isGuideText =
+                                    goalName == '클릭해서 목표를 선택해 주세요.';
                                 return DropdownMenuItem<String>(
                                   value: goal['id'].toString(),
                                   child: Text(
                                     goalName,
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: currentWidth < 600 ? 13 : 15),
+                                        color: isGuideText
+                                            ? const Color(0xff888888)
+                                            : Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: currentWidth < 600 ? 14 : 17),
                                   ),
                                 );
                               }).toList(),
@@ -332,10 +379,17 @@ Future<void> _initializeData() async {
                                 }
                               },
                               isExpanded: true,
-                              dropdownColor: Color(0xff222222),
+                              dropdownColor: const Color(0xff2A2A2A),
                               style: const TextStyle(color: Colors.white),
-                              iconEnabledColor: Colors.white,
+                              icon: Icon(
+                                Icons
+                                    .keyboard_arrow_down_rounded, // 원하는 아이콘으로 변경 가능
+                                color: const Color(0xff888888),
+                                size: currentWidth < 600 ? 22 : 25, // 아이콘 크기 조절
+                              ),
                               underline: Container(),
+                              elevation: 0,
+                              borderRadius: BorderRadius.circular(7),
                             );
                           } else {
                             return const Center(
@@ -349,12 +403,47 @@ Future<void> _initializeData() async {
                       ),
                     ),
                     if (selectedGoalName != "") ...[
-                      SizedBox(height: currentWidth < 600 ? 28 : 32),
+                      SizedBox(height: currentWidth < 600 ? 40 : 40),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           DPGuideText('어떤 플랜과 관련됐나요?', currentWidth)
                               .dPGuideText(),
+                          SizedBox(height: currentWidth < 600 ? 15 : 25),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(17, 5, 17, 5),
+                            height: currentWidth < 600 ? 40 : 53,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black
+                                      .withOpacity(0.05), // 검은색 10% 투명도
+                                  offset: const Offset(0, 0), // X, Y 위치 (0,0)
+                                  blurRadius: 7, // 블러 7
+                                  spreadRadius: 0, // 스프레드 0
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(6),
+                              color: const Color(0xff2A2A2A),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  thirdGoalName,
+                                  style: TextStyle(
+                                      color:
+                                          thirdGoalName == '제3목표를 클릭하여 선택해주세요.'
+                                              ? const Color(0xff888888)
+                                              : Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: currentWidth < 600 ? 14 : 17),
+                                ),
+                              ],
+                            ),
+                          ),
                           SizedBox(height: currentWidth < 600 ? 20 : 25),
                           Center(
                             child: MandalartGrid2(
@@ -376,14 +465,19 @@ Future<void> _initializeData() async {
               children: [
                 //취소버튼
                 NewButton(Colors.black, Colors.white, '취소', () {
-                  context.read<SelectAPModel>().selectAP("플랜선택없음", null);
+                  context
+                      .read<SelectAPModel>()
+                      .selectAP("제3목표를 클릭하여 선택해주세요.", null);
+                      context
+                      .read<SelectRepeatModel>()
+                      .selectRepeat(false, false, false, false);
                   Navigator.pop(context);
                 }, currentWidth)
                     .newButton(),
 
                 //다음버튼
                 NewButton(Colors.black, Colors.white, '다음', () {
-                  if (thirdGoalName != '플랜선택없음') {
+                  if (thirdGoalName != '제3목표를 클릭하여 선택해주세요.') {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -394,13 +488,11 @@ Future<void> _initializeData() async {
                       ),
                     );
                   } else {
-                    Fluttertoast.showToast(
-                      msg: '플랜을 선택해주세요.',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.white,
-                      textColor: backgroundColor,
-                    );
+                    Message("목표를 선택해 주세요.", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
                   }
                 }, currentWidth)
                     .newButton(),

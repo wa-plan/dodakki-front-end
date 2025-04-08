@@ -40,6 +40,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => TestInputtedDetailGoalModel()),
         ChangeNotifierProvider(create: (_) => TestInputtedActionPlanModel()),
         ChangeNotifierProvider(create: (_) => GoalOrder()),
+        ChangeNotifierProvider(create: (_) => SelectRepeatModel()),
       ],
       child: const MyApp(), // MyApp 클래스를 사용
     ),

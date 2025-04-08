@@ -366,6 +366,61 @@ class DeleteMandalartService {
   }
 }
 
+class DeleteThirdGoalService {
+  static Future<bool> deleteThirdGoal(
+    BuildContext context,
+    int thirdGoalId,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('authToken');
+
+    if (token == null) {
+      Fluttertoast.showToast(
+        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return false;
+    }
+
+    final url = Uri.parse('$baseUrl/api/thirdgoal/$thirdGoalId');
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        Fluttertoast.showToast(
+          msg: '삭제 실패: ${response.body}',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+        return false;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: '오류 발생: $e',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return false;
+    }
+  }
+}
+
 class EditSecondGoalService {
   static Future<bool> editSecondGoal({
     required List<int> secondGoalId,

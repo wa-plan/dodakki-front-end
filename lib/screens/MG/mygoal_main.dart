@@ -49,7 +49,14 @@ class _MyGoalState extends State<MyGoal> {
       setState(() {
         nickname = data['nickname'] ?? '당신은 어떤 사람인가요?';
         description = data['description'] ?? '프로필 편집을 통해 \n자신을 표현해주세요.';
+
+        // ✅ 프로필 이미지 경로도 서버에서 불러와서 반영
+        selectedImage = data['profile']?.isNotEmpty == true
+            ? data['profile']
+            : defaultImage;
       });
+
+      print('selectedImage: $selectedImage');
     }
   }
 
@@ -263,7 +270,9 @@ class _MyGoalState extends State<MyGoal> {
                             ],
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: AssetImage(selectedImage),
+                              image: selectedImage.startsWith('http')
+                                  ? NetworkImage(selectedImage)
+                                  : AssetImage(selectedImage) as ImageProvider,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -300,8 +309,8 @@ class _MyGoalState extends State<MyGoal> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ProfileEdit(
-                            selectedImage: "",
-                            profileImage: profile ?? defaultImage,
+                            selectedImage: selectedImage,
+                            profileImage: profile ?? "",
                             cameraImage: ""),
                       ),
                     );
@@ -349,83 +358,92 @@ class _MyGoalState extends State<MyGoal> {
                     ),
                   )
                 else ...[
-                  SizedBox(
-                    height: currentWidth < 600
-                        ? currentWidth * 0.55
-                        : currentWidth * 0.4,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: inProgressIDs.length,
-                      itemBuilder: (context, index) {
-                        String mandalartId =
-                            inProgressIDs[index]['id'] ?? ''; // id 값
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xff2B2B2B),
+                        borderRadius: BorderRadius.circular(6)),
+                    child: Center(
+                      child: SizedBox(
+                        height: 240,
+                        width: 320,
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: inProgressIDs.length,
+                          itemBuilder: (context, index) {
+                            String mandalartId =
+                                inProgressIDs[index]['id'] ?? ''; // id 값
 
-                        String name =
-                            inProgressIDs[index]['name'] ?? ''; // name 값
+                            String name =
+                                inProgressIDs[index]['name'] ?? ''; // name 값
 
-                        String status = statusList.firstWhere(
-                              (element) =>
-                                  element['mandalartId'] ==
-                                  mandalartId, // mandalartId와 비교
-                              orElse: () =>
-                                  {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                            )['status'] ??
-                            '';
+                            String status = statusList.firstWhere(
+                                  (element) =>
+                                      element['mandalartId'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () =>
+                                      {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['status'] ??
+                                '';
 
-                        String dday = ddayList.firstWhere(
-                              (element) =>
-                                  element['mandalartId'] ==
-                                  mandalartId, // mandalartId와 비교
-                              orElse: () =>
-                                  {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                            )['dday'] ??
-                            '0';
+                            String dday = ddayList.firstWhere(
+                                  (element) =>
+                                      element['mandalartId'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () =>
+                                      {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['dday'] ??
+                                '0';
 
-                        String color = colorList.firstWhere(
-                              (element) =>
-                                  element['id'] ==
-                                  mandalartId, // mandalartId와 비교
-                              orElse: () => {
-                                'color': '0xff000000'
-                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                            )['color'] ??
-                            '0xff000000';
+                            String color = colorList.firstWhere(
+                                  (element) =>
+                                      element['id'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () => {
+                                    'color': '0xff000000'
+                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['color'] ??
+                                '0xff000000';
 
-                        int successNum = successNums.firstWhere(
-                              (element) =>
-                                  element['mandalartId'] ==
-                                  mandalartId, // mandalartId와 비교
-                              orElse: () =>
-                                  {'successNum': 0}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                            )['successNum'] ??
-                            0;
+                            int successNum = successNums.firstWhere(
+                                  (element) =>
+                                      element['mandalartId'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () => {
+                                    'successNum': 0
+                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['successNum'] ??
+                                0;
 
-                        List<String> photoList = (photos[mandalartId] ?? [])
-                            .map<String>((photo) => photo['path'].toString())
-                            .toList();
+                            List<String> photoList = (photos[mandalartId] ?? [])
+                                .map<String>(
+                                    (photo) => photo['path'].toString())
+                                .toList();
 
-                        String bookmark = bookmarks.firstWhere(
-                              (element) =>
-                                  element['id'] ==
-                                  mandalartId, // mandalartId와 비교
-                              orElse: () => {
-                                'bookmark': 'UNBOOKMARK'
-                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                            )['bookmark'] ??
-                            'UNBOOKMARK';
+                            String bookmark = bookmarks.firstWhere(
+                                  (element) =>
+                                      element['id'] ==
+                                      mandalartId, // mandalartId와 비교
+                                  orElse: () => {
+                                    'bookmark': 'UNBOOKMARK'
+                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                )['bookmark'] ??
+                                'UNBOOKMARK';
 
-                        return GoalCard(
-                          mandalartId: mandalartId,
-                          name: name,
-                          status: status,
-                          photoList: photoList,
-                          dday: dday,
-                          color: color,
-                          successNum: successNum,
-                          bookmark: bookmark,
-                          onBookmarkToggle: (id, action) {},
-                        );
-                      },
+                            return GoalCard(
+                              mandalartId: mandalartId,
+                              name: name,
+                              status: status,
+                              photoList: photoList,
+                              dday: dday,
+                              color: color,
+                              successNum: successNum,
+                              bookmark: bookmark,
+                              onBookmarkToggle: (id, action) {},
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 18),
