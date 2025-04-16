@@ -160,7 +160,7 @@ class _EditInput1PageState extends State<EditInput1Page> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: currentWidth < 600 ? 15 : 20),
+                        SizedBox(height: currentWidth < 600 ? 10 : 20),
                         DPGuideText("최종 목표를 이루기 위한 세부 목표에요.", currentWidth)
                             .dPGuideText(),
                         SizedBox(height: currentWidth < 600 ? 14 : 20),
@@ -171,7 +171,7 @@ class _EditInput1PageState extends State<EditInput1Page> {
                                 currentHeight,
                                 currentWidth)
                             .dpMainGoal(),
-                        SizedBox(height: currentWidth < 600 ? 10 : 15),
+                        SizedBox(height: currentWidth < 600 ? 20 : 15),
                         Center(
                             child: SizedBox(
                                 width: currentHeight * 0.4,
@@ -228,7 +228,11 @@ class _EditInput1PageState extends State<EditInput1Page> {
                     ),
                   ),
                 ),
-                Row(
+                
+              ],
+            )),
+            bottomNavigationBar: Padding(padding: fullPadding, child: 
+            Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       NewButton(Colors.black, Colors.white, '취소', () {
@@ -255,8 +259,7 @@ class _EditInput1PageState extends State<EditInput1Page> {
                         Navigator.pop(context);
                       }, currentWidth)
                           .newButton()
-                    ])
-              ],
-            )));
+                    ]),),
+            );
   }
 }

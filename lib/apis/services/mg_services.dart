@@ -20,7 +20,7 @@ class AddGoalService {
     String? token = prefs.getString('authToken');
     print("🔐 저장된 authToken: $token");
 
-    if (token == null || token.isEmpty) {
+    if (token == null) {
       Fluttertoast.showToast(
         msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
         toastLength: Toast.LENGTH_SHORT,
@@ -52,13 +52,7 @@ class AddGoalService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '목표가 성공적으로 저장되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode == 401) {
         Fluttertoast.showToast(
@@ -125,13 +119,7 @@ class EditGoalNameService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '목표가 성공적으로 수정되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode == 401) {
         Fluttertoast.showToast(
@@ -198,13 +186,7 @@ class EditGoalDateService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '목표가 성공적으로 수정되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode == 401) {
         Fluttertoast.showToast(
@@ -272,13 +254,7 @@ class EditGoalDescriptionService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '목표가 성공적으로 수정되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+       
         return true;
       } else if (response.statusCode == 401) {
         Fluttertoast.showToast(

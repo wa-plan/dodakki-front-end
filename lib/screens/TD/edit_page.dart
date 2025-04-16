@@ -36,29 +36,6 @@ class EditPageState extends State<EditPage> {
   String dominoValue = '';
   late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
 
-  /*void editDomino(int goalId, String newGoal) async {
-    final success =
-        await EditDominoService.editDomino(goalId: goalId, newGoal: newGoal);
-
-    if (success) {
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노가 삭제되었습니다.')),
-      );
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const TdMain(),
-          ));
-    } else {
-      // 실패한 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
-      );
-    }
-  }*/
-
   void editDominoNew(int thirdGoalId, String name, List<DateTime> dates,
       String repetition) async {
     final success = await EditDominoNewService.editDomino(
@@ -69,9 +46,8 @@ class EditPageState extends State<EditPage> {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노가 삭제되었습니다.')),
-      );
+       
+      
 
       Navigator.push(
           context,
@@ -80,9 +56,11 @@ class EditPageState extends State<EditPage> {
           ));
     } else {
       // 실패한 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
-      );
+      Message("도미노 삭제에 실패했습니다.", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
     }
   }
 
@@ -369,9 +347,7 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노가 삭제되었습니다.')),
-      );
+      
 
       Navigator.push(
           context,
@@ -392,9 +368,11 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노가 삭제되었습니다.')),
-      );
+      Message("도미노가 삭제되었어!.", const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block)
+        .message(context);
 
       Navigator.push(
           context,

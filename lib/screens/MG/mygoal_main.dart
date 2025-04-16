@@ -286,7 +286,7 @@ class _MyGoalState extends State<MyGoal> {
                           Text(nickname,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 13 : 14,
+                                  fontSize: currentWidth < 600 ? 14 : 15,
                                   fontWeight: FontWeight.w600)),
                           const SizedBox(height: 5),
                           //프로필 설명
@@ -295,7 +295,7 @@ class _MyGoalState extends State<MyGoal> {
                             style: TextStyle(
                                 height: 1.5,
                                 color: Colors.white,
-                                fontSize: currentWidth < 600 ? 11 : 12,
+                                fontSize: currentWidth < 600 ? 12 : 13,
                                 fontWeight: FontWeight.w400),
                           ),
                         ],
@@ -351,22 +351,22 @@ class _MyGoalState extends State<MyGoal> {
                     child: Text(
                       "새로운 목표를 세워볼까요?",
                       style: TextStyle(
-                            color: Color(0xff6C6C6C),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        color: Color(0xff6C6C6C),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   )
                 else ...[
                   Container(
-                    width: double.infinity,
                     decoration: BoxDecoration(
                         color: Color(0xff2B2B2B),
                         borderRadius: BorderRadius.circular(6)),
+                    width: double.infinity,
                     child: Center(
                       child: SizedBox(
                         height: 240,
-                        width: 320,
+                        width: 350,
                         child: PageView.builder(
                           controller: _pageController,
                           itemCount: inProgressIDs.length,
@@ -482,15 +482,11 @@ class _MyGoalState extends State<MyGoal> {
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
-                          
-                          
                         ),
                         Column(
                           children: [
                             SizedBox(height: 15),
-                            Image.asset(
-                              'assets/img/haha.png',
-                              scale: 2),
+                            Image.asset('assets/img/haha.png', scale: 2),
                           ],
                         )
                       ],
@@ -598,15 +594,11 @@ class _MyGoalState extends State<MyGoal> {
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
-                          
-                          
                         ),
                         Column(
                           children: [
                             SizedBox(height: 15),
-                            Image.asset(
-                              'assets/img/haha.png',
-                              scale: 2),
+                            Image.asset('assets/img/haha.png', scale: 2),
                           ],
                         )
                       ],

@@ -466,13 +466,7 @@ class EditSecondGoalService {
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Fluttertoast.showToast(
-            msg: '목표가 성공적으로 수정되었습니다.',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-          );
+          
         } else {
           Fluttertoast.showToast(
             msg: '목표 수정 실패: ${response.body}',
@@ -543,13 +537,7 @@ class EditGoalColorService {
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Fluttertoast.showToast(
-            msg: '목표가 성공적으로 수정되었습니다.',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-          );
+          
         } else {
           Fluttertoast.showToast(
             msg: '목표 수정 실패: ${response.body}',
@@ -656,13 +644,7 @@ class EditThirdGoalService {
           );
 
           if (response.statusCode == 200 || response.statusCode == 201) {
-            Fluttertoast.showToast(
-              msg: '목표가 성공적으로 저장되었습니다.',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-            );
+            
           } else {
             Fluttertoast.showToast(
               msg: '목표 생성 실패: ${response.body}',

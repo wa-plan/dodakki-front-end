@@ -193,7 +193,7 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                             currentHeight,
                             currentWidth)
                         .dpMainGoal(),
-                    SizedBox(height: currentWidth < 600 ? 10 : 15),
+                    SizedBox(height: currentWidth < 600 ? 20 : 15),
                     Center(
                       child: SizedBox(
                         width: currentHeight * 0.4,
@@ -256,7 +256,12 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                 ),
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(padding: fullPadding, child: 
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               NewButton(Colors.black, Colors.white, '취소', () {
                 // TestInputtedActionPlanModel 초기화
                 context.read<TestInputtedActionPlanModel>().resetActionPlans();
@@ -294,10 +299,7 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                 );
               }, currentWidth)
                   .newButton(),
-            ]),
-          ],
-        ),
-      ),
+            ]),),
     );
   }
 }

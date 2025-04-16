@@ -28,6 +28,7 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
     everyWeek = widget.everyWeek;
     everyTwoWeek = widget.everyTwoWeek;
     everyMonth = widget.everyMonth;
+    print(everyDay);
   }
 
   @override

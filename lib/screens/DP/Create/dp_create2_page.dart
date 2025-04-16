@@ -143,7 +143,7 @@ class _DPcreate99Page extends State<DPcreate99Page> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: currentWidth < 600 ? 15 : 20),
+                        SizedBox(height: currentWidth < 600 ? 10 : 20),
                         DPGuideText('만다라트를 작성해 보아요.', currentWidth).dPGuideText(),
                         SizedBox(height: currentWidth < 600 ? 14 : 20),
                         DPMainGoal(
@@ -156,7 +156,7 @@ class _DPcreate99Page extends State<DPcreate99Page> {
                         SizedBox(height: currentWidth < 600 ? 10 : 15),
                         Center(
                           child: SizedBox(
-                            width: currentHeight*0.5,
+                            width: currentHeight*0.53,
                             child: GridView(
                               shrinkWrap: true, // GridView를 자식으로 설정
                               physics:

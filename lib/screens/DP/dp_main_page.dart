@@ -240,28 +240,46 @@ class _DPMainState extends State<DPMain> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   //만다라트 추가 버튼
-                  NewCustomIconButton(() {
-                    //기존 Create 기능에 저장된 secondGoal 초기화
+                  NewCustomIconButton(() async {
+                    // 초기화 로직
                     for (int i = 0; i < 9; i++) {
-                      context
-                          .read<SaveInputtedDetailGoalModel>()
-                          .updateDetailGoal("$i", "");
-                    }
-                    //color 초기화
-                    for (int i = 0; i < 9; i++) {
-                      context
-                          .read<GoalColor>()
-                          .updateGoalColor("$i", const Color(0xff929292));
-                    }
-                    //thirdGoal 초기화
-                    for (int i = 0; i < 9; i++) {
-                      for (int j = 0; j < 9; j++) {
-                        context
-                            .read<SaveInputtedActionPlanModel>()
-                            .updateActionPlan(i, "$j", "");
-                      }
-                    }
+                                context
+                                    .read<SaveInputtedDetailGoalModel>()
+                                    .updateDetailGoal(i.toString(), "");
+                              }
 
+                              for (int i = 0; i < 9; i++) {
+                                context
+                                    .read<TestInputtedDetailGoalModel>()
+                                    .updateTestDetailGoal(i.toString(), "");
+                              }
+
+                              for (int i = 0; i < 9; i++) {
+                                context.read<GoalColor>().updateGoalColor(
+                                    i.toString(), const Color(0xff929292));
+                              }
+
+                              for (int i = 0; i < 9; i++) {
+                                for (int j = 0; j < 9; j++) {
+                                  context
+                                      .read<SaveInputtedActionPlanModel>()
+                                      .updateActionPlan(i, j.toString(), "");
+                                }
+                              }
+
+                              for (int i = 0; i < 9; i++) {
+                                for (int j = 0; j < 9; j++) {
+                                  context
+                                      .read<TestInputtedActionPlanModel>()
+                                      .updateTestActionPlan(
+                                          i, j.toString(), "");
+                                }
+                              }
+
+                    // 살짝 기다려줌 (프레임 간 처리 타이밍 보장)
+                    await Future.delayed(Duration(milliseconds: 10));
+
+                    // 화면 전환
                     Navigator.push(
                       context,
                       MaterialPageRoute(

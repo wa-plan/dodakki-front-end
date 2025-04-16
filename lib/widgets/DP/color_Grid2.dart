@@ -7,19 +7,30 @@ class ColorBox2 extends StatelessWidget {
   final int keyNumber;
 
   const ColorBox2({super.key, required this.keyNumber});
+  
 
   @override
   Widget build(BuildContext context) {
+
+    Color fallbackColor = const Color(0xff929292); // 기본 색상
+
+    final selectedColor =
+    context.watch<GoalColor>().selectedGoalColor['$keyNumber'];
+
+    Color color1 = context
+                    .watch<SaveInputtedDetailGoalModel>()
+                    .inputtedDetailGoal['$keyNumber']!
+                    .isEmpty
+    ? backgroundColor
+    : (selectedColor == null || selectedColor == Colors.transparent
+        ? fallbackColor
+        : selectedColor);
+    
     return DPCreateGrid(
             context
                 .watch<SaveInputtedDetailGoalModel>()
                 .inputtedDetailGoal['$keyNumber']!,
-            context
-                    .watch<SaveInputtedDetailGoalModel>()
-                    .inputtedDetailGoal['$keyNumber']!
-                    .isEmpty
-                ? backgroundColor
-                : context.watch<GoalColor>().selectedGoalColor['$keyNumber'],
+            color1,
                 null)
         .dPCreateGrid();
   }

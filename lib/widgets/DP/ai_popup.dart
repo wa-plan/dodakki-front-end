@@ -238,7 +238,7 @@ class _AIPopupState extends State<AIPopup> {
               const SizedBox(height: 10),
               Center(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   height: 40,
                   child: TextButton(
                     onPressed: _handleApply,
@@ -298,8 +298,8 @@ class AICardState extends State<AICard> {
             padding: const EdgeInsets.all(3.0),
             child: Container(
               alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width * 0.2,
-              height: MediaQuery.of(context).size.width * 0.2,
+              width: MediaQuery.of(context).size.width * 0.22,
+              height: MediaQuery.of(context).size.width * 0.22,
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
                 color: widget.isSelected

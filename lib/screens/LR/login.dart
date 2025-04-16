@@ -1,4 +1,5 @@
 import 'package:domino/screens/LR/loginregister_find_password.dart';
+import 'package:domino/screens/LR/agreement.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
 import 'package:domino/screens/Tutorial/tutorial1_page.dart';
 import 'package:domino/styles.dart';
@@ -286,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen(),
+                                  builder: (context) => const Agreement(),
                                 ),
                               );
                             },

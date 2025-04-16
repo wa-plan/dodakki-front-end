@@ -172,7 +172,7 @@ class _EditInput2PageState extends State<EditInput2Page> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(height: currentWidth < 600 ? 15 : 20),
+                    SizedBox(height: currentWidth < 600 ? 10 : 20),
                     DPGuideText("세부 목표를 위한 구체적인 계획이에요.", currentWidth)
                         .dPGuideText(),
                     SizedBox(height: currentWidth < 600 ? 14 : 20),
@@ -182,7 +182,7 @@ class _EditInput2PageState extends State<EditInput2Page> {
                             currentHeight,
                             currentWidth)
                         .dpMainGoal(),
-                    SizedBox(height: currentWidth < 600 ? 10 : 15),
+                    SizedBox(height: currentWidth < 600 ? 20 : 15),
                     Center(
                       child: SizedBox(
                         width: currentHeight * 0.4,
@@ -273,7 +273,12 @@ class _EditInput2PageState extends State<EditInput2Page> {
                 ),
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(padding: fullPadding, child: 
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               NewButton(
                 Colors.black,
                 Colors.white,
@@ -307,10 +312,7 @@ class _EditInput2PageState extends State<EditInput2Page> {
                   Navigator.pop(context);
                 },currentWidth
               ).newButton(),
-            ]),
-          ],
-        ),
-      ),
+            ]),),
     );
   }
 }
