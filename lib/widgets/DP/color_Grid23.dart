@@ -31,15 +31,23 @@ class ColorBox extends StatelessWidget {
     // ✅ detailGoal이 ""인지 확인 (디버깅용 print 추가)
     bool isDetailGoalEmpty = detailGoal.isEmpty;
 
+    print('$detailGoal + $isDetailGoalEmpty');
+
     // ✅ 부모 위젯으로 값 전달
     WidgetsBinding.instance.addPostFrameCallback((_) {
       onDetailGoalEmpty(isDetailGoalEmpty);
     });
 
+    final selectedColor =
+        context.watch<GoalColor>().selectedGoalColor['$goalColorId'];
+
+    Color fallbackColor = const Color(0xff929292); // 기본 색상
+
     Color color1 = detailGoal.isEmpty
         ? backgroundColor
-        : (context.watch<GoalColor>().selectedGoalColor['$goalColorId'] ??
-            const Color(0xff929292));
+        : (selectedColor == null || selectedColor == Colors.transparent
+            ? fallbackColor
+            : selectedColor);
 
     List<Widget> buildGridItems() {
       return List.generate(9, (index) {

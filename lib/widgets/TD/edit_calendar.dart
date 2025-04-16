@@ -18,13 +18,18 @@ class EditCalendarState extends State<EditCalendar> {
   Map pickDates = {};
 
   @override
-  void initState() {
-    super.initState();
-    _focusedDay = widget.date;
-    _selectedDay = widget.date;
-    pickedDate = widget.date; // 초기에는 전달된 날짜로 설정
+void initState() {
+  super.initState();
+  _focusedDay = widget.date;
+  _selectedDay = widget.date;
+  pickedDate = widget.date; // 초기에는 전달된 날짜로 설정
+
+  // addPostFrameCallback을 사용하여 빌드 후 상태 변경
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     Provider.of<DateProvider>(context, listen: false).setPickedDate(pickedDate);
-  }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +73,16 @@ class EditCalendarState extends State<EditCalendar> {
               color: mainTextColor,
               fontSize: currentWidth < 600 ? 12 : 16,
             ),
+            selectedTextStyle: TextStyle(
+                fontSize: 12, // 선택된 날짜의 폰트 크기 고정
+                fontWeight: FontWeight.w700,
+                color: Colors.white, // 선택된 날짜의 텍스트 색상
+              ),
+              todayTextStyle: TextStyle(
+                fontSize: 12, // 오늘 날짜 폰트 크기
+                fontWeight: FontWeight.w700, // 오늘 날짜 폰트 굵기
+                color: Colors.white, // 오늘 날짜 텍스트 색상
+              ),
             weekendTextStyle: TextStyle(
               color: mainTextColor,
               fontSize: currentWidth < 600 ? 12 : 16,

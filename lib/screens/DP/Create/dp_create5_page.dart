@@ -384,8 +384,8 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(3),
                                   color: const Color(0xff2A2A2A)),
-                              height: currentWidth < 600 ? 100 : 150,
-                              width: currentWidth < 600 ? 400 : 410,
+                              height: 130,
+                              width: 400,
                               child: GridView(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -438,51 +438,72 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                       }, currentWidth)
                           .newButton(),
                       NewButton(Colors.black, Colors.white, '완료', () async {
-                        // Execute _addSecondGoal and wait for the result
-                        final secondGoalSuccess = await _addSecondGoal();
-
-                        // If _addSecondGoal was successful, update the created goals and proceed to _addThirdGoal
-                        if (secondGoalSuccess) {
-                          // Update the created goal using provider
-                          context
-                              .read<SaveMandalartCreatedGoal>()
-                              .updateMandalartCreatedGoal(
-                                  "${widget.mainGoalId}");
-
-                          // Ensure that the update is completed before moving to next goal
-                          final thirdGoalSuccess = await _addThirdGoal();
-
-                          // If both goals are added successfully, navigate to DPMain
-                          if (thirdGoalSuccess) {
-                            for (int i = 0; i < 9; i++) {
-                              context
-                                  .read<SaveInputtedDetailGoalModel>()
-                                  .updateDetailGoal(i.toString(), "");
-                            }
-
-                            for (int i = 0; i < 9; i++) {
-                              context.read<GoalColor>().updateGoalColor(
-                                  i.toString(), const Color(0xff929292));
-                            }
-
-                            for (int i = 0; i < 9; i++) {
-                              for (int j = 0; j < 9; j++) {
-                                context
-                                    .read<SaveInputtedActionPlanModel>()
-                                    .updateActionPlan(i, j.toString(), "");
-                              }
-                            }
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CompletePage()),
-                            );
-                          }
-                        }
+                        _handleSubmitWithDialog();
                       }, currentWidth)
                           .newButton(),
                     ]),
               ],
             )));
   }
+
+  Future<void> _handleSubmitWithDialog() async {
+  // 1. 로딩 다이얼로그 띄우기
+  showDialog(
+    context: context,
+    barrierDismissible: false, // 바깥 눌러도 안 닫힘
+    builder: (_) => AlertDialog(
+    backgroundColor: backgroundColor,
+    content: Row(
+      children: const [
+        CircularProgressIndicator(color: mainRed),
+        SizedBox(width: 20),
+        Text("만다라트를 만드는 중이야..!", style: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w600)),
+      ],
+    ),
+  ),
+  );
+
+  // 2. 실제 작업
+  final secondGoalSuccess = await _addSecondGoal();
+
+  if (secondGoalSuccess) {
+    context.read<SaveMandalartCreatedGoal>().updateMandalartCreatedGoal("${widget.mainGoalId}");
+
+    final thirdGoalSuccess = await _addThirdGoal();
+
+    if (thirdGoalSuccess) {
+      for (int i = 0; i < 9; i++) {
+        context.read<SaveInputtedDetailGoalModel>().updateDetailGoal(i.toString(), "");
+      }
+
+      for (int i = 0; i < 9; i++) {
+        context.read<GoalColor>().updateGoalColor(i.toString(), const Color(0xff929292));
+      }
+
+      for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+          context.read<SaveInputtedActionPlanModel>().updateActionPlan(i, j.toString(), "");
+        }
+      }
+
+      // 3. 로딩 다이얼로그 닫기
+      Navigator.pop(context); // 팝업 닫기
+
+      // 4. 다음 페이지로 이동
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const CompletePage()),
+      );
+      return;
+    }
+  }
+
+  // 작업 실패 시에도 팝업 닫기
+  Navigator.pop(context);
 }
+}
+
+

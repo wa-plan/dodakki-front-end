@@ -158,7 +158,7 @@ class _DPcreateSelectPageState extends State<DPcreateSelectPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: currentWidth < 600 ? 15 : 25),
+            SizedBox(height: currentWidth < 600 ? 10 : 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -266,8 +266,8 @@ class _DPcreateSelectPageState extends State<DPcreateSelectPage> {
             if (showGrid)
               Center(
                 child: Container(
-                  height: currentHeight*0.2,
-                  width: currentHeight*0.2,
+                  height: currentHeight*0.17,
+                  width: currentHeight*0.17,
                     padding:  EdgeInsets.all(currentWidth < 600 ? 3 : 5),
                     decoration: BoxDecoration(
                         borderRadius:
@@ -277,8 +277,8 @@ class _DPcreateSelectPageState extends State<DPcreateSelectPage> {
                     child: Center(
                         child: AutoSizeText(
                             maxLines: 3, // 최대 줄 수 (필요에 따라 변경 가능)
-                            minFontSize: currentWidth < 600 ? 6 : 10,
-                            maxFontSize: currentWidth < 600 ? 13 : 20, 
+                            minFontSize: currentWidth < 600 ? 8 : 10,
+                            maxFontSize: currentWidth < 600 ? 15 : 20, 
                             overflow: TextOverflow.ellipsis, // 내용이 너무 길 경우 생략 표시
                             selectedGoalName,
                             textAlign: TextAlign.center,

@@ -273,8 +273,8 @@ class AICardState extends State<AICard> {
             padding: const EdgeInsets.all(3.0),
             child: Container(
               alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width * 0.23,
-              height: MediaQuery.of(context).size.width * 0.23,
+              width: MediaQuery.of(context).size.width * 0.22,
+              height: MediaQuery.of(context).size.width * 0.22,
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
                 color: widget.isSelected
@@ -286,7 +286,7 @@ class AICardState extends State<AICard> {
                 widget.goal,
                 maxLines: 3,
                 minFontSize: 6,
-                maxFontSize: 13,
+                maxFontSize: 12,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: TextStyle(

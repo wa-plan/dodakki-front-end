@@ -215,13 +215,7 @@ class DominoStatusService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '도미노 상태가 성공적으로 변경되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -291,13 +285,7 @@ class EditDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '도미노 목표가 변경되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -443,13 +431,7 @@ class DeleteDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '도미노가 성공적으로 삭제되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+       
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -515,13 +497,7 @@ class DeleteTodayDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '오늘의 도미노가 성공적으로 삭제되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(

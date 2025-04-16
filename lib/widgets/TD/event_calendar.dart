@@ -99,9 +99,7 @@ class _EventCalendarState extends State<EventCalendar> {
         goalId: goalId, attainment: attainment, date: date);
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('상태가 $attainment(으)로 업데이트 되었습니다.')),
-      );
+      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('업데이트에 실패했습니다.')),

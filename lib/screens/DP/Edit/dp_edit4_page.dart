@@ -412,8 +412,8 @@ class EditColorPageState extends State<EditColorPage> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(3),
                                   color: const Color(0xff2A2A2A)),
-                              height: currentWidth < 600 ? 100 : 150,
-                              width: currentWidth < 600 ? 400 : 410,
+                              height: 130,
+                              width: 400,
                               child: GridView(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -466,21 +466,39 @@ class EditColorPageState extends State<EditColorPage> {
                       }, currentWidth)
                           .newButton(),
                       NewButton(Colors.black, Colors.white, '완료', () async {
-                        // Execute _addSecondGoal and wait for the result
+                        // 👉 로딩 팝업 띄우기
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => AlertDialog(
+                            backgroundColor: backgroundColor,
+                            content: Row(
+                              children: const [
+                                CircularProgressIndicator(color: mainRed),
+                                SizedBox(width: 20),
+                                Text("만다라트를 수정하는 중이야..!",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                        );
+
+                        // 1. Second Goal 수정
                         final secondGoalSuccess = await _editSecondGoal();
 
-                        // If _addSecondGoal was successful, proceed to _addThirdGoal
-                        /*if (secondGoalSuccess) {
-                              final thirdGoalSuccess = await _editThirdGoal();*/
-
                         if (secondGoalSuccess) {
+                          // 2. Goal Color 수정
                           final goalColorSuccess = await _editColor();
 
                           if (goalColorSuccess) {
+                            // 3. Third Goal 수정
                             final thirdGoalSuccess = await _editThirdGoal();
 
-                            // If both are successful, navigate to DPlistPage
                             if (thirdGoalSuccess) {
+                              // 4. 상태 초기화
                               for (int i = 0; i < 9; i++) {
                                 context
                                     .read<SaveInputtedDetailGoalModel>()
@@ -499,15 +517,23 @@ class EditColorPageState extends State<EditColorPage> {
                                       .updateActionPlan(i, j.toString(), "");
                                 }
                               }
+
+                              // ✅ 로딩 팝업 닫기 후 페이지 이동
+                              Navigator.pop(context); // 로딩 팝업 닫기
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const EditCompletePage()),
+                                  builder: (context) =>
+                                      const EditCompletePage(),
+                                ),
                               );
+                              return;
                             }
                           }
                         }
+
+                        // ❌ 실패했을 경우에도 팝업 닫기
+                        Navigator.pop(context);
                       }, currentWidth)
                           .newButton(),
                     ]),

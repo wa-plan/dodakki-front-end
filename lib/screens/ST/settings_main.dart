@@ -1,3 +1,4 @@
+import 'package:domino/screens/LR/agreement.dart';
 import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/account_management.dart';
@@ -186,6 +187,10 @@ class _SettingsMainState extends State<SettingsMain> {
                   }
                 },
               ),
+              const SizedBox(height: 14),
+              MGSubTitle('앱 정보', currentWidth).mgSubTitle(context),
+              const SizedBox(height: 8),
+              _buildCombinedNavigationItem()
             ],
           ),
         ),
@@ -270,7 +275,7 @@ class _SettingsMainState extends State<SettingsMain> {
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
                       fontSize: currentWidth < 600 ? 12 : 16,
-                      fontWeight: FontWeight.w300)),
+                      fontWeight: FontWeight.w400)),
               const Spacer(),
               customSwitch(time: "morning")
             ],
@@ -288,7 +293,7 @@ class _SettingsMainState extends State<SettingsMain> {
                   style: TextStyle(
                       color: Color(0xffAAAAAA),
                       fontSize: currentWidth < 600 ? 12 : 16,
-                      fontWeight: FontWeight.w300)),
+                      fontWeight: FontWeight.w400)),
               const Spacer(),
               customSwitch(time: "night")
             ],
@@ -347,6 +352,99 @@ class _SettingsMainState extends State<SettingsMain> {
       ),
     );
   }
+
+   Widget _buildCombinedNavigationItem() {
+    final currentWidth = MediaQuery.of(context).size.width;
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      decoration: BoxDecoration(
+        color: const Color(0xff2A2A2A),
+        borderRadius: BorderRadius.circular(3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+            offset: const Offset(0, 0), // X, Y 위치 (0,0)
+            blurRadius: 15, // 블러 7
+            spreadRadius: 0, // 스프레드 0
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('앱 버전',
+                      style: TextStyle(
+                          fontSize: currentWidth < 600 ? 13 : 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600)),
+                  Text('1.0.0 (2025.5.1)',
+                      style: TextStyle(
+                          fontSize: currentWidth < 600 ? 13 : 16,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w600)),
+                  
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 13),
+          GestureDetector(
+            onTap: () {
+
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('서비스 이용약관',
+                      style: TextStyle(
+                          fontSize: currentWidth < 600 ? 13 : 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600)),
+                  NewCustomIconButton(() {showServiceRulePopup(context, currentWidth);
+                    
+                  }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
+                      .newCustomIconButton(),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 13),
+          GestureDetector(
+            onTap: () {  
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('개인정보 처리방침',
+                      style: TextStyle(
+                          fontSize: currentWidth < 600 ? 13 : 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600)),
+                  NewCustomIconButton(() {showAgreementPopup(context, currentWidth);
+                  }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
+                      .newCustomIconButton(),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 class NotificationService {
@@ -392,7 +490,8 @@ class NotificationService {
       icon: '@drawable/smallicon',
       largeIcon: DrawableResourceAndroidBitmap('@drawable/ic_notification'), // 컬러 이미지 표시
       enableVibration: true,
-      playSound: true
+      playSound: true,
+      color: backgroundColor
 
       
     );
@@ -444,3 +543,5 @@ await flutterLocalNotificationsPlugin.show(
     return status;
   }
 }
+
+
