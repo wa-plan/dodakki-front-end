@@ -51,6 +51,9 @@ class AddGoalService {
         body: body,
       );
 
+      print('📡 요청 응답 상태 코드: ${response.statusCode}');
+      print('📡 응답 본문: ${response.body}');
+
       if (response.statusCode >= 200 && response.statusCode < 300) {
         
         return true;

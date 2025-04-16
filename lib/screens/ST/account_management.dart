@@ -71,6 +71,8 @@ class _AccountManagementState extends State<AccountManagement> {
                   _buildSettingItem(
                     title: '비밀번호 변경하기',
                     onTap: () {
+                      print(widget.phoneNum);
+                      print(widget.email);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
