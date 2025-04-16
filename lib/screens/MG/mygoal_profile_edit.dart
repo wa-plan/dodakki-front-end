@@ -171,43 +171,42 @@ class _ProfileEditState extends State<ProfileEdit> {
     try {
       print('📤 _uploadSelectedImage 호출됨');
 
-      if (widget.selectedImage.isNotEmpty) {
-        print('📷 selectedImage 경로: ${widget.selectedImage}');
+      // ✅ selectedImage가 asset이 아닌 경우 생략
+      if (widget.selectedImage.isEmpty ||
+          !widget.selectedImage.startsWith("assets/")) {
+        print('⏭️ selectedImage가 asset이 아님 — 업로드 생략: ${widget.selectedImage}');
+        return;
+      }
 
-        // 1️⃣ asset에서 이미지 로드
-        ByteData byteData = await rootBundle.load(widget.selectedImage);
-        Uint8List imageBytes = byteData.buffer.asUint8List();
+      print('📷 selectedImage 경로: ${widget.selectedImage}');
 
-        // 2️⃣ 임시 디렉토리에 파일로 저장
-        final directory = await getTemporaryDirectory();
-        final filePath = '${directory.path}/profile_image.png';
-        final file = File(filePath);
-        await file.writeAsBytes(imageBytes);
-        print('📁 파일로 저장 완료: $filePath');
+      ByteData byteData = await rootBundle.load(widget.selectedImage);
+      Uint8List imageBytes = byteData.buffer.asUint8List();
 
-        // 3️⃣ path 기반 PlatformFile 생성
-        PlatformFile selectedFile = PlatformFile(
-          name: 'profile_image.png',
-          path: filePath, // ✅ 여기 핵심
-          size: imageBytes.length,
-        );
+      final directory = await getTemporaryDirectory();
+      final filePath = '${directory.path}/profile_image.png';
+      final file = File(filePath);
+      await file.writeAsBytes(imageBytes);
+      print('📁 파일로 저장 완료: $filePath');
 
-        // 4️⃣ 업로드 실행
-        List<PlatformFile> fileList = [selectedFile];
-        String uploadedUrl = await UploadFileService.uploadFiles(fileList);
+      PlatformFile selectedFile = PlatformFile(
+        name: 'profile_image.png',
+        path: filePath,
+        size: imageBytes.length,
+      );
 
-        // 5️⃣ 업로드 결과 반영
-        if (uploadedUrl.isNotEmpty) {
-          setState(() {
-            _imageFiles.clear();
-            _imageFiles.add(uploadedUrl);
-          });
-          print('✅ 이미지 업로드 성공: $uploadedUrl');
-        } else {
-          print('⚠️ 업로드 실패: 빈 URL');
-        }
+      List<PlatformFile> fileList = [selectedFile];
+      String uploadedUrl = await UploadFileService.uploadFiles(fileList);
+
+      if (uploadedUrl.isNotEmpty) {
+        setState(() {
+          _imageFiles.clear();
+          _imageFiles.add(uploadedUrl);
+          profile = uploadedUrl;
+        });
+        print('✅ 이미지 업로드 성공: $uploadedUrl');
       } else {
-        print('ℹ️ selectedImage 없음 — 업로드 생략');
+        print('⚠️ 업로드 실패: 빈 URL');
       }
     } catch (e) {
       print('❌ 이미지 업로드 중 예외 발생: $e');
