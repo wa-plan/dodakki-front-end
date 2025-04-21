@@ -273,7 +273,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       setState(() {
         nickname = data['nickname'] ?? "도민호";
         description = data['description'] ?? "매일의 목표: 행보칸 하루 살기";
-        profile = widget.profileImage;
+        profile = data['profile'] ?? "";
       });
 
       _nicknamecontroller.text = nickname ?? "";
@@ -472,11 +472,21 @@ class _ProfileEditState extends State<ProfileEdit> {
             NewButton(Colors.black, Colors.white, '완료', () async {
               await _uploadSelectedImage(); // 🔹 이미지 업로드 완료까지 대기
 
-              // ✅ 이미지가 없어도 기본 값으로 진행
-              String profileToUpload =
-                  _imageFiles.isNotEmpty ? _imageFiles[0] : '';
+              String profileToUpload;
 
-              print('_editProfile 실행 전');
+              // 1순위: 새로 업로드된 이미지
+              if (_imageFiles.isNotEmpty) {
+                profileToUpload = _imageFiles[0];
+              }
+              // 2순위: 기존에 서버에 저장된 이미지 (profile 변수 또는 widget.profileImage) → 단, asset이 아니어야 함
+              else if ((profile ?? widget.profileImage).isNotEmpty &&
+                  !(profile ?? widget.profileImage).startsWith('assets/')) {
+                profileToUpload = profile ?? widget.profileImage;
+              }
+              // 3순위: 이미지가 없을 경우만 빈 문자열
+              else {
+                profileToUpload = '';
+              }
 
               bool isEdited = await _editProfile(
                 _nicknamecontroller.text,

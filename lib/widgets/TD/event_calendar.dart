@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:domino/apis/services/td_services.dart';
 import 'package:domino/provider/DP/model.dart';
 import 'package:flutter/material.dart';
@@ -60,21 +62,60 @@ class _EventCalendarState extends State<EventCalendar> {
   }*/
 
   Future<int?> getThirdGoalId(int mandalartId, String targetThirdGoal) async {
-    print('만다라트아이디=$mandalartId');
+    print('📥 요청된 mandalartId=$mandalartId');
+    print('🎯 targetThirdGoal: "$targetThirdGoal"');
+
     Map<String, dynamic>? mandalartData =
         await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
 
-    print('레츠고: $mandalartData');
+    // ✅ 1. 응답 데이터 전체 출력
+    print('🔍 전체 mandalartData 응답: ${jsonEncode(mandalartData)}');
 
-    if (mandalartData == null) return null;
+    if (mandalartData == null) {
+      print('⛔ mandalartData is null');
+      return null;
+    }
 
-    for (var secondGoal in mandalartData['secondGoals']) {
-      for (var thirdGoal in secondGoal['thirdGoals']) {
-        if (thirdGoal['thirdGoal'] == targetThirdGoal) {
-          return thirdGoal['id'];
+    final secondGoals = mandalartData['secondGoals'] as List<dynamic>?;
+
+    if (secondGoals == null) {
+      print('⛔ secondGoals is null');
+      return null;
+    }
+
+    // 🔧 문자열 비교 정규화 함수
+    String normalize(String input) =>
+        input.replaceAll(RegExp(r'\s+'), '').trim().toLowerCase();
+
+    for (var secondGoal in secondGoals) {
+      final thirdGoals = secondGoal['thirdGoals'] as List<dynamic>?;
+
+      if (thirdGoals == null) continue;
+
+      for (var thirdGoal in thirdGoals) {
+        final String currentGoal =
+            (thirdGoal['thirdGoal'] ?? '').toString().trim();
+
+        // ✅ 2. 각 thirdGoal 값과 길이 출력
+        print('🔹 currentGoal: "$currentGoal" (length: ${currentGoal.length})');
+        print(
+            '🔸 targetGoal : "${targetThirdGoal.trim()}" (length: ${targetThirdGoal.trim().length})');
+
+        // ✅ 3. 비교 결과 출력
+        if (normalize(currentGoal) == normalize(targetThirdGoal)) {
+          final thirdGoalId = thirdGoal['id'] as int;
+          print('✅ 일치하는 thirdGoalId: $thirdGoalId');
+          return thirdGoalId;
+        }
+
+        // 부분 매칭일 경우에도 알려줌
+        if (currentGoal.contains(targetThirdGoal.trim())) {
+          print('⚠️ 부분 포함됨: "$currentGoal"');
         }
       }
     }
+
+    print('❌ thirdGoalId를 찾을 수 없습니다.');
     return null;
   }
 
@@ -99,7 +140,6 @@ class _EventCalendarState extends State<EventCalendar> {
         goalId: goalId, attainment: attainment, date: date);
 
     if (success) {
-      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('업데이트에 실패했습니다.')),
