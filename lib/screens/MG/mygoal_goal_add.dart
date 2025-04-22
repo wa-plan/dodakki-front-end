@@ -8,6 +8,7 @@ import 'package:domino/apis/services/image_services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
+import 'package:domino/utils/permission_util.dart';
 
 class MyGoalAdd extends StatefulWidget {
   const MyGoalAdd({super.key});
@@ -115,6 +116,14 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     setState(() {
       _selectedColor = color;
     });
+  }
+
+  void _checkGalleryThenPickImages() async {
+    bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
+    if (granted) {
+      _imageFiles.clear();
+      await _pickImages();
+    }
   }
 
   DateTime? _selectedDate; // 상위 화면에서 사용하는 상태 변수
@@ -437,7 +446,8 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                               // ✅ 최대 3개 미만일 때만 추가 버튼 표시
                               if (_imageFiles.length < 3)
                                 GestureDetector(
-                                  onTap: _pickImages, // 🔹 이미지 선택 함수 호출
+                                  onTap:
+                                      _checkGalleryThenPickImages, // 🔹 이미지 선택 함수 호출
                                   child: Container(
                                     width: 80,
                                     height: 80,
