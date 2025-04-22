@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:domino/apis/services/image_services.dart';
 import 'package:domino/widgets/MG/calender.dart';
+import 'package:domino/utils/permission_util.dart';
 
 class MygoalEdit extends StatefulWidget {
   final String name;
@@ -128,52 +129,6 @@ class _MygoalEditState extends State<MygoalEdit> {
     });
   }
 
-  /*void _deleteImage(int index) async {
-    if (goalImage.isEmpty && _imageFiles.isEmpty) {
-      print("⚠️ 삭제할 이미지가 없습니다.");
-      return;
-    }
-
-    String imageToDelete;
-    if (index < goalImage.length) {
-      imageToDelete = goalImage[index];
-    } else {
-      int newIndex = index - goalImage.length;
-      if (newIndex < _imageFiles.length) {
-        imageToDelete = _imageFiles[newIndex];
-      } else {
-        print("❌ 잘못된 index: $index");
-        return;
-      }
-    }
-
-    // ✅ 서버에서 이미지 삭제 요청
-    bool success = await DeleteFileService.deleteFile(imageToDelete);
-
-    if (success) {
-      setState(() {
-        if (index < goalImage.length) {
-          goalImage.removeAt(index);
-          widget.goalImage.removeAt(index);
-        } else {
-          _imageFiles.removeAt(index - goalImage.length);
-        }
-      });
-
-      print("✅ 삭제 후 goalImage: $goalImage");
-      print("✅ 삭제 후 _imageFiles: $_imageFiles");
-    } else {
-      print("❌ 서버에서 이미지 삭제 실패");
-      Fluttertoast.showToast(
-        msg: "이미지 삭제 실패",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-    }
-  }*/
-
   Future<bool> _editName(String name, int mandalartId) async {
     try {
       final success = await EditGoalNameService.editGoalName(
@@ -251,6 +206,13 @@ class _MygoalEditState extends State<MygoalEdit> {
     setState(() {
       _selectedColor = color;
     });
+  }
+
+  void _checkGalleryThenPickImages() async {
+    bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
+    if (granted) {
+      await _pickImages();
+    }
   }
 
   @override
@@ -546,7 +508,8 @@ class _MygoalEditState extends State<MygoalEdit> {
                               // ✅ 최대 3개 미만일 때만 추가 버튼 표시
                               if (goalImage.length + _imageFiles.length < 3)
                                 GestureDetector(
-                                  onTap: _pickImages, // 🔹 이미지 선택 함수 호출
+                                  onTap:
+                                      _checkGalleryThenPickImages, // 🔹 이미지 선택 함수 호출
                                   child: Container(
                                     width: 80,
                                     height: 80,
@@ -642,141 +605,138 @@ class _MygoalEditState extends State<MygoalEdit> {
                   ),
                 ],
               ),
-              
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(padding: fullPadding,
-      child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //취소버튼
-                  NewButton(Colors.black, Colors.white, '취소',
-                          () => Navigator.pop(context), currentWidth)
-                      .newButton(),
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //취소버튼
+            NewButton(Colors.black, Colors.white, '취소',
+                    () => Navigator.pop(context), currentWidth)
+                .newButton(),
 
-                  //삭제버튼
-                  NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
-                    PopupDialog.show(
+            //삭제버튼
+            NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
+              PopupDialog.show(
+                context,
+                '이건 아니야.. \n정말 떠날거야...?',
+                true, // cancel
+                true, // delete
+                false, //signout
+                false, // success
+                onCancel: () {
+                  Navigator.of(context).pop();
+                },
+                onDelete: () async {
+                  bool isDeleted = await DeleteFirstGoalService.deleteFirstGoal(
+                    context,
+                    int.parse(widget.id),
+                  );
+                  if (isDeleted) {
+                    Navigator.pushReplacement(
                       context,
-                      '이건 아니야.. \n정말 떠날거야...?',
-                      true, // cancel
-                      true, // delete
-                      false, //signout
-                      false, // success
-                      onCancel: () {
-                        Navigator.of(context).pop();
-                      },
-                      onDelete: () async {
-                        bool isDeleted =
-                            await DeleteFirstGoalService.deleteFirstGoal(
-                          context,
-                          int.parse(widget.id),
-                        );
-                        if (isDeleted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MyGoal(),
-                            ),
-                          );
-                        }
-                      },
-                      onSignOut: () {},
+                      MaterialPageRoute(
+                        builder: (context) => const MyGoal(),
+                      ),
                     );
-                  }, currentWidth)
-                      .newButton(),
+                  }
+                },
+                onSignOut: () {},
+              );
+            }, currentWidth)
+                .newButton(),
 
-                  //완료버튼
-                  NewButton(Colors.black, Colors.white, '저장', () async {
-                    // 모든 API 호출이 성공했는지 확인할 변수
-                    bool isSuccess = true;
+            //완료버튼
+            NewButton(Colors.black, Colors.white, '저장', () async {
+              // 모든 API 호출이 성공했는지 확인할 변수
+              bool isSuccess = true;
 
-                    // 🔹 목표 이름 수정
-                    bool nameSuccess = await _editName(
-                        _namecontroller.text, int.parse(widget.id));
-                    if (!nameSuccess) {
-                      isSuccess = false;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표 이름 저장에 실패했습니다.')),
-                      );
-                    }
+              // 🔹 목표 이름 수정
+              bool nameSuccess =
+                  await _editName(_namecontroller.text, int.parse(widget.id));
+              if (!nameSuccess) {
+                isSuccess = false;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표 이름 저장에 실패했습니다.')),
+                );
+              }
 
-                    // 🔹 목표 설명 수정
-                    bool descriptSuccess = await _editDescript(
-                        _descriptcontroller.text, int.parse(widget.id));
-                    if (!descriptSuccess) {
-                      isSuccess = false;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표 설명 저장에 실패했습니다.')),
-                      );
-                    }
+              // 🔹 목표 설명 수정
+              bool descriptSuccess = await _editDescript(
+                  _descriptcontroller.text, int.parse(widget.id));
+              if (!descriptSuccess) {
+                isSuccess = false;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표 설명 저장에 실패했습니다.')),
+                );
+              }
 
-                    for (String imageUrl in goalImage) {
-                      bool deleteSuccess =
-                          await DeleteFileService.deleteFile(imageUrl);
-                      if (!deleteSuccess) {
-                        isSuccess = false;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('기존 이미지 삭제에 실패했습니다.')),
-                        );
-                      }
-                    }
+              for (String imageUrl in goalImage) {
+                bool deleteSuccess =
+                    await DeleteFileService.deleteFile(imageUrl);
+                if (!deleteSuccess) {
+                  isSuccess = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('기존 이미지 삭제에 실패했습니다.')),
+                  );
+                }
+              }
 
-                    // 🔹 2️⃣ 삭제가 모두 성공했을 경우에만 새로운 이미지 저장 진행
-                    if (isSuccess) {
-                      List<String> finalImageList = [
-                        ...goalImage,
-                        ..._imageFiles
-                      ];
+              // 🔹 2️⃣ 삭제가 모두 성공했을 경우에만 새로운 이미지 저장 진행
+              if (isSuccess) {
+                List<String> finalImageList = [...goalImage, ..._imageFiles];
 
-                      // 🔹 3️⃣ 최종적으로 서버에 업데이트 요청
-                      bool photoSuccess = await _editPhoto(
-                          finalImageList, int.parse(widget.id));
+                // 🔹 3️⃣ 최종적으로 서버에 업데이트 요청
+                bool photoSuccess =
+                    await _editPhoto(finalImageList, int.parse(widget.id));
 
-                      if (!photoSuccess) {
-                        isSuccess = false;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('목표 사진 저장에 실패했습니다.')),
-                        );
-                      }
-                    }
+                if (!photoSuccess) {
+                  isSuccess = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('목표 사진 저장에 실패했습니다.')),
+                  );
+                }
+              }
 
-                    // 🔹 날짜 변환 후 목표 날짜 수정
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(calculatedDate);
-                    bool dateSuccess =
-                        await _editDate(formattedDate, int.parse(widget.id));
-                    if (!dateSuccess) {
-                      isSuccess = false;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표 날짜 저장에 실패했습니다.')),
-                      );
-                    }
+              // 🔹 날짜 변환 후 목표 날짜 수정
+              String formattedDate =
+                  DateFormat('yyyy-MM-dd').format(calculatedDate);
+              bool dateSuccess =
+                  await _editDate(formattedDate, int.parse(widget.id));
+              if (!dateSuccess) {
+                isSuccess = false;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표 날짜 저장에 실패했습니다.')),
+                );
+              }
 
-                    final colorHex = _selectedColor != null
-                        ? '0x${_selectedColor!.value.toRadixString(16)}'
-                        : '0xffffffff'; // 기본값으로 흰색 (Color(0xffffffff))
+              final colorHex = _selectedColor != null
+                  ? '0x${_selectedColor!.value.toRadixString(16)}'
+                  : '0xffffffff'; // 기본값으로 흰색 (Color(0xffffffff))
 
-                    // 🔹 목표 색상 수정
-                    bool colorSuccess =
-                        await _editColor(colorHex, int.parse(widget.id));
-                    if (!colorSuccess) {
-                      isSuccess = false;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('목표 색상 저장에 실패했습니다.')),
-                      );
-                    }
+              // 🔹 목표 색상 수정
+              bool colorSuccess =
+                  await _editColor(colorHex, int.parse(widget.id));
+              if (!colorSuccess) {
+                isSuccess = false;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표 색상 저장에 실패했습니다.')),
+                );
+              }
 
-                    // 🔹 모든 API 호출이 성공했을 경우만 화면 닫기
-                    if (isSuccess) {
-                      Navigator.pop(context);
-                    }
-                  }, currentWidth)
-                      .newButton(),
-                ],
-              ),),
+              // 🔹 모든 API 호출이 성공했을 경우만 화면 닫기
+              if (isSuccess) {
+                Navigator.pop(context);
+              }
+            }, currentWidth)
+                .newButton(),
+          ],
+        ),
+      ),
     );
   }
 }

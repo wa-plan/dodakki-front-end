@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:domino/apis/services/image_services.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:domino/utils/permission_util.dart';
 
 class ProfileEdit extends StatefulWidget {
   final String selectedImage;
@@ -284,6 +285,14 @@ class _ProfileEditState extends State<ProfileEdit> {
   void _onNicknameChanged() {
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  void _checkGalleryThenPickImages() async {
+    bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
+    if (granted) {
+      _imageFiles.clear();
+      await _pickImages();
     }
   }
 
@@ -590,12 +599,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                     Expanded(
                       flex: 1,
                       child: GestureDetector(
-                        onTap: () {
-                          _imageFiles.clear();
-
-                          _pickImages();
-
+                        onTap: () async {
                           Navigator.pop(context);
+                          _checkGalleryThenPickImages();
                         },
                         child: Container(
                           height: 90,
