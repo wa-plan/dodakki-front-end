@@ -92,30 +92,7 @@ class _SettingsMainState extends State<SettingsMain> {
 
   void _requestNotificationPermissions() async {
     //알림 권한 요청
-    final status = await NotificationService().requestNotificationPermissions();
-    if (status.isDenied && context.mounted) {
-      showDialog(
-        // 알림 권한이 거부되었을 경우 다이얼로그 출력
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('알림 권한이 거부되었습니다.'),
-          content: const Text('알림을 받으려면 앱 설정에서 권한을 허용해야 합니다.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('설정'), //다이얼로그 버튼의 죄측 텍스트
-              onPressed: () {
-                Navigator.of(context).pop();
-                openAppSettings(); //설정 클릭시 권한설정 화면으로 이동
-              },
-            ),
-            TextButton(
-              child: const Text('취소'), //다이얼로그 버튼의 우측 텍스트
-              onPressed: () => Navigator.of(context).pop(), //다이얼로그 닫기
-            ),
-          ],
-        ),
-      );
-    }
+    await NotificationService().requestNotificationPermissions();
   }
 
   @override
@@ -251,13 +228,13 @@ class _SettingsMainState extends State<SettingsMain> {
         color: const Color(0xff2A2A2A),
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
-              offset: const Offset(0, 0), // X, Y 위치 (0,0)
-              blurRadius: 15, // 블러 7
-              spreadRadius: 0, // 스프레드 0
-            ),
-          ],
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
+            offset: const Offset(0, 0), // X, Y 위치 (0,0)
+            blurRadius: 15, // 블러 7
+            spreadRadius: 0, // 스프레드 0
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,9 +295,7 @@ class _SettingsMainState extends State<SettingsMain> {
           inactiveThumbColor: Colors.white,
           trackOutlineColor: WidgetStateProperty.resolveWith<Color?>(
             (Set<WidgetState> states) {
-              if (true) {
-                return Colors.transparent;
-              }
+              return Colors.transparent;
             },
           ),
           value: time == "morning"
@@ -331,29 +306,125 @@ class _SettingsMainState extends State<SettingsMain> {
                   ? true
                   : false,
           onChanged: (value) async {
+            // 🔥 먼저 권한 체크
+            final status = await Permission.notification.status;
+
+            if (!status.isGranted) {
+              if (context.mounted) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    contentPadding: const EdgeInsets.all(0),
+                    elevation: 30.0,
+                    content: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 30, 30, 0),
+                      decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 26, 26, 26),
+                          borderRadius: BorderRadius.all(Radius.circular(7))),
+                      height: currentWidth < 600 ? 160 : 220,
+                      width: currentWidth < 600 ? 340 : 400,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Image.asset('assets/img/Dominho2.png',
+                                  width: currentWidth < 600 ? 84 : 120),
+                              SizedBox(width: currentWidth < 600 ? 30 : 50),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning_amber_rounded,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        const Text(
+                                          '알림 권한이 필요해!',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    const Text(
+                                      '설정 앱에서 도닦기 알림을 허용해줘.',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        
+                                        NewButton(Colors.black, Colors.white,
+                                                '설정으로 이동', () {
+                                          Navigator.of(context).pop();
+                                          openAppSettings();
+                                        }, currentWidth)
+                                            .newButton(),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: currentWidth < 600 ? 15 : 20,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return; // ❗ 권한 없으면 여기서 끝내고 뒤 코드 실행 안 함
+            }
+
+            // 🔥 권한 있을 때만 setState 실행
             setState(() {
-              time == 'morning'
-                  ? isMorningAlarmOn = value
-                  : isNightAlarmOn = value;
+              if (time == 'morning') {
+                isMorningAlarmOn = value;
+              } else {
+                isNightAlarmOn = value;
+              }
             });
 
-            time == 'morning' && isMorningAlarmOn == true
-                ? NotificationService().scheduleNotification(time)
-                : null;
-            time == 'night' && isNightAlarmOn == true
-                ? NotificationService().scheduleNotification(time)
-                : null;
+            if (time == 'morning' && isMorningAlarmOn == true) {
+              NotificationService().scheduleNotification(time);
+            } else if (time == 'night' && isNightAlarmOn == true) {
+              NotificationService().scheduleNotification(time);
+            }
 
-            time == 'morning'
-                ? _updateMorningAlarm(isMorningAlarmOn!)
-                : await _updateNightAlarm(isMorningAlarmOn!);
+            if (time == 'morning') {
+              _updateMorningAlarm(isMorningAlarmOn!);
+            } else {
+              await _updateNightAlarm(isNightAlarmOn!);
+            }
           },
         ),
       ),
     );
   }
 
-   Widget _buildCombinedNavigationItem() {
+  Widget _buildCombinedNavigationItem() {
     final currentWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
@@ -374,9 +445,7 @@ class _SettingsMainState extends State<SettingsMain> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Container(
               color: Colors.transparent,
               child: Row(
@@ -392,16 +461,13 @@ class _SettingsMainState extends State<SettingsMain> {
                           fontSize: currentWidth < 600 ? 13 : 16,
                           color: Colors.grey,
                           fontWeight: FontWeight.w600)),
-                  
                 ],
               ),
             ),
           ),
           const SizedBox(height: 13),
           GestureDetector(
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Container(
               color: Colors.transparent,
               child: Row(
@@ -412,8 +478,8 @@ class _SettingsMainState extends State<SettingsMain> {
                           fontSize: currentWidth < 600 ? 13 : 16,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  NewCustomIconButton(() {showServiceRulePopup(context, currentWidth);
-                    
+                  NewCustomIconButton(() {
+                    showServiceRulePopup(context, currentWidth);
                   }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
                       .newCustomIconButton(),
                 ],
@@ -422,8 +488,7 @@ class _SettingsMainState extends State<SettingsMain> {
           ),
           const SizedBox(height: 13),
           GestureDetector(
-            onTap: () {  
-            },
+            onTap: () {},
             child: Container(
               color: Colors.transparent,
               child: Row(
@@ -434,7 +499,8 @@ class _SettingsMainState extends State<SettingsMain> {
                           fontSize: currentWidth < 600 ? 13 : 16,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  NewCustomIconButton(() {showAgreementPopup(context, currentWidth);
+                  NewCustomIconButton(() {
+                    showAgreementPopup(context, currentWidth);
                   }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
                       .newCustomIconButton(),
                 ],
@@ -481,33 +547,28 @@ class NotificationService {
     const int notificationId = 0;
 
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-      'counter_channel',
-      'Counter Channel',
-      channelDescription:
-          'This channel is used for counter-related notifications',
-      importance: Importance.high,
-      icon: '@drawable/smallicon',
-      largeIcon: DrawableResourceAndroidBitmap('@drawable/ic_notification'), // 컬러 이미지 표시
-      enableVibration: true,
-      playSound: true,
-      color: backgroundColor
-
-      
-    );
+        AndroidNotificationDetails('counter_channel', 'Counter Channel',
+            channelDescription:
+                'This channel is used for counter-related notifications',
+            importance: Importance.high,
+            icon: '@drawable/smallicon',
+            largeIcon: DrawableResourceAndroidBitmap(
+                '@drawable/ic_notification'), // 컬러 이미지 표시
+            enableVibration: true,
+            playSound: true,
+            color: backgroundColor);
 
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
     final tz.TZDateTime scheduledTime = _getScheduledTime(time);
 
-
-await flutterLocalNotificationsPlugin.show(
-  notificationId,
-  '도민호의 동기부여',
-  '오늘도 아자아자! 도미노를 쓰러뜨리자!!!',
-  notificationDetails,
-);
+    await flutterLocalNotificationsPlugin.show(
+      notificationId,
+      '도민호의 동기부여',
+      '오늘도 아자아자! 도미노를 쓰러뜨리자!!!',
+      notificationDetails,
+    );
 
     /*await flutterLocalNotificationsPlugin.zonedSchedule(
       notificationId,
@@ -543,5 +604,3 @@ await flutterLocalNotificationsPlugin.show(
     return status;
   }
 }
-
-
