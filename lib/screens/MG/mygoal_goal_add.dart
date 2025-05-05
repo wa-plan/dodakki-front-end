@@ -9,6 +9,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
 import 'package:domino/utils/permission_util.dart';
+import 'dart:io'; // ✅ Platform용
+import 'package:permission_handler/permission_handler.dart'; // ✅ Permission용
 
 class MyGoalAdd extends StatefulWidget {
   const MyGoalAdd({super.key});
@@ -118,11 +120,34 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     });
   }
 
-  void _checkGalleryThenPickImages() async {
+  /*void _checkGalleryThenPickImages() async {
     bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
     if (granted) {
       _imageFiles.clear();
       await _pickImages();
+    }
+  }*/
+  void _checkGalleryThenPickImages() async {
+    bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
+    if (granted) {
+      _imageFiles.clear();
+      await _pickImages(); // ✅ 권한 허용 후 바로 실행
+    } else {
+      // ❌ 완전 거부(permanently denied)인 경우 → 설정창 안내
+      final permanentlyDenied = Platform.isAndroid
+          ? await Permission.storage.isPermanentlyDenied
+          : await Permission.photos.isPermanentlyDenied;
+
+      if (permanentlyDenied) {
+        Fluttertoast.showToast(
+          msg: '설정에서 갤러리 접근 권한을 허용해주세요.',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+        openAppSettings();
+      }
     }
   }
 
