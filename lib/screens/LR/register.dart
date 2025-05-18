@@ -1,4 +1,4 @@
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/apis/services/lr_services.dart';
 

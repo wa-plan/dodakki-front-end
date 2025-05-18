@@ -1,5 +1,6 @@
 import 'package:domino/screens/LR/agreement.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/account_management.dart';
 import 'package:domino/screens/ST/contact_us.dart';

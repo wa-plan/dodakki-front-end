@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:domino/screens/MG/profile_img_samplegallery.dart';
@@ -289,7 +289,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   void _checkGalleryThenPickImages() async {
-    bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
+    bool granted = await PermissionUtil.checkAndRequestGalleryPermission(context);
     if (granted) {
       _imageFiles.clear();
       await _pickImages();

@@ -8,16 +8,20 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 //color
-const backgroundColor = Color(0xff262626);
-const mainRed = Color(0xffFF7A7A);
+const backgroundColor = Color.fromARGB(255, 32, 32, 32);
+const mainRed = Color(0xffFF6767);
+const mainGrey = Color(0xff444444);
 const mainTextColor = Colors.white;
 const mainGold = Color.fromARGB(255, 255, 217, 79);
+const mainGreen = Color(0xff72FF5B);
+const mainBlue = Color(0xff5DD8FF);
 
 //padding
 const appBarPadding = EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20);
 const fullPadding = EdgeInsets.fromLTRB(20.0, 10, 20.0, 20.0);
 const tabletPadding = EdgeInsets.fromLTRB(40.0, 30, 40.0, 20);
 const tabletFullPadding = EdgeInsets.fromLTRB(40.0, 10, 40.0, 20);
+
 
 //colorPalette
 Map<Color, Color> colorPalette = {
@@ -36,21 +40,7 @@ Map<Color, Color> colorPalette = {
   Colors.transparent: const Color(0xff5C5C5C),
 };
 
-//DP_create_titleText
-class DPTitleText {
-  final String text;
-  final double currentWidth;
 
-  DPTitleText(this.text, this.currentWidth);
-
-  Widget dPTitleText() {
-    return Text(text,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: currentWidth < 600 ? 18 : 21,
-            fontWeight: FontWeight.w600));
-  }
-}
 
 //DP_create_guideText
 class DPGuideText {
@@ -133,8 +123,8 @@ class NewButton {
         text,
         style: TextStyle(
           color: textColor,
-          fontSize: currentWidth < 600 ? 13 : 16,
-          fontWeight: FontWeight.w500,
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -998,8 +988,8 @@ class NewCustomIconButton {
 
   Widget newCustomIconButton() {
     return Container(
-      width: currentWidth < 600 ? 35 : 50,
-      height: currentWidth < 600 ? 24 : 35,
+      width: 40,
+      height: 27,
       decoration: BoxDecoration(
         color: Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
@@ -1019,7 +1009,7 @@ class NewCustomIconButton {
         child: Icon(
           icon,
           color: const Color(0xff646464),
-          size: currentWidth < 600 ? size : size + 7,
+          size: 25,
         ),
       ),
     );

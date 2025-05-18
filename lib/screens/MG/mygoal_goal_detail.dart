@@ -1,7 +1,7 @@
 import 'package:domino/screens/MG/mygoal_main.dart';
 import 'package:domino/screens/MG/piechart.dart';
 import 'package:domino/screens/event_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:typed_data'; // Uint8List 사용을 위한 라이브러리 임포트
 import 'package:domino/screens/MG/mygoal_goal_edit.dart';
@@ -337,7 +337,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                             if (_selectedStatus == '달성 완료') {
                               PopupDialog.show(
                                 context,
-                                '대박! 이 목표 정말 \n달성 완료한거야?',
+                                '이 목표 정말 \n달성 완료한거야?',
+                                '대박!',
                                 true, // cancel
                                 false, // delete
                                 false, // signout
@@ -360,7 +361,9 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          EventPage(domino: successNum),
+                                          EventPage(
+                                            domino: successNum,
+                                            goalName: name,),
                                     ),
                                   );
                                 },
@@ -369,7 +372,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                             if (_selectedStatus == '진행 중') {
                               PopupDialog.show(
                                 context,
-                                '잘 생각했어! 다시 도전해보는거야?',
+                                '잘 생각했어!\n다시 도전해보는거야?',
+                                '좋아!',
                                 true, // cancel
                                 false, // delete
                                 false, // signout
@@ -400,7 +404,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                             if (_selectedStatus == '달성 실패') {
                               PopupDialog.show(
                                 context,
-                                '아쉬워! 이 목표는 \n달성 실패인거야?',
+                                '이 목표는\n달성 실패인거야?',
+                                '아쉽다..',
                                 true, // cancel
                                 false, // delete
                                 false, // signout

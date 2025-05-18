@@ -1,6 +1,6 @@
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/change_password.dart';
 import 'package:domino/widgets/popup.dart';
@@ -245,11 +245,13 @@ class _AccountManagementState extends State<AccountManagement> {
             onTap: () {
               PopupDialog.show(
                 context,
-                '이건 아니야.. \n정말 떠날거야...?',
+                '한번 떠나면,\n지금까지의 기록이 없어져!',
+                '잠깐만!!',
                 true, // cancel
                 false, // delete
                 true, //signout
                 false, // success
+
                 onCancel: () {
                   Navigator.of(context).pop();
                 },
@@ -279,7 +281,8 @@ class _AccountManagementState extends State<AccountManagement> {
                   NewCustomIconButton(() {
                     PopupDialog.show(
                       context,
-                      '이건 아니야..\n정말 떠날거야...?',
+                      '지금 떠나면,\n지금까지의 기록이 없어져..!',
+                      '잠깐만!!',
                       true, // cancel
                       false, // delete
                       true, //signout

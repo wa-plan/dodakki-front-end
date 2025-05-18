@@ -1,5 +1,6 @@
 import 'package:domino/screens/Tutorial/tutorial3_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/style_tutorial.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class Tutorial2 extends StatefulWidget {
@@ -10,197 +11,146 @@ class Tutorial2 extends StatefulWidget {
 }
 
 class Tutorial2State extends State<Tutorial2> {
-  int currentSelection = 0;
-
-  void wrongAnswer() {
-    Message("아닌데...다시 한번 잘 생각해봐!", const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
-  }
-
-  void noAnswer() {
-    Message("어떤 계획을 세워야할 지 선택해줘!", const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
-  }
+  int selectedIndex = 100;
+  List<String> texts = [
+    '돈 많은\n백수되기',
+    '뿌듯한\n학교생활하기',
+    '행복한\n휴학생활하기',
+    '알찬 방학\n보내기'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
         backgroundColor: backgroundColor,
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 22, 30, 30),
+          padding: tutorialPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //스텝 및 내용
-              Flexible(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "1  최종 목표",
-                      style: TextStyle(
-                        fontSize: currentWidth < 600 ? 13 : 16,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xffFF6767),
-                      ),
-                    ),
-                    SizedBox(height: currentWidth < 600 ? 8 : 13),
-                    Text(
-                      "나는 이번 학기에\n학교 생활을 잘 하고싶어!",
-                      style: TextStyle(
-                        fontSize: currentWidth < 600 ? 16 : 22,
-                        fontWeight: FontWeight.w500,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //프로그레스 바
+                  ProgressBar(1, 4).progressBar(),
+                  SizedBox(height: 10),
+
+                  //프로그레스 타이틀
+                  ProgressTitle('제1목표 만들기').progressTitle(),
+                  SizedBox(height: 17),
+
+                  //질문
+                  Text(
+                    '새 학기를 시작하는\n도민호를 위한 제1목표는?',
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
+                        height: 1.5),
+                  ),
+
+                  SizedBox(height: 20),
+                ],
               ),
 
-              // 선택지 영역
-              Flexible(
-                flex: 8,
-                fit: FlexFit.tight,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Option('뿌듯한\n학교생활하기', () {
-                          setState(() {
-                            currentSelection = 1;
-                          });
-                        }, currentWidth, 1, currentSelection)
-                            .option(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('알찬 방학\n보내기', () {
-                          setState(() {
-                            currentSelection = 2;
-                          });
-                        }, currentWidth, 2, currentSelection)
-                            .option(),
-                      ],
+              //선택지
+              Center(
+                child: SizedBox(
+                  width: 270,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 13,
+                      mainAxisSpacing: 13,
                     ),
-                    SizedBox(height: currentWidth < 600 ? 10 : 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Option('행복한\n휴학생활하기', () {
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
                           setState(() {
-                            currentSelection = 3;
+                            selectedIndex = index;
                           });
-                        }, currentWidth, 3, currentSelection)
-                            .option(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('돈 많은\n백수되기', () {
-                          setState(() {
-                            currentSelection = 4;
-                          });
-                        }, currentWidth, 4, currentSelection)
-                            .option(),
-                      ],
-                    )
-                  ],
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: selectedIndex == index
+                                ? Color(0xff503333)
+                                : Color(0xff3B3B3B),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: selectedIndex == index
+                                  ? mainRed
+                                  : Colors.transparent,
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle_rounded,
+                                    size: 18,
+                                    color: selectedIndex == index
+                                        ? mainRed
+                                        : Color(0xff3B3B3B),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                texts[index],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: selectedIndex == index
+                                      ? mainRed
+                                      : Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Icon(
+                                Icons.check_circle_rounded,
+                                size: 18,
+                                color: selectedIndex == index
+                                    ? Color(0xff503333)
+                                    : Color(0xff3B3B3B),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
+              )
             ],
           ),
         ),
         bottomNavigationBar:
-            //다음 버튼
+            //버튼
             Padding(
-          padding: const EdgeInsets.fromLTRB(22, 0, 22, 22),
-          child: SizedBox(
-            width: double.infinity,
-            child: TextButton(
-                onPressed: () {
-                  if (currentSelection == 1) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Tutorial3()),
-                    );
-                  } else if (currentSelection == 0) {
-                    noAnswer();
-                  } else
-                    wrongAnswer();
-                },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  backgroundColor: mainRed,
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(currentWidth < 600 ? 6 : 8),
-                  ),
-                ),
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                      color: backgroundColor,
-                      fontSize: currentWidth < 600 ? 15 : 21,
-                      fontWeight: FontWeight.w700),
-                )),
-          ),
+          padding: tutorialPadding,
+          child: TutorialButton('다음', () {
+            if (selectedIndex == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tutorial3()),
+              );
+            } else if (selectedIndex == 0 ||
+                selectedIndex == 2 ||
+                selectedIndex == 3) {
+              TutorialMessage("아닌데...다시 한번 잘 생각해봐!").tutorialMessage(context);
+            } else {
+              TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
+            }
+          }).tutorialButton(),
         ));
-  }
-}
-
-class Option {
-  final String text;
-  final Function function;
-  final double currentWidth;
-  final int currentSelection;
-  final int index;
-
-  const Option(this.text, this.function, this.currentWidth, this.index,
-      this.currentSelection);
-
-  Widget option() {
-    return GestureDetector(
-      onTap: () {
-        function();
-      },
-      child: Container(
-          child: CircleAvatar(
-        radius: currentWidth < 600 ? 60 : 100,
-        backgroundColor: Colors.transparent, // 배경색을 투명하게 설정
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: currentSelection == index
-                ? const Color(0xff563535)
-                : const Color(0xff3B3B3B),
-            border: Border.all(
-              color: currentSelection == index
-                  ? const Color(0xff9B3636)
-                  : Colors.transparent,
-              width: 2,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: currentWidth < 600 ? 14 : 19,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-      )),
-    );
   }
 }

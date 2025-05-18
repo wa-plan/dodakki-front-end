@@ -1,6 +1,6 @@
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
@@ -209,7 +209,7 @@ class _MygoalEditState extends State<MygoalEdit> {
   }
 
   void _checkGalleryThenPickImages() async {
-    bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
+    bool granted = await PermissionUtil.checkAndRequestGalleryPermission(context);
     if (granted) {
       await _pickImages();
     }
@@ -623,7 +623,8 @@ class _MygoalEditState extends State<MygoalEdit> {
             NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
               PopupDialog.show(
                 context,
-                '이건 아니야.. \n정말 떠날거야...?',
+                '헐 진짜..?\n이 목표는 없어지는거야?',
+                '잠깐!',
                 true, // cancel
                 true, // delete
                 false, //signout

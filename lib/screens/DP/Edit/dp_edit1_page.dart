@@ -2,7 +2,8 @@ import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit4_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit2_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_description1_widget.dart';
 import 'package:domino/widgets/DP/Edit/dp_edit1_widget.dart';
 import 'package:domino/widgets/popup.dart';
@@ -43,6 +44,7 @@ class Edit99Page extends StatelessWidget {
                   PopupDialog.show(
                       context,
                       '지금 나가면,\n작성한 내용이 사라져!',
+                      '잠깐!',
                       true, // cancel
                       false, // delete
                       false, // signout
@@ -230,6 +232,7 @@ class Edit99Page extends StatelessWidget {
                         PopupDialog.show(
                           context,
                           '지금 취소하면,\n수정한 내용이 사라져!',
+                          '잠깐!',
                           true, // cancel
                           false, // delete
                           false, // signout
@@ -309,6 +312,7 @@ class Edit99Page extends StatelessWidget {
                             PopupDialog.show(
                               context,
                               '멋진 계획이었는데,\n이대로 보낼꺼야..?',
+                              '헐..!',
                               true, // cancel
                               true, // delete
                               false, // signout

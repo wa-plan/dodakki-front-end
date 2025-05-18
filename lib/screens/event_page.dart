@@ -1,17 +1,18 @@
 import 'package:domino/screens/MG/mygoal_main.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class EventPage extends StatefulWidget {
   final int domino;
-  const EventPage({super.key, required this.domino});
+  final String goalName;
+  const EventPage({super.key, required this.domino, required this.goalName});
 
   @override
   State<EventPage> createState() => _EventPageState();
 }
 
 class _EventPageState extends State<EventPage> {
-  String goal = "환상적인 세계여행"; //제1목표 title api 가져오기
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
   bool _isContentVisible = true;
@@ -43,7 +44,7 @@ class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: backgroundColor,
       body: FutureBuilder(
         future: _initializeVideoPlayerFuture,
         builder: (context, snapshot) {
@@ -120,7 +121,7 @@ class _EventPageState extends State<EventPage> {
                           child: const Text(
                             '공 굴리기',
                             style: TextStyle(
-                                color: Colors.black,
+                                color: mainRed,
                                 fontWeight: FontWeight.w900),
                           ),
                         )
@@ -134,12 +135,23 @@ class _EventPageState extends State<EventPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '$goal\n쓰러뜨리기 성공!\n\n축하해요!',
+                          '${widget.goalName}\n쓰러뜨리기 성공!',
                           style: const TextStyle(
-                            height: 2,
+                            height: 1.5,
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '축하해요!',
+                          style: const TextStyle(
+                            height: 2,
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -166,20 +178,7 @@ class _EventPageState extends State<EventPage> {
                     ),
                   )
 
-                /*if (_isVideoEnded)
-                  Align(
-                    alignment: const Alignment(0, -0.5),
-                    child: Text(
-                      '$goal\n쓰러뜨리기 성공!\n\n축하해요!',
-                      style: const TextStyle(
-                        height: 2,
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),*/
+                
               ],
             );
           } else {

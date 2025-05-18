@@ -1,6 +1,7 @@
 import 'package:domino/screens/Tutorial/tutorial4_page.dart';
+import 'package:domino/style/style_tutorial.dart';
 import 'package:flutter/material.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 
 class Tutorial3 extends StatefulWidget {
   const Tutorial3({super.key});
@@ -10,261 +11,77 @@ class Tutorial3 extends StatefulWidget {
 }
 
 class Tutorial3State extends State<Tutorial3> {
-  int currentSelection = 90;
-
-  final int correctIndex = 1; // 정답 위치 (두 번째 그리드)
-
-  void wrongAnswer() {
-    Message("아닌데...다시 한번 잘 생각해봐!", const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
-  }
-
-  void noAnswer() {
-    Message("어떤 계획을 세워야할 지 선택해줘!", const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
-  }
 
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
+    int selectedIndex = 100;
 
     return Scaffold(
         backgroundColor: backgroundColor,
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 22, 30, 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //스텝 및 내용
-              Expanded(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "2  세부 목표",
-                      style: TextStyle(
-                        fontSize: currentWidth < 600 ? 13 : 16,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xffFF6767),
-                      ),
-                    ),
-                    SizedBox(height: currentWidth < 600 ? 8 : 13),
-                    Text(
-                      "그러기 위해서\n스펙도 많이 쌓아야지!",
-                      style: TextStyle(
-                        fontSize: currentWidth < 600 ? 16 : 22,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        body: Stack(
+          children: [
+            Padding(
+              padding: tutorialPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //프로그레스 바
+                  ProgressBar(2, 4).progressBar(),
+                  SizedBox(height: 10),
 
-              // 선택지 영역
-              Expanded(
-                flex: 8,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Option('여행 많이\n다니기', () {
-                          setState(() {
-                            currentSelection = 0;
-                          });
-                        }, currentWidth, 0, currentSelection)
-                            .option(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('스펙왕\n되기', () {
-                          setState(() {
-                            currentSelection = 1;
-                          });
-                        }, currentWidth, 1, currentSelection)
-                            .option(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('나 자신을\n찾아가기', () {
-                          setState(() {
-                            currentSelection = 2;
-                          });
-                        }, currentWidth, 2, currentSelection)
-                            .option(),
-                      ],
-                    ),
-                    SizedBox(height: currentWidth < 600 ? 10 : 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Option('맛있는거\n많이 먹기', () {
-                          setState(() {
-                            currentSelection = 3;
-                          });
-                        }, currentWidth, 3, currentSelection)
-                            .option(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option2('뿌듯한\n학교생활하기', currentWidth).option2(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('완벽하게\n자기관리하기', () {
-                          setState(() {
-                            currentSelection = 5;
-                          });
-                        }, currentWidth, 5, currentSelection)
-                            .option(),
-                      ],
-                    ),
-                    SizedBox(height: currentWidth < 600 ? 10 : 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Option('친구들이랑\n좋은추억 쌓기', () {
-                          setState(() {
-                            currentSelection = 6;
-                          });
-                        }, currentWidth, 6, currentSelection)
-                            .option(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('다양한 사람\n만나보기', () {
-                          setState(() {
-                            currentSelection = 7;
-                          });
-                        }, currentWidth, 7, currentSelection)
-                            .option(),
-                        SizedBox(width: currentWidth < 600 ? 10 : 15),
-                        Option('돈 많이\n모으기', () {
-                          setState(() {
-                            currentSelection = 8;
-                          });
-                        }, currentWidth, 8, currentSelection)
-                            .option(),
-                      ],
-                    )
-                  ],
-                ),
+                  //프로그레스 타이틀
+                  ProgressTitle('제2목표 만들기').progressTitle(),
+                  SizedBox(height: 17),
+
+                  //질문
+                  TutorialQuestion('뿌듯한 학교생활하기', '달성해야 할 제2목표는?', 'red')
+                      .tutorialQuestion(),
+                  SizedBox(height: 20),
+                ],
               ),
-            ],
-          ),
+            ),
+            //선택지
+            Positioned(
+              left: -80,
+              top: 170,
+              child: MandalartOption(
+                  middleText: '뿌듯한\n학교생활하기',
+                  texts: [
+                    '',
+                    '방 청소\n잘하기',
+                    '스펙왕\n되기',
+                    '',
+                    '',
+                    '피아노\n연습하기',
+                    '',
+                    '스타일\n변신하기',
+                    'F학점\n받아보기'
+                  ],
+                  color: 'red',
+                  onItemSelected: (index) {
+                      selectedIndex = index;
+              },),
+            ),
+          ],
         ),
         bottomNavigationBar:
-            //다음 버튼
+            //버튼
             Padding(
-          padding: const EdgeInsets.fromLTRB(22, 0, 22, 22),
-          child: SizedBox(
-            width: double.infinity,
-            child: TextButton(
-                onPressed: () {
-                  if (currentSelection == 1) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Tutorial4()),
-                    );
-                  } else if (currentSelection == 90) {
-                    noAnswer();
-                  } else
-                    wrongAnswer();
-                },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  backgroundColor: mainRed,
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(currentWidth < 600 ? 6 : 8),
-                  ),
-                ),
-                child: Text(
-                  '다음',
-                  style: TextStyle(
-                      color: backgroundColor,
-                      fontSize: currentWidth < 600 ? 15 : 21,
-                      fontWeight: FontWeight.w700),
-                )),
-          ),
+          padding: tutorialPadding,
+          child: TutorialButton('다음', () {
+            if (selectedIndex == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tutorial4()),
+              );
+            } else if (selectedIndex == 0 || selectedIndex == 3 || selectedIndex == 6) {
+               TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
+            } else {
+              TutorialMessage("아닌데...다시 한번 잘 생각해봐!").tutorialMessage(context);
+            }
+          })
+              .tutorialButton(),
         ));
-  }
-}
-
-class Option {
-  final String text;
-  final Function function;
-  final double currentWidth;
-  final int currentSelection;
-  final int index;
-
-  const Option(this.text, this.function, this.currentWidth, this.index,
-      this.currentSelection);
-
-  Widget option() {
-    return GestureDetector(
-      onTap: () {
-        function();
-      },
-      child: Container(
-        width: currentWidth < 600 ? currentWidth*0.25 : 125,
-        height: currentWidth < 600 ? currentWidth*0.25 : 125,
-        padding: EdgeInsets.all(currentWidth < 600 ? 7 : 20),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: currentSelection == index
-                ? const Color(0xff555634)
-                : const Color(0xff3B3B3B),
-            border: Border.all(
-              color: currentSelection == index
-                  ? const Color(0xff949B36)
-                  : Colors.transparent,
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(currentWidth < 600 ? 6 : 8)),
-        child: Center(
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: currentWidth < 600 ? 12 : 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Option2 {
-  final String text;
-  final double currentWidth;
-
-  const Option2(this.text, this.currentWidth);
-
-  Widget option2() {
-    return Container(
-      width: currentWidth < 600 ? currentWidth*0.25 : 125,
-        height: currentWidth < 600 ? currentWidth*0.25 : 125,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: mainRed,
-        ),
-        child: Center(
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: backgroundColor,
-              fontSize: currentWidth < 600 ? 12 : 15,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-    
-    );
   }
 }

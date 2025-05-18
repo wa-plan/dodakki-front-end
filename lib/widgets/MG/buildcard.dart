@@ -1,5 +1,5 @@
 import 'package:domino/screens/MG/mygoal_goal_detail.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/apis/services/mg_services.dart';
 

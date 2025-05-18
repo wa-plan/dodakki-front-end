@@ -2,7 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/screens/DP/Create/dp_create5_page.dart';
 import 'package:domino/screens/DP/Create/dp_create3_page.dart';
 import 'package:domino/screens/DP/dp_main_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_create2_widget.dart';
 import 'package:domino/widgets/DP/Create/dp_description1_widget.dart';
 import 'package:domino/widgets/popup.dart';
@@ -39,6 +40,7 @@ class _DPcreate99Page extends State<DPcreate99Page> {
                   PopupDialog.show(
                       context,
                       '지금 나가면,\n작성한 내용이 사라져!',
+                      '잠깐!',
                       true, // cancel
                       false, // delete
                       false, // signout
@@ -284,6 +286,7 @@ class _DPcreate99Page extends State<DPcreate99Page> {
                           PopupDialog.show(
                             context,
                             '지금 돌아가면,\n작성한 내용이 사라져!',
+                            '잠깐!',
                             true, // cancel
                             false, // delete
                             false, // signout

@@ -1,7 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/Edit/dp_edit5_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/color_Grid23.dart';
 import 'package:domino/widgets/DP/color_Grid2.dart';
 import 'package:domino/widgets/popup.dart';
@@ -226,6 +227,7 @@ class EditColorPageState extends State<EditColorPage> {
                   PopupDialog.show(
                       context,
                       '지금 나가면,\n작성한 내용이 사라져!',
+                      '잠깐!',
                       true, // cancel
                       false, // delete
                       false, // signout

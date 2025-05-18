@@ -1,5 +1,5 @@
 import 'package:domino/screens/DP/dp_main_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class CompletePage extends StatefulWidget {

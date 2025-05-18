@@ -1,7 +1,7 @@
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:domino/widgets/TD/add_calendar.dart';

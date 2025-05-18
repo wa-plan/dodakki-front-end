@@ -1,7 +1,8 @@
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/widgets/TD/event_calendar.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 
 // TD 메인 페이지
 class TdMain extends StatelessWidget {
