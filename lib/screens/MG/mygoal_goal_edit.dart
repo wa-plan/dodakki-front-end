@@ -293,14 +293,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                          offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                          blurRadius: 7, // 블러 7
-                          spreadRadius: 0, // 스프레드 0
-                        ),
-                      ],
+                      
                     ),
                     child: NewCustomTextField("", _namecontroller,
                             (value) => null, false, 1, currentWidth)
@@ -331,15 +324,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                           height: 40,
                           padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black
-                                      .withOpacity(0.05), // 검은색 10% 투명도
-                                  offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                                  blurRadius: 7, // 블러 7
-                                  spreadRadius: 0, // 스프레드 0
-                                ),
-                              ],
+                              
                               borderRadius: BorderRadius.circular(6),
                               color: const Color(0xff2A2A2A)),
                           child: Text(
@@ -391,14 +376,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   Container(
                     height: 80,
                     decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                          offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                          blurRadius: 7, // 블러 7
-                          spreadRadius: 0, // 스프레드 0
-                        ),
-                      ],
+                      
                     ),
                     child: NewCustomTextField("", _descriptcontroller,
                             (value) => null, false, 5, currentWidth)
@@ -440,17 +418,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                                           width: 80,
                                           height: 80,
                                           decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(
-                                                          0.05), // 검은색 10% 투명도
-                                                  offset: const Offset(
-                                                      0, 0), // X, Y 위치 (0,0)
-                                                  blurRadius: 7, // 블러 7
-                                                  spreadRadius: 0, // 스프레드 0
-                                                ),
-                                              ],
+                                              
                                               color: Color(
                                                   0xff2A2A2A), // ✅ 로드 실패 대비 배경 설정
                                               borderRadius:
@@ -514,16 +482,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                                     width: 80,
                                     height: 80,
                                     decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withOpacity(
-                                                0.05), // 검은색 10% 투명도
-                                            offset: const Offset(
-                                                0, 0), // X, Y 위치 (0,0)
-                                            blurRadius: 7, // 블러 7
-                                            spreadRadius: 0, // 스프레드 0
-                                          ),
-                                        ],
+                                        
                                         color: Color(0xff2A2A2A),
                                         borderRadius: BorderRadius.circular(6)),
                                     child: Icon(

@@ -178,14 +178,7 @@ class _DPcreateSelectPageState extends State<DPcreateSelectPage> {
               padding: const EdgeInsets.fromLTRB(17, 0, 17, 0),
               height: currentWidth < 600 ? 40 : 53,
               decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                    offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                    blurRadius: 7, // 블러 7
-                    spreadRadius: 0, // 스프레드 0
-                  ),
-                ],
+              
                 borderRadius: BorderRadius.circular(6),
                 color: const Color(0xff2A2A2A),
               ),

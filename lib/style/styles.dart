@@ -951,16 +951,17 @@ class CustomIconButton {
       width: currentWidth < 600 ? 33 : 50,
       height: currentWidth < 600 ? 22 : 35,
       decoration: BoxDecoration(
-        color: const Color(0xff303030),
-        borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-            offset: const Offset(0, 0), // X, Y 위치 (0,0)
-            blurRadius: 7, // 블러 7
-            spreadRadius: 0, // 스프레드 0
+            color: Colors.black.withOpacity(0.02), 
+            offset: const Offset(0, 0), 
+            blurRadius: 15, 
+            spreadRadius: 0, 
           ),
         ],
+        color: const Color(0xff303030),
+        borderRadius: BorderRadius.circular(25),
+        
       ),
       child: GestureDetector(
         onTap: () {
@@ -991,16 +992,17 @@ class NewCustomIconButton {
       width: 40,
       height: 27,
       decoration: BoxDecoration(
-        color: Color(0xff303030),
-        borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02), // 검은색 10% 투명도
-            offset: const Offset(0, 0), // X, Y 위치 (0,0)
-            blurRadius: 15, // 블러 7
-            spreadRadius: 0, // 스프레드 0
+            color: Colors.black.withOpacity(0.02), 
+            offset: const Offset(0, 0), 
+            blurRadius: 15, 
+            spreadRadius: 0, 
           ),
         ],
+        color: Color(0xff303030),
+        borderRadius: BorderRadius.circular(25),
+        
       ),
       child: GestureDetector(
         onTap: () {
@@ -1009,7 +1011,7 @@ class NewCustomIconButton {
         child: Icon(
           icon,
           color: const Color(0xff646464),
-          size: 25,
+          size: size,
         ),
       ),
     );

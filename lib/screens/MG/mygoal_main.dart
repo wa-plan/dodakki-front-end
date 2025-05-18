@@ -246,15 +246,7 @@ class _MyGoalState extends State<MyGoal> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(0xff303030),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                              offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                              blurRadius: 7, // 블러 7
-                              spreadRadius: 0, // 스프레드 0
-                            ),
-                          ],
+                          
                         ),
                         child: Container(
                           width: 75,
