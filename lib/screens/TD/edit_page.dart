@@ -46,8 +46,6 @@ class EditPageState extends State<EditPage> {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-       
-      
 
       Navigator.push(
           context,
@@ -56,11 +54,13 @@ class EditPageState extends State<EditPage> {
           ));
     } else {
       // 실패한 경우에 처리할 코드
-      Message("도미노 삭제에 실패했습니다.", const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
+      Message(
+              "도미노 삭제에 실패했습니다.",
+              const Color(0xffFF6767), // 텍스트 색상
+              const Color(0xff412C2C), // 배경 색상
+              borderColor: const Color(0xffFF6767), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
     }
   }
 
@@ -104,14 +104,17 @@ class EditPageState extends State<EditPage> {
     dominoController = TextEditingController(text: widget.content);
     switchValue = widget.switchValue;
     interval = widget.interval;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = context.read<DateListProvider>();
-      provider.updateRepeatSettings(interval);
-      everyDay = provider.everyDay;
-      everyWeek = provider.everyWeek;
-      everyTwoWeek = provider.everyTwoWeek;
-      everyMonth = provider.everyMonth;
-    });
+
+    // 🔥 여기! postFrameCallback을 쓰지 말고 바로 provider에서 값 읽기
+    final provider = Provider.of<DateListProvider>(context, listen: false);
+    provider.updateRepeatSettings(interval);
+    everyDay = provider.everyDay;
+    everyWeek = provider.everyWeek;
+    everyTwoWeek = provider.everyTwoWeek;
+    everyMonth = provider.everyMonth;
+
+    print(
+        '[EditPage] 초기 반복 값: $everyDay, $everyWeek, $everyTwoWeek, $everyMonth');
   }
 
   @override
@@ -170,8 +173,8 @@ class EditPageState extends State<EditPage> {
                     ),
                   ),
                   SizedBox(height: currentWidth < 600 ? 40 : 40),
-                    DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
-                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                  DPGuideText('언제 실행하고 싶나요?', currentWidth).dPGuideText(),
+                  SizedBox(height: currentWidth < 600 ? 15 : 25),
 
                   Center(
                       child: Container(
@@ -197,24 +200,26 @@ class EditPageState extends State<EditPage> {
                       SizedBox(height: currentWidth < 600 ? 10 : 15),
                       SizedBox(
                         height: currentWidth < 600 ? 35 : 45,
-                          width: currentWidth < 600 ? 45 : 55,
+                        width: currentWidth < 600 ? 45 : 55,
                         child: FittedBox(
                           fit: BoxFit.fill,
                           child: Switch(
                             activeTrackColor: const Color(0xff00C300),
-                              inactiveTrackColor: const Color(0xff474747),
-                              inactiveThumbColor: Colors.white,
-                              trackOutlineColor:
-                                  WidgetStateProperty.resolveWith<Color?>(
-                                (Set<WidgetState> states) {
-                                  if (true) {
-                                    return Colors.transparent;
-                                  }
-                                },
-                              ),
+                            inactiveTrackColor: const Color(0xff474747),
+                            inactiveThumbColor: Colors.white,
+                            trackOutlineColor:
+                                WidgetStateProperty.resolveWith<Color?>(
+                              (Set<WidgetState> states) {
+                                if (true) {
+                                  return Colors.transparent;
+                                }
+                              },
+                            ),
                             value: switchValue,
                             onChanged: (value) {
                               setState(() {
+                                print(
+                                    '전달할 값 $everyDay, $everyWeek, $everyTwoWeek, $everyMonth)');
                                 switchValue = value;
                               });
                             },
@@ -226,117 +231,108 @@ class EditPageState extends State<EditPage> {
 
                   if (switchValue)
                     EditRepeatSettings(
-                        everyDay, everyWeek, everyTwoWeek, everyMonth),
-
-                  
-
-                  
+                      everyDay,
+                      everyWeek,
+                      everyTwoWeek,
+                      everyMonth,
+                      key: ValueKey(
+                          '$everyDay-$everyWeek-$everyTwoWeek-$everyMonth'), // 👈 추가!
+                    ),
                 ],
               ),
             ),
           ),
         ]),
       ),
-      bottomNavigationBar: Padding(padding: fullPadding,
-      child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        NewButton(Colors.black, Colors.white, '이전', (){
-                          Navigator.pop(context);
-                        }, currentWidth).newButton(),
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          NewButton(Colors.black, Colors.white, '이전', () {
+            Navigator.pop(context);
+          }, currentWidth)
+              .newButton(),
+          NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
+            DateTime? pickedDate = context.read<DateProvider>().pickedDate;
+            context
+                .read<DateListProvider>()
+                .setInterval(switchValue, pickedDate!);
+            List<DateTime> dateList = context.read<DateListProvider>().dateList;
+            String repeatInfo = context.read<DateListProvider>().repeatInfo();
+            print('dateList=$dateList');
+            print('repeatInfo=$repeatInfo');
+            print('골아이디 확인 ${widget.goalId}, ${widget.date}');
+            howDeleteDialog(context, widget.goalId, widget.date);
+          }, currentWidth)
+              .newButton(),
+          NewButton(Colors.black, Colors.white, '완료', () async {
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
 
-                        NewButton(Color(0xff6A1B1B), Colors.white, '삭제', (){
-                          DateTime? pickedDate =
-                                context.read<DateProvider>().pickedDate;
-                            context
-                                .read<DateListProvider>()
-                                .setInterval(switchValue, pickedDate!);
-                            List<DateTime> dateList =
-                                context.read<DateListProvider>().dateList;
-                            String repeatInfo =
-                                context.read<DateListProvider>().repeatInfo();
-                            print('dateList=$dateList');
-                            print('repeatInfo=$repeatInfo');
-                            print('골아이디 확인 ${widget.goalId}, ${widget.date}');
-                            howDeleteDialog(
-                                context, widget.goalId, widget.date);
-                        }, currentWidth).newButton(),
+              DateTime? pickedDate = context.read<DateProvider>().pickedDate;
 
-                        NewButton(Colors.black, Colors.white, '완료', ()async{
-                          if (formKey.currentState!.validate()) {
-                              formKey.currentState!.save();
+              if (pickedDate == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('날짜를 선택해 주세요.')),
+                );
+              } else {
+                // 🔹 반복 설정을 적용
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    context
+                        .read<DateListProvider>()
+                        .setInterval(switchValue, pickedDate);
+                  }
+                });
 
-                              DateTime? pickedDate =
-                                  context.read<DateProvider>().pickedDate;
+                // 🔹 반복 정보 가져오기
+                String repetition =
+                    context.read<DateListProvider>().repeatInfo();
+                List<DateTime> dateList =
+                    context.read<DateListProvider>().dateList;
 
-                              if (pickedDate == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('날짜를 선택해 주세요.')),
-                                );
-                              } else {
-                                // 🔹 반복 설정을 적용
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  if (mounted) {
-                                    context
-                                        .read<DateListProvider>()
-                                        .setInterval(switchValue, pickedDate);
-                                  }
-                                });
+                // 🔹 날짜 리스트가 비어 있으면 기본값 설정
+                if (dateList.isEmpty) {
+                  dateList = [pickedDate];
+                }
 
-                                // 🔹 반복 정보 가져오기
-                                String repetition = context
-                                    .read<DateListProvider>()
-                                    .repeatInfo();
-                                List<DateTime> dateList =
-                                    context.read<DateListProvider>().dateList;
+                print('전송값 테스트!!');
+                print(widget.goalId);
+                print(dominoController.text);
+                print(dateList);
+                print(repetition);
 
-                                // 🔹 날짜 리스트가 비어 있으면 기본값 설정
-                                if (dateList.isEmpty) {
-                                  dateList = [pickedDate];
-                                }
+                // 🔹 수정 요청 후 성공 여부 확인
+                bool success = await EditDominoNewService.editDomino(
+                  thirdGoalId: widget.thirdGoalId,
+                  name: dominoController.text,
+                  dates: dateList,
+                  repetition: repetition,
+                );
 
-                                print('전송값 테스트!!');
-                                print(widget.goalId);
-                                print(dominoController.text);
-                                print(dateList);
-                                print(repetition);
-
-                                // 🔹 수정 요청 후 성공 여부 확인
-                                bool success =
-                                    await EditDominoNewService.editDomino(
-                                  thirdGoalId: widget.thirdGoalId,
-                                  name: dominoController.text,
-                                  dates: dateList,
-                                  repetition: repetition,
-                                );
-
-                                if (success) {
-                                  // 성공 메시지 출력 후 페이지 이동
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('도미노가 수정되었습니다.')),
-                                  );
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const TdMain(),
-                                    ),
-                                  );
-                                } else {
-                                  // 실패 메시지 출력
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('도미노 수정에 실패했습니다.')),
-                                  );
-                                }
-                              }
-                            }
-                        }, currentWidth).newButton(),
-                       
-                        
-                        
-                      ]),),
+                if (success) {
+                  // 성공 메시지 출력 후 페이지 이동
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('도미노가 수정되었습니다.')),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TdMain(),
+                    ),
+                  );
+                } else {
+                  // 실패 메시지 출력
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('도미노 수정에 실패했습니다.')),
+                  );
+                }
+              }
+            }
+          }, currentWidth)
+              .newButton(),
+        ]),
+      ),
     );
   }
 }
@@ -347,7 +343,6 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      
 
       Navigator.push(
           context,
@@ -368,11 +363,13 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      Message("도미노가 삭제되었어!.", const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
+      Message(
+              "도미노가 삭제되었어!.",
+              const Color(0xffFF6767), // 텍스트 색상
+              const Color(0xff412C2C), // 배경 색상
+              borderColor: const Color(0xffFF6767), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
 
       Navigator.push(
           context,

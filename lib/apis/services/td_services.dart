@@ -47,7 +47,7 @@ class Event {
       thirdGoalId: json['thirdGoalId'] ?? 0,
       goalName: json['goalName'] ?? 'Unknown',
       color: json['color'] ?? 'white',
-      thirdGoal: json['thridGoal'] ?? 'No content',
+      thirdGoal: json['thirdGoal'] ?? 'No content',
       attainment: json['attainment'] ?? 'NONE',
       repetition: json['repetition'] ?? 'NONE',
       didZero: didZero,
@@ -147,7 +147,6 @@ class AddDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
         Fluttertoast.showToast(
@@ -215,7 +214,6 @@ class DominoStatusService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -285,7 +283,6 @@ class EditDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -431,7 +428,6 @@ class DeleteDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-       
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -497,7 +493,6 @@ class DeleteTodayDominoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode >= 400) {
         Fluttertoast.showToast(
@@ -583,7 +578,6 @@ class MandalartInfoService {
       }
       return null; // 실패 시 null 반환
     } catch (e) {
-      
       return null; // 오류 발생 시 null 반환
     }
   }
@@ -637,7 +631,6 @@ class MandaIdListService {
         return null;
       }
     } catch (e) {
-      
       return null;
     }
   }

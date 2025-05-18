@@ -4,7 +4,6 @@ import 'package:domino/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/TD/td_create2_page.dart';
 import 'package:domino/widgets/DP/td_create1_widget.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/DP/model.dart';
 
@@ -242,9 +241,9 @@ class _AddPage1State extends State<AddPage1> {
                 context
                     .read<SelectAPModel>()
                     .selectAP("제3목표를 클릭하여 선택해주세요.", null);
-                    context
-                      .read<SelectRepeatModel>()
-                      .selectRepeat(false, false, false, false);
+                context
+                    .read<SelectRepeatModel>()
+                    .selectRepeat(false, false, false, false);
                 Navigator.pop(context);
               }, Icons.keyboard_arrow_left_rounded, currentWidth)
                   .customIconButton(),
@@ -468,7 +467,7 @@ class _AddPage1State extends State<AddPage1> {
                   context
                       .read<SelectAPModel>()
                       .selectAP("제3목표를 클릭하여 선택해주세요.", null);
-                      context
+                  context
                       .read<SelectRepeatModel>()
                       .selectRepeat(false, false, false, false);
                   Navigator.pop(context);
@@ -488,11 +487,13 @@ class _AddPage1State extends State<AddPage1> {
                       ),
                     );
                   } else {
-                    Message("목표를 선택해 주세요.", const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
+                    Message(
+                            "목표를 선택해 주세요.",
+                            const Color(0xffFF6767), // 텍스트 색상
+                            const Color(0xff412C2C), // 배경 색상
+                            borderColor: const Color(0xffFF6767), // 테두리 색상
+                            icon: Icons.block)
+                        .message(context);
                   }
                 }, currentWidth)
                     .newButton(),
