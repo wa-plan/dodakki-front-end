@@ -119,7 +119,8 @@ class _MyGoalAddState extends State<MyGoalAdd> {
   }
 
   void _checkGalleryThenPickImages() async {
-    bool granted = await PermissionUtil.checkAndRequestGalleryPermission(context);
+    bool granted =
+        await PermissionUtil.checkAndRequestGalleryPermission(context);
     if (granted) {
       _imageFiles.clear();
       await _pickImages();
@@ -177,17 +178,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   const SizedBox(height: 8),
                   Container(
                       height: 40,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                            offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                            blurRadius: 7, // 블러 7
-                            spreadRadius: 0, // 스프레드 0
-                          ),
-                        ],
-                      ),
+                      decoration: BoxDecoration(),
                       child: NewCustomTextField('', _nameController, (value) {
                         return null;
                       }, false, 1, currentWidth)
@@ -218,15 +209,6 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                           height: 40,
                           padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black
-                                      .withOpacity(0.05), // 검은색 10% 투명도
-                                  offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                                  blurRadius: 7, // 블러 7
-                                  spreadRadius: 0, // 스프레드 0
-                                ),
-                              ],
                               borderRadius: BorderRadius.circular(6),
                               color: const Color(0xff2A2A2A)),
                           child: Text(
@@ -333,17 +315,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   const SizedBox(height: 8),
                   Container(
                       height: 80,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                            offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                            blurRadius: 7, // 블러 7
-                            spreadRadius: 0, // 스프레드 0
-                          ),
-                        ],
-                      ),
+                      decoration: BoxDecoration(),
                       child: NewCustomTextField('', _descriptionController,
                               (value) {
                         return null;
@@ -381,16 +353,6 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                         width: 80,
                                         height: 80,
                                         decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(
-                                                    0.05), // 검은색 10% 투명도
-                                                offset: const Offset(
-                                                    0, 0), // X, Y 위치 (0,0)
-                                                blurRadius: 7, // 블러 7
-                                                spreadRadius: 0, // 스프레드 0
-                                              ),
-                                            ],
                                             color: Color(
                                                 0xff2A2A2A), // ✅ 로드 실패 대비 배경 설정
                                             borderRadius:
@@ -452,16 +414,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                     width: 80,
                                     height: 80,
                                     decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withOpacity(
-                                                0.05), // 검은색 10% 투명도
-                                            offset: const Offset(
-                                                0, 0), // X, Y 위치 (0,0)
-                                            blurRadius: 7, // 블러 7
-                                            spreadRadius: 0, // 스프레드 0
-                                          ),
-                                        ],
+                                        
                                         color: Color(0xff2A2A2A),
                                         borderRadius: BorderRadius.circular(6)),
                                     child: Icon(

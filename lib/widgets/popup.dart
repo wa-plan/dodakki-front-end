@@ -34,15 +34,18 @@ class PopupDialog extends StatelessWidget {
     List<Widget> buttons = [];
     if (delete) {
       buttons.add(
-        NewButton(
-                const Color.fromARGB(255, 128, 22, 15),
-                Colors.white,
-                '삭제',
-                () => onDelete != null
-                    ? onDelete!()
-                    : Navigator.of(context).pop(),
-                currentWidth)
-            .newButton(),
+        SizedBox(
+          width: 110,
+          child: NewButton(
+                  const Color.fromARGB(255, 128, 22, 15),
+                  Colors.white,
+                  '삭제',
+                  () => onDelete != null
+                      ? onDelete!()
+                      : Navigator.of(context).pop(),
+                  currentWidth)
+              .newButton(),
+        ),
       );
     }
     if (signout) {
@@ -63,15 +66,18 @@ class PopupDialog extends StatelessWidget {
     }
     if (success) {
       buttons.add(
-        NewButton(
-                mainRed,
-                backgroundColor,
-                '확인',
-                () => onSuccess != null
-                    ? onSuccess!()
-                    : Navigator.of(context).pop(),
-                currentWidth)
-            .newButton(),
+        SizedBox(
+          width: 110,
+          child: NewButton(
+                  mainRed,
+                  backgroundColor,
+                  '확인',
+                  () => onSuccess != null
+                      ? onSuccess!()
+                      : Navigator.of(context).pop(),
+                  currentWidth)
+              .newButton(),
+        ),
       );
     }
 
