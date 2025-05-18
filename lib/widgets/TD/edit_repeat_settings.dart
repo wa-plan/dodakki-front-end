@@ -28,7 +28,25 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
     everyWeek = widget.everyWeek;
     everyTwoWeek = widget.everyTwoWeek;
     everyMonth = widget.everyMonth;
-    print(everyDay);
+    print('전달받은 값: $everyDay, $everyWeek, $everyTwoWeek, $everyMonth');
+  }
+
+  @override
+  void didUpdateWidget(EditRepeatSettings oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.everyDay != widget.everyDay ||
+        oldWidget.everyWeek != widget.everyWeek ||
+        oldWidget.everyTwoWeek != widget.everyTwoWeek ||
+        oldWidget.everyMonth != widget.everyMonth) {
+      setState(() {
+        everyDay = widget.everyDay;
+        everyWeek = widget.everyWeek;
+        everyTwoWeek = widget.everyTwoWeek;
+        everyMonth = widget.everyMonth;
+        print(
+            'didUpdateWidget: $everyDay, $everyWeek, $everyTwoWeek, $everyMonth');
+      });
+    }
   }
 
   @override
@@ -45,16 +63,16 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                   scale: 1,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
-                fillColor: WidgetStateProperty.resolveWith<Color>(
-                    (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.disabled)) {
-                    return Color(0xff323232);
-                  }
-                  return Color(0xff323232);
-                }),
-                activeColor: Colors.transparent,
-                side: BorderSide(color: Colors.transparent),
-                checkColor: const Color(0xffFF6767),
+                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.disabled)) {
+                        return Color(0xff323232);
+                      }
+                      return Color(0xff323232);
+                    }),
+                    activeColor: Colors.transparent,
+                    side: BorderSide(color: Colors.transparent),
+                    checkColor: const Color(0xffFF6767),
                     value: everyDay,
                     onChanged: (value) {
                       setState(() {
@@ -67,10 +85,11 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                     },
                   ),
                 ),
-                 Text(
+                Text(
                   '매일',
-                  style:  TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),
@@ -80,16 +99,16 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                   scale: 1,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
-                fillColor: WidgetStateProperty.resolveWith<Color>(
-                    (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.disabled)) {
-                    return Color(0xff323232);
-                  }
-                  return Color(0xff323232);
-                }),
-                activeColor: Colors.transparent,
-                side: BorderSide(color: Colors.transparent),
-                checkColor: const Color(0xffFF6767),
+                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.disabled)) {
+                        return Color(0xff323232);
+                      }
+                      return Color(0xff323232);
+                    }),
+                    activeColor: Colors.transparent,
+                    side: BorderSide(color: Colors.transparent),
+                    checkColor: const Color(0xffFF6767),
                     value: everyWeek,
                     onChanged: (value) {
                       setState(() {
@@ -102,10 +121,11 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                     },
                   ),
                 ),
-                 Text(
+                Text(
                   '매주',
-                  style:  TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),
@@ -115,16 +135,16 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                   scale: 1,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
-                fillColor: WidgetStateProperty.resolveWith<Color>(
-                    (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.disabled)) {
-                    return Color(0xff323232);
-                  }
-                  return Color(0xff323232);
-                }),
-                activeColor: Colors.transparent,
-                side: BorderSide(color: Colors.transparent),
-                checkColor: const Color(0xffFF6767),
+                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.disabled)) {
+                        return Color(0xff323232);
+                      }
+                      return Color(0xff323232);
+                    }),
+                    activeColor: Colors.transparent,
+                    side: BorderSide(color: Colors.transparent),
+                    checkColor: const Color(0xffFF6767),
                     value: everyTwoWeek,
                     onChanged: (value) {
                       setState(() {
@@ -139,10 +159,11 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                     },
                   ),
                 ),
-                 Text(
+                Text(
                   '격주',
-                  style:  TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),
@@ -152,16 +173,16 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                   scale: 1,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
-                fillColor: WidgetStateProperty.resolveWith<Color>(
-                    (Set<WidgetState> states) {
-                  if (states.contains(WidgetState.disabled)) {
-                    return Color(0xff323232);
-                  }
-                  return Color(0xff323232);
-                }),
-                activeColor: Colors.transparent,
-                side: BorderSide(color: Colors.transparent),
-                checkColor: const Color(0xffFF6767),
+                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.disabled)) {
+                        return Color(0xff323232);
+                      }
+                      return Color(0xff323232);
+                    }),
+                    activeColor: Colors.transparent,
+                    side: BorderSide(color: Colors.transparent),
+                    checkColor: const Color(0xffFF6767),
                     value: everyMonth,
                     onChanged: (value) {
                       setState(() {
@@ -170,14 +191,17 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                         everyWeek = false;
                         everyTwoWeek = false;
                       });
-                      context.read<DateListProvider>().setEverymonth(everyMonth);
+                      context
+                          .read<DateListProvider>()
+                          .setEverymonth(everyMonth);
                     },
                   ),
                 ),
-                 Text(
+                Text(
                   '매월',
-                  style:  TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: currentWidth < 600 ? 14 : 16),
                 ),
               ],
             ),

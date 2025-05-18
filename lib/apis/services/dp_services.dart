@@ -37,6 +37,7 @@ class MainGoalListService {
       );
 
       if (response.statusCode == 200) {
+        print('토큰: $token');
         final List<dynamic> jsonResponse =
             json.decode(utf8.decode(response.bodyBytes));
 
@@ -466,7 +467,6 @@ class EditSecondGoalService {
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          
         } else {
           Fluttertoast.showToast(
             msg: '목표 수정 실패: ${response.body}',
@@ -537,7 +537,6 @@ class EditGoalColorService {
         );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          
         } else {
           Fluttertoast.showToast(
             msg: '목표 수정 실패: ${response.body}',
@@ -644,7 +643,6 @@ class EditThirdGoalService {
           );
 
           if (response.statusCode == 200 || response.statusCode == 201) {
-            
           } else {
             Fluttertoast.showToast(
               msg: '목표 생성 실패: ${response.body}',
