@@ -1,5 +1,5 @@
 //DP 디테일 페이지에서 이동한 3x3 만다라트 페이지
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Detail/dp_detail2_widget.dart';
 import 'package:flutter/material.dart';
 

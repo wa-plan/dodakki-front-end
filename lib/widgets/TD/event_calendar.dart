@@ -7,7 +7,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:domino/screens/TD/td_create1_page.dart';
 import 'package:domino/screens/TD/edit_page.dart';
 import 'package:intl/intl.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 
 class EventCalendar extends StatefulWidget {
   const EventCalendar({super.key});
@@ -448,12 +448,12 @@ class _EventCalendarState extends State<EventCalendar> {
                                         width: currentWidth < 600 ? 13 : 14,
                                         height: currentWidth < 600 ? 60 : 55,
                                         decoration: BoxDecoration(
-                                          color: Color(int.parse(
+                                          /*color: Color(int.parse(
                                             value[index]
                                                 .color
                                                 .replaceAll('Color(', '')
                                                 .replaceAll(')', ''),
-                                          )),
+                                          )),*/
                                           borderRadius:
                                               BorderRadius.circular(3),
                                         ),

@@ -1,7 +1,8 @@
 // DP 메인 페이지
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/provider/DP/model.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/DP_main_mandalart.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/DP/Create/dp_create1_page.dart';
@@ -55,6 +56,16 @@ class _DPMainState extends State<DPMain> {
   Future<void> _initializeData() async {
     await userMandaIdInfo(); // 데이터를 먼저 가져오기
     _mainGoalList(); // 데이터를 기반으로 호출
+  }
+
+  String ddayFinder(String mandalartId) {
+    String dday = ddayList.firstWhere(
+          (element) => element['mandalartId'] == mandalartId, // mandalartId와 비교
+          orElse: () => {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+        )['dday'] ??
+        '0';
+
+    return dday;
   }
 
   Future<void> userMandaIdInfo() async {
@@ -226,224 +237,219 @@ class _DPMainState extends State<DPMain> {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('도미노 플랜', currentWidth).dPTitleText(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              DPTitleText('도미노 플랜', currentWidth).dPTitleText(),
+              //만다라트 생성 버튼
+              Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                DPIconButton(() async {
+                  //초기화 로직
+                  for (int i = 0; i < 9; i++) {
+                    context
+                        .read<SaveInputtedDetailGoalModel>()
+                        .updateDetailGoal(i.toString(), "");
+                  }
+
+                  for (int i = 0; i < 9; i++) {
+                    context
+                        .read<TestInputtedDetailGoalModel>()
+                        .updateTestDetailGoal(i.toString(), "");
+                  }
+
+                  for (int i = 0; i < 9; i++) {
+                    context
+                        .read<GoalColor>()
+                        .updateGoalColor(i.toString(), const Color(0xff929292));
+                  }
+
+                  for (int i = 0; i < 9; i++) {
+                    for (int j = 0; j < 9; j++) {
+                      context
+                          .read<SaveInputtedActionPlanModel>()
+                          .updateActionPlan(i, j.toString(), "");
+                    }
+                  }
+
+                  for (int i = 0; i < 9; i++) {
+                    for (int j = 0; j < 9; j++) {
+                      context
+                          .read<TestInputtedActionPlanModel>()
+                          .updateTestActionPlan(i, j.toString(), "");
+                    }
+                  }
+
+                  // 살짝 기다려줌 (프레임 간 처리 타이밍 보장)
+                  await Future.delayed(Duration(milliseconds: 10));
+
+                  // 화면 전환
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DPcreateSelectPage(
+                        emptyMainGoals: emptyMainGoals,
+                      ),
+                    ),
+                  );
+                }, Icons.add)
+                    .dPIconButton(),
+              ],
+            ),
+            ],
+          ),
         ),
         backgroundColor: backgroundColor,
       ),
       bottomNavigationBar: const NavBar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: fullPadding,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //만다라트 추가 버튼
-                  NewCustomIconButton(() async {
-                    // 초기화 로직
-                    for (int i = 0; i < 9; i++) {
-                                context
-                                    .read<SaveInputtedDetailGoalModel>()
-                                    .updateDetailGoal(i.toString(), "");
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                context
-                                    .read<TestInputtedDetailGoalModel>()
-                                    .updateTestDetailGoal(i.toString(), "");
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                context.read<GoalColor>().updateGoalColor(
-                                    i.toString(), const Color(0xff929292));
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                for (int j = 0; j < 9; j++) {
-                                  context
-                                      .read<SaveInputtedActionPlanModel>()
-                                      .updateActionPlan(i, j.toString(), "");
-                                }
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                for (int j = 0; j < 9; j++) {
-                                  context
-                                      .read<TestInputtedActionPlanModel>()
-                                      .updateTestActionPlan(
-                                          i, j.toString(), "");
-                                }
-                              }
-
-                    // 살짝 기다려줌 (프레임 간 처리 타이밍 보장)
-                    await Future.delayed(Duration(milliseconds: 10));
-
-                    // 화면 전환
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DPcreateSelectPage(
-                          emptyMainGoals: emptyMainGoals,
+      body: Padding(
+        padding: fullPadding,
+        child: Column(
+          children: [
+            
+            SizedBox(height: currentWidth < 600 ? 10 : 15),
+            mainGoals.isEmpty
+                ? Container(
+                    height: currentWidth < 600 ? 300 : 400,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff2D2D2D),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Stack(
+                      children: [
+                        // 텍스트: 좌측 상단 정렬
+                        Positioned(
+                          top: 25, // 텍스트의 상단 여백
+                          left: 25, // 텍스트의 좌측 여백
+                          child: Text(
+                            '아직 플랜이 없어요.\n목표를 이루려면\n철저한 계획은 필수!',
+                            style: TextStyle(
+                                color: const Color(0xff464646),
+                                fontSize: currentWidth < 600 ? 15 : 20,
+                                fontWeight: FontWeight.w700,
+                                height: 1.7),
+                          ),
                         ),
-                      ),
-                    );
-                  }, Icons.add, currentWidth, 21)
-                      .newCustomIconButton(),
-                ],
-              ),
-              SizedBox(height: currentWidth < 600 ? 10 : 15),
-              mainGoals.isEmpty
-                  ? Container(
-                      height: currentWidth < 600 ? 300 : 400,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff2D2D2D),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Stack(
-                        children: [
-                          // 텍스트: 좌측 상단 정렬
-                          Positioned(
-                            top: 25, // 텍스트의 상단 여백
-                            left: 25, // 텍스트의 좌측 여백
-                            child: Text(
-                              '아직 플랜이 없어요.\n목표를 이루려면\n철저한 계획은 필수!',
-                              style: TextStyle(
-                                  color: const Color(0xff464646),
-                                  fontSize: currentWidth < 600 ? 15 : 20,
-                                  fontWeight: FontWeight.w700,
-                                  height: 1.7),
+                        // 이미지: 우측 하단 정렬
+                        Positioned(
+                          bottom: 0, // 이미지의 하단 여백
+                          right: 0, // 이미지의 우측 여백
+                          child: Opacity(
+                            opacity: 0.2,
+                            child: Image.asset(
+                              'assets/img/emptyDominho.png',
+                              height: currentWidth < 600 ? 190 : 300,
+                              // 이미지 크기 유지
                             ),
                           ),
-                          // 이미지: 우측 하단 정렬
-                          Positioned(
-                            bottom: 0, // 이미지의 하단 여백
-                            right: 0, // 이미지의 우측 여백
-                            child: Opacity(
-                              opacity: 0.2,
-                              child: Image.asset(
-                                'assets/img/emptyDominho.png',
-                                height: currentWidth < 600 ? 190 : 300,
-                                // 이미지 크기 유지
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : SizedBox(
-                      height: 800,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: mainGoals.length,
-                        itemBuilder: (context, index) {
-                          final goal = mainGoals[index];
-                          final mandalartId = goal['id'].toString();
+                        ),
+                      ],
+                    ),
+                  )
 
-                          return FutureBuilder<List<Map<String, dynamic>>?>(
-                            future: _fetchSecondGoals(mandalartId),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              } else if (snapshot.hasError) {
-                                return const Center(
-                                  child: Text(
-                                    '데이터를 불러오는 데 실패했습니다.',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                );
-                              } else if (!snapshot.hasData ||
-                                  snapshot.data!.isEmpty) {
-                                return const Center(
-                                  child: Text(
-                                    '목표가 없습니다.',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                );
-                              } else {
-                                final data = snapshot.data!;
-                                final firstColor = data[0]['color'];
-                                final mandalart = data[0]['mandalart'];
-                                final secondGoals = data[0]['secondGoals']
-                                    as List<Map<String, dynamic>>?;
+                //만다라트 목록 UI
+                : SizedBox(
+                    height: 440,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: mainGoals.length,
+                      itemBuilder: (context, index) {
+                        final goal = mainGoals[index];
+                        final mandalartId = goal['id'].toString();
 
-                                if (secondGoals == null ||
-                                    secondGoals.isEmpty) {
-                                  return const SizedBox.shrink();
-                                }
+                        return FutureBuilder<List<Map<String, dynamic>>?>(
+                          future: _fetchSecondGoals(mandalartId),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return const Center(
+                                child: Text(
+                                  '데이터를 불러오는 데 실패했습니다.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              );
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return const Center(
+                                child: Text(
+                                  '목표가 없습니다.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              );
+                            } else {
+                              final data = snapshot.data!;
+                              final firstColor = data[0]['color'];
+                              final mandalart = data[0]['mandalart'];
+                              final secondGoals = data[0]['secondGoals']
+                                  as List<Map<String, dynamic>>?;
 
-                                return GestureDetector(
-                                  onTap: () {
-                                    print(secondGoals);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DPdetailPage(
-                                          mandalart: mandalart,
-                                          secondGoals: secondGoals,
-                                          mandalartId: int.parse(mandalartId),
-                                          firstColor: firstColor,
-                                        ),
+                              if (secondGoals == null || secondGoals.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DPdetailPage(
+                                        mandalart: mandalart,
+                                        secondGoals: secondGoals,
+                                        mandalartId: int.parse(mandalartId),
+                                        firstColor: firstColor,
                                       ),
-                                    );
-                                  },
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(30),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff2A2A2A),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                   child: Column(
                                     children: [
-                                      const SizedBox(height: 15),
-                                      Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 10, 0, 10),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xff2B2B2B),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        width: double.infinity,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          mandalart,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize:
-                                                currentWidth < 600 ? 13 : 17,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                      //디데이
+                                      DdayTag(int.parse(
+                                              ddayFinder(mandalartId)))
+                                          .ddayTag(),
+                                      SizedBox(height: 15),
+                                      //제1목표
+                                      Text(
+                                        mandalart,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
-                                      Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            40, 20, 40, 40),
-                                        decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: MandalartGrid(
-                                          mandalart: mandalart,
-                                          firstColor: firstColor,
-                                          secondGoals: secondGoals,
-                                          mandalartId: int.parse(mandalartId),
-                                          currentHeight: currentHeight,
-                                        ),
+                                      SizedBox(height: 35),
+                                      //만다라트
+                                      MandalartGrid(
+                                        mandalart: mandalart,
+                                        firstColor: firstColor,
+                                        secondGoals: secondGoals,
+                                        mandalartId: int.parse(mandalartId),
+                                        currentHeight: currentHeight,
                                       ),
                                     ],
                                   ),
-                                );
-                              }
-                            },
-                          );
-                        },
-                      ),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
                     ),
-              const SizedBox(height: 40),
-              if (mainGoals.length > 1)
-                PageIndicator(_pageController, mainGoals).pageIndicator(),
-              const SizedBox(height: 20),
-            ],
-          ),
+                  ),
+            const SizedBox(height: 20),
+            //페이지 인디케이터
+            PageIndicator(_pageController, mainGoals).pageIndicator(),
+          ],
         ),
       ),
     );

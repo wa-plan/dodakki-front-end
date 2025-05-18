@@ -1,6 +1,6 @@
 import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/apis/services/mg_services.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/TD/td_create2_page.dart';
 import 'package:domino/widgets/DP/td_create1_widget.dart';

@@ -1,5 +1,5 @@
 // 3X3 만다라트 세부 화면
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class MandalartGrid4 extends StatefulWidget {

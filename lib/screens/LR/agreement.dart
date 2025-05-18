@@ -1,5 +1,5 @@
 import 'package:domino/screens/LR/register.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

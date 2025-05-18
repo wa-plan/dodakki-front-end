@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/provider/DP/model.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
 import 'package:domino/widgets/DP/Edit/dp_edit2_widget.dart';
 import 'package:domino/widgets/DP/ai_popup.dart';

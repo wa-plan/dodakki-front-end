@@ -1,5 +1,5 @@
 // DP 메인 페이지에 들어가는 만다라트
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class MandalartGrid extends StatelessWidget {
@@ -20,7 +20,7 @@ class MandalartGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: currentHeight * 0.5,
+      width: currentHeight * 0.35,
       child: GridView(
         shrinkWrap: true, // GridView will be wrapped in the available space
         physics: const NeverScrollableScrollPhysics(),

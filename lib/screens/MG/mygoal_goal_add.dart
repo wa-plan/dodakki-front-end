@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/MG/calender.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:domino/apis/services/image_services.dart';
@@ -119,7 +119,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
   }
 
   void _checkGalleryThenPickImages() async {
-    bool granted = await PermissionUtil.checkAndRequestGalleryPermission();
+    bool granted = await PermissionUtil.checkAndRequestGalleryPermission(context);
     if (granted) {
       _imageFiles.clear();
       await _pickImages();

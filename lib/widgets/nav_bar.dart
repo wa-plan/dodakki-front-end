@@ -1,6 +1,6 @@
 import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/nav_provider.dart';
@@ -65,7 +65,7 @@ class NavBar extends StatelessWidget {
               child: Image.asset(
                 iconPath,
                 scale:1.15,
-                color: isSelected ? mainGold : const Color(0xffAAAAAA), // 선택된 색상 조정
+                color: isSelected ? mainRed : const Color(0xffAAAAAA), // 선택된 색상 조정
               ),
             ),
             Text(
@@ -73,7 +73,7 @@ class NavBar extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 10.5,
-                color: isSelected ? mainGold : const Color(0xffAAAAAA),
+                color: isSelected ? mainRed : const Color(0xffAAAAAA),
                 fontWeight: FontWeight.w500,
               ),
             ),

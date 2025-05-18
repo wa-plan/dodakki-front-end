@@ -1,8 +1,9 @@
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class PopupDialog extends StatelessWidget {
   final String content;
+  final String title;
   final bool cancel;
   final bool delete;
   final bool signout;
@@ -19,6 +20,7 @@ class PopupDialog extends StatelessWidget {
     required this.delete,
     required this.signout,
     required this.success,
+    required this.title,
     this.onCancel,
     this.onDelete,
     this.onSignOut,
@@ -33,81 +35,114 @@ class PopupDialog extends StatelessWidget {
     if (delete) {
       buttons.add(
         NewButton(
-          const Color.fromARGB(255, 128, 22, 15),
-          Colors.white,
-          '삭제',
-          () => onDelete != null ? onDelete!() : Navigator.of(context).pop(),currentWidth
-        ).newButton(),
+                const Color.fromARGB(255, 128, 22, 15),
+                Colors.white,
+                '삭제',
+                () => onDelete != null
+                    ? onDelete!()
+                    : Navigator.of(context).pop(),
+                currentWidth)
+            .newButton(),
       );
     }
     if (signout) {
       buttons.add(
-        NewButton(
-          const Color.fromARGB(255, 128, 22, 15),
-          Colors.white,
-          '탈퇴',
-          () => onSignOut != null ? onSignOut!() : Navigator.of(context).pop(),currentWidth
-        ).newButton(),
+        SizedBox(
+          width: 110,
+          child: NewButton(
+                  mainRed,
+                  backgroundColor,
+                  '탈퇴하기',
+                  () => onSignOut != null
+                      ? onSignOut!()
+                      : Navigator.of(context).pop(),
+                  currentWidth)
+              .newButton(),
+        ),
       );
     }
     if (success) {
       buttons.add(
         NewButton(
-          Colors.black,
-          Colors.white,
-          '확인',
-          () => onSuccess != null ? onSuccess!() : Navigator.of(context).pop(), currentWidth
-        ).newButton(),
+                mainRed,
+                backgroundColor,
+                '확인',
+                () => onSuccess != null
+                    ? onSuccess!()
+                    : Navigator.of(context).pop(),
+                currentWidth)
+            .newButton(),
       );
     }
-
-    
 
     return AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: const EdgeInsets.all(0),
       elevation: 30.0,
       content: Container(
-        padding: const EdgeInsets.fromLTRB(10, 30, 30, 0),
+        padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
         decoration: const BoxDecoration(
             color: Color.fromARGB(255, 26, 26, 26),
-            borderRadius: BorderRadius.all(Radius.circular(7))),
-        height: currentWidth < 600 ? 160 : 220,
-        width: currentWidth < 600 ? 340 : 400,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
+            borderRadius: BorderRadius.all(Radius.circular(15))),
+        height: 200,
+        width: 300,
+        child: Stack(
           children: [
-            Image.asset('assets/img/Dominho2.png',
-                width: currentWidth < 600 ? 95 : 130),
-            SizedBox(width: currentWidth < 600 ? 30 : 50),
-            Expanded(
+            //이미지
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Image.asset(
+                  'assets/img/popup.png',
+                  height: 170,
+                ),
+              
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 30, 23),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //타이틀
                   Text(
-                    content,
+                    title,
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: currentWidth < 600 ? 15 : 20,
+                        color: mainRed,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         height: 1.7),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 7,
                   ),
+                  //본문
+                  Text(
+                    content,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: currentWidth < 600 ? 16 : 20,
+                        fontWeight: FontWeight.w600,
+                        height: 1.7),
+                  ),
+
                   Spacer(),
+                  //버튼
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (cancel)
-                        NewButton(Colors.black, Colors.white, '취소',
-                            () => Navigator.of(context).pop(), currentWidth).newButton(),
+                        SizedBox(
+                          width: 110,
+                          child: NewButton(
+                                  mainGrey,
+                                  Colors.white,
+                                  '취소',
+                                  () => Navigator.of(context).pop(),
+                                  currentWidth)
+                              .newButton(),
+                        ),
                       ...buttons,
                     ],
-                  ),
-                   SizedBox(
-                    height: currentWidth < 600 ? 15 : 20,
                   ),
                 ],
               ),
@@ -121,6 +156,7 @@ class PopupDialog extends StatelessWidget {
   static void show(
     BuildContext context,
     String content,
+    String title,
     bool cancel,
     bool delete,
     bool signout,
@@ -136,6 +172,7 @@ class PopupDialog extends StatelessWidget {
       builder: (BuildContext context) {
         return PopupDialog(
           content: content,
+          title: title,
           cancel: cancel,
           delete: delete,
           signout: signout,

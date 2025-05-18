@@ -1,4 +1,4 @@
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class Description {

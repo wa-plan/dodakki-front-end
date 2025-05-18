@@ -1,7 +1,7 @@
 //DP 만다라트 9X9 상세 페이지
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/screens/DP/Edit/dp_edit1_page.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Detail/dp_detail1_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

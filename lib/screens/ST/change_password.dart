@@ -1,6 +1,6 @@
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:domino/screens/ST/settings_main.dart';
-import 'package:domino/styles.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/LR/loginregister_find_password.dart';
 
