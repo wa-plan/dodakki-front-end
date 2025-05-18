@@ -448,12 +448,12 @@ class _EventCalendarState extends State<EventCalendar> {
                                         width: currentWidth < 600 ? 13 : 14,
                                         height: currentWidth < 600 ? 60 : 55,
                                         decoration: BoxDecoration(
-                                          /*color: Color(int.parse(
+                                          color: Color(int.parse(
                                             value[index]
                                                 .color
                                                 .replaceAll('Color(', '')
                                                 .replaceAll(')', ''),
-                                          )),*/
+                                          )),
                                           borderRadius:
                                               BorderRadius.circular(3),
                                         ),
@@ -655,7 +655,7 @@ void editDialog(
         insetPadding: EdgeInsets.all(0),
         child: SizedBox(
           height: currentWidth < 600 ? 210 : 250,
-          width: currentWidth < 600 ? 300 : 480,
+          width: currentWidth < 600 ? 330 : 480,
           child: Container(
             padding: EdgeInsets.all(currentWidth < 600 ? 25 : 30),
             decoration: BoxDecoration(

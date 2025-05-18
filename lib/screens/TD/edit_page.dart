@@ -36,7 +36,7 @@ class EditPageState extends State<EditPage> {
   String dominoValue = '';
   late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
 
-  void editDominoNew(int thirdGoalId, String name, List<DateTime> dates,
+  /*void editDominoNew(int thirdGoalId, String name, List<DateTime> dates,
       String repetition) async {
     final success = await EditDominoNewService.editDomino(
         thirdGoalId: thirdGoalId,
@@ -62,6 +62,32 @@ class EditPageState extends State<EditPage> {
               icon: Icons.block)
           .message(context);
     }
+  }*/
+
+  Future<bool> deleteDomino(int thirdGoalId) async {
+    final success = await DeleteDominoService.deleteDomino(goalId: thirdGoalId);
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
+      );
+    }
+    return success;
+  }
+
+  Future<bool> addDomino(int thirdGoalId, String name, List<DateTime> dateList,
+      String repetition) async {
+    final success = await AddDominoService.addDomino(
+      thirdGoalId: thirdGoalId,
+      name: name,
+      dates: dateList,
+      repetition: repetition,
+    );
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('도미노 추가에 실패했습니다.')),
+      );
+    }
+    return success;
   }
 
   //텍스트폼필드 함수 만들기
@@ -277,14 +303,9 @@ class EditPageState extends State<EditPage> {
                 );
               } else {
                 // 🔹 반복 설정을 적용
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    context
-                        .read<DateListProvider>()
-                        .setInterval(switchValue, pickedDate);
-                  }
-                });
-
+                context
+                    .read<DateListProvider>()
+                    .setInterval(switchValue, pickedDate);
                 // 🔹 반복 정보 가져오기
                 String repetition =
                     context.read<DateListProvider>().repeatInfo();
@@ -303,30 +324,34 @@ class EditPageState extends State<EditPage> {
                 print(repetition);
 
                 // 🔹 수정 요청 후 성공 여부 확인
-                bool success = await EditDominoNewService.editDomino(
+                /*bool success = await EditDominoNewService.editDomino(
                   thirdGoalId: widget.thirdGoalId,
                   name: dominoController.text,
                   dates: dateList,
                   repetition: repetition,
-                );
+                );*/
 
-                if (success) {
-                  // 성공 메시지 출력 후 페이지 이동
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('도미노가 수정되었습니다.')),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const TdMain(),
-                    ),
-                  );
-                } else {
-                  // 실패 메시지 출력
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('도미노 수정에 실패했습니다.')),
-                  );
-                }
+                final deleted = await deleteDomino(widget.goalId);
+                if (!deleted) return;
+
+                final added = await addDomino(
+                  widget.thirdGoalId,
+                  dominoController.text,
+                  dateList,
+                  repetition,
+                );
+                if (!added) return;
+
+                // 성공 메시지 출력 후 페이지 이동
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('도미노가 수정되었습니다.')),
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TdMain(),
+                  ),
+                );
               }
             }
           }, currentWidth)
