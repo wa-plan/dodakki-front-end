@@ -20,7 +20,7 @@ class MandalartGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: currentHeight * 0.35,
+      width: 250,
       child: GridView(
         shrinkWrap: true, // GridView will be wrapped in the available space
         physics: const NeverScrollableScrollPhysics(),

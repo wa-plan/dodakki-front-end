@@ -4,7 +4,6 @@ import 'package:domino/screens/TD/td_main_page.dart';
 import 'package:domino/screens/Tutorial/tutorial1_page.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:domino/screens/LR/register.dart';
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

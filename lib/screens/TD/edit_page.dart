@@ -125,23 +125,27 @@ class EditPageState extends State<EditPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    dominoController = TextEditingController(text: widget.content);
-    switchValue = widget.switchValue;
-    interval = widget.interval;
+void initState() {
+  super.initState();
+  dominoController = TextEditingController(text: widget.content);
+  switchValue = widget.switchValue;
+  interval = widget.interval;
 
-    // 🔥 여기! postFrameCallback을 쓰지 말고 바로 provider에서 값 읽기
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     final provider = Provider.of<DateListProvider>(context, listen: false);
     provider.updateRepeatSettings(interval);
-    everyDay = provider.everyDay;
-    everyWeek = provider.everyWeek;
-    everyTwoWeek = provider.everyTwoWeek;
-    everyMonth = provider.everyMonth;
 
-    print(
-        '[EditPage] 초기 반복 값: $everyDay, $everyWeek, $everyTwoWeek, $everyMonth');
-  }
+    setState(() {
+      everyDay = provider.everyDay;
+      everyWeek = provider.everyWeek;
+      everyTwoWeek = provider.everyTwoWeek;
+      everyMonth = provider.everyMonth;
+    });
+
+    print('[EditPage] 초기 반복 값: $everyDay, $everyWeek, $everyTwoWeek, $everyMonth');
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
