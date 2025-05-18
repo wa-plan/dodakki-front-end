@@ -69,7 +69,6 @@ class DateListProvider extends ChangeNotifier {
     _dateList.clear();
 
     if (switchValue) {
-      // Add null check here
       if (_everyDay) {
         _interval = 1;
       }
@@ -83,6 +82,7 @@ class DateListProvider extends ChangeNotifier {
         _interval = 30;
       }
       _generateDateList(date);
+      _dateList.insert(0, date);
     } else {
       _dateList.add(date);
     }
@@ -91,6 +91,66 @@ class DateListProvider extends ChangeNotifier {
   }
 
   void _generateDateList(DateTime startDate) {
+    _dateList.clear();
+
+    DateTime currentDate = startDate;
+
+    // 🔁 시작 날짜는 중복되므로 한 번 건너뜀
+    if (_everyDay) {
+      currentDate = currentDate.add(const Duration(days: 1));
+    } else if (_everyWeek) {
+      currentDate = currentDate.add(const Duration(days: 7));
+    } else if (_everyTwoWeek) {
+      currentDate = currentDate.add(const Duration(days: 14));
+    } else if (_everyMonth) {
+      int nextMonth = currentDate.month + 1;
+      int nextYear = currentDate.year;
+      if (nextMonth > 12) {
+        nextMonth = 1;
+        nextYear++;
+      }
+
+      int lastDayOfNextMonth = DateTime(nextYear, nextMonth + 1, 0).day;
+      int newDay = currentDate.day > lastDayOfNextMonth
+          ? lastDayOfNextMonth
+          : currentDate.day;
+
+      currentDate = DateTime(nextYear, nextMonth, newDay);
+    }
+
+    DateTime endDate = startDate.add(const Duration(days: 365));
+
+    while (currentDate.isBefore(endDate) ||
+        currentDate.isAtSameMomentAs(endDate)) {
+      _dateList.add(currentDate);
+
+      if (_everyDay) {
+        currentDate = currentDate.add(const Duration(days: 1));
+      } else if (_everyWeek) {
+        currentDate = currentDate.add(const Duration(days: 7));
+      } else if (_everyTwoWeek) {
+        currentDate = currentDate.add(const Duration(days: 14));
+      } else if (_everyMonth) {
+        int nextMonth = currentDate.month + 1;
+        int nextYear = currentDate.year;
+        if (nextMonth > 12) {
+          nextMonth = 1;
+          nextYear++;
+        }
+
+        int lastDayOfNextMonth = DateTime(nextYear, nextMonth + 1, 0).day;
+        int newDay = currentDate.day > lastDayOfNextMonth
+            ? lastDayOfNextMonth
+            : currentDate.day;
+
+        currentDate = DateTime(nextYear, nextMonth, newDay);
+      }
+    }
+
+    notifyListeners();
+  }
+
+  /*void _generateDateList(DateTime startDate) {
     _dateList.clear();
     DateTime currentDate = startDate;
     DateTime endDate = startDate.add(const Duration(days: 365)); // 1년 후까지 반복
@@ -128,7 +188,7 @@ class DateListProvider extends ChangeNotifier {
     }
 
     notifyListeners();
-  }
+  }*/
 
   void updateRepeatSettings(int interval) {
     if (interval == 1) {
@@ -158,5 +218,37 @@ class DateListProvider extends ChangeNotifier {
       _everyMonth = false;
     }
     notifyListeners();
+  }
+}
+
+class RepeatProvider extends ChangeNotifier {
+  bool _everyDay = false;
+  bool _everyWeek = false;
+  bool _everyTwoWeek = false;
+  bool _everyMonth = false;
+
+  bool get everyDay => _everyDay;
+  bool get everyWeek => _everyWeek;
+  bool get everyTwoWeek => _everyTwoWeek;
+  bool get everyMonth => _everyMonth;
+
+  void setRepeat(
+      {bool day = false,
+      bool week = false,
+      bool twoWeek = false,
+      bool month = false}) {
+    _everyDay = day;
+    _everyWeek = week;
+    _everyTwoWeek = twoWeek;
+    _everyMonth = month;
+    notifyListeners();
+  }
+
+  String get repeatInfo {
+    if (_everyDay) return "EVERYDAY";
+    if (_everyWeek) return "EVERYWEEK";
+    if (_everyTwoWeek) return "BIWEEKLY";
+    if (_everyMonth) return "EVERYMONTH";
+    return "NONE";
   }
 }

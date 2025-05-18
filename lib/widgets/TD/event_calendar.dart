@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:domino/apis/services/td_services.dart';
 import 'package:domino/provider/DP/model.dart';
 import 'package:flutter/material.dart';
@@ -399,11 +398,11 @@ class _EventCalendarState extends State<EventCalendar> {
                                 value[index].interval = 0;
                               }
 
-                              print('만달달아이디: ${value[index].id}');
+                              print('thirdgoalID: ${value[index].thirdGoalId}');
 
-                              int? thirdGoalId = await getThirdGoalId(
-                                  value[index].id, value[index].thirdGoal);
-                              print('thirdGoalId=$thirdGoalId');
+                              //int? thirdGoalId = await getThirdGoalId(
+                              //    value[index].id, value[index].thirdGoal);
+                              //print('thirdGoalId=$thirdGoalId');
 
                               editDialog(
                                   context,
