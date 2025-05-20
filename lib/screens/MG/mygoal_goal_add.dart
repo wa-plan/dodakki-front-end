@@ -24,7 +24,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   String? uploadedImageResponse;
-  final List<String> _imageFiles = [];
+  List<String> _imageFiles = [];
 
   Future<void> _pickImages() async {
     try {
@@ -36,13 +36,16 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
       if (result != null) {
         // 파일 업로드 서비스 호출
-        String uploadedUrl = await UploadFileService.uploadFiles(result.files);
+        List<String> uploadedUrls =
+            await UploadFilesService.uploadFiles(result.files);
 
-        if (uploadedUrl.isNotEmpty) {
+        if (uploadedUrls.isNotEmpty) {
           setState(() {
-            _imageFiles.add(uploadedUrl); // URL을 _imageFiles에 추가
+            _imageFiles = [
+              ...{..._imageFiles, ...uploadedUrls}
+            ].take(3).toList();
           });
-        } else {}
+        }
       }
     } catch (e) {
       Fluttertoast.showToast(
@@ -414,7 +417,6 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                     width: 80,
                                     height: 80,
                                     decoration: BoxDecoration(
-                                        
                                         color: Color(0xff2A2A2A),
                                         borderRadius: BorderRadius.circular(6)),
                                     child: Icon(

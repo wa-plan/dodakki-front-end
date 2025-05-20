@@ -58,13 +58,13 @@ class _MygoalEditState extends State<MygoalEdit> {
 
       if (result != null) {
         // 파일 업로드 서비스 호출
-        String uploadedUrl = await UploadFileService.uploadFiles(result.files);
+        List<String> uploadedUrls =
+            await UploadFilesService.uploadFiles(result.files);
 
-        if (uploadedUrl.isNotEmpty) {
+        if (uploadedUrls.isNotEmpty) {
           setState(() {
-            // ✅ 중복 방지 & 3개까지만 유지
             _imageFiles = [
-              ...{..._imageFiles, uploadedUrl}
+              ...{..._imageFiles, ...uploadedUrls}
             ].take(3 - goalImage.length).toList();
           });
         }
@@ -209,7 +209,8 @@ class _MygoalEditState extends State<MygoalEdit> {
   }
 
   void _checkGalleryThenPickImages() async {
-    bool granted = await PermissionUtil.checkAndRequestGalleryPermission(context);
+    bool granted =
+        await PermissionUtil.checkAndRequestGalleryPermission(context);
     if (granted) {
       await _pickImages();
     }
@@ -292,9 +293,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   const SizedBox(height: 8),
                   Container(
                     height: 40,
-                    decoration: BoxDecoration(
-                      
-                    ),
+                    decoration: BoxDecoration(),
                     child: NewCustomTextField("", _namecontroller,
                             (value) => null, false, 1, currentWidth)
                         .newtextField(),
@@ -324,7 +323,6 @@ class _MygoalEditState extends State<MygoalEdit> {
                           height: 40,
                           padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           decoration: BoxDecoration(
-                              
                               borderRadius: BorderRadius.circular(6),
                               color: const Color(0xff2A2A2A)),
                           child: Text(
@@ -375,9 +373,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   const SizedBox(height: 8),
                   Container(
                     height: 80,
-                    decoration: BoxDecoration(
-                      
-                    ),
+                    decoration: BoxDecoration(),
                     child: NewCustomTextField("", _descriptcontroller,
                             (value) => null, false, 5, currentWidth)
                         .newtextField(),
@@ -418,7 +414,6 @@ class _MygoalEditState extends State<MygoalEdit> {
                                           width: 80,
                                           height: 80,
                                           decoration: BoxDecoration(
-                                              
                                               color: Color(
                                                   0xff2A2A2A), // ✅ 로드 실패 대비 배경 설정
                                               borderRadius:
@@ -482,7 +477,6 @@ class _MygoalEditState extends State<MygoalEdit> {
                                     width: 80,
                                     height: 80,
                                     decoration: BoxDecoration(
-                                        
                                         color: Color(0xff2A2A2A),
                                         borderRadius: BorderRadius.circular(6)),
                                     child: Icon(
