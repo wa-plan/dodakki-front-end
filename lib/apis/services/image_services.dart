@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart'; // kIsWeb을 사용하기 위한 import
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 
 String? baseUrl = dotenv.env['BASE_URL'];
 
@@ -92,6 +93,81 @@ class UploadFileService {
     }
 
     return uploadedUrl; // 업로드된 파일 URL 반환
+  }
+}
+
+class UploadFilesService {
+  // 반환 타입을 List<String>에서 String으로 수정
+  static Future<List<String>> uploadFiles(List<PlatformFile> files) async {
+    List<String> uploadedUrls = [];
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('authToken');
+
+      if (token == null || token.isEmpty) {
+        Fluttertoast.showToast(
+          msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+        return [];
+      }
+
+      for (var file in files) {
+        var uri = Uri.parse("$baseUrl/s3/upload");
+        var request = http.MultipartRequest('POST', uri);
+        request.headers['Authorization'] = 'Bearer $token';
+
+        if (kIsWeb) {
+          var byteData = file.bytes!;
+          var multipartFile = http.MultipartFile.fromBytes(
+            'image',
+            byteData,
+            filename: file.name,
+          );
+          request.files.add(multipartFile);
+        } else {
+          var filePath = file.path!;
+          var fileStream = File(filePath).openRead();
+          var multipartFile = http.MultipartFile(
+            'image',
+            fileStream,
+            await File(filePath).length(),
+            filename: file.name,
+          );
+          request.files.add(multipartFile);
+        }
+
+        var response = await request.send();
+        var responseBody = await response.stream.bytesToString();
+
+        if (response.statusCode == 200) {
+          uploadedUrls.add(responseBody); // ✅ 그대로 사용하면 됨
+        } else {
+          Fluttertoast.showToast(
+            msg: '파일 업로드 실패: ${response.statusCode}',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+        }
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: '오류 발생: $e',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return [];
+    }
+
+    return uploadedUrls; // ⬅️ 여러 개의 URL 반환
   }
 }
 
