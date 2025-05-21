@@ -44,19 +44,24 @@ class _MyGoalState extends State<MyGoal> {
   List<Map<String, String>> mandalarts = [];
   List<Map<String, String>> bookmarks = [];
 
-  void userInfo() async {
-    final data = await UserInfoService.userInfo();
-    if (data.isNotEmpty) {
-      setState(() {
-        nickname = data['nickname'] == '' || data['nickname'] == null ? '당신은 어떤 사람인가요?' : data['nickname'];
-        description = data['description'] == '' ||  data['description'] == null ? '프로필 편집을 통해 \n자신을 표현해주세요.' : data['description'];
+ void userInfo() async {
+  final data = await UserInfoService.userInfo();
+  if (data.isNotEmpty) {
+    setState(() {
+      nickname = (data['nickname']?.toString().isEmpty ?? true)
+          ? '당신은 어떤 사람인가요?'
+          : data['nickname'];
 
-        selectedImage = data['profile']?.isNotEmpty == true
-            ? data['profile']
-            : defaultImage;
-      });
-    }
+      description = (data['description']?.toString().isEmpty ?? true)
+          ? '프로필 편집을 통해 \n자신을 표현해주세요.'
+          : data['description'];
+
+      final profile = data['profile']?.toString() ?? '';
+      selectedImage = profile == 'https://dodakkibucket.s3.ap-northeast-2.amazonaws.com/baseImage.png' ? defaultImage : profile;
+    });
   }
+}
+
 
   Future<void> userMandaIdInfo() async {
     if (mandalarts.isNotEmpty) return;
@@ -259,7 +264,7 @@ class _MyGoalState extends State<MyGoal> {
                           Text(nickname,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w600)),
                           const SizedBox(height: 8),
                           //프로필 설명
@@ -268,7 +273,7 @@ class _MyGoalState extends State<MyGoal> {
                             style: TextStyle(
                                 height: 1.5,
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w400),
                           ),
                         ],

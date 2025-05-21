@@ -194,3 +194,47 @@ class _CheeringMessageState extends State<CheeringMessage> {
     );
   }
 }
+
+//바텀시트 버튼
+class BottomButton {
+  final String text;
+  final IconData icon;
+  final Function function;
+
+  const BottomButton (this.text, this.icon, this.function);
+
+  Widget bottomButton(){
+    return SizedBox(
+      width: double.infinity,
+      height: 70,
+      child: TextButton(
+        onPressed: () => function(),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          backgroundColor: Color(0xff262626),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: mainRed,
+              size: 20,
+            ),
+            SizedBox(width: 15),
+            Text(
+              text,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

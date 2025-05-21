@@ -725,11 +725,11 @@ class NewCustomTextField {
     void Function()? onClear,
   }) {
     return TextFormField(
-      cursorColor: Color(0xffAAAAAA),
+      cursorColor: mainRed,
       controller: controller,
       obscureText: obscureText,
       maxLines: maxLines,
-      style: const TextStyle(color: Colors.white, fontSize: 14),
+      style: const TextStyle(color: Colors.white, fontSize: 16),
       decoration: InputDecoration(
         errorBorder: OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
         focusedErrorBorder:
@@ -738,7 +738,6 @@ class NewCustomTextField {
             color: mainRed, fontSize: 12, fontWeight: FontWeight.w400),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xffAAAAAA))),
-        isDense: true,
         filled: true,
         fillColor: const Color(0xff2A2A2A),
         enabledBorder: OutlineInputBorder(
@@ -746,10 +745,10 @@ class NewCustomTextField {
           borderRadius: BorderRadius.circular(6),
         ),
         hintText: hintText,
-        contentPadding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
         hintStyle: TextStyle(
             color: Color(0xffAAAAAA),
-            fontSize: currentWidth < 600 ? 13 : 14,
+            fontSize: 15,
             fontWeight: FontWeight.w400),
         suffixIcon: controller.text.isNotEmpty
             ? Column(
@@ -761,11 +760,11 @@ class NewCustomTextField {
                           controller.clear();
                         },
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 12, 10, 10),
+                      padding: const EdgeInsets.fromLTRB(10, 15, 20, 10),
                       child: const Icon(
                         Icons.cancel,
-                        size: 15,
-                        color: Color.fromARGB(255, 98, 98, 98),
+                        size: 17,
+                        color: Color(0xffAAAAAA),
                       ),
                     ),
                   ),
@@ -971,8 +970,8 @@ class NewCustomIconButton {
 
   Widget newCustomIconButton() {
     return Container(
-      width: 40,
-      height: 27,
+      width: 45,
+      height: 30,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
