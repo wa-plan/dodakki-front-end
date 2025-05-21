@@ -150,13 +150,19 @@ class _ProfileEditState extends State<ProfileEdit> {
         _imageFiles.add(uploadedUrl); // URL을 _imageFiles에 추가
       });
 
-      Navigator.push(
+      setState(() {
+        _imageFiles.clear();
+        _imageFiles.add(uploadedUrl);
+        profile = uploadedUrl; // 🔥 여기서 profile 변수 갱신!
+      });
+
+      /*Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ProfileEdit(
               selectedImage: "", profileImage: uploadedUrl, cameraImage: ""),
         ),
-      );
+      );*/
     } catch (e) {
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
@@ -274,7 +280,10 @@ class _ProfileEditState extends State<ProfileEdit> {
       setState(() {
         nickname = data['nickname'] ?? "도민호";
         description = data['description'] ?? "매일의 목표: 행보칸 하루 살기";
-        profile = data['profile'] ?? "";
+        if (widget.selectedImage.isEmpty) {
+          profile = data['profile'] ?? "";
+        }
+        //profile = data['profile'] ?? "";
       });
 
       _nicknamecontroller.text = nickname ?? "";
@@ -289,7 +298,8 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   void _checkGalleryThenPickImages() async {
-    bool granted = await PermissionUtil.checkAndRequestGalleryPermission(context);
+    bool granted =
+        await PermissionUtil.checkAndRequestGalleryPermission(context);
     if (granted) {
       _imageFiles.clear();
       await _pickImages();
