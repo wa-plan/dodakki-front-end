@@ -3,6 +3,7 @@ import 'package:domino/apis/services/td_services.dart';
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/screens/MG/mygoal_goal_detail.dart';
 import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/MG/buildcard.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:domino/screens/MG/mygoal_profile_edit.dart';
 import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/screens/MG/mygoal_goal_add.dart';
 import 'package:provider/provider.dart';
-import 'package:domino/widgets/MG/cheering_message.dart';
 
 class MyGoal extends StatefulWidget {
   const MyGoal({super.key});
@@ -25,7 +25,7 @@ class _MyGoalState extends State<MyGoal> {
   String description = '';
   String selectedImage = "assets/img/profile_smp4.png";
 
-  late PageController _pageController; // PageController 추가
+  late PageController _pageController; 
   int successNum = 0;
   String mandaDescription = '';
   String bookmark = 'UNBOOKMARK';
@@ -39,7 +39,7 @@ class _MyGoalState extends State<MyGoal> {
   List<Map<dynamic, dynamic>> successNums = [];
   Map<String, List<Map<String, String>>> photos = {};
   String? profile;
-  String defaultImage = 'assets/img/profile_smp4.png'; // 기본 이미지 경로
+  String defaultImage = 'assets/img/profile_smp4.png'; 
 
   List<Map<String, String>> mandalarts = [];
   List<Map<String, String>> bookmarks = [];
@@ -48,16 +48,13 @@ class _MyGoalState extends State<MyGoal> {
     final data = await UserInfoService.userInfo();
     if (data.isNotEmpty) {
       setState(() {
-        nickname = data['nickname'] ?? '당신은 어떤 사람인가요?';
-        description = data['description'] ?? '프로필 편집을 통해 \n자신을 표현해주세요.';
+        nickname = data['nickname'] == '' || data['nickname'] == null ? '당신은 어떤 사람인가요?' : data['nickname'];
+        description = data['description'] == '' ||  data['description'] == null ? '프로필 편집을 통해 \n자신을 표현해주세요.' : data['description'];
 
-        // ✅ 프로필 이미지 경로도 서버에서 불러와서 반영
         selectedImage = data['profile']?.isNotEmpty == true
             ? data['profile']
             : defaultImage;
       });
-
-      print('selectedImage: $selectedImage');
     }
   }
 
@@ -73,39 +70,32 @@ class _MyGoalState extends State<MyGoal> {
           bookmarks = data['bookmarks']!;
         });
 
-        // 비동기 작업 병렬 처리
         final tasks = mandalarts.map((mandalart) async {
           final String mandalartId = mandalart['id'] ?? '0';
           await userMandaInfo(mandalartId);
           await mandaColor(mandalartId);
         });
 
-        await Future.wait(tasks); // 모든 작업 완료를 기다림
+        await Future.wait(tasks); 
 
-        // id 값을 기준으로 오름차순 정렬
         failedIDs.sort((a, b) {
           return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
         });
-        /*inProgressIDs.sort((a, b) {
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });*/
+   
 
         inProgressIDs.sort((a, b) {
-          // BOOKMARK 상태 확인
           final aBookmark = bookmarks
               .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
           final bBookmark = bookmarks
               .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
 
-          // BOOKMARK 상태 기준으로 정렬
           if (aBookmark && !bBookmark) {
-            return -1; // a가 BOOKMARK 상태이고, b는 UNBOOKMARK 상태
+            return -1; 
           }
           if (!aBookmark && bBookmark) {
-            return 1; // b가 BOOKMARK 상태이고, a는 UNBOOKMARK 상태
+            return 1; 
           }
 
-          // 같은 상태라면 id 값 기준 정렬 (오름차순)
           return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
         });
 
@@ -116,7 +106,6 @@ class _MyGoalState extends State<MyGoal> {
         });
       }
     } catch (e) {
-      // 에러 발생 시 처리
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('데이터 로드 중 오류가 발생했습니다: $e')),
       );
@@ -147,11 +136,9 @@ class _MyGoalState extends State<MyGoal> {
 
           nameList.add({'mandalartId': id, 'name': name});
           statusList.add({'mandalartId': id, 'status': status});
-          //photoList.add({'mandalartId': id, 'photos': photos});
           ddayList.add({'mandalartId': id, 'dday': dday});
           successNums.add({'mandalartId': id, 'successNum': successNum});
 
-          // 사진 리스트를 photos에 저장
           if (photoList.isNotEmpty) {
             photos[id] = [];
             for (var photo in photoList) {
@@ -171,17 +158,12 @@ class _MyGoalState extends State<MyGoal> {
   }
 
   Future<void> mandaColor(String mandalartId) async {
-// 중복 방지
     if (colorList.any((item) => item['id'] == mandalartId)) return;
 
     try {
-      // 서버에서 데이터 가져오기
       final data = await MandalartInfoService.mandalartInfo(
           mandalartId: int.parse(mandalartId));
-      print('이건 만다라아이디디 $mandalartId');
-      print('이건 되나? $data');
       if (data != null) {
-        // 반환된 데이터를 colorList에 추가
         setState(() {
           colorList.add({"id": mandalartId, "color": data["color"]});
         });
@@ -207,7 +189,7 @@ class _MyGoalState extends State<MyGoal> {
 
   @override
   void dispose() {
-    _pageController.dispose(); // 메모리 누수 방지
+    _pageController.dispose(); 
     super.dispose();
   }
 
@@ -233,7 +215,6 @@ class _MyGoalState extends State<MyGoal> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: currentWidth < 600 ? 0 : 15),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -246,11 +227,10 @@ class _MyGoalState extends State<MyGoal> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(0xff303030),
-                          
                         ),
                         child: Container(
-                          width: 75,
-                          height: 75,
+                          width: 80,
+                          height: 80,
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -279,16 +259,16 @@ class _MyGoalState extends State<MyGoal> {
                           Text(nickname,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: currentWidth < 600 ? 14 : 15,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 8),
                           //프로필 설명
                           Text(
                             description,
                             style: TextStyle(
                                 height: 1.5,
                                 color: Colors.white,
-                                fontSize: currentWidth < 600 ? 12 : 13,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w400),
                           ),
                         ],
@@ -317,7 +297,7 @@ class _MyGoalState extends State<MyGoal> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  MGSubTitle('쓰러뜨릴 목표', currentWidth).mgSubTitle(context),
+                  MGSubTitle('쓰러뜨릴 목표').mgSubTitle(context),
                   //목표 추가 버튼
                   NewCustomIconButton(() {
                     Navigator.push(
@@ -330,26 +310,11 @@ class _MyGoalState extends State<MyGoal> {
                 ],
               ),
               SizedBox(
-                height: currentWidth < 600 ? 10 : 25,
+                height: 15,
               ),
               Column(children: [
                 if (inProgressIDs.isEmpty)
-                  Container(
-                    height: currentWidth < 600 ? 200 : 220, // 높이 조정 가능
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff2B2B2B),
-                      borderRadius: BorderRadius.circular(8), // 모서리 둥글게
-                    ),
-                    child: Text(
-                      "새로운 목표를 세워볼까요?",
-                      style: TextStyle(
-                        color: Color(0xff6C6C6C),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  )
+                  BlankData("엇!\n아직 쓰러뜨릴 목표가 없어요!\n어서 만들어봅시다!", 220).blankData()
                 else ...[
                   Container(
                     decoration: BoxDecoration(
@@ -448,44 +413,18 @@ class _MyGoalState extends State<MyGoal> {
                 ],
               ]),
               const SizedBox(height: 40),
-              MGSubTitle('이번주의 응원!', currentWidth).mgSubTitle(context),
-              const SizedBox(height: 10),
+
+              //이번주의 응원
+              MGSubTitle('이번주의 응원!').mgSubTitle(context),
+              const SizedBox(height: 15),
               const CheeringMessage(),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨린 목표', currentWidth).mgSubTitle(context),
-              const SizedBox(height: 10),
+
+              //쓰러뜨린 목표
+              MGSubTitle('쓰러뜨린 목표').mgSubTitle(context),
+              const SizedBox(height: 15),
               if (successIDs.isEmpty)
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xff2B2B2B),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(25, 0, 10, 0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.min, // 자식 위젯 크기만큼만 높이를 조정
-                      children: [
-                        Text(
-                          "함께 목표를 쓰러뜨려봐요!",
-                          style: TextStyle(
-                            color: Color(0xff6C6C6C),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            SizedBox(height: 15),
-                            Image.asset('assets/img/haha.png', scale: 2),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                )
+              BlankData2("함께 목표를 쓰러뜨려봐요!").blankData2()                
               else
                 Column(
                   children: [
@@ -493,18 +432,18 @@ class _MyGoalState extends State<MyGoal> {
                       String status = statusList.firstWhere(
                             (element) =>
                                 element['mandalartId'] ==
-                                item['id'], // mandalartId와 비교
+                                item['id'], 
                             orElse: () =>
-                                {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                {'status': ''}, 
                           )['status'] ??
                           '';
 
                       String dday = ddayList.firstWhere(
                             (element) =>
                                 element['mandalartId'] ==
-                                item['id'], // mandalartId와 비교
+                                item['id'], 
                             orElse: () =>
-                                {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                {'dday': ''}, 
                           )['dday'] ??
                           '0';
 
@@ -512,15 +451,13 @@ class _MyGoalState extends State<MyGoal> {
                           .map<String>((photo) => photo['path'].toString())
                           .toList();
 
-                      // id에 맞는 색상을 찾아서 적용
                       final color = colorList.firstWhere(
                           (element) => element['id'] == item['id'],
                           orElse: () => {
                                 'color': 'Color(0xff000000)'
-                              } // 색상이 없을 경우 기본값 (검정색)
+                              } 
                           )['color'];
 
-                      // Color로 변환 (문자열에서 'Color('와 ')'를 제거하고 int로 변환한 뒤 Color 객체로 감싸기)
                       final colorValue = Color(int.parse(
                           color!.replaceAll('Color(', '').replaceAll(')', '')));
 
@@ -564,40 +501,12 @@ class _MyGoalState extends State<MyGoal> {
                   ],
                 ),
               const SizedBox(height: 40),
-              MGSubTitle('쓰러뜨리지 못한 목표', currentWidth).mgSubTitle(context),
-              const SizedBox(height: 10),
+
+              //쓰러뜨리지 못한 목표
+              MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
+              const SizedBox(height: 15),
               if (failedIDs.isEmpty)
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xff2B2B2B),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(25, 0, 10, 0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.min, // 자식 위젯 크기만큼만 높이를 조정
-                      children: [
-                        Text(
-                          "쓰러뜨리지 못한 목표가 없어요~!",
-                          style: TextStyle(
-                            color: Color(0xff6C6C6C),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            SizedBox(height: 15),
-                            Image.asset('assets/img/haha.png', scale: 2),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                )
+              BlankData2("쓰러뜨리지 못한 목표가 없어요~!").blankData2()    
               else
                 Column(
                   children: [
@@ -605,33 +514,31 @@ class _MyGoalState extends State<MyGoal> {
                       String status = statusList.firstWhere(
                             (element) =>
                                 element['mandalartId'] ==
-                                item['id'], // mandalartId와 비교
+                                item['id'],
                             orElse: () =>
-                                {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                {'status': ''},
                           )['status'] ??
                           '';
 
                       String dday = ddayList.firstWhere(
                             (element) =>
                                 element['mandalartId'] ==
-                                item['id'], // mandalartId와 비교
+                                item['id'],
                             orElse: () =>
-                                {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                                {'dday': ''},
                           )['dday'] ??
                           '0';
 
                       List<String> photoList = (photos[item['id']] ?? [])
                           .map<String>((photo) => photo['path'].toString())
                           .toList();
-                      // id에 맞는 색상을 찾아서 적용
                       final color = colorList.firstWhere(
                           (element) => element['id'] == item['id'],
                           orElse: () => {
                                 'color': 'Color(0xff000000)'
-                              } // 색상이 없을 경우 기본값 (검정색)
+                              } 
                           )['color'];
 
-                      // Color로 변환 (문자열에서 'Color('와 ')'를 제거하고 int로 변환한 뒤 Color 객체로 감싸기)
                       final colorValue = Color(int.parse(
                           color!.replaceAll('Color(', '').replaceAll(')', '')));
 

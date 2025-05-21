@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 //color
-const backgroundColor = Color.fromARGB(255, 32, 32, 32);
+const backgroundColor = Color(0xff222222);
 const mainRed = Color(0xffFF6767);
 const mainGrey = Color(0xff444444);
 const mainTextColor = Colors.white;
@@ -131,24 +131,7 @@ class NewButton {
   }
 }
 
-//MG Sub Title
-class MGSubTitle {
-  final String text;
-  final double currentWidth;
 
-  MGSubTitle(this.text, this.currentWidth);
-
-  Widget mgSubTitle(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: const Color.fromARGB(255, 178, 178, 178),
-        fontSize: currentWidth < 600 ? 14 : 15,
-        fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-}
 
 //Fluttertoast
 class Message {
@@ -854,29 +837,28 @@ class ColorOption2 extends StatelessWidget {
   }
 }
 
+//태그
 class Tag {
   final Color bgColor;
-  final Color borderColor;
   final String text;
 
   const Tag(
     this.bgColor,
-    this.borderColor,
     this.text,
   );
 
   Widget tag() {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: borderColor)),
+            ),
         child: Text(
           text,
           style: const TextStyle(
-              color: Color(0xffFF7E7E),
-              fontSize: 9,
+              color: mainRed,
+              fontSize: 11,
               fontFamily: "Pretendard",
               fontWeight: FontWeight.w600),
         ));

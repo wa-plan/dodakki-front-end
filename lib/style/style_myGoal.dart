@@ -1,5 +1,108 @@
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
+//비어있는 데이터 (for 쓰러뜨릴 목표)
+class BlankData {
+  final String text;
+  final double height;
+
+  const BlankData(this.text, this.height);
+
+  Widget blankData() {
+    return Container(
+      height: height,
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
+      decoration: BoxDecoration(
+        color: const Color(0xff2D2D2D),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+              height: 1.5,
+              color: Color(0xff595959),
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Positioned(
+              top: 50,
+              right: 10,
+              child: Opacity(
+                opacity: 0.3,
+                child: Image.asset('assets/img/emptyDominho.png', height: 150),
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+//서브메뉴 타이틀
+class MGSubTitle {
+  final String text;
+
+  MGSubTitle(this.text);
+
+  Widget mgSubTitle(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: const Color.fromARGB(255, 178, 178, 178),
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
+//비어있는 데이터 (for 쓰러뜨린/쓰러뜨리지 못한 목표)
+class BlankData2 {
+  final String text;
+
+  const BlankData2(this.text);
+
+  Widget blankData2() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xff2D2D2D),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(25, 0, 10, 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                color: Color(0xff595959),
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Column(
+              children: [
+                SizedBox(height: 15),
+                Opacity(
+                    opacity: 0.3,
+                    child: Image.asset('assets/img/haha.png', scale: 2)),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//응원 메시지
 class CheeringMessage extends StatefulWidget {
   const CheeringMessage({super.key});
 
@@ -30,7 +133,7 @@ class _CheeringMessageState extends State<CheeringMessage> {
     '1퍼센트의 가능성, 그것이 너의 길이야!',
     '좋은 성과를 얻으려면 한걸음 한걸음이 힘차고 충실해야해!',
     '계단을 밟아야 계단 위에 올라설 수 있어!',
-    '작은 기회에서 종종 위대한 업적이 시작되지!',
+    '작은 기회에서 종종\n위대한 업적이 시작되지!',
     '오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간대!',
     '시간 걱정을 하지 말고 스스로 마음을 바쳐 최선을 다 할 수 있을지를 고민해!',
     '이 또한 지나갈 테니 걱정 마!',
@@ -55,47 +158,36 @@ class _CheeringMessageState extends State<CheeringMessage> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xff2B2B2B),
+        color: const Color(0xff2D2D2D),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(25, 14, 25, 14),
+        padding: EdgeInsets.fromLTRB(25, 16, 25, 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min, // 자식 위젯 크기만큼만 높이를 조정
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              '"',
-              style: TextStyle(
-                  color: Color(0xffAAAAAA),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: "NotoSansKR"),
-            ),
+            Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(3.1416),
+                child: const Icon(Icons.format_quote, color: mainRed, size: 25)),
             SizedBox(
               width: currentWidth < 600 ? 205 : 250,
               child: Text(
-                  currentMessage,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: currentWidth < 600 ? 11.5 : 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2, // 최대 두 줄로 제한
-                  overflow: TextOverflow.ellipsis, // 텍스트가 넘칠 경우 말줄임표(...) 표시
+                currentMessage,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            
-            const Text(
-              '"',
-              style: TextStyle(
-                  color: Color(0xffAAAAAA),
-                  fontSize: 19,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: "NotoSansKR"),
-            ),
+            const Icon(Icons.format_quote, color: mainRed, size: 25),
           ],
         ),
       ),
