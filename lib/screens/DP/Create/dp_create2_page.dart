@@ -335,7 +335,12 @@ class _DPcreate99Page extends State<DPcreate99Page> {
                               Navigator.pop(context);
 
                               // 이전 페이지로 이동
-                              Navigator.pop(context);
+                              Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DPMain()
+                            ),
+                          );
                             },
                           );
                         }, currentWidth

@@ -475,7 +475,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                     SizedBox(height: 14),
                                     statistics(
                                         rate: successRate,
-                                        num: successRate,
+                                        num: successNum,
                                         icon: Icons.circle_outlined,
                                         iconColor: Color(widget.colorValue)),
                                     const SizedBox(height: 6),
@@ -602,7 +602,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               '$rate',
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 17,
                   fontWeight: FontWeight.w600),
             ),
             Text(
@@ -621,7 +621,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               '$num',
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 17,
                   fontWeight: FontWeight.w600),
             ),
             Text(
