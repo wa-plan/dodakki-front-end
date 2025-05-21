@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart'; // kIsWeb을 사용하기 위한 import
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:convert';
 
 String? baseUrl = dotenv.env['BASE_URL'];
 
