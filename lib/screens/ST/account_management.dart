@@ -1,5 +1,6 @@
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
+import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/change_password.dart';
@@ -60,13 +61,13 @@ class _AccountManagementState extends State<AccountManagement> {
               child: ListView(
                 children: [
                   const SizedBox(height: 15),
-                  MGSubTitle('정보', currentWidth).mgSubTitle(context),
+                  MGSubTitle('정보', ).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildSettingItem2(
                     title: widget.email,
                   ),
                   const SizedBox(height: 14),
-                  MGSubTitle('보안', currentWidth).mgSubTitle(context),
+                  MGSubTitle('보안', ).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildSettingItem(
                     title: '비밀번호 변경하기',
@@ -84,7 +85,7 @@ class _AccountManagementState extends State<AccountManagement> {
                     },
                   ),
                   const SizedBox(height: 14),
-                  MGSubTitle('종료', currentWidth).mgSubTitle(context),
+                  MGSubTitle('종료', ).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildCombinedSwitchItem()
                 ],

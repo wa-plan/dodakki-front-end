@@ -255,7 +255,7 @@ class IdFindService {
 }
 
 class PwFindService {
-  static Future<void> findPassword({
+  static Future<String> findPassword({
     required String userId,
     required String email,
     required BuildContext context,
@@ -276,21 +276,10 @@ class PwFindService {
         body: body,
       );
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Message('임시 비밀번호를 이메일에서 확인해주세요.', const Color(0xff00DB00),
-            Color(0xff31412C), // 배경 색상
-            borderColor: const Color(0xff00DB00), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
-
-       
+        return response.body; // Adjust based on your API response
+        
       } else {
-        Message('입력한 정보를 다시 한번 확인해주세요.', const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
-
-      
+        return '실패';
       }
     } catch (e) {
       Fluttertoast.showToast(
@@ -300,6 +289,7 @@ class PwFindService {
         backgroundColor: Colors.red,
         textColor: Colors.white,
       );
+      return '실패';
     }
   }
 }

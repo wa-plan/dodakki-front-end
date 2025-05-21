@@ -1,5 +1,6 @@
 import 'package:domino/screens/LR/agreement.dart';
 import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/account_management.dart';
@@ -118,7 +119,7 @@ class _SettingsMainState extends State<SettingsMain> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              MGSubTitle('계정', currentWidth).mgSubTitle(context),
+              MGSubTitle('계정', ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '내 계정',
@@ -136,11 +137,11 @@ class _SettingsMainState extends State<SettingsMain> {
                 },
               ),
               const SizedBox(height: 14),
-              MGSubTitle('알림', currentWidth).mgSubTitle(context),
+              MGSubTitle('알림', ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildCombinedSwitchItem(),
               const SizedBox(height: 14),
-              MGSubTitle('문의', currentWidth).mgSubTitle(context),
+              MGSubTitle('문의', ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '문의하기',
@@ -154,7 +155,7 @@ class _SettingsMainState extends State<SettingsMain> {
                 },
               ),
               const SizedBox(height: 14),
-              MGSubTitle('도움', currentWidth).mgSubTitle(context),
+              MGSubTitle('도움', ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '앱 사용설명서',
@@ -166,7 +167,7 @@ class _SettingsMainState extends State<SettingsMain> {
                 },
               ),
               const SizedBox(height: 14),
-              MGSubTitle('앱 정보', currentWidth).mgSubTitle(context),
+              MGSubTitle('앱 정보', ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildCombinedNavigationItem()
             ],
@@ -501,7 +502,7 @@ class _SettingsMainState extends State<SettingsMain> {
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
                   NewCustomIconButton(() {
-                    showAgreementPopup(context, currentWidth);
+                    
                   }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
                       .newCustomIconButton(),
                 ],
@@ -604,4 +605,107 @@ class NotificationService {
     final status = await Permission.notification.request();
     return status;
   }
+}
+
+
+void showServiceRulePopup(BuildContext context, double currentWidth) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+          backgroundColor: Colors.white,
+          contentPadding: const EdgeInsets.fromLTRB(23, 25, 23, 25),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          content: SizedBox(
+            width: 300,
+            height: 500,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '서비스 이용약관',
+                            style: TextStyle(
+                                color: backgroundColor,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              if (!await launchUrl(Uri.parse(
+                                  'https://sites.google.com/view/dodakki-policy/privacy-policy'))) {
+                                throw 'Could not launch';
+                              }
+                            },
+                            child: Icon(
+                              Icons.link_rounded,
+                              color: backgroundColor,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Divider(
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        '''1. 동의
+사용자가 도닦기 앱을 다운로드하거나 사용하는 경우, 아래 조건에 동의한 것으로 간주됩니다. 본 약관을 숙지 후 사용해 주시기 바랍니다.
+
+
+2. 지식재산권
+앱 및 그 구성 요소에 대한 저작권, 상표권, 데이터베이스 권리 등은 “도를 닦는 사람들”에게 있으며, 무단 복제, 수정, 배포를 금합니다.
+
+
+3. 서비스 제공
+앱은 최선의 서비스 제공을 위해 수시로 업데이트되며, 서비스 제공자는 예고 없이 앱의 일부 기능을 수정하거나 중단할 수 있습니다.
+
+
+4. 인터넷 연결
+일부 기능은 인터넷 연결을 필요로 하며, 연결 불가 시 앱이 정상 작동하지 않을 수 있습니다. 데이터 요금은 사용자 책임입니다.
+
+
+5. 기기 사용 책임
+기기 충전 상태, 성능 저하 등으로 인해 앱 사용에 제한이 생길 경우, 이는 사용자 책임입니다.
+
+
+6. 업데이트 및 종료
+앱은 운영체제 업데이트나 정책 변경에 따라 업데이트가 필요할 수 있으며, 서비스 제공자는 앱의 배포를 중단할 권리를 가집니다.
+
+
+7. 향후 광고
+현재 앱은 광고를 포함하지 않으나, 추후 광고 기능이 추가될 수 있으며 그에 따라 약관 및 방침이 변경될 수 있습니다.''',
+                        style: TextStyle(
+                            color: backgroundColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      NewButton(Colors.black, Colors.white, '닫기', () {
+                        Navigator.pop(context);
+                      }, currentWidth)
+                          .newButton(),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ));
+    },
+  );
 }
