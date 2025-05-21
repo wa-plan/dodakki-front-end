@@ -91,254 +91,252 @@ class _GoalCardState extends State<GoalCard> {
         child: Container(
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
-              color: Color(0xff2B2B2B), borderRadius: BorderRadius.circular(6)),
+              color: Color(0xff2B2B2B),),
           child: Column(children: [
             //첫번째 줄 (북마크/제1목표/디데이)
-            
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                //북마크
-                GestureDetector(
-                  onTap: _toggleBookmark,
-                  child: Icon(
-                    Icons.star,
-                    color: starColor,
-                    size: 21,
-                  ),
+
+            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              //북마크
+              GestureDetector(
+                onTap: _toggleBookmark,
+                child: Icon(
+                  Icons.star,
+                  color: starColor,
+                  size: 25,
                 ),
-                const SizedBox(width: 4),
-                //제1목표
-                Text(
-                  widget.name,
+              ),
+              const SizedBox(width: 10),
+              //제1목표
+              Text(
+                widget.name,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(width: 10),
+              //디데이
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 9.0, vertical: 2.0),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 51, 51, 51),
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      offset: const Offset(0, 0),
+                      blurRadius: 7,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Text(
+                  ddayParsed < 0 ? 'D+${ddayParsed * -1}' : 'D-$ddayParsed',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
+                    color: Color.fromARGB(255, 105, 105, 105),
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(width: 8),
-                //디데이
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 9.0, vertical: 2.0),
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 51, 51, 51),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                        offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                        blurRadius: 7, // 블러 7
-                        spreadRadius: 0, // 스프레드 0
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    ddayParsed < 0 ? 'D+${ddayParsed * -1}' : 'D-$ddayParsed',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 105, 105, 105),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ]),
-          
+              ),
+            ]),
+
             SizedBox(height: 13),
             //두 번째 + 세 번째 줄
             Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //첫번째 열
-                  SizedBox(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //목표 이미지
-                          if (widget.photoList.isEmpty)
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xff323232),
-                                borderRadius: BorderRadius.circular(3.0),
-                              ),
-                              width: 290,
-                              height: 105,
-                              child: Center(
-                                child: Text(
-                                  '이미지를 추가해보세요',
-                                  style: TextStyle(
-                                      fontSize: 12.5,
-                                      color: Color(0xff969696),
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            )
-                          else
-                            SizedBox(
-                              height: 105, // 이미지 높이 설정
-                              width: 290, // 가로 크기 제한 (화면의 80%)
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal, // 가로 스크롤 가능
-                                itemCount: widget.photoList.length
-                                    .clamp(1, 3), // 최대 3개 제한
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(6), // 둥근 모서리 적용
-                                      child: Image.network(
-                                        widget.photoList[index], // 이미지 URL
-                                        width: 105,
-                                        height: 105,
-                                        fit: BoxFit.cover, // 이미지가 꽉 차도록 설정
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Container(
-                                            width: 105,
-                                            height: 105,
-                                            color: Colors.grey[300],
-                                            child: Center(
-                                              child: Text(
-                                                '이미지 로드 실패',
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 12),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          const SizedBox(height: 17),
-                          //세 번째 줄
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //첫번째 열
+                SizedBox(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //목표 이미지
+                        if (widget.photoList.isEmpty)
                           SizedBox(
-                            width: 290,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(width: 40),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          '나의 도미노',
-                                          style: TextStyle(
-                                              color: Color(0xffAAAAAA),
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 13),
-                                        ),
-                                        Text(
-                                          '${widget.successNum}개',
-                                          style: TextStyle(
-                                            color: const Color(0xffFCFF62),
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15,
+                            height: 105, // 이미지 높이 설정
+                            width: 290, // 가로 크기 제한 (화면의 80%)
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal, // 가로 스크롤 가능
+                              itemCount: 3, // 최대 3개 제한
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                  
+                                  width: 105,
+                                  height: 105,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 53, 53, 53),
+                                    borderRadius:
+                                        BorderRadius.circular(6),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        else
+                          SizedBox(
+                            height: 105, // 이미지 높이 설정
+                            width: 290, // 가로 크기 제한 (화면의 80%)
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal, // 가로 스크롤 가능
+                              itemCount: widget.photoList.length
+                                  .clamp(1, 3), // 최대 3개 제한
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.circular(6), // 둥근 모서리 적용
+                                    child: Image.network(
+                                      widget.photoList[index], // 이미지 URL
+                                      width: 105,
+                                      height: 105,
+                                      fit: BoxFit.cover, // 이미지가 꽉 차도록 설정
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Container(
+                                          width: 105,
+                                          height: 105,
+                                          color: Colors.grey[300],
+                                          child: Center(
+                                            child: Text(
+                                              '이미지 로드 실패',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 12),
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 6),
-                                      ],
+                                        );
+                                      },
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    const CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: 5,
-                                    ),
-                                    SizedBox(
-                                      width: 18,
-                                    ),
-                                    // 첫 번째 색상
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: colors[0], // 첫 번째 색상
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                      ),
-                                      width: 12, //13
-                                      height: 6, // 첫 번째 높이 (6.0으로 고정)
-                                    ),
-                                    SizedBox(
-                                      width: 18,
-                                    ),
-                                    // 두 번째 색상
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: colors.length > 1
-                                            ? colors[1]
-                                            : Colors.transparent, // 두 번째 색상
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                      ),
-                                      width: 12,
-                                      height: 16, //16
-                                    ),
-                                    SizedBox(
-                                      width: 18,
-                                    ),
-                                    // 세 번째 색상
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: colors.length > 2
-                                            ? colors[2]
-                                            : Colors.transparent, // 세 번째 색상
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                      ),
-                                      width: 12,
-                                      height: 26, // 세 번째 높이 (예: 20 추가)
-                                    ),
-                                    SizedBox(
-                                      width: 18,
-                                    ),
-                                    // 네 번째 색상
-                                    Container(
-                                        decoration: BoxDecoration(
-                                          color: colors.length > 3
-                                              ? colors[3]
-                                              : Colors.transparent, // 네 번째 색상
-                                          borderRadius:
-                                              BorderRadius.circular(2.0),
-                                        ),
-                                        width: 12,
-                                        height: 37 // 네 번째 높이 (예: 30 추가)
-                                        ),
-                                  ],
-                                )
-                              ],
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                        ]),
-                  ),
-                  SizedBox(
-                    width: 18,
-                  ),
+                        const SizedBox(height: 17),
+                        //세 번째 줄
+                        SizedBox(
+                          width: 290,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: 40),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        '나의 도미노',
+                                        style: TextStyle(
+                                            color: Color(0xffAAAAAA),
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15),
+                                      ),
+                                      Text(
+                                        '${widget.successNum}개',
+                                        style: TextStyle(
+                                          color: const Color(0xffFCFF62),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(height: 6),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  const CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 5,
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  // 첫 번째 색상
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: colors[0], // 첫 번째 색상
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    width: 13, //13
+                                    height: 6, // 첫 번째 높이 (6.0으로 고정)
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  // 두 번째 색상
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: colors.length > 1
+                                          ? colors[1]
+                                          : Colors.transparent, // 두 번째 색상
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    width: 13,
+                                    height: 16, //16
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  // 세 번째 색상
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: colors.length > 2
+                                          ? colors[2]
+                                          : Colors.transparent, // 세 번째 색상
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    width: 13,
+                                    height: 26, // 세 번째 높이 (예: 20 추가)
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  // 네 번째 색상
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        color: colors.length > 3
+                                            ? colors[3]
+                                            : Colors.transparent, // 네 번째 색상
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
+                                      ),
+                                      width: 13,
+                                      height: 37 // 네 번째 높이 (예: 30 추가)
+                                      ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ]),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
 
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(colorValue),
-                      borderRadius: BorderRadius.circular(2.0),
-                    ),
-                    width: 12,
-                    height: 165,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(colorValue),
+                    borderRadius: BorderRadius.circular(2.0),
                   ),
-                ],
-              ),
-         
+                  width: 13,
+                  height: 165,
+                ),
+              ],
+            ),
           ]),
         ));
   }

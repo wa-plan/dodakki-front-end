@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_myGoal.dart';
+import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,6 +39,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   String? description;
   String? profile;
   final List<String> _imageFiles = [];
+  String showimage = "";
 
   final ImagePicker _picker = ImagePicker();
 
@@ -235,8 +239,13 @@ class _ProfileEditState extends State<ProfileEdit> {
   }) {
     // 우선순위: profile > selected > camera
     String imageToShow = "";
+    print(profileImage);
+    print(selectedImage);
+    print(cameraImage);
 
-    if (profileImage.isNotEmpty) {
+    if (profileImage.isNotEmpty &&
+        profileImage !=
+            'https://dodakkibucket.s3.ap-northeast-2.amazonaws.com/baseImage.png') {
       imageToShow = profileImage;
     } else if (selectedImage.isNotEmpty) {
       imageToShow = selectedImage;
@@ -311,9 +320,6 @@ class _ProfileEditState extends State<ProfileEdit> {
     super.initState();
     userInfo();
     _nicknamecontroller.addListener(_onNicknameChanged);
-    print('selectedImage: ${widget.selectedImage}');
-    print('profileImage: ${widget.profileImage}');
-    print('cameraImage: ${widget.cameraImage}');
   }
 
   @override
@@ -337,16 +343,16 @@ class _ProfileEditState extends State<ProfileEdit> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
-                Navigator.of(context).pop();
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
-              SizedBox(width: currentWidth < 600 ? 10 : 14),
-              Text('프로필 편집',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 17 : 27,
-                      fontWeight: FontWeight.w600)),
+              //나가기 버튼
+              CustomBackButton(
+                () {
+                  Navigator.of(context).pop();
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+
+              //페이지 타이틀
+              PageTitle('프로필 편집').pageTitle(),
             ],
           ),
         ),
@@ -376,26 +382,23 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 color: Color(0xff303030),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black
-                                        .withOpacity(0.05), // 검은색 10% 투명도
-                                    offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                                    blurRadius: 7, // 블러 7
-                                    spreadRadius: 0, // 스프레드 0
+                                    color: Colors.black.withOpacity(0.05),
+                                    offset: const Offset(0, 0),
+                                    blurRadius: 7,
+                                    spreadRadius: 0,
                                   ),
                                 ],
                               ),
                               child: Container(
-                                width: 130,
-                                height: 130,
+                                width: 160,
+                                height: 160,
                                 decoration: BoxDecoration(
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black
-                                          .withOpacity(0.05), // 검은색 10% 투명도
-                                      offset:
-                                          const Offset(0, 0), // X, Y 위치 (0,0)
-                                      blurRadius: 7, // 블러 7
-                                      spreadRadius: 0, // 스프레드 0
+                                      color: Colors.black.withOpacity(0.05),
+                                      offset: const Offset(0, 0),
+                                      blurRadius: 7,
+                                      spreadRadius: 0,
                                     ),
                                   ],
                                   shape: BoxShape.circle,
@@ -403,7 +406,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     image: getImageProvider(
                                       selectedImage: widget.selectedImage,
                                       profileImage:
-                                          profile ?? widget.profileImage,
+                                     widget.profileImage,
                                       cameraImage: widget.cameraImage,
                                       fallbackAsset: defaultImage,
                                     ),
@@ -413,60 +416,54 @@ class _ProfileEditState extends State<ProfileEdit> {
                               ),
                             ),
                             Positioned(
-                                right: currentWidth < 600 ? 20 : 35,
-                                top: currentWidth < 600 ? 110 : 200,
+                                right: 20,
+                                top: 125,
                                 child: CircleAvatar(
-                                    radius: currentWidth < 600 ? 14 : 20,
+                                    radius: 16,
                                     backgroundColor: mainRed,
                                     child: Icon(Icons.edit,
-                                        size: currentWidth < 600 ? 15 : 24,
-                                        color: backgroundColor))),
+                                        size: 18, color: backgroundColor))),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(height: 35),
-                    const Question(question: '닉네임을 만들어봐요'),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: StatefulBuilder(
-                        builder: (context, setState) {
-                          // 🔹 리스너 추가: 입력값 변경 시 setState() 호출
-                          _nicknamecontroller.addListener(() {
-                            setState(() {});
-                          });
 
-                          return NewCustomTextField(
-                                  'Ex. 꿈꾸는 마이클',
-                                  _nicknamecontroller,
-                                  (value) => null, // validator
-                                  false, // obscureText
-                                  1,
-                                  currentWidth // maxLines
-                                  )
-                              .newtextField(
-                            onClear: () {
-                              _nicknamecontroller.clear();
-                              setState(() {}); // 🔹 clear() 후에도 UI 갱신
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    const Question(question: '당신은 어떤 사람인가요?'),
+                    //닉네임 부분
+                    const FieldTitle('닉네임을 만들어봐요.').fieldTitle(),
                     const SizedBox(height: 10),
-                    SizedBox(
-                        height: 80,
-                        child: NewCustomTextField(
-                                'Ex. 명랑하면서 도전적인 사람!',
-                                _explaincontroller,
-                                (value) => null,
-                                false,
-                                3,
-                                currentWidth)
-                            .newtextField()),
+                    StatefulBuilder(
+                      builder: (context, setState) {
+                        // 🔹 리스너 추가: 입력값 변경 시 setState() 호출
+                        _nicknamecontroller.addListener(() {
+                          setState(() {});
+                        });
+
+                        return NewCustomTextField(
+                                '꿈꾸는 마이클',
+                                _nicknamecontroller,
+                                (value) => null, // validator
+                                false, // obscureText
+                                1,
+                                currentWidth // maxLines
+                                )
+                            .newtextField(
+                          onClear: () {
+                            _nicknamecontroller.clear();
+                            setState(() {}); // 🔹 clear() 후에도 UI 갱신
+                          },
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    //설명 부분
+                    const FieldTitle('당신은 어떤 사람인가요?').fieldTitle(),
+                    const SizedBox(height: 10),
+                    NewCustomTextField('명랑하면서 도전적인 사람?', _explaincontroller,
+                            (value) => null, false, 3, currentWidth)
+                        .newtextField()
                   ],
                 ),
               ),
@@ -475,72 +472,45 @@ class _ProfileEditState extends State<ProfileEdit> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: fullPadding,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            NewButton(Colors.black, Colors.white, '취소', () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MyGoal(),
-                ),
-              );
-            }, currentWidth)
-                .newButton(),
-            NewButton(Colors.black, Colors.white, '완료', () async {
-              await _uploadSelectedImage(); // 🔹 이미지 업로드 완료까지 대기
+          padding: fullPadding,
+          //저장하기 버튼
+          child: LoginButton('저장하기', () async {
+            await _uploadSelectedImage();
 
-              String profileToUpload;
+            String profileToUpload;
 
-              // 1순위: 새로 업로드된 이미지
-              if (_imageFiles.isNotEmpty) {
-                profileToUpload = _imageFiles[0];
-              }
-              // 2순위: 기존에 서버에 저장된 이미지 (profile 변수 또는 widget.profileImage) → 단, asset이 아니어야 함
-              else if ((profile ?? widget.profileImage).isNotEmpty &&
-                  !(profile ?? widget.profileImage).startsWith('assets/')) {
-                profileToUpload = profile ?? widget.profileImage;
-              }
-              // 3순위: 이미지가 없을 경우만 빈 문자열
-              else {
-                profileToUpload = '';
-              }
+            if (_imageFiles.isNotEmpty) {
+              profileToUpload = _imageFiles[0];
+            } else if ((profile ?? widget.profileImage).isNotEmpty &&
+                !(profile ?? widget.profileImage).startsWith('assets/')) {
+              profileToUpload = profile ?? widget.profileImage;
+            } else {
+              profileToUpload = '';
+            }
 
-              bool isEdited = await _editProfile(
-                _nicknamecontroller.text,
-                profileToUpload, // 🔹 빈 문자열도 가능
-                _explaincontroller.text,
-              );
+            bool isEdited = await _editProfile(
+              _nicknamecontroller.text,
+              profileToUpload,
+              _explaincontroller.text,
+            );
 
-              if (isEdited) {
-                // 🔹 프로필 수정 성공 시 이동
-                if (context.mounted) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MyGoal()),
-                  );
-                }
-              } else {
-                Fluttertoast.showToast(
-                  msg: '프로필 수정에 실패했습니다.',
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
+            if (isEdited) {
+              if (context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyGoal()),
                 );
               }
-            }, currentWidth)
-                .newButton()
-          ],
-        ),
-      ),
+            } else {
+              TutorialMessage('프로필 수정에 실패했습니다.').tutorialMessage(context);
+            }
+          }).loginButton()),
     );
   }
 
   void _showBottomSheet() {
     showModalBottomSheet(
-      backgroundColor: Color.fromARGB(255, 46, 46, 46),
+      backgroundColor: backgroundColor,
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -551,141 +521,51 @@ class _ProfileEditState extends State<ProfileEdit> {
         return FractionallySizedBox(
           widthFactor: 0.9,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+            padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   '어디서 사진을 가져올까요?',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    //카메라
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          setState(() {
-                            _imageFiles.clear();
-                          });
-                          await _takePhoto();
-                        },
-                        child: Container(
-                          height: 90,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: Color(0xff262626)),
-                          child: Center(
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.photo_camera,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '카메라',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                BottomButton('카메라', Icons.photo_camera, () async {
+                  Navigator.pop(context);
+                  setState(() {
+                    _imageFiles.clear();
+                  });
+                  await _takePhoto();
+                }).bottomButton(),
+                const SizedBox(height: 10),
+                BottomButton('갤러리', Icons.photo, () async {
+                  Navigator.pop(context);
+                  _checkGalleryThenPickImages();
+                }).bottomButton(),
+                const SizedBox(height: 10),
+                BottomButton('도민호 이미지', Icons.star, () async {
+                  Navigator.pop(context); // 이전 화면 닫기 (필요하면 유지)
+
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileSampleGallery(
+                        selectedImage: widget.selectedImage,
+                                  profileImage: widget.profileImage
                       ),
                     ),
-                    const SizedBox(width: 7),
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          _checkGalleryThenPickImages();
-                        },
-                        child: Container(
-                          height: 90,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: Color(0xff262626)),
-                          child: Center(
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.insert_photo,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '앨범',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 7),
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProfileSampleGallery(
-                                  selectedImage: widget.selectedImage,
-                                  profileImage: widget.profileImage),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          height: 90,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: Color(0xff262626)),
-                          child: Center(
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.grade,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '도민호 갤러리',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+
+                  // 이미지가 변경되었다면 갱신
+                  if (result != null && result is String) {
+                    showimage = result;
+                  }
+                }).bottomButton()
               ],
             ),
           ),
