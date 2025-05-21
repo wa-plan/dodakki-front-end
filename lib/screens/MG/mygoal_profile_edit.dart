@@ -39,7 +39,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   String? description;
   String? profile;
   final List<String> _imageFiles = [];
-  String showimage = "";
 
   final ImagePicker _picker = ImagePicker();
 
@@ -160,13 +159,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         profile = uploadedUrl; // 🔥 여기서 profile 변수 갱신!
       });
 
-      /*Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProfileEdit(
-              selectedImage: "", profileImage: uploadedUrl, cameraImage: ""),
-        ),
-      );*/
+      
     } catch (e) {
       Fluttertoast.showToast(
         msg: '오류 발생: $e',
@@ -239,9 +232,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }) {
     // 우선순위: profile > selected > camera
     String imageToShow = "";
-    print(profileImage);
-    print(selectedImage);
-    print(cameraImage);
+  
 
     if (profileImage.isNotEmpty &&
         profileImage !=
@@ -346,7 +337,12 @@ class _ProfileEditState extends State<ProfileEdit> {
               //나가기 버튼
               CustomBackButton(
                 () {
-                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyGoal()
+                    ),
+                  );
                 },
               ).customBackButton(),
               SizedBox(width: 15),
@@ -406,7 +402,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     image: getImageProvider(
                                       selectedImage: widget.selectedImage,
                                       profileImage:
-                                     widget.profileImage,
+                                     profile ?? widget.profileImage,
                                       cameraImage: widget.cameraImage,
                                       fallbackAsset: defaultImage,
                                     ),
@@ -549,22 +545,17 @@ class _ProfileEditState extends State<ProfileEdit> {
                 }).bottomButton(),
                 const SizedBox(height: 10),
                 BottomButton('도민호 이미지', Icons.star, () async {
-                  Navigator.pop(context); // 이전 화면 닫기 (필요하면 유지)
+                  Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfileSampleGallery(
+                                  selectedImage: widget.selectedImage,
+                                  profileImage: widget.profileImage),
+                            ),
+                          );
 
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileSampleGallery(
-                        selectedImage: widget.selectedImage,
-                                  profileImage: widget.profileImage
-                      ),
-                    ),
-                  );
-
-                  // 이미지가 변경되었다면 갱신
-                  if (result != null && result is String) {
-                    showimage = result;
-                  }
+                  
                 }).bottomButton()
               ],
             ),

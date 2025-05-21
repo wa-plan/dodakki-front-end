@@ -184,7 +184,11 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
                     MaterialPageRoute(
                       builder: (context) => ProfileEdit(
                         selectedImage: _selectedImage,
-                        profileImage: _selectedImage,
+                        profileImage: _selectedImage.isEmpty
+                            ? (widget.profileImage.isNotEmpty
+                                ? widget.profileImage
+                                : "")
+                            : "",
                         cameraImage: "",
                       ),
                     ),
