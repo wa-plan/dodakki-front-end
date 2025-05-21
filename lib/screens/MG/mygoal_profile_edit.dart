@@ -39,6 +39,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   String? description;
   String? profile;
   final List<String> _imageFiles = [];
+  String showimage = "";
 
   final ImagePicker _picker = ImagePicker();
 
@@ -396,7 +397,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     image: getImageProvider(
                                       selectedImage: widget.selectedImage,
                                       profileImage:
-                                          profile ?? widget.profileImage,
+                                     widget.profileImage,
                                       cameraImage: widget.cameraImage,
                                       fallbackAsset: defaultImage,
                                     ),
@@ -544,19 +545,16 @@ class _ProfileEditState extends State<ProfileEdit> {
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProfileSampleGallery(),
+                      builder: (context) => ProfileSampleGallery(
+                        selectedImage: widget.selectedImage,
+                                  profileImage: widget.profileImage
+                      ),
                     ),
                   );
 
                   // 이미지가 변경되었다면 갱신
                   if (result != null && result is String) {
-                    getImageProvider(
-                                      selectedImage: result,
-                                      profileImage:
-                                          result,
-                                      cameraImage: result,
-                                      fallbackAsset: defaultImage,
-                                    );
+                    showimage = result;
                   }
                 }).bottomButton()
               ],

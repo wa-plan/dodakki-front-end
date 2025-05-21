@@ -1,3 +1,5 @@
+import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_myGoal.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
@@ -72,28 +74,19 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
     final colorHex = _selectedColor != null
         ? '0x${_selectedColor!.value.toRadixString(16)}'
-        : '0xffffffff'; // 기본값으로 흰색 (Color(0xffffffff))
+        : '0xffffffff';
 
     final String date = selectedDate != null
         ? DateFormat('yyyy-MM-dd').format(selectedDate!)
-        : DateFormat('yyyy-MM-dd').format(DateTime.now()); // null일 경우 현재 날짜를 사용
-
-    // 이미지 업로드
+        : DateFormat('yyyy-MM-dd').format(DateTime.now());
     List<String> uploadedImageUrls = _imageFiles;
 
-    print('name: $name');
-    print('description: $description');
-    print('colorHex: $colorHex');
-    print('date: $date');
-    print('uploadedImageUrls: $uploadedImageUrls');
-
-    // AddGoalService.addGoal API 호출, 업로드된 이미지 URL 리스트를 전달
     final success = await AddGoalService.addGoal(
       name: name,
       description: description,
       color: colorHex,
       date: date,
-      pictures: uploadedImageUrls, // 업로드된 이미지 URL을 전달
+      pictures: uploadedImageUrls,
     );
 
     if (success) {
@@ -106,7 +99,6 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     }
   }
 
-  // 날짜 형식을 변환하는 메서드
   String convertDateTimeDisplay(String date) {
     final DateFormat displayFormatter = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
     final DateFormat serverFormatter = DateFormat('yyyy-MM-dd');
@@ -130,7 +122,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
     }
   }
 
-  DateTime? _selectedDate; // 상위 화면에서 사용하는 상태 변수
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -145,16 +137,16 @@ class _MyGoalAddState extends State<MyGoalAdd> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
-                Navigator.of(context).pop();
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
-              SizedBox(width: currentWidth < 600 ? 10 : 14),
-              Text('목표 세우기',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 17 : 27,
-                      fontWeight: FontWeight.w600)),
+              //나가기 버튼
+              CustomBackButton(
+                () {
+                  Navigator.of(context).pop();
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+
+              //페이지 타이틀
+              PageTitle('목표 세우기').pageTitle(),
             ],
           ),
         ),
@@ -167,142 +159,127 @@ class _MyGoalAddState extends State<MyGoalAdd> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 어떤 목표인가요?
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Question(question: '어떤 목표인가요?'),
-                      const Tag(Colors.transparent,  '필수')
-                          .tag()
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                      height: 40,
-                      decoration: BoxDecoration(),
-                      child: NewCustomTextField('', _nameController, (value) {
-                        return null;
-                      }, false, 1, currentWidth)
-                          .newtextField()),
+                  const Question(question: '어떤 목표인가요?'),
+                  const Tag(Color(0xff503333), '필수').tag()
                 ],
               ),
+              const SizedBox(height: 10),
+              NewCustomTextField('', _nameController, (value) {
+                return null;
+              }, false, 1, currentWidth)
+                  .newtextField(),
 
               const SizedBox(height: 40),
+
               //언제까지 목표를 이루고 싶나요?
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Question(question: '언제까지 목표를 이루고 싶나요?'),
+                  const Tag(Color(0xff503333), '필수').tag()
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      height: 55,
+                      padding: const EdgeInsets.fromLTRB(20, 5, 15, 5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: const Color(0xff2A2A2A)),
+                      child: Text(
+                        _selectedDate != null
+                            ? DateFormat('yyyy년 MM월 dd일')
+                                .format(_selectedDate!) // 선택된 날짜 포맷팅
+
+                            : '달력에서 날짜를 선택해 주세요.', // null인 경우 출력
+
+                        style: TextStyle(
+                          color: _selectedDate != null
+                              ? Colors.white
+                              : Color(0xffAAAAAA),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 9),
+                  SizedBox(
+                    height: 55,
+                    child: NewButton(Color(0xff161616), Colors.white, '📅', () {
+                      showCalendarPopup(context, (DateTime? selectedDate) {
+                        if (selectedDate != null) {
+                          setState(() {
+                            _selectedDate = selectedDate; // 상위 화면의 변수에 저장
+                          });
+                        }
+                      });
+                    }, currentWidth)
+                        .newButton(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Question(question: '언제까지 목표를 이루고 싶나요?'),
-                      const Tag(Colors.transparent, '필수')
-                          .tag()
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          height: 40,
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: const Color(0xff2A2A2A)),
-                          child: Text(
-                            _selectedDate != null
-                                ? DateFormat('yyyy년 MM월 dd일')
-                                    .format(_selectedDate!) // 선택된 날짜 포맷팅
-
-                                : '클릭해서 날짜를 선택해 주세요.', // null인 경우 출력
-
-                            style: TextStyle(
-                              color: _selectedDate != null
-                                  ? Colors.white
-                                  : Color(0xffAAAAAA),
-                              fontSize: currentWidth < 600 ? 12 : 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                  Transform.scale(
+                    scale: 1.3,
+                    child: Checkbox(
+                      visualDensity: VisualDensity.compact,
+                      fillColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) => const Color(0xff323232),
                       ),
-                      const SizedBox(width: 9),
-                      SizedBox(
-                        height: 40,
-                        child: NewButton(Color(0xff161616), Colors.white, '달력',
-                                () {
-                          showCalendarPopup(context, (DateTime? selectedDate) {
-                            if (selectedDate != null) {
-                              setState(() {
-                                _selectedDate = selectedDate; // 상위 화면의 변수에 저장
-                              });
-                            }
-                          });
-                        }, currentWidth)
-                            .newButton(),
+                      activeColor: Colors.transparent,
+                      side: const BorderSide(color: Colors.transparent),
+                      checkColor: mainRed,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3), // 모서리 둥글기 조정
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                        checkColor: Color(0xffFF7E7E),
-                        activeColor: Color(0xff323232),
-                        fillColor:
-                            WidgetStateProperty.resolveWith<Color>((states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return Color(0xff323232); // 체크됐을 때 색상
+                      value: _isChecked,
+                      materialTapTargetSize:
+                          MaterialTapTargetSize.shrinkWrap, // 여백 제거
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked = value!;
+                          if (_isChecked) {
+                            selectedDate =
+                                DateTime.now(); //목표 날짜 확실하지 않은 경우, 오늘 날짜로 설정
+                          } else {
+                            selectedDate = null;
                           }
-                          return Color(0xff323232); // 체크 해제 상태 색상
-                        }),
-                        visualDensity: VisualDensity.compact,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6), // 모서리 둥글기 조정
-                        ),
-                        value: _isChecked,
-                        materialTapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap, // 여백 제거
-                        onChanged: (value) {
-                          setState(() {
-                            _isChecked = value!;
-                            if (_isChecked) {
-                              selectedDate =
-                                  DateTime.now(); //목표 날짜 확실하지 않은 경우, 오늘 날짜로 설정
-                            } else {
-                              selectedDate = null;
-                            }
-                          });
-                        },
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 7),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "확실하지 않아요",
+                        style: TextStyle(
+                            fontFamily: "Pretendard",
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(width: 3),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "확실하지 않아요",
-                            style: TextStyle(
-                                fontFamily: "Pretendard",
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            '그럼 오늘부터 날짜를 세어나갈게요.',
-                            style: TextStyle(
-                                fontFamily: "Pretendard",
-                                color: Color(0xff909090),
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                      SizedBox(height: 5),
+                      Text(
+                        '그럼 오늘부터 날짜를 세어나갈게요.',
+                        style: TextStyle(
+                            fontFamily: "Pretendard",
+                            color: Color(0xff909090),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -310,22 +287,14 @@ class _MyGoalAddState extends State<MyGoalAdd> {
               ),
 
               const SizedBox(height: 40),
+
               //목표에 대해서 더 알려주세요.
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Question(question: '목표에 대해서 더 알려주세요.'),
-                  const SizedBox(height: 8),
-                  Container(
-                      height: 80,
-                      decoration: BoxDecoration(),
-                      child: NewCustomTextField('', _descriptionController,
-                              (value) {
-                        return null;
-                      }, false, 5, currentWidth)
-                          .newtextField()),
-                ],
-              ),
+              const Question(question: '목표에 대해서 더 알려주세요.'),
+              const SizedBox(height: 10),
+              NewCustomTextField('', _descriptionController, (value) {
+                return null;
+              }, false, 4, currentWidth)
+                  .newtextField(),
 
               const SizedBox(height: 40),
 
@@ -334,7 +303,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Question(question: '목표를 보여주는 사진이 있나요?'),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -353,8 +322,8 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                       padding:
                                           const EdgeInsets.only(right: 10.0),
                                       child: Container(
-                                        width: 80,
-                                        height: 80,
+                                        width: 90,
+                                        height: 90,
                                         decoration: BoxDecoration(
                                             color: Color(
                                                 0xff2A2A2A), // ✅ 로드 실패 대비 배경 설정
@@ -363,8 +332,8 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                         child: imageData.startsWith("http")
                                             ? Image.network(
                                                 imageData, // ✅ URL이면 NetworkImage 사용
-                                                width: 80,
-                                                height: 80,
+                                                width: 90,
+                                                height: 90,
                                                 fit: BoxFit.cover,
                                                 errorBuilder: (context, error,
                                                     stackTrace) {
@@ -414,8 +383,8 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                                   onTap:
                                       _checkGalleryThenPickImages, // 🔹 이미지 선택 함수 호출
                                   child: Container(
-                                    width: 80,
-                                    height: 80,
+                                    width: 90,
+                                    height: 90,
                                     decoration: BoxDecoration(
                                         color: Color(0xff2A2A2A),
                                         borderRadius: BorderRadius.circular(6)),
@@ -445,15 +414,14 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Question(question: '목표를 색깔로 표현해주세요.'),
-                      const Tag(Colors.transparent, '필수')
-                          .tag()
+                      const Tag(Color(0xff503333), '필수').tag()
                     ],
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 10,
                   ),
                   Container(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(13),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
                         color: Color(0xff2A2A2A)),
@@ -507,35 +475,26 @@ class _MyGoalAddState extends State<MyGoalAdd> {
       ),
       bottomNavigationBar: Padding(
         padding: fullPadding,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //취소버튼
-            NewButton(Colors.black, Colors.white, '취소',
-                    () => Navigator.pop(context), currentWidth)
-                .newButton(),
+        child:
 
             //완료버튼
-            NewButton(Colors.black, Colors.white, '완료', () {
-              if (_nameController.text == '') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('목표를 입력해 주세요.')),
-                );
-              } else if (!_isChecked && _selectedDate == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
-                );
-              } else if (_selectedColor == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('색상을 선택해 주세요.')),
-                );
-              } else {
-                _addGoal();
-              }
-            }, currentWidth)
-                .newButton(),
-          ],
-        ),
+            LoginButton('완료', () {
+          if (_nameController.text == '') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('목표를 입력해 주세요.')),
+            );
+          } else if (!_isChecked && _selectedDate == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
+            );
+          } else if (_selectedColor == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('색상을 선택해 주세요.')),
+            );
+          } else {
+            _addGoal();
+          }
+        }).loginButton(),
       ),
     );
   }

@@ -1,9 +1,10 @@
 import 'package:domino/screens/MG/mygoal_main.dart';
 import 'package:domino/screens/MG/piechart.dart';
 import 'package:domino/screens/event_page.dart';
+import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data'; // Uint8List 사용을 위한 라이브러리 임포트
+import 'dart:typed_data'; 
 import 'package:domino/screens/MG/mygoal_goal_edit.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/widgets/popup.dart';
@@ -32,11 +33,9 @@ class MyGoalDetail extends StatefulWidget {
 }
 
 class MyGoalDetailState extends State<MyGoalDetail> {
-  //description, successNum
 
   final _status = ['달성 실패', '진행 중', '달성 완료'];
   String? _selectedStatus;
-  // 선택된 파일 리스트를 관리할 변수 추가
   List<Uint8List> selectedFiles = [];
   bool bookmark = false;
   String o = '0';
@@ -54,13 +53,12 @@ class MyGoalDetailState extends State<MyGoalDetail> {
   int inProgressNum = 0;
   List<String> goalImage = [];
   List<String> photoList = [];
-  //double rate = 0.0;
   int total = 0;
   int successRate = 0;
   int inProgressRate = 0;
   int failedRate = 0;
-  final GlobalKey _iconKey = GlobalKey(); // 아이콘 위치를 추적하기 위한 키
-  Offset _iconPosition = Offset.zero; // 아이콘의 위치
+  final GlobalKey _iconKey = GlobalKey(); 
+  Offset _iconPosition = Offset.zero; 
 
   Future<void> userMandaInfo(String mandalartId) async {
     try {
@@ -112,7 +110,6 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     status = widget.status;
     photoList = widget.photoList;
 
-    print('photoList: $photoList');
 
     userMandaInfo(mandalartId);
 
@@ -125,8 +122,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     } else if (status == 'SUCCESS') {
       _selectedStatus = _status[2];
     } else {
-      // status가 예상 범위를 벗어날 경우 처리
-      _selectedStatus = _status[1]; // 기본값으로 '진행 중' 설정
+      _selectedStatus = _status[1]; 
     }
   }
 
@@ -145,10 +141,12 @@ class MyGoalDetailState extends State<MyGoalDetail> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomIconButton(() {
+                //나가기 버튼
+              CustomBackButton(
+                () {
                   Navigator.of(context).pop();
-                }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                    .customIconButton(),
+                },
+              ).customBackButton(),
                 Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -158,10 +156,10 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-                          offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                          blurRadius: 7, // 블러 7
-                          spreadRadius: 0, // 스프레드 0
+                          color: Colors.black.withOpacity(0.05), 
+                          offset: const Offset(0, 0), 
+                          blurRadius: 7, 
+                          spreadRadius: 0, 
                         ),
                       ],
                     ),
@@ -169,13 +167,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                       dday < 0 ? 'D+${dday * -1}' : 'D-$dday',
                       style: TextStyle(
                         color: Color(0xff5F5F5F),
-                        fontSize: currentWidth < 600 ? 11 : 17,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                 ),
-                CustomIconButton(() {
+                NewCustomIconButton(() {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -186,8 +184,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                               description: mandaDescription,
                               color: color,
                               goalImage: goalImage)));
-                }, Icons.edit, currentWidth)
-                    .customIconButton()
+                }, Icons.edit, currentWidth, 20)
+                    .newCustomIconButton()
               ],
             ),
           ),
@@ -205,7 +203,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                   style: TextStyle(
                       fontFamily: "Pretendard",
                       color: Colors.white,
-                      fontSize: 13,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600),
                 ),
               ),
@@ -219,23 +217,23 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                   borderRadius: BorderRadius.circular(10), // 모서리 둥글게
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (goalImage.isEmpty) ...[
-                      Center(
-                        child: Image.asset(
-                          'assets/img/if_no_img.png', // 로컬 기본 이미지
+                      Image.asset(
+                          'assets/img/if_no_img.png', 
                           fit: BoxFit.cover,
                           //width: 400,
                           //height: 100,
                         ),
-                      )
+                     
                     ] else ...[
                       SizedBox(
                         height: 140,
                         child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, // 이미지 개수에 맞춰 열 개수 조정
+                            crossAxisCount: 3, 
                             childAspectRatio: 1 / 1,
                             mainAxisSpacing: 10,
                             crossAxisSpacing: 10,
@@ -271,30 +269,17 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                       ),
                     ],
                     if (mandaDescription.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15.0, vertical: 7.0),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 44, 44, 44),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(
+                      Container(
+                        padding: const EdgeInsets.all(15),
+                        child: Text(
                                 mandaDescription,
                                 style: const TextStyle(
                                     height: 1.5,
                                     color: Colors.white,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500),
                               ),
-                            ),
-                          ],
-                        ),
+                       
                       ),
                   ],
                 ),
@@ -484,10 +469,10 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                       style: TextStyle(
                                           color: Color(0xffAAAAAA),
                                           fontSize:
-                                              currentWidth < 600 ? 12 : 20,
+                                              14,
                                           fontWeight: FontWeight.w600),
                                     ),
-                                    SizedBox(height: 8),
+                                    SizedBox(height: 14),
                                     statistics(
                                         rate: successRate,
                                         num: successRate,
@@ -531,7 +516,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                         style: TextStyle(
                                             color: Color(0xffAAAAAA),
                                             fontSize:
-                                                currentWidth < 600 ? 12 : 20,
+                                                14,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       GestureDetector(
@@ -550,7 +535,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 8),
+                                  SizedBox(height: 14),
                                   Row(
                                     children: [
                                       Image.asset(
@@ -572,7 +557,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize:
-                                                currentWidth < 600 ? 18 : 24,
+                                                20,
                                             fontWeight: FontWeight.w600),
                                       ),
                                     ],
@@ -602,14 +587,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
       required int num,
       required IconData icon,
       required Color iconColor}) {
-    final currentWidth = MediaQuery.of(context).size.width;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Icon(
           icon,
-          color: iconColor,
-          size: currentWidth < 600 ? 15 : 24,
+          color: mainRed,
+          size: 20,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -618,14 +602,14 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               '$rate',
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 14 : 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
             Text(
-              '%',
+              ' %',
               style: TextStyle(
                   color: Color(0xffAAAAAA),
-                  fontSize: currentWidth < 600 ? 11 : 24,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
           ],
@@ -637,14 +621,14 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               '$num',
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: currentWidth < 600 ? 14 : 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
             Text(
-              '개',
+              ' 개',
               style: TextStyle(
                   color: Color(0xffAAAAAA),
-                  fontSize: currentWidth < 600 ? 11 : 24,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
           ],

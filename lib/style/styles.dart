@@ -777,24 +777,7 @@ class NewCustomTextField {
   }
 }
 
-class Question extends StatelessWidget {
-  final String question;
 
-  const Question({
-    super.key,
-    required this.question,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(question,
-        style: const TextStyle(
-            fontFamily: "Pretendard",
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 14));
-  }
-}
 
 class ColorOption2 extends StatelessWidget {
   final Color colorCode;
