@@ -113,6 +113,114 @@ class LoginTextField {
   }
 }
 
+class PasswordTextField extends StatefulWidget {
+  final String hintText;
+  final TextEditingController controller;
+  final FormFieldValidator<String?> validator;
+  final IconData icon;
+
+  const PasswordTextField({
+    super.key,
+    required this.hintText,
+    required this.controller,
+    required this.validator,
+    required this.icon,
+  });
+
+  @override
+  State<PasswordTextField> createState() => _PasswordTextFieldState();
+}
+
+class _PasswordTextFieldState extends State<PasswordTextField> {
+  bool _obscureText = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = true;
+  }
+
+  void _toggleVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.controller,
+      obscureText: _obscureText,
+      validator: widget.validator,
+      cursorColor: mainRed,
+      style: const TextStyle(color: Colors.white, fontSize: 16),
+      decoration: InputDecoration(
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(left: 17, right: 8),
+          child: Icon(widget.icon, size: 19, color: const Color(0xffAAAAAA)),
+        ),
+        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: mainRed),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: mainRed),
+        ),
+        errorStyle: const TextStyle(
+          color: mainRed,
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xffAAAAAA)),
+        ),
+        filled: true,
+        fillColor: const Color(0xff2A2A2A),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        hintText: widget.hintText,
+        hintStyle: const TextStyle(
+          color: Color(0xffAAAAAA),
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+        ),
+        contentPadding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+        suffixIcon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              padding: EdgeInsets.fromLTRB(0, 2, 4, 0),
+              icon: Icon(
+                _obscureText ? Icons.visibility_off : Icons.visibility,
+                size: 20,
+                color: const Color(0xffAAAAAA),
+              ),
+              onPressed: _toggleVisibility,
+            ),
+            if (widget.controller.text.isNotEmpty)
+              GestureDetector(
+                onTap: () {
+                  widget.controller.clear();
+                  setState(() {});
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 10, 10),
+                  child: const Icon(
+                    Icons.cancel,
+                    size: 17,
+                    color: Color(0xffAAAAAA),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 //비밀번호 찾기, 계정 만들기 버튼
 class LoginEtcButton {
   final String text;
@@ -327,7 +435,7 @@ class FeedBack {
       width: double.infinity,
       height: 45,
       child: TextButton(
-        onPressed: (){},
+        onPressed: () {},
         style: TextButton.styleFrom(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           backgroundColor: Color(0xff452D2D),

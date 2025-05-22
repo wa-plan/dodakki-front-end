@@ -93,9 +93,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
-
-
                   //아이디 타이틀
                   FieldTitle('아이디').fieldTitle(),
                   SizedBox(height: 10),
@@ -110,34 +107,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   }, false, Icons.person)
                       .loginTextField(),
-                      SizedBox(height: 36),
-
+                  SizedBox(height: 36),
 
                   //비밀번호 타이틀
                   FieldTitle('비밀번호').fieldTitle(),
                   SizedBox(height: 10),
-                  //비밀번호 입력창 1
-                  LoginTextField('8~16자를 입력해 주세요.', _pwController, (value) {
-                    if (value == null || value.isEmpty) {
-                      return '8~16자를 입력해 주세요.';
-                    }
-                    if (value.length < 8 || value.length > 16) {
-                      return '비밀번호는 8~16자로 입력해 주세요.';
-                    }
-                    return null;
-                  }, true, Icons.lock)
-                      .loginTextField(),
-                      SizedBox(height: 10),
-                  //비밀번호 입력창 2
-                  LoginTextField('비밀번호를 확인해 주세요.', _checkpwController, (value) {
-                    if (value == null || value != _pwController.text) {
-                      return '비밀번호가 일치하지 않습니다.';
-                    }
-                    return null;
-                  }, true, Icons.lock)
-                      .loginTextField(),
-                      SizedBox(height: 36),
 
+                  //비밀번호 입력창 1
+                  PasswordTextField(
+                    hintText: '8~16자를 입력해 주세요.',
+                    controller: _pwController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '8~16자를 입력해 주세요.';
+                      }
+                      if (value.length < 8 || value.length > 16) {
+                        return '비밀번호는 8~16자로 입력해 주세요.';
+                      }
+                      return null;
+                    },
+                    icon: Icons.lock,
+                  ),
+                  const SizedBox(height: 10),
+
+                  //비밀번호 입력창 2
+                  PasswordTextField(
+                    hintText: '비밀번호를 확인해 주세요.',
+                    controller: _checkpwController,
+                    validator: (value) {
+                      if (value == null || value != _pwController.text) {
+                        return '비밀번호가 일치하지 않습니다.';
+                      }
+                      return null;
+                    },
+                    icon: Icons.lock,
+                  ),
+
+                  SizedBox(height: 36),
 
                   //개인정보 타이틀
                   FieldTitle('개인정보').fieldTitle(),
@@ -154,24 +160,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   }, false, Icons.mail)
                       .loginTextField(),
-                      SizedBox(height: 10),
-                  LoginTextField('- 없이 전화번호를 입력해 주세요.', _phoneController, (value) {
+                  SizedBox(height: 10),
+                  LoginTextField('- 없이 전화번호를 입력해 주세요.', _phoneController,
+                          (value) {
                     if (value == null || value.isEmpty) {
                       return '올바른 전화번호를 입력해 주세요.';
                     }
                     return null;
                   }, false, Icons.phone)
                       .loginTextField(),
-                      SizedBox(height: 10),
+                  SizedBox(height: 10),
 
                   //드롭다운 설명문
                   DropDownDescription(
-                    Color(0xff452D2D), 
-                    mainRed, 
-                    Color(0xffFFC4C4), 
-                    "왜 개인정보가 필요하지?", 
-                    "이메일 주소와 전화번호는 분실한 아이디와 비밀번호를 찾기 위해서만 사용되기 때문에 안심해도 돼 :)").dropDownDescription()
-
+                          Color(0xff452D2D),
+                          mainRed,
+                          Color(0xffFFC4C4),
+                          "왜 개인정보가 필요하지?",
+                          "이메일 주소와 전화번호는 분실한 아이디와 비밀번호를 찾기 위해서만 사용되기 때문에 안심해도 돼 :)")
+                      .dropDownDescription()
                 ],
               ),
             ),

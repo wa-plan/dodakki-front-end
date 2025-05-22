@@ -18,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _idcontroller = TextEditingController();
   final TextEditingController _pwcontroller = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); 
+  final _formKey = GlobalKey<FormState>();
   final storage = const FlutterSecureStorage();
   String userInfo = "";
   final LoginService _loginService = LoginService();
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {}
     } else {}
   }
-  
+
   //로그인 함수
   void _login() async {
     final userId = _idcontroller.text;
@@ -78,9 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (isSuccess) {
       final String? accessToken = await storage.read(key: "token");
       if (accessToken == null || accessToken.isEmpty) {
-        await storage.write(
-            key: "token",
-            value: "your_generated_token_here");
+        await storage.write(key: "token", value: "your_generated_token_here");
       }
 
       if (context.mounted) {
@@ -113,7 +111,6 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: backgroundColor,
       body: Stack(
         children: [
-
           //도민호 이미지
           Positioned(
             top: 60,
@@ -147,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   //아이디 입력창
                   LoginTextField(
-                    '  아이디를 입력해 주세요.',
+                    '아이디를 입력해 주세요.',
                     _idcontroller,
                     (value) {
                       if (value == null || value.isEmpty) {
@@ -161,18 +158,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 14),
 
                   //비밀번호 입력창
-                  LoginTextField(
-                    '  비밀번호를 입력해 주세요.',
-                    _pwcontroller,
-                    (value) {
+                  PasswordTextField(
+                    hintText: '비밀번호를 입력해 주세요.',
+                    controller: _pwcontroller,
+                    validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '  비밀번호를 입력해 주세요.';
+                        return '비밀번호를 입력해 주세요.';
                       }
                       return null;
                     },
-                    true,
-                    Icons.lock,
-                  ).loginTextField(),
+                    icon: Icons.lock,
+                  ),
+
                   const SizedBox(height: 14),
 
                   //로그인 버튼
