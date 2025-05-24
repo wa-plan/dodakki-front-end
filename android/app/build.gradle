@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.example.front_end_develop"
+    namespace = "com.dodakki.domino"
     compileSdk = 35
     ndkVersion = "25.1.8937393"
 
@@ -39,11 +39,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.front_end_develop"
+        applicationId = "com.dodakki.domino"
         minSdk = 21
         targetSdk = 34
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        versionCode = 2
+        versionName = '1.0.1'
         multiDexEnabled true
     }
 
