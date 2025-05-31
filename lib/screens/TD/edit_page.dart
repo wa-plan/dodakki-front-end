@@ -391,7 +391,7 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
                     deleteDomino(thirdGoalId);
                   },
                   child: const Text(
-                    '앞으로의 도미노 모두 삭제',
+                    '오늘 이후 도미노 모두 삭제',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   )),
@@ -405,7 +405,7 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
                     deleteTodayDomino(thirdGoalId, formattedDate);
                   },
                   child: const Text(
-                    '오늘의 도미노만 삭제',
+                    '선택한 날짜의 도미노만 삭제',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   )),
