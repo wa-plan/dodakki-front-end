@@ -36,35 +36,7 @@ class EditPageState extends State<EditPage> {
   String dominoValue = '';
   late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
 
-  /*void editDominoNew(int thirdGoalId, String name, List<DateTime> dates,
-      String repetition) async {
-    final success = await EditDominoNewService.editDomino(
-        thirdGoalId: thirdGoalId,
-        name: name,
-        dates: dates,
-        repetition: repetition);
-
-    if (success) {
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const TdMain(),
-          ));
-    } else {
-      // 실패한 경우에 처리할 코드
-      Message(
-              "도미노 삭제에 실패했습니다.",
-              const Color(0xffFF6767), // 텍스트 색상
-              const Color(0xff412C2C), // 배경 색상
-              borderColor: const Color(0xffFF6767), // 테두리 색상
-              icon: Icons.block)
-          .message(context);
-    }
-  }*/
-
-  Future<bool> deleteDomino(int thirdGoalId) async {
+  Future<bool> deleteDominoToEdit(int thirdGoalId) async {
     final success = await DeleteDominoService.deleteDomino(goalId: thirdGoalId);
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -125,27 +97,27 @@ class EditPageState extends State<EditPage> {
   }
 
   @override
-void initState() {
-  super.initState();
-  dominoController = TextEditingController(text: widget.content);
-  switchValue = widget.switchValue;
-  interval = widget.interval;
+  void initState() {
+    super.initState();
+    dominoController = TextEditingController(text: widget.content);
+    switchValue = widget.switchValue;
+    interval = widget.interval;
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    final provider = Provider.of<DateListProvider>(context, listen: false);
-    provider.updateRepeatSettings(interval);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<DateListProvider>(context, listen: false);
+      provider.updateRepeatSettings(interval);
 
-    setState(() {
-      everyDay = provider.everyDay;
-      everyWeek = provider.everyWeek;
-      everyTwoWeek = provider.everyTwoWeek;
-      everyMonth = provider.everyMonth;
+      setState(() {
+        everyDay = provider.everyDay;
+        everyWeek = provider.everyWeek;
+        everyTwoWeek = provider.everyTwoWeek;
+        everyMonth = provider.everyMonth;
+      });
+
+      print(
+          '[EditPage] 초기 반복 값: $everyDay, $everyWeek, $everyTwoWeek, $everyMonth');
     });
-
-    print('[EditPage] 초기 반복 값: $everyDay, $everyWeek, $everyTwoWeek, $everyMonth');
-  });
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -287,11 +259,6 @@ void initState() {
             context
                 .read<DateListProvider>()
                 .setInterval(switchValue, pickedDate!);
-            List<DateTime> dateList = context.read<DateListProvider>().dateList;
-            String repeatInfo = context.read<DateListProvider>().repeatInfo();
-            print('dateList=$dateList');
-            print('repeatInfo=$repeatInfo');
-            print('골아이디 확인 ${widget.goalId}, ${widget.date}');
             howDeleteDialog(context, widget.goalId, widget.date);
           }, currentWidth)
               .newButton(),
@@ -321,21 +288,7 @@ void initState() {
                   dateList = [pickedDate];
                 }
 
-                print('전송값 테스트!!');
-                print(widget.goalId);
-                print(dominoController.text);
-                print(dateList);
-                print(repetition);
-
-                // 🔹 수정 요청 후 성공 여부 확인
-                /*bool success = await EditDominoNewService.editDomino(
-                  thirdGoalId: widget.thirdGoalId,
-                  name: dominoController.text,
-                  dates: dateList,
-                  repetition: repetition,
-                );*/
-
-                final deleted = await deleteDomino(widget.goalId);
+                final deleted = await deleteDominoToEdit(widget.goalId);
                 if (!deleted) return;
 
                 final added = await addDomino(
@@ -372,6 +325,14 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
+
+      Message(
+              "도미노가 삭제되었어!.",
+              const Color(0xffFF6767), // 텍스트 색상
+              const Color(0xff412C2C), // 배경 색상
+              borderColor: const Color(0xffFF6767), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
 
       Navigator.push(
           context,
@@ -428,11 +389,6 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
               TextButton(
                   onPressed: () {
                     deleteDomino(thirdGoalId);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TdMain(),
-                        ));
                   },
                   child: const Text(
                     '앞으로의 도미노 모두 삭제',
@@ -446,14 +402,7 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
                   onPressed: () {
                     String formattedDate =
                         DateFormat('yyyy-MM-dd').format(date);
-                    print(formattedDate);
-                    //date.toIso8601String()
                     deleteTodayDomino(thirdGoalId, formattedDate);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TdMain(),
-                        ));
                   },
                   child: const Text(
                     '오늘의 도미노만 삭제',
