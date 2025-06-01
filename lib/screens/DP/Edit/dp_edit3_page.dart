@@ -1,13 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
 import 'package:domino/widgets/DP/Edit/dp_edit3_widget.dart';
+import 'package:domino/widgets/DP/ai_popup2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/apis/services/openai_services.dart';
-import 'package:domino/widgets/DP/ai_popup.dart';
 
 class EditInput2Page extends StatefulWidget {
   final String mandalart;
@@ -40,7 +40,6 @@ class _EditInput2PageState extends State<EditInput2Page> {
         .watch<SaveInputtedDetailGoalModel>()
         .inputtedDetailGoal[selectedDetailGoal.toString()];
 
-    print("Updated Goal: $updatedGoal");
 
     if (goal != updatedGoal) {
       setState(() {
@@ -72,10 +71,11 @@ class _EditInput2PageState extends State<EditInput2Page> {
     }
   }
 
-  Future<void> _showAIPopup(BuildContext context) async {
+  Future<void> _showAIPopup(BuildContext context, int selectedDetailGoal) async {
     await showDialog(
       context: context,
-      builder: (BuildContext context) => AIPopup(
+      builder: (BuildContext context,) => AIPopup2(
+        selectedDetailGoal: selectedDetailGoal,
         mainGoalId: widget.mainGoalId,
         firstColor: widget.firstColor,
         subgoals: _subGoals,
@@ -87,9 +87,15 @@ class _EditInput2PageState extends State<EditInput2Page> {
             );
           } else {
             Navigator.pop(context);
-            _showAIPopup(context);
+            _showAIPopup(context, selectedDetailGoal);
           }
         },
+        thirdGoal: context
+                                                .watch<
+                                                    SaveInputtedDetailGoalModel>()
+                                                .inputtedDetailGoal[
+                                            context.watch<SelectDetailGoal>().selectedDetailGoal.toString()] ??
+                                        '',
       ),
     );
   }
@@ -98,7 +104,6 @@ class _EditInput2PageState extends State<EditInput2Page> {
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
-    // selectedDetailGoal을 안전하게 파싱
     final selectedDetailGoalString =
         context.watch<SelectDetailGoal>().selectedDetailGoal;
     final selectedDetailGoal = int.tryParse(selectedDetailGoalString) ?? 0;
@@ -113,47 +118,52 @@ class _EditInput2PageState extends State<EditInput2Page> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
+              //나가기 버튼
+              CustomBackButton(() {
                 context.read<TestInputtedActionPlanModel>().resetActionPlans();
                 Navigator.pop(context);
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
-              const SizedBox(width: 10),
-              DPTitleText('플랜 수정하기', currentWidth).dPTitleText(),
+              }, )
+                  .customBackButton(),
+              const SizedBox(width: 15),
+              //페이지 타이틀
+              PageTitle('제3목표 수정').pageTitle(),
               const Spacer(),
+              //AI 버튼
               TextButton(
                 onPressed: () async {
                   setState(() {
-                    _isLoading = true; // 로딩 시작
+                    _isLoading = true;
                   });
                   await _fetchSubGoals();
                   setState(() {
-                    _isLoading = false; // 로딩 종료
+                    _isLoading = false;
                   });
-                  _showAIPopup(context);
+                  _showAIPopup(context, selectedDetailGoal);
                 },
                 style: TextButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
-                  backgroundColor: const Color(0xff303030),
+                  backgroundColor: const Color.fromARGB(255, 31, 31, 31),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
                 child: _isLoading
-                    ? const CircularProgressIndicator() // 로딩 중일 때 로딩 인디케이터 표시
+                    ? const CircularProgressIndicator(
+                      color: mainRed,
+                    ) 
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Image.asset('assets/img/AIIcon.png',
-                              height: currentWidth < 600 ? 15 : 18),
-                          SizedBox(width: currentWidth < 600 ? 4 : 7),
+                              height: 20),
+                          SizedBox(width: 5),
                           Text(
-                            'Ask AI',
+                            'Ask 도민호',
                             style: TextStyle(
-                              fontSize: currentWidth < 600 ? 13 : 16,
+                              fontSize: 14,
                               color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -173,22 +183,12 @@ class _EditInput2PageState extends State<EditInput2Page> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(height: currentWidth < 600 ? 10 : 20),
-                    DPGuideText("세부 목표를 위한 구체적인 계획이에요.", currentWidth)
-                        .dPGuideText(),
-                    SizedBox(height: currentWidth < 600 ? 14 : 20),
-                    DPMainGoal(
-                            widget.mandalart,
-                            ColorTransform(widget.firstColor).colorTransform(),
-                            currentHeight,
-                            currentWidth)
-                        .dpMainGoal(),
-                    SizedBox(height: currentWidth < 600 ? 20 : 15),
+                    SizedBox(height: 30),
                     Center(
                       child: SizedBox(
-                        width: currentHeight * 0.4,
+                        width: currentHeight * 0.53,
                         child: GridView(
-                          shrinkWrap: true, // GridView를 자식으로 설정
+                          shrinkWrap: true, 
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -224,11 +224,10 @@ class _EditInput2PageState extends State<EditInput2Page> {
                               margin: const EdgeInsets.all(1.0),
                               child: Center(
                                 child: AutoSizeText(
-                                    maxLines: 3, // 최대 줄 수 (필요에 따라 변경 가능)
-                                    minFontSize: 6,
-                                    maxFontSize: 16, // 최소 글씨 크기
+                                    maxLines: 3, 
+                                   
                                     overflow: TextOverflow
-                                        .ellipsis, // 내용이 너무 길 경우 생략 표시
+                                        .ellipsis,
                                     context
                                                 .watch<
                                                     SaveInputtedDetailGoalModel>()
@@ -239,6 +238,7 @@ class _EditInput2PageState extends State<EditInput2Page> {
                                     style: const TextStyle(
                                       color: backgroundColor,
                                       fontWeight: FontWeight.w600,
+                                      fontSize: 15
                                     )),
                               ),
                             ),
@@ -266,10 +266,9 @@ class _EditInput2PageState extends State<EditInput2Page> {
                         ),
                       ),
                     ),
-                    SizedBox(height: currentWidth < 600 ? 15 : 25),
-                      Description2(widget.firstColor, currentWidth)
-                          .description2(),
-                      SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    SizedBox(height: 30),
+                    Description2(widget.firstColor).description2(),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -280,39 +279,47 @@ class _EditInput2PageState extends State<EditInput2Page> {
       ),
       bottomNavigationBar: Padding(padding: fullPadding, child: 
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              NewButton(
-                Colors.black,
-                Colors.white,
-                '취소',
-                () {
-                  // TestInputtedActionPlanModel 초기화
-                  context
-                      .read<TestInputtedActionPlanModel>()
-                      .resetActionPlans();
-                  Navigator.pop(context);
-                }, currentWidth
-              ).newButton(),
-              NewButton(
-                Colors.black,
-                Colors.white,
-                '완료',
-                () {
-                  // 모델 가져오기
-                  final testModel = context.read<TestInputtedActionPlanModel>();
-                  final saveModel = context.read<SaveInputtedActionPlanModel>();
-
-                  // TestInputtedActionPlanModel의 데이터를 SaveInputtedActionPlanModel로 복사
-                  for (int goalId = 0;
-                      goalId < testModel.inputtedActionPlan.length;
-                      goalId++) {
-                    testModel.inputtedActionPlan[goalId].forEach((key, value) {
-                      saveModel.updateActionPlan(goalId, key, value);
-                    });
-                  }
-
-                  Navigator.pop(context);
-                },currentWidth
-              ).newButton(),
+              SizedBox(
+                width: 90,
+            height: 45,
+                child: NewButton(
+                  Colors.black,
+                  Colors.white,
+                  '취소',
+                  () {
+                    // TestInputtedActionPlanModel 초기화
+                    context
+                        .read<TestInputtedActionPlanModel>()
+                        .resetActionPlans();
+                    Navigator.pop(context);
+                  }, currentWidth
+                ).newButton(),
+              ),
+              SizedBox(
+                width: 90,
+            height: 45,
+                child: NewButton(
+                  Colors.black,
+                  Colors.white,
+                  '완료',
+                  () {
+                    // 모델 가져오기
+                    final testModel = context.read<TestInputtedActionPlanModel>();
+                    final saveModel = context.read<SaveInputtedActionPlanModel>();
+                
+                    // TestInputtedActionPlanModel의 데이터를 SaveInputtedActionPlanModel로 복사
+                    for (int goalId = 0;
+                        goalId < testModel.inputtedActionPlan.length;
+                        goalId++) {
+                      testModel.inputtedActionPlan[goalId].forEach((key, value) {
+                        saveModel.updateActionPlan(goalId, key, value);
+                      });
+                    }
+                
+                    Navigator.pop(context);
+                  },currentWidth
+                ).newButton(),
+              ),
             ]),),
     );
   }

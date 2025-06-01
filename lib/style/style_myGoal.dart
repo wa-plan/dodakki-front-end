@@ -24,7 +24,7 @@ class BlankData {
             style: TextStyle(
               height: 1.5,
               color: Color(0xff595959),
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),

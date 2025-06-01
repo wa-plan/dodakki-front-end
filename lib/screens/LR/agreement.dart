@@ -53,7 +53,7 @@ class _AgreementState extends State<Agreement> {
           children: [
             const SizedBox(height: 15),
             //설명문
-            Description('도닦기를 시작하려면\n권한이 필요해요.').description(),
+            LoginDescription('도닦기를 시작하려면\n권한이 필요해요.').loginDescription(),
             const SizedBox(height: 30),
 
             Row(

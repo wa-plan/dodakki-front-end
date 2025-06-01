@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/screens/DP/Create/dp_create2_page.dart';
-import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_create3_widget.dart';
 import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
@@ -33,7 +33,6 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
     super.didChangeDependencies();
     // context.watch를 통해 goal 업데이트
     final updatedGoal = context.watch<SelectFinalGoalModel>().selectedFinalGoal;
-
 
     if (goal != updatedGoal) {
       setState(() {
@@ -82,6 +81,7 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
           Navigator.pop(context);
           _showAIPopup(context); // 새 팝업 표시
         },
+        secondGoal: context.watch<SelectFinalGoalModel>().selectedFinalGoal,
       ),
     );
   }
@@ -99,48 +99,52 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
+              //나가기 버튼
+              CustomBackButton(() {
                 context.read<TestInputtedDetailGoalModel>().resetDetailGoals();
                 Navigator.pop(context);
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
-              const SizedBox(width: 10),
-              DPTitleText('플랜 만들기', currentWidth).dPTitleText(),
+              }).customBackButton(),
+              SizedBox(width: 15),
+
+              //페이지 타이틀
+              PageTitle('제2목표 작성').pageTitle(),
               const Spacer(),
+
+              //AI 버튼
               TextButton(
                 onPressed: () async {
                   setState(() {
-                    _isLoading = true; // 로딩 시작
+                    _isLoading = true;
                   });
                   await _fetchSubGoals();
                   setState(() {
-                    _isLoading = false; // 로딩 종료
+                    _isLoading = false;
                   });
                   _showAIPopup(context);
-                  //_aiPopup(context, _subGoals);
                 },
                 style: TextButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
-                  backgroundColor: const Color(0xff303030),
+                  backgroundColor: const Color.fromARGB(255, 31, 31, 31),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
                 child: _isLoading
-                    ? const CircularProgressIndicator() // 로딩 중일 때 로딩 인디케이터 표시
+                    ? const CircularProgressIndicator(
+                        color: mainRed,
+                      )
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset('assets/img/AIIcon.png',
-                              height: currentWidth < 600 ? 15 : 18),
-                          SizedBox(width: currentWidth < 600 ? 4 : 7),
+                          Image.asset('assets/img/AIIcon.png', height: 20),
+                          SizedBox(width: 5),
                           Text(
-                            'Ask AI',
+                            'Ask 도민호',
                             style: TextStyle(
-                              fontSize: currentWidth < 600 ? 13 : 16,
+                              fontSize: 14,
                               color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -160,25 +164,12 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: currentWidth < 600 ? 10 : 20),
-                      DPGuideText("최종 목표를 이루기 위한 세부 목표에요.", currentWidth)
-                          .dPGuideText(),
-                      SizedBox(height: currentWidth < 600 ? 14 : 20),
-                      DPMainGoal(
-                              context
-                                  .watch<SelectFinalGoalModel>()
-                                  .selectedFinalGoal,
-                              ColorTransform(widget.firstColor)
-                                  .colorTransform(),
-                              currentHeight,
-                              currentWidth)
-                          .dpMainGoal(),
-                      SizedBox(height: currentWidth < 600 ? 20 : 15),
+                      SizedBox(height: 30),
                       Center(
                           child: SizedBox(
-                              width: currentHeight * 0.4,
+                              width: currentHeight * 0.53,
                               child: GridView(
-                                  shrinkWrap: true, // GridView를 자식으로 설정
+                                  shrinkWrap: true, 
                                   physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
@@ -195,18 +186,14 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                                       margin: const EdgeInsets.all(1.0),
                                       padding: const EdgeInsets.all(7.0),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(3),
+                                        borderRadius: BorderRadius.circular(6),
                                         color: ColorTransform(widget.firstColor)
                                             .colorTransform(),
                                       ),
                                       child: Center(
                                         child: AutoSizeText(
-                                            maxLines:
-                                                3, // 최대 줄 수 (필요에 따라 변경 가능)
-                                            minFontSize: 6,
-                                            maxFontSize: 16, // 최소 글씨 크기
-                                            overflow: TextOverflow
-                                                .ellipsis, // 내용이 너무 길 경우 생략 표시
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
                                             context
                                                 .watch<SelectFinalGoalModel>()
                                                 .selectedFinalGoal,
@@ -214,6 +201,7 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                                             style: const TextStyle(
                                               color: backgroundColor,
                                               fontWeight: FontWeight.w600,
+                                              fontSize: 15
                                             )),
                                       ),
                                     ),
@@ -222,59 +210,65 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                                     const Input1(selectedDetailGoalId: 7),
                                     const Input1(selectedDetailGoalId: 8),
                                   ]))),
-                      SizedBox(height: currentWidth < 600 ? 15 : 25),
-                      Description2(widget.firstColor, currentWidth)
-                          .description2(),
-                      SizedBox(height: currentWidth < 600 ? 15 : 25),
+                      SizedBox(height: 30),
+                      Description2(widget.firstColor).description2(),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),
               ),
-              
             ],
           )),
-          bottomNavigationBar: Padding(padding: fullPadding, child: 
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                NewButton(
-                  Colors.black,
-                  Colors.white,
-                  '취소',
-                  () {
-                    // TestInputtedDetailGoalModel만 초기화
-                    context
-                        .read<TestInputtedDetailGoalModel>()
-                        .resetDetailGoals();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DPcreate99Page(
-                                firstColor: widget.firstColor,
-                                mainGoalId: widget.mainGoalId,
-                              )),
-                    );
-                  },
-                  currentWidth,
-                ).newButton(),
-                NewButton(Colors.black, Colors.white, '저장', () {
-                  // 현재 context를 통해 두 모델에 접근
-                  final testModel = context.read<TestInputtedDetailGoalModel>();
-                  final saveModel = context.read<SaveInputtedDetailGoalModel>();
-                  // TestInputtedDetailGoalModel의 데이터를 SaveInputtedDetailGoalModel로 복사
-                  testModel.testinputtedDetailGoal.forEach((key, value) {
-                    saveModel.updateDetailGoal(key, value); // Save 모델에 값 저장
-                  });
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          //취소
+          SizedBox(
+            width: 90,
+            height: 45,
+            child: NewButton(
+              Colors.black,
+              Colors.white,
+              '취소',
+              () {
+                context.read<TestInputtedDetailGoalModel>().resetDetailGoals();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DPcreate99Page(
+                            firstColor: widget.firstColor,
+                            mainGoalId: widget.mainGoalId,
+                          )),
+                );
+              },
+              currentWidth,
+            ).newButton(),
+          ),
+          //저장
+          SizedBox(
+            width: 90,
+            height: 45,
+            child: NewButton(Colors.black, Colors.white, '저장', () {
+              final testModel = context.read<TestInputtedDetailGoalModel>();
+              final saveModel = context.read<SaveInputtedDetailGoalModel>();
+              testModel.testinputtedDetailGoal.forEach((key, value) {
+                saveModel.updateDetailGoal(key, value); // Save 모델에 값 저장
+              });
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DPcreate99Page(
-                              firstColor: widget.firstColor,
-                              mainGoalId: widget.mainGoalId,
-                            )),
-                  );
-                }, currentWidth)
-                    .newButton()
-              ]),),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DPcreate99Page(
+                          firstColor: widget.firstColor,
+                          mainGoalId: widget.mainGoalId,
+                        )),
+              );
+            }, currentWidth)
+                .newButton(),
+          )
+        ]),
+      ),
     );
   }
 }

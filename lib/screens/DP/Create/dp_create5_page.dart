@@ -2,7 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/Create/dp_create6_page.dart';
 import 'package:domino/screens/DP/dp_main_page.dart';
-import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/color_Grid23.dart';
 import 'package:domino/widgets/DP/color_Grid2.dart';
@@ -154,103 +155,73 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
             padding: appBarPadding,
             child: Row(
               children: [
-                CustomIconButton(() {
-                  PopupDialog.show(
-                      context,
-                      '지금 나가면,\n작성한 내용이 사라져!',
-                      '잠깐!',
-                      true, // cancel
-                      false, // delete
-                      false, // signout
-                      true, //success
-                      onCancel: () {
-                    // 취소 버튼을 눌렀을 때 실행할 코드
-                    Navigator.pop(context);
-                  }, onSuccess: () async {
-                    for (int i = 0; i < 9; i++) {
-                      context
-                          .read<SaveInputtedDetailGoalModel>()
-                          .updateDetailGoal(i.toString(), "");
-                    }
-
-                    for (int i = 0; i < 9; i++) {
-                      context
-                          .read<TestInputtedDetailGoalModel>()
-                          .updateTestDetailGoal(i.toString(), "");
-                    }
-
-                    for (int i = 0; i < 9; i++) {
-                      context.read<GoalColor>().updateGoalColor(
-                          i.toString(), const Color(0xff929292));
-                    }
-
-                    for (int i = 0; i < 9; i++) {
-                      for (int j = 0; j < 9; j++) {
+                //나가기 버튼
+                CustomBackButton(
+                  () {
+                    PopupDialog.show(
+                        context,
+                        '지금 나가면,\n작성한 내용이 사라져!',
+                        '잠깐!',
+                        true, // cancel
+                        false, // delete
+                        false, // signout
+                        true, //success
+                        onCancel: () {
+                      // 취소 버튼을 눌렀을 때 실행할 코드
+                      Navigator.pop(context);
+                    }, onSuccess: () async {
+                      for (int i = 0; i < 9; i++) {
                         context
-                            .read<SaveInputtedActionPlanModel>()
-                            .updateActionPlan(i, j.toString(), "");
+                            .read<SaveInputtedDetailGoalModel>()
+                            .updateDetailGoal(i.toString(), "");
                       }
-                    }
 
-                    for (int i = 0; i < 9; i++) {
-                      for (int j = 0; j < 9; j++) {
+                      for (int i = 0; i < 9; i++) {
                         context
-                            .read<TestInputtedActionPlanModel>()
-                            .updateTestActionPlan(i, j.toString(), "");
+                            .read<TestInputtedDetailGoalModel>()
+                            .updateTestDetailGoal(i.toString(), "");
                       }
-                    }
 
-                    // 팝업 닫기
-                    Navigator.pop(context);
+                      for (int i = 0; i < 9; i++) {
+                        context.read<GoalColor>().updateGoalColor(
+                            i.toString(), const Color(0xff929292));
+                      }
 
-                    // DP 메인 페이지로 이동
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const DPMain()),
-                    );
-                  });
-                }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                    .customIconButton(),
-                const SizedBox(width: 10),
-                DPTitleText('플랜 만들기', currentWidth).dPTitleText(),
+                      for (int i = 0; i < 9; i++) {
+                        for (int j = 0; j < 9; j++) {
+                          context
+                              .read<SaveInputtedActionPlanModel>()
+                              .updateActionPlan(i, j.toString(), "");
+                        }
+                      }
+
+                      for (int i = 0; i < 9; i++) {
+                        for (int j = 0; j < 9; j++) {
+                          context
+                              .read<TestInputtedActionPlanModel>()
+                              .updateTestActionPlan(i, j.toString(), "");
+                        }
+                      }
+
+                      // 팝업 닫기
+                      Navigator.pop(context);
+
+                      // DP 메인 페이지로 이동
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DPMain()),
+                      );
+                    });
+                  },
+                ).customBackButton(),
+                SizedBox(width: 15),
+
+                //페이지 타이틀
+                PageTitle('색깔 입히기').pageTitle(),
                 const Spacer(),
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xff515151), // 첫 번째 색상
-                        borderRadius:
-                            BorderRadius.circular(currentWidth < 600 ? 2 : 3),
-                      ),
-                      width: currentWidth < 600 ? 7 : 11,
-                      height: currentWidth < 600 ? 7 : 11,
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xffD9D9D9), // 첫 번째 색상
-                        borderRadius:
-                            BorderRadius.circular(currentWidth < 600 ? 2 : 3),
-                      ),
-                      width: currentWidth < 600 ? 7 : 11,
-                      height: currentWidth < 600 ? 7 : 11,
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xff515151), // 첫 번째 색상
-                        borderRadius:
-                            BorderRadius.circular(currentWidth < 600 ? 2 : 3),
-                      ),
-                      width: currentWidth < 600 ? 7 : 11,
-                      height: currentWidth < 600 ? 7 : 11,
-                    ),
-                  ],
-                ),
+
+                //프로그레스 바 (from style_tutorial.dart)
+                ProgressBar(3, 3).progressBar()
               ],
             ),
           ),
@@ -265,21 +236,12 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: currentWidth < 600 ? 15 : 20),
-                        DPGuideText('나만의 스타일로 만다라트를 꾸며요.', currentWidth)
-                            .dPGuideText(),
-                        SizedBox(height: currentWidth < 600 ? 14 : 20),
+                        SizedBox(height: 10),
                         Center(
-                          child: Container(
-                            width: currentHeight * 0.4,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(3),
-                            ),
+                          child: SizedBox(
+                            width: currentHeight * 0.45,
                             child: GridView(
-                              shrinkWrap: true, // GridView를 자식으로 설정
+                              shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -343,15 +305,12 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                                     decoration: BoxDecoration(
                                       border: isDetailGoalEmpty
                                           ? Border.all(
-                                              color: selectIndex == index
-                                                  ? Colors.red
-                                                  : backgroundColor,
-                                              width: 1,
+                                              color: backgroundColor,
                                             )
                                           : Border.all(
                                               color: selectIndex == index
                                                   ? const Color.fromARGB(
-                                                      255, 125, 125, 125)
+                                                      255, 204, 204, 204)
                                                   : backgroundColor,
                                               width: 1,
                                             ),
@@ -377,56 +336,53 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 50,
                         ),
-                        Center(
-                          child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 15),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(3),
-                                  color: const Color(0xff2A2A2A)),
-                              height: 130,
-                              width: 400,
-                              child: GridView(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 6,
-                                  crossAxisSpacing:
-                                      currentWidth < 600 ? 20 : 23,
-                                  mainAxisSpacing: currentWidth < 600 ? 20 : 23,
-                                ),
-                                children: List.generate(colors.length, (index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      context.read<GoalColor>().updateGoalColor(
-                                          '$selectIndex', colors[index]);
-                                      setState(() {
-                                        selectColorIndex = index + 1;
-                                      });
-                                    },
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(3),
-                                            color: colors[index],
-                                          ),
+                        Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 15),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(3),
+                                color: const Color.fromARGB(255, 39, 39, 39)),
+                            height: 130,
+                            width: 400,
+                            child: GridView(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 6,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20,
+                              ),
+                              children: List.generate(colors.length, (index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    context.read<GoalColor>().updateGoalColor(
+                                        '$selectIndex', colors[index]);
+                                    setState(() {
+                                      selectColorIndex = index + 1;
+                                    });
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                          color: colors[index],
                                         ),
-                                        if (selectColorIndex == index + 1)
-                                          Icon(
-                                            Icons.check_circle_rounded,
-                                            color: const Color(0xff303030),
-                                            size: currentWidth < 600 ? 20 : 22,
-                                          ),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                              )),
-                        ),
+                                      ),
+                                      if (selectColorIndex == index + 1)
+                                        Icon(
+                                          Icons.check_circle_rounded,
+                                          color: backgroundColor,
+                                          size: 20,
+                                        ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            )),
                         const SizedBox(height: 20),
                       ],
                     ),
@@ -435,77 +391,93 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      NewButton(Colors.black, Colors.white, '이전', () {
-                        Navigator.pop(context);
-                      }, currentWidth)
-                          .newButton(),
-                      NewButton(Colors.black, Colors.white, '완료', () async {
-                        _handleSubmitWithDialog();
-                      }, currentWidth)
-                          .newButton(),
+                      SizedBox(
+                        width: 90,
+                        height: 45,
+                        child: NewButton(Colors.black, Colors.white, '이전', () {
+                          Navigator.pop(context);
+                        }, currentWidth)
+                            .newButton(),
+                      ),
+                      SizedBox(
+                        width: 90,
+                        height: 45,
+                        child: NewButton(mainRed, backgroundColor, '완료',
+                                () async {
+                          _handleSubmitWithDialog();
+                        }, currentWidth)
+                            .newButton(),
+                      ),
                     ]),
               ],
             )));
   }
 
   Future<void> _handleSubmitWithDialog() async {
-  // 1. 로딩 다이얼로그 띄우기
-  showDialog(
-    context: context,
-    barrierDismissible: false, // 바깥 눌러도 안 닫힘
-    builder: (_) => AlertDialog(
-    backgroundColor: backgroundColor,
-    content: Row(
-      children: const [
-        CircularProgressIndicator(color: mainRed),
-        SizedBox(width: 20),
-        Text("만다라트를 만드는 중이야..!", style: TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.w600)),
-      ],
-    ),
-  ),
-  );
+    // 1. 로딩 다이얼로그 띄우기
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 바깥 눌러도 안 닫힘
+      builder: (_) => AlertDialog(
+        backgroundColor: backgroundColor,
+        content: Row(
+          children: const [
+            CircularProgressIndicator(color: mainRed),
+            SizedBox(width: 20),
+            Text("만다라트를 만드는 중이야..!",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+    );
 
-  // 2. 실제 작업
-  final secondGoalSuccess = await _addSecondGoal();
+    // 2. 실제 작업
+    final secondGoalSuccess = await _addSecondGoal();
 
-  if (secondGoalSuccess) {
-    context.read<SaveMandalartCreatedGoal>().updateMandalartCreatedGoal("${widget.mainGoalId}");
+    if (secondGoalSuccess) {
+      context
+          .read<SaveMandalartCreatedGoal>()
+          .updateMandalartCreatedGoal("${widget.mainGoalId}");
 
-    final thirdGoalSuccess = await _addThirdGoal();
+      final thirdGoalSuccess = await _addThirdGoal();
 
-    if (thirdGoalSuccess) {
-      for (int i = 0; i < 9; i++) {
-        context.read<SaveInputtedDetailGoalModel>().updateDetailGoal(i.toString(), "");
-      }
-
-      for (int i = 0; i < 9; i++) {
-        context.read<GoalColor>().updateGoalColor(i.toString(), const Color(0xff929292));
-      }
-
-      for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-          context.read<SaveInputtedActionPlanModel>().updateActionPlan(i, j.toString(), "");
+      if (thirdGoalSuccess) {
+        for (int i = 0; i < 9; i++) {
+          context
+              .read<SaveInputtedDetailGoalModel>()
+              .updateDetailGoal(i.toString(), "");
         }
+
+        for (int i = 0; i < 9; i++) {
+          context
+              .read<GoalColor>()
+              .updateGoalColor(i.toString(), const Color(0xff929292));
+        }
+
+        for (int i = 0; i < 9; i++) {
+          for (int j = 0; j < 9; j++) {
+            context
+                .read<SaveInputtedActionPlanModel>()
+                .updateActionPlan(i, j.toString(), "");
+          }
+        }
+
+        // 3. 로딩 다이얼로그 닫기
+        Navigator.pop(context); // 팝업 닫기
+
+        // 4. 다음 페이지로 이동
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CompletePage()),
+        );
+        return;
       }
-
-      // 3. 로딩 다이얼로그 닫기
-      Navigator.pop(context); // 팝업 닫기
-
-      // 4. 다음 페이지로 이동
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CompletePage()),
-      );
-      return;
     }
+
+    // 작업 실패 시에도 팝업 닫기
+    Navigator.pop(context);
   }
-
-  // 작업 실패 시에도 팝업 닫기
-  Navigator.pop(context);
 }
-}
-
-

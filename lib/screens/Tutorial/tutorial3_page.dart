@@ -44,7 +44,7 @@ class Tutorial3State extends State<Tutorial3> {
             //선택지
             Positioned(
               left: -80,
-              top: 170,
+              top: currentWidth < 600 ? 170 : 190,
               child: MandalartOption(
                   middleText: '뿌듯한\n학교생활하기',
                   texts: [
@@ -61,7 +61,7 @@ class Tutorial3State extends State<Tutorial3> {
                   color: 'red',
                   onItemSelected: (index) {
                       selectedIndex = index;
-              },),
+              },currentWidth: currentWidth,),
             ),
           ],
         ),

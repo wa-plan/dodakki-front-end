@@ -23,43 +23,6 @@ class _EventCalendarState extends State<EventCalendar> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   bool _isExpanded = false; // 달력 확장 상태
 
-  /*void mandalartInfo(context, int mandalartId) async {
-    final data =
-        await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
-    if (data != null) {
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),
-      );
-    }
-  }*/
-
-  /*Future<void> mandaColor(String mandalartId) async {
-// 중복 방지
-    if (colorList.any((item) => item['id'] == mandalartId)) return;
-
-    try {
-      // 서버에서 데이터 가져오기
-      final data = await MandalartInfoService.mandalartInfo(
-          mandalartId: int.parse(mandalartId));
-      if (data != null) {
-        // 반환된 데이터를 colorList에 추가
-        setState(() {
-          colorList.add({"id": mandalartId, "color": data["color"]});
-        });
-        print('colorList=$colorList');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
-      );
-    }
-  }*/
-
   Future<int?> getThirdGoalId(int mandalartId, String targetThirdGoal) async {
     print('📥 요청된 mandalartId=$mandalartId');
     print('🎯 targetThirdGoal: "$targetThirdGoal"');
@@ -193,7 +156,7 @@ class _EventCalendarState extends State<EventCalendar> {
             child: Column(
               children: [
                 TableCalendar<Event>(
-                  rowHeight: 35,
+                  rowHeight: 45,
                   firstDay: DateTime.utc(2014, 1, 1),
                   lastDay: DateTime.utc(2034, 12, 31),
                   focusedDay: _focusedDay,
@@ -231,55 +194,67 @@ class _EventCalendarState extends State<EventCalendar> {
                     markerSize: 0.0,
                     isTodayHighlighted: true,
                     todayDecoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 56, 56, 56),
-                        shape: BoxShape.circle),
+                        color: mainGrey, shape: BoxShape.circle),
                     selectedDecoration: const BoxDecoration(
                       color: mainRed,
                       shape: BoxShape.circle,
                     ),
+                    //선택된 날짜
                     selectedTextStyle: TextStyle(
-                      fontSize: 12, // 선택된 날짜의 폰트 크기 고정
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white, // 선택된 날짜의 텍스트 색상
+                      color: backgroundColor,
                     ),
+                    //오늘 날짜
                     todayTextStyle: TextStyle(
-                      fontSize: 12, // 오늘 날짜 폰트 크기
-                      fontWeight: FontWeight.w700, // 오늘 날짜 폰트 굵기
-                      color: Colors.white, // 오늘 날짜 텍스트 색상
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
                     outsideTextStyle: TextStyle(
                       color: const Color.fromARGB(255, 125, 125, 125),
-                      fontSize: currentWidth < 600 ? 12 : 16,
+                      fontSize: 14,
                     ),
+                    //보통 날짜
                     defaultTextStyle: TextStyle(
                       color: mainTextColor,
-                      fontSize: currentWidth < 600 ? 12 : 16,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
+                    //주말 날짜
                     weekendTextStyle: TextStyle(
-                      color: mainTextColor,
-                      fontSize: currentWidth < 600 ? 12 : 16,
+                      color: Color.fromARGB(255, 201, 110, 110),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   daysOfWeekStyle: const DaysOfWeekStyle(
-                    weekdayStyle: TextStyle(color: Color(0xffD4D4D4)), // 평일 색상
-                    weekendStyle: TextStyle(color: Color(0xffD4D4D4)), // 주말 색상
+                    weekdayStyle: TextStyle(
+                      color: Color.fromARGB(255, 170, 170, 170),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    weekendStyle: TextStyle(
+                      color: Color.fromARGB(255, 201, 110, 110),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   headerStyle: HeaderStyle(
                     titleCentered: true,
                     titleTextStyle:
                         const TextStyle(color: Colors.white, fontSize: 15),
                     leftChevronIcon: Icon(
-                      Icons.arrow_back_ios,
+                      Icons.arrow_back_rounded,
                       color: const Color.fromARGB(255, 170, 170, 170),
-                      size: currentWidth < 600 ? 17 : 20,
+                      size: 17,
                     ),
                     rightChevronIcon: Icon(
-                      Icons.arrow_forward_ios,
+                      Icons.arrow_forward_rounded,
                       color: const Color.fromARGB(255, 170, 170, 170),
-                      size: currentWidth < 600 ? 17 : 20,
+                      size: 17,
                     ),
-                    formatButtonVisible:
-                        false, //원래 달력 열고 닫는 버튼. 지금은 화살표 아이콘이 역할을 대신하고 있음.
+                    formatButtonVisible: false,
                   ),
                 ),
                 Row(
@@ -291,39 +266,16 @@ class _EventCalendarState extends State<EventCalendar> {
                       constraints: const BoxConstraints(), // constraints
                       icon: Icon(
                         _isExpanded
-                            ? Icons.arrow_drop_up
-                            : Icons.arrow_drop_down,
+                            ? Icons.arrow_drop_up_rounded
+                            : Icons.arrow_drop_down_rounded,
                         color: const Color(0xffD4D4D4),
-                        size: 25,
+                        size: 28,
                       ),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: currentWidth < 600 ? 0 : 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    NewCustomIconButton(() {
-                      context
-                          .read<SelectAPModel>()
-                          .selectAP("제3목표를 클릭하여 선택해주세요.", null);
-
-                      context
-                          .read<SelectRepeatModel>()
-                          .selectRepeat(false, false, false, false);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AddPage1(),
-                          ));
-                    }, Icons.add, currentWidth, 21)
-                        .newCustomIconButton(),
-                  ],
-                ),
-                SizedBox(
-                  height: currentWidth < 600 ? 14 : 20,
+                  height: 15,
                 ),
                 ValueListenableBuilder<List<Event>>(
                   valueListenable: _selectedEvents,
@@ -342,9 +294,9 @@ class _EventCalendarState extends State<EventCalendar> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  '오늘은 쓰러뜨릴 도미노가 없어요.\n여유로운 하루를 보내세요:)',
+                                  '오늘은 쓰러뜨릴 도미노가 없어요.\n여유로운 하루를 보내세요 :)',
                                   style: TextStyle(
-                                    color: const Color(0xff464646),
+                                    color: Color(0xff595959),
                                     fontSize: currentWidth < 600 ? 15 : 20,
                                     fontWeight: FontWeight.w700,
                                     height: 1.7,
@@ -358,7 +310,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Opacity(
-                                    opacity: 0.2,
+                                    opacity: 0.3,
                                     child: Image.asset(
                                       'assets/img/emptyDominho.png',
                                       height: currentWidth < 600 ? 150 : 300,
@@ -648,125 +600,87 @@ void editDialog(
 
   showDialog(
     context: context,
-    barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+    barrierDismissible: true,
     builder: (BuildContext context) {
       return Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.all(0),
         child: SizedBox(
-          height: currentWidth < 600 ? 210 : 250,
-          width: currentWidth < 600 ? 330 : 480,
+          height: 200,
+          width: 340,
           child: Container(
-            padding: EdgeInsets.all(currentWidth < 600 ? 25 : 30),
+            padding: EdgeInsets.all(25),
             decoration: BoxDecoration(
                 color: backgroundColor,
-                borderRadius: BorderRadius.all(
-                    Radius.circular(currentWidth < 600 ? 10 : 13))),
+                borderRadius: BorderRadius.all(Radius.circular(13))),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: currentWidth < 600 ? 16 : 18,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Color(int.parse(
-                                  color
-                                      .replaceAll('Color(', '')
-                                      .replaceAll(')', '')
-                                      .replaceAll('0x', ''),
-                                  radix: 16) +
-                              0xFF000000),
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(currentWidth < 600 ? 3 : 5)),
+                Container(
+                      width: 16,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Color(int.parse(
+                                color
+                                    .replaceAll('Color(', '')
+                                    .replaceAll(')', '')
+                                    .replaceAll('0x', ''),
+                                radix: 16) +
+                            0xFF000000),
+                        borderRadius: BorderRadius.all(Radius.circular(3)),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          content,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16),
                         ),
-                      ),
-                      SizedBox(width: currentWidth < 600 ? 16 : 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    content,
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: currentWidth < 600 ? 13 : 17),
-                                  ),
-                                  SizedBox(height: currentWidth < 600 ? 5 : 7),
-                                  SizedBox(
-                                    width: 140,
-                                    child: Text(
-                                      title,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize:
-                                              currentWidth < 600 ? 17 : 19,
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1, // 👉 최대 2줄까지만 표시
-                                      overflow: TextOverflow
-                                          .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
-                                      softWrap: true, // 👉 자동 줄바꿈 허용
-                                    ),
-                                  ),
-                                ],
+                        SizedBox(height: 5),
+                        Text(
+                            title,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
+                            maxLines: 1, // 👉 최대 2줄까지만 표시
+                            overflow: TextOverflow
+                                .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
+                            softWrap: true, // 👉 자동 줄바꿈 허용
+                          ),
+                       
+                        SizedBox(height: 30),
+                        
+                        Text(
+                                '반복',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: currentWidth < 600 ? 20 : 25),
-                          Container(
-                            height: 82,
-                            width: currentWidth < 600 ? 170 : 250,
-                            padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: Color(0xff292929)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '반복',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: currentWidth < 600 ? 13 : 14,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  getIntervalText(),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: currentWidth < 600 ? 15 : 17,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      NewCustomIconButton(() {
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                getIntervalText(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                        
+                       
+                      ],
+                    ),
+                    Spacer(),
+                 
+                 NewCustomIconButton(() {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -782,9 +696,8 @@ void editDialog(
                         );
                       }, Icons.edit, currentWidth, 19)
                           .newCustomIconButton(),
-                    ],
-                  ),
-                ),
+                 
+               
               ],
             ),
           ),

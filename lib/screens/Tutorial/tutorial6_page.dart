@@ -8,17 +8,18 @@ class Tutorial6 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: backgroundColor,
         body: Stack(
           children: [
             //비주얼
-            Positioned(top: 40, left: 5, child: PlanVisual().planVisual()),
+            Positioned(top: 40, left: 5, child: PlanVisual(currentWidth).planVisual()),
             //그라데이션
             Positioned(
                 top: 0,
                 child: Container(
-                  width: 400,
+                  width: currentWidth < 600 ? 400 : 630,
                   height: 200,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

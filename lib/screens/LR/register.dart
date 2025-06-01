@@ -86,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             const SizedBox(height: 15),
             //설명문
-            Description('아이디와 비밀번호를\n만들어주세요.').description(),
+            LoginDescription('아이디와 비밀번호를\n만들어주세요.').loginDescription(),
             const SizedBox(height: 30),
             Form(
               key: _formKey,

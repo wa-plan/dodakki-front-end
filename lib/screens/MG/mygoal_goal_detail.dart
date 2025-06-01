@@ -1,10 +1,11 @@
 import 'package:domino/screens/MG/mygoal_main.dart';
 import 'package:domino/screens/MG/piechart.dart';
 import 'package:domino/screens/event_page.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data'; 
+import 'dart:typed_data';
 import 'package:domino/screens/MG/mygoal_goal_edit.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/widgets/popup.dart';
@@ -33,7 +34,6 @@ class MyGoalDetail extends StatefulWidget {
 }
 
 class MyGoalDetailState extends State<MyGoalDetail> {
-
   final _status = ['달성 실패', '진행 중', '달성 완료'];
   String? _selectedStatus;
   List<Uint8List> selectedFiles = [];
@@ -57,8 +57,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
   int successRate = 0;
   int inProgressRate = 0;
   int failedRate = 0;
-  final GlobalKey _iconKey = GlobalKey(); 
-  Offset _iconPosition = Offset.zero; 
+  final GlobalKey _iconKey = GlobalKey();
+  Offset _iconPosition = Offset.zero;
 
   Future<void> userMandaInfo(String mandalartId) async {
     try {
@@ -110,7 +110,6 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     status = widget.status;
     photoList = widget.photoList;
 
-
     userMandaInfo(mandalartId);
 
     goalImage = photoList.map((photo) => photo).toList();
@@ -122,7 +121,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     } else if (status == 'SUCCESS') {
       _selectedStatus = _status[2];
     } else {
-      _selectedStatus = _status[1]; 
+      _selectedStatus = _status[1];
     }
   }
 
@@ -142,37 +141,136 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //나가기 버튼
-              CustomBackButton(
-                () {
-                  Navigator.of(context).pop();
-                },
-              ).customBackButton(),
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 9.0, vertical: 2.0),
-                    decoration: BoxDecoration(
-                      color: Color(0xff303030),
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05), 
-                          offset: const Offset(0, 0), 
-                          blurRadius: 7, 
-                          spreadRadius: 0, 
+                CustomBackButton(
+                  () {
+                    Navigator.of(context).pop();
+                  },
+                ).customBackButton(),
+                //진행 상태 드롭다운
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                      height: 35,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Color(0xff303030)),
+                      child: Center(
+                        child: DropdownButton<String>(
+                          icon: Icon(Icons.arrow_drop_down_rounded),
+                          iconSize: 30,
+                          elevation: 0,
+                          underline: const SizedBox.shrink(),
+                          dropdownColor: const Color(0xff303030),
+                          value: _selectedStatus,
+                          items: _status
+                              .map(
+                                (e) => DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Center(
+                                    child: Text(e),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedStatus = value;
+                              if (_selectedStatus == '달성 완료') {
+                                PopupDialog.show(
+                                  context,
+                                  '이 목표 정말 \n달성 완료한거야?',
+                                  '대박!',
+                                  true,
+                                  false,
+                                  false,
+                                  true,
+                                  onCancel: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  onDelete: () {},
+                                  onSignOut: () {},
+                                  onSuccess: () {
+                                    _mandaProgress(
+                                        int.parse(widget.id), "SUCCESS");
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EventPage(
+                                          domino: successNum,
+                                          goalName: name,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                              if (_selectedStatus == '진행 중') {
+                                PopupDialog.show(
+                                  context,
+                                  '잘 생각했어!\n다시 도전해보는거야?',
+                                  '좋아!',
+                                  true,
+                                  false,
+                                  false,
+                                  true,
+                                  onCancel: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  onDelete: () {},
+                                  onSignOut: () {},
+                                  onSuccess: () {
+                                    _mandaProgress(
+                                        int.parse(widget.id), "IN_PROGRESS");
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MyGoal(),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                              if (_selectedStatus == '달성 실패') {
+                                PopupDialog.show(
+                                  context,
+                                  '이 목표는\n달성 실패인거야?',
+                                  '아쉽다..',
+                                  true,
+                                  false,
+                                  false,
+                                  true,
+                                  onCancel: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  onDelete: () {},
+                                  onSignOut: () {},
+                                  onSuccess: () {
+                                    _mandaProgress(
+                                        int.parse(widget.id), "FAIL");
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MyGoal(),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            });
+                          },
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      dday < 0 ? 'D+${dday * -1}' : 'D-$dday',
-                      style: TextStyle(
-                        color: Color(0xff5F5F5F),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ),
+                  ],
                 ),
+
+                //수정 버튼
                 NewCustomIconButton(() {
                   Navigator.push(
                       context,
@@ -197,66 +295,86 @@ class MyGoalDetailState extends State<MyGoalDetail> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Center(
-                child: Text(
-                  name,
-                  style: TextStyle(
-                      fontFamily: "Pretendard",
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               Container(
-                padding: const EdgeInsets.all(10), // 내부 여백 조정 가능
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xff2A2A2A), // 전체 배경색 설정
-                  borderRadius: BorderRadius.circular(10), // 모서리 둥글게
+                  color: const Color(0xff2B2B2B),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (goalImage.isEmpty) ...[
-                      Image.asset(
-                          'assets/img/if_no_img.png', 
-                          fit: BoxFit.cover,
-                          //width: 400,
-                          //height: 100,
+                    Row(
+                      children: [
+                        //목표 이름
+                        Text(
+                          name,
+                          style: TextStyle(
+                              fontFamily: "Pretendard",
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600),
                         ),
-                     
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        //디데이 태그
+                        DdayTag(dday).ddayTag(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 17,
+                    ),
+                    //이미지
+                    if (goalImage.isEmpty) ...[
+                      SizedBox(
+                        height: 105,
+                        width: currentWidth < 600 ? 290 : double.infinity,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              width: 105,
+                              height: 105,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 53, 53, 53),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            );
+                          },
+                        ),
+                      )
                     ] else ...[
                       SizedBox(
-                        height: 140,
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, 
-                            childAspectRatio: 1 / 1,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                          ),
-                          itemCount: goalImage.length.clamp(0, 3),
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
+                        height: 105,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
                           itemBuilder: (context, index) {
                             if (index < goalImage.length) {
-                              return ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(15), // 둥근 네모 형태로 설정
-                                child: Image.network(
-                                  goalImage[index],
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Center(
-                                      child: Text(
-                                        '이미지 로드 실패',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    );
-                                  },
+                              return Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: Image.network(
+                                    goalImage[index],
+                                    fit: BoxFit.cover,
+                                    width: 105,
+                                    height: 105,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Center(
+                                        child: Text(
+                                          '이미지 로드 실패',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               );
                             } else {
@@ -270,310 +388,160 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                     ],
                     if (mandaDescription.isNotEmpty)
                       Container(
-                        padding: const EdgeInsets.all(15),
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                         child: Text(
-                                mandaDescription,
-                                style: const TextStyle(
-                                    height: 1.5,
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                       
+                          mandaDescription,
+                          style: const TextStyle(
+                              height: 1.5,
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                   ],
                 ),
               ),
+
+              //통계
               const SizedBox(
-                height: 20,
+                height: 90,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
-                    height: currentWidth < 600 ? 30 : 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color(0xff303030)),
-                    child: Center(
-                      child: DropdownButton<String>(
-                        underline: const SizedBox.shrink(),
-                        dropdownColor: const Color(0xff303030),
-                        iconEnabledColor: const Color(0xff646464),
-                        value: _selectedStatus,
-                        items: _status
-                            .map(
-                              (e) => DropdownMenuItem<String>(
-                                value: e,
-                                child: Center(
-                                  child: Text(e),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: currentWidth < 600 ? 11 : 16,
-                            fontWeight: FontWeight.w500),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedStatus = value;
-                            if (_selectedStatus == '달성 완료') {
-                              PopupDialog.show(
-                                context,
-                                '이 목표 정말 \n달성 완료한거야?',
-                                '대박!',
-                                true, // cancel
-                                false, // delete
-                                false, // signout
-                                true, //success
-                                onCancel: () {
-                                  // 취소 버튼을 눌렀을 때 실행할 코드
-                                  Navigator.of(context).pop();
-                                },
-
-                                onDelete: () {
-                                  // 삭제 버튼을 눌렀을 때 실행할 코드
-                                },
-                                onSignOut: () {
-                                  // 탈퇴 버튼을 눌렀을 때 실행할 코드
-                                },
-                                onSuccess: () {
-                                  _mandaProgress(
-                                      int.parse(widget.id), "SUCCESS");
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          EventPage(
-                                            domino: successNum,
-                                            goalName: name,),
-                                    ),
-                                  );
-                                },
-                              );
-                            }
-                            if (_selectedStatus == '진행 중') {
-                              PopupDialog.show(
-                                context,
-                                '잘 생각했어!\n다시 도전해보는거야?',
-                                '좋아!',
-                                true, // cancel
-                                false, // delete
-                                false, // signout
-                                true, //success
-                                onCancel: () {
-                                  // 취소 버튼을 눌렀을 때 실행할 코드
-                                  Navigator.of(context).pop();
-                                },
-
-                                onDelete: () {
-                                  // 삭제 버튼을 눌렀을 때 실행할 코드
-                                },
-                                onSignOut: () {
-                                  // 탈퇴 버튼을 눌렀을 때 실행할 코드
-                                },
-                                onSuccess: () {
-                                  _mandaProgress(
-                                      int.parse(widget.id), "IN_PROGRESS");
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const MyGoal(),
-                                    ),
-                                  );
-                                },
-                              );
-                            }
-                            if (_selectedStatus == '달성 실패') {
-                              PopupDialog.show(
-                                context,
-                                '이 목표는\n달성 실패인거야?',
-                                '아쉽다..',
-                                true, // cancel
-                                false, // delete
-                                false, // signout
-                                true, //success
-                                onCancel: () {
-                                  // 취소 버튼을 눌렀을 때 실행할 코드
-                                  Navigator.of(context).pop();
-                                },
-
-                                onDelete: () {
-                                  // 삭제 버튼을 눌렀을 때 실행할 코드
-                                },
-                                onSignOut: () {
-                                  // 탈퇴 버튼을 눌렀을 때 실행할 코드
-                                },
-                                onSuccess: () {
-                                  _mandaProgress(int.parse(widget.id), "FAIL");
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const MyGoal(),
-                                    ),
-                                  );
-                                },
-                              );
-                            }
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+              //원형 그래프
+              Center(
+                child: CustomPaint(
+                  size: const Size(60, 60),
+                  painter: PieChart(
+                      successPercentage: successRate,
+                      inProgressPercentage: inProgressRate,
+                      failPercentage: failedRate,
+                      color: color),
+                ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(
+                height: 90,
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 17),
+                decoration: BoxDecoration(
+                  color: const Color(0xff2B2B2B),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: CustomPaint(
-                          size: const Size(60, 60),
-                          painter: PieChart(
-                              successPercentage: successRate, // int로 변환
-                              inProgressPercentage: inProgressRate, // int로 변환
-                              failPercentage: failedRate,
-                              color: color),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 85,
-                      ),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xff2A2A2A),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '할 일 달성 통계',
-                                      style: TextStyle(
-                                          color: Color(0xffAAAAAA),
-                                          fontSize:
-                                              14,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(height: 14),
-                                    statistics(
-                                        rate: successRate,
-                                        num: successNum,
-                                        icon: Icons.circle_outlined,
-                                        iconColor: Color(widget.colorValue)),
-                                    const SizedBox(height: 6),
-                                    statistics(
-                                        rate: inProgressRate,
-                                        num: inProgressNum,
-                                        icon: Icons.change_history_outlined,
-                                        iconColor: Color(0xff8C8C8C)),
-                                    const SizedBox(height: 6),
-                                    statistics(
-                                        rate:
-                                            failedRate == 100 ? 0 : failedRate,
-                                        num: failedNum,
-                                        icon: Icons.clear_outlined,
-                                        iconColor: Colors.black)
-                                  ]),
-                            ),
+                          Icon(
+                            Icons.bar_chart,
+                            color: Color(0xffAAAAAA),
+                            size: 20,
                           ),
-                          SizedBox(width: 7),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xff2A2A2A),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '나의 도미노',
-                                        style: TextStyle(
-                                            color: Color(0xffAAAAAA),
-                                            fontSize:
-                                                14,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _updateIconPosition();
-                                          _showPopupMessage(
-                                              context, '동그라미로만 도미노를 만들 수 있어요.');
-                                        },
-                                        child: Icon(
-                                          Icons.help,
-                                          key: _iconKey,
-                                          color: const Color.fromARGB(
-                                              255, 57, 57, 57),
-                                          size: 17,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 14),
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/img/domino.png',
-                                        width: currentWidth < 600 ? 25 : 40,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        'x',
-                                        style: TextStyle(
-                                            color: Color(0xffAAAAAA),
-                                            fontSize:
-                                                currentWidth < 600 ? 16 : 26,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        '$successNum',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize:
-                                                20,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '할 일 달성 통계',
+                            style: TextStyle(
+                                color: Color(0xffAAAAAA),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  )
-                ],
+                      SizedBox(height: 15),
+                      statistics(
+                          rate: successRate,
+                          num: successNum,
+                          text: '달성 완료',
+                          textColor: Color(widget.colorValue)),
+                      const SizedBox(height: 8),
+                      statistics(
+                          rate: inProgressRate,
+                          num: inProgressNum,
+                          text: '달성 중간',
+                          textColor: Color(0xffC7C7C7)),
+                      const SizedBox(height: 8),
+                      statistics(
+                          rate: failedRate == 100 ? 0 : failedRate,
+                          num: failedNum,
+                          text: '달성 실패',
+                          textColor: Color(0xff5E5E5E)),
+                      const SizedBox(height: 10),
+                      Divider(
+                        color: mainGrey,
+                      ),
+                      const SizedBox(height: 10),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        //나의 도미노
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.bar_chart,
+                                    color: Color(0xffAAAAAA),
+                                    size: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    '나의 도미노',
+                                    style: TextStyle(
+                                        color: Color(0xffAAAAAA),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _updateIconPosition();
+                                  _showPopupMessage(context,
+                                      '도미노는 ‘달성완료’ 시에만 만들어지며,\n목표를 달성했을 때 이 도미노들로 \n목표를 쓰러뜨리게 돼요!');
+                                },
+                                child: Icon(
+                                  Icons.help,
+                                  key: _iconKey,
+                                  color: Color.fromARGB(255, 107, 107, 107),
+                                  size: 17,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Image.asset(
+                                'assets/img/domino.png',
+                                width: 27,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                'x',
+                                style: TextStyle(
+                                    color: Color(0xffAAAAAA),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                '$successNum',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ]),
               ),
             ],
           ),
@@ -582,60 +550,60 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     );
   }
 
-  Widget statistics(
-      {required int rate,
-      required int num,
-      required IconData icon,
-      required Color iconColor}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Icon(
-          icon,
-          color: mainRed,
-          size: 20,
+  Widget statistics({
+  required int rate,
+  required int num,
+  required String text,
+  required Color textColor,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(width: 10),
+          Text(
+            '$rate%',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Spacer(),
+          Text(
+            '$num개',
+            style: TextStyle(
+              color: textColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 6),
+      // 막대 그래프
+      ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: LinearProgressIndicator(
+          value: rate / 100.0,
+          backgroundColor: const Color(0xff444444),
+          valueColor: AlwaysStoppedAnimation<Color>(textColor),
+          minHeight: 10,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              '$rate',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600),
-            ),
-            Text(
-              ' %',
-              style: TextStyle(
-                  color: Color(0xffAAAAAA),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              '$num',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600),
-            ),
-            Text(
-              ' 개',
-              style: TextStyle(
-                  color: Color(0xffAAAAAA),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+      ),
+      const SizedBox(height: 6),
+    ],
+  );
+}
 
   void _updateIconPosition() {
     // 아이콘의 현재 위치를 계산
@@ -669,14 +637,14 @@ class MyGoalDetailState extends State<MyGoalDetail> {
             ),
             // 팝업 메시지 위치 설정
             Positioned(
-              top: _iconPosition.dy - 40, // 아이콘 아래 위치
-              left: _iconPosition.dx - 210,
+              top: _iconPosition.dy - -20, // 아이콘 아래 위치
+              left: _iconPosition.dx - 230,
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 64, 64, 64),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
                       BoxShadow(
@@ -690,7 +658,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                     message,
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.white,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500
                     ),
                   ),
                 ),

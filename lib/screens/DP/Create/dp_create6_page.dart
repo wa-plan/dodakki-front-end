@@ -1,4 +1,5 @@
 import 'package:domino/screens/DP/dp_main_page.dart';
+import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +42,7 @@ class _CompletePageState extends State<CompletePage> {
                             Text(
                               "플랜 만들기 성공!",
                               style: TextStyle(
-                                fontSize: currentWidth < 600 ? 16 : 25,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
                               ),
@@ -51,7 +52,7 @@ class _CompletePageState extends State<CompletePage> {
                               "이제 목표를 향해\n달려볼까요?",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: currentWidth < 600 ? 14 : 23,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
                               ),
@@ -69,7 +70,7 @@ class _CompletePageState extends State<CompletePage> {
                 child: Center(
                   child: Image.asset(
                     "assets/img/Complete.png", 
-                    height: currentHeight*0.4))),
+                    height: currentHeight*0.35))),
         
                
             ],
@@ -79,32 +80,13 @@ class _CompletePageState extends State<CompletePage> {
             //다음 버튼
             Padding(
           padding: const EdgeInsets.fromLTRB(22, 0, 22, 22),
-          child: SizedBox(
-            width: double.infinity,
-            child: TextButton(
-                onPressed: () {
+          child: LoginButton('달려가기!!', () {
                   Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const DPMain()),
                         );
                       
-                },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  backgroundColor: mainRed,
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(currentWidth < 600 ? 6 : 8),
-                  ),
-                ),
-                child: Text(
-                  '네!',
-                  style: TextStyle(
-                      color: backgroundColor,
-                      fontSize: currentWidth < 600 ? 15 : 21,
-                      fontWeight: FontWeight.w700),
-                )),
-          ),
+                }).loginButton()
         ));
   }
 }

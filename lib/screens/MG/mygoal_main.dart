@@ -429,7 +429,7 @@ class _MyGoalState extends State<MyGoal> {
               MGSubTitle('쓰러뜨린 목표').mgSubTitle(context),
               const SizedBox(height: 15),
               if (successIDs.isEmpty)
-              BlankData2("함께 목표를 쓰러뜨려봐요!").blankData2()                
+              BlankData2("함께 목표를 쓰러뜨려봐요").blankData2()                
               else
                 Column(
                   children: [
@@ -511,7 +511,7 @@ class _MyGoalState extends State<MyGoal> {
               MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
               const SizedBox(height: 15),
               if (failedIDs.isEmpty)
-              BlankData2("쓰러뜨리지 못한 목표가 없어요~!").blankData2()    
+              BlankData2("쓰러뜨리지 못한 목표가 없어요").blankData2()    
               else
                 Column(
                   children: [

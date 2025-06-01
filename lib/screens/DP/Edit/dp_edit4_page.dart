@@ -2,6 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/screens/DP/Edit/dp_edit5_page.dart';
 import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/color_Grid23.dart';
 import 'package:domino/widgets/DP/color_Grid2.dart';
@@ -223,7 +225,7 @@ class EditColorPageState extends State<EditColorPage> {
             padding: appBarPadding,
             child: Row(
               children: [
-                CustomIconButton(() {
+                CustomBackButton(() {
                   PopupDialog.show(
                       context,
                       '지금 나가면,\n작성한 내용이 사라져!',
@@ -277,10 +279,15 @@ class EditColorPageState extends State<EditColorPage> {
 
                     Navigator.pop(context);
                   });
-                }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                    .customIconButton(),
-                const SizedBox(width: 10),
-                DPTitleText('플랜 수정하기', currentWidth).dPTitleText(),
+                })
+                    .customBackButton(),
+                const SizedBox(width: 15),
+                //페이지 타이틀
+                PageTitle('색깔 수정하기').pageTitle(),
+                const Spacer(),
+
+                //프로그레스 바 (from style_tutorial.dart)
+                ProgressBar(2, 2).progressBar()
               ],
             ),
           ),
@@ -295,21 +302,13 @@ class EditColorPageState extends State<EditColorPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: currentWidth < 600 ? 15 : 20),
-                        DPGuideText('나만의 스타일로 만다라트를 꾸며요.', currentWidth)
-                            .dPGuideText(),
-                        SizedBox(height: currentWidth < 600 ? 14 : 20),
+                        SizedBox(height: 10),
                         Center(
-                          child: Container(
-                            width: currentHeight * 0.4,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(3),
-                            ),
+                          child: SizedBox(
+                            width: currentHeight * 0.45,
+                            
                             child: GridView(
-                              shrinkWrap: true, // GridView를 자식으로 설정
+                              shrinkWrap: true, 
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -371,15 +370,12 @@ class EditColorPageState extends State<EditColorPage> {
                                     decoration: BoxDecoration(
                                       border: isDetailGoalEmpty
                                           ? Border.all(
-                                              color: selectIndex == index
-                                                  ? Colors.red
-                                                  : backgroundColor,
-                                              width: 1,
+                                              color: backgroundColor,
                                             )
                                           : Border.all(
                                               color: selectIndex == index
                                                   ? const Color.fromARGB(
-                                                      255, 125, 125, 125)
+                                                      255, 204, 204, 204)
                                                   : backgroundColor,
                                               width: 1,
                                             ),
@@ -405,7 +401,7 @@ class EditColorPageState extends State<EditColorPage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 50,
                         ),
                         Center(
                           child: Container(
@@ -413,7 +409,7 @@ class EditColorPageState extends State<EditColorPage> {
                                   vertical: 15, horizontal: 15),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(3),
-                                  color: const Color(0xff2A2A2A)),
+                                  color: const Color.fromARGB(255, 39, 39, 39)),
                               height: 130,
                               width: 400,
                               child: GridView(
@@ -421,8 +417,8 @@ class EditColorPageState extends State<EditColorPage> {
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 6,
                                   crossAxisSpacing:
-                                      currentWidth < 600 ? 20 : 23,
-                                  mainAxisSpacing: currentWidth < 600 ? 20 : 23,
+                                      20,
+                                  mainAxisSpacing: 20,
                                 ),
                                 children: List.generate(colors.length, (index) {
                                   return GestureDetector(
@@ -439,15 +435,15 @@ class EditColorPageState extends State<EditColorPage> {
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(3),
+                                                BorderRadius.circular(6),
                                             color: colors[index],
                                           ),
                                         ),
                                         if (selectColorIndex == index + 1)
                                           Icon(
                                             Icons.check_circle_rounded,
-                                            color: const Color(0xff303030),
-                                            size: currentWidth < 600 ? 20 : 22,
+                                            color: backgroundColor,
+                                            size: 20,
                                           ),
                                       ],
                                     ),
@@ -463,81 +459,89 @@ class EditColorPageState extends State<EditColorPage> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      NewButton(Colors.black, Colors.white, '이전', () {
-                        Navigator.pop(context);
-                      }, currentWidth)
-                          .newButton(),
-                      NewButton(Colors.black, Colors.white, '완료', () async {
-                        // 👉 로딩 팝업 띄우기
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) => AlertDialog(
-                            backgroundColor: backgroundColor,
-                            content: Row(
-                              children: const [
-                                CircularProgressIndicator(color: mainRed),
-                                SizedBox(width: 20),
-                                Text("만다라트를 수정하는 중이야..!",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600)),
-                              ],
+                      SizedBox(
+                        width: 90,
+                        height: 45,
+                        child: NewButton(Colors.black, Colors.white, '이전', () {
+                          Navigator.pop(context);
+                        }, currentWidth)
+                            .newButton(),
+                      ),
+                      SizedBox(
+                        width: 90,
+                        height: 45,
+                        child: LoginButton('완료', () async {
+                          // 👉 로딩 팝업 띄우기
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => AlertDialog(
+                              backgroundColor: backgroundColor,
+                              content: Row(
+                                children: const [
+                                  CircularProgressIndicator(color: mainRed),
+                                  SizedBox(width: 20),
+                                  Text("만다라트를 수정하는 중이야..!",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600)),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-
-                        // 1. Second Goal 수정
-                        final secondGoalSuccess = await _editSecondGoal();
-
-                        if (secondGoalSuccess) {
-                          // 2. Goal Color 수정
-                          final goalColorSuccess = await _editColor();
-
-                          if (goalColorSuccess) {
-                            // 3. Third Goal 수정
-                            final thirdGoalSuccess = await _editThirdGoal();
-
-                            if (thirdGoalSuccess) {
-                              // 4. 상태 초기화
-                              for (int i = 0; i < 9; i++) {
-                                context
-                                    .read<SaveInputtedDetailGoalModel>()
-                                    .updateDetailGoal(i.toString(), "");
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                context.read<GoalColor>().updateGoalColor(
-                                    i.toString(), const Color(0xff929292));
-                              }
-
-                              for (int i = 0; i < 9; i++) {
-                                for (int j = 0; j < 9; j++) {
+                          );
+                        
+                          // 1. Second Goal 수정
+                          final secondGoalSuccess = await _editSecondGoal();
+                        
+                          if (secondGoalSuccess) {
+                            // 2. Goal Color 수정
+                            final goalColorSuccess = await _editColor();
+                        
+                            if (goalColorSuccess) {
+                              // 3. Third Goal 수정
+                              final thirdGoalSuccess = await _editThirdGoal();
+                        
+                              if (thirdGoalSuccess) {
+                                // 4. 상태 초기화
+                                for (int i = 0; i < 9; i++) {
                                   context
-                                      .read<SaveInputtedActionPlanModel>()
-                                      .updateActionPlan(i, j.toString(), "");
+                                      .read<SaveInputtedDetailGoalModel>()
+                                      .updateDetailGoal(i.toString(), "");
                                 }
+                        
+                                for (int i = 0; i < 9; i++) {
+                                  context.read<GoalColor>().updateGoalColor(
+                                      i.toString(), const Color(0xff929292));
+                                }
+                        
+                                for (int i = 0; i < 9; i++) {
+                                  for (int j = 0; j < 9; j++) {
+                                    context
+                                        .read<SaveInputtedActionPlanModel>()
+                                        .updateActionPlan(i, j.toString(), "");
+                                  }
+                                }
+                        
+                                // ✅ 로딩 팝업 닫기 후 페이지 이동
+                                Navigator.pop(context); // 로딩 팝업 닫기
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const EditCompletePage(),
+                                  ),
+                                );
+                                return;
                               }
-
-                              // ✅ 로딩 팝업 닫기 후 페이지 이동
-                              Navigator.pop(context); // 로딩 팝업 닫기
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const EditCompletePage(),
-                                ),
-                              );
-                              return;
                             }
                           }
-                        }
-
-                        // ❌ 실패했을 경우에도 팝업 닫기
-                        Navigator.pop(context);
-                      }, currentWidth)
-                          .newButton(),
+                        
+                          // ❌ 실패했을 경우에도 팝업 닫기
+                          Navigator.pop(context);
+                        }, )
+                            .loginButton(),
+                      ),
                     ]),
               ],
             )));

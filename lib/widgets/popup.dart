@@ -30,7 +30,6 @@ class PopupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
-    // Determine which button to display based on the flags
     List<Widget> buttons = [];
     if (delete) {
       buttons.add(
@@ -126,7 +125,7 @@ class PopupDialog extends StatelessWidget {
                     content,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: currentWidth < 600 ? 16 : 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                         height: 1.7),
                   ),

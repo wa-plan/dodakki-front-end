@@ -41,7 +41,7 @@ class _EditCompletePageState extends State<EditCompletePage> {
                             Text(
                               "플랜 수정하기 성공!",
                               style: TextStyle(
-                                fontSize: currentWidth < 600 ? 16 : 25,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
                               ),
@@ -51,7 +51,7 @@ class _EditCompletePageState extends State<EditCompletePage> {
                               "새로운 플랜으로 다시\n달려볼까요?",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: currentWidth < 600 ? 14 : 23,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
                               ),

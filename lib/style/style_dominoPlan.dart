@@ -27,7 +27,7 @@ class DdayTag {
                     dday < 0 ? 'D+${dday * -1}' : 'D-$dday',
                     style: TextStyle(
                       color: Color.fromARGB(255, 105, 105, 105),
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -87,5 +87,36 @@ class DPTitleText {
             color: Colors.white,
             fontSize: 21,
             fontWeight: FontWeight.w600));
+  }
+}
+
+//DPMainGoal
+class DPMainGoal {
+  final String text;
+  final Color color;
+  final double currentHeight;
+  final double currentWidth;
+
+  DPMainGoal(this.text, this.color, this.currentHeight, this.currentWidth);
+
+  Widget dpMainGoal() {
+    return Container(
+        height: 43,
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(3),
+          color: color,
+          
+        ),
+        child: Text(
+            textAlign: TextAlign.center,
+            text,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            )));
   }
 }

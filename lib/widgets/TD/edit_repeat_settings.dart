@@ -51,7 +51,6 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Row(
@@ -60,7 +59,7 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
             Row(
               children: [
                 Transform.scale(
-                  scale: 1,
+                  scale: 1.2,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
                     fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -88,15 +87,14 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                 Text(
                   '매일',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
             Row(
               children: [
                 Transform.scale(
-                  scale: 1,
+                  scale: 1.2,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
                     fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -124,15 +122,14 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                 Text(
                   '매주',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
             Row(
               children: [
                 Transform.scale(
-                  scale: 1,
+                  scale: 1.2,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
                     fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -162,15 +159,14 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                 Text(
                   '격주',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
             Row(
               children: [
                 Transform.scale(
-                  scale: 1,
+                  scale: 1.2,
                   child: Checkbox(
                     visualDensity: VisualDensity.compact,
                     fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -200,8 +196,7 @@ class EditRepeatSettingsState extends State<EditRepeatSettings> {
                 Text(
                   '매월',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
                 ),
               ],
             ),

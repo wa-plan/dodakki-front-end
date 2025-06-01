@@ -20,11 +20,13 @@ class MandalartGrid5 extends StatefulWidget {
 }
 
 class _MandalartGrid5 extends State<MandalartGrid5> {
+  
   @override
   Widget build(BuildContext context) {
     final currentHeight = MediaQuery.of(context).size.height;
+    final currentWidth = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: currentHeight * 0.4,
+      width: currentHeight * 0.53,
       child: GridView(
         shrinkWrap: true, // GridView를 자식으로 설정
         physics: const NeverScrollableScrollPhysics(),
@@ -32,13 +34,13 @@ class _MandalartGrid5 extends State<MandalartGrid5> {
             crossAxisCount: 3, crossAxisSpacing: 5, mainAxisSpacing: 5),
         children: [
           for (int i = 0; i < 4; i++)
-            DPGrid2(i, widget.mandalart, widget.secondGoals, 15, null)
+            DPGrid2(i, widget.mandalart, widget.secondGoals, 15, null, currentWidth)
                 .dpGrid2(),
           DPGrid1(widget.mandalart,
                   ColorTransform(widget.firstColor).colorTransform(), 15)
               .dpGrid1(),
           for (int i = 4; i < 8; i++)
-            DPGrid2(i, widget.mandalart, widget.secondGoals, 15, null)
+            DPGrid2(i, widget.mandalart, widget.secondGoals, 15, null, currentWidth)
                 .dpGrid2(),
         ],
       ),

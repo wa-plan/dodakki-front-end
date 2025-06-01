@@ -139,7 +139,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                         SizedBox(height: 15),
 
                         //아이디 찾기 버튼
-                        LoginButton('찾기', () {
+                        LoginButton('아이디 찾기', () {
                           if (_formKey.currentState!.validate()) {
                             if (_idEmailController.text.isNotEmpty &&
                                 _phoneController.text.isNotEmpty) {
@@ -155,7 +155,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                             : SizedBox.shrink(),
                       ],
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 40),
 
                     FieldTitle('비밀번호 찾기').fieldTitle(),
                     SizedBox(height: 15),
@@ -185,7 +185,7 @@ class _LoginregisterFindPasswordState extends State<LoginregisterFindPassword> {
                           SizedBox(height: 15),
 
                           //비밀번호 찾기 버튼
-                          LoginButton('찾기', () {
+                          LoginButton('비밀번호 찾기', () {
                             if (_formKey2.currentState!.validate()) {
                               if (_userIdController.text.isNotEmpty &&
                                   _pwEmailController.text.isNotEmpty) {
