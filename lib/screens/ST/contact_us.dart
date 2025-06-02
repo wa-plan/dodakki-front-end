@@ -1,3 +1,4 @@
+import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -23,16 +24,19 @@ class _ContactUsState extends State<ContactUs> {
           padding: appBarPadding,
           child: Row(
             children: [
-              NewCustomIconButton(() {
-                Navigator.of(context).pop();
-              }, Icons.arrow_back_ios_rounded, currentWidth, 12)
-                  .newCustomIconButton(),
-              SizedBox(width: currentWidth < 600 ? 10 : 14),
-              Text('문의하기',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 17 : 27,
-                      fontWeight: FontWeight.w600)),
+              //나가기 버튼
+              CustomBackButton(
+                () {
+                  Navigator.of(context).pop();
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+
+              //페이지 타이틀
+              PageTitle('문의하기').pageTitle(),
+              const Spacer(),
+
+              
             ],
           ),
         ),
@@ -62,16 +66,16 @@ class _ContactUsState extends State<ContactUs> {
                           '편하게 물어봐:)',
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: currentWidth < 600 ? 15 : 20),
+                              fontSize: 17),
                         ),
                         const SizedBox(height: 15),
                         Text(
                           '궁금한 점이나\n개선하고 싶은 점이 있다면\n내 이메일은 24시간 열려있어!',
                           style: TextStyle(
-                              color: Color(0xff6C6C6C),
+                              color: Color.fromARGB(255, 169, 169, 169),
                               fontWeight: FontWeight.w500,
                               height: 1.7,
-                              fontSize: currentWidth < 600 ? 13.5 : 18),
+                              fontSize: 15),
                         ),
                         Spacer(),
                         Container(
@@ -85,9 +89,9 @@ class _ContactUsState extends State<ContactUs> {
                                       16)
                                   .newCustomIconButton(),
                                   SizedBox(width: 10),
-                              Text(widget.email,
+                              Text('dodakki123@gmail.com',
                                   style: TextStyle(
-                                      fontSize: currentWidth < 600 ? 12 : 16,
+                                      fontSize: 14,
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600)),
                             ],

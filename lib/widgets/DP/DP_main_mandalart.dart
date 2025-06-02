@@ -19,6 +19,7 @@ class MandalartGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return SizedBox(
       width: 250,
       child: GridView(
@@ -41,7 +42,7 @@ class MandalartGrid extends StatelessWidget {
                               ColorTransform(firstColor).colorTransform(), 8)
                           .dpGrid1()
                     else
-                      DPGrid2(i, mandalart, secondGoals, 8, null).dpGrid2()
+                      DPGrid2(i, mandalart, secondGoals, 8, null, currentWidth).dpGrid2()
                 ],
               ),
             );
@@ -54,7 +55,7 @@ class MandalartGrid extends StatelessWidget {
                 mainAxisSpacing: 0.5,
                 children: List.generate(9, (i) {
                   if (i == 4) {
-                    return DPGrid2(j, mandalart, secondGoals, 8, null)
+                    return DPGrid2(j, mandalart, secondGoals, 8, null, currentWidth)
                         .dpGrid2();
                   } else {
                     return DPGrid3(j, i, mandalart, secondGoals, 8, null)

@@ -307,12 +307,12 @@ class PageTitle {
 }
 
 //설명문 및 인사말
-class Description {
+class LoginDescription {
   final String text;
 
-  Description(this.text);
+  LoginDescription(this.text);
 
-  Widget description() {
+  Widget loginDescription() {
     return Text(
       text,
       style: const TextStyle(
@@ -385,6 +385,7 @@ class DropDownDescription {
         shape: const Border(),
         title: Text(
           title,
+          textAlign: TextAlign.left,
           style: TextStyle(
             color: titleColor,
             fontSize: 15,

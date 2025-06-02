@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/screens/DP/Create/dp_create2_page.dart';
 import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_todaysDomino.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_create4_widget.dart';
 import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
@@ -99,6 +101,11 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
             _showAIPopup(context, selectedDetailGoal);
           }
         },
+        thirdGoal:  context
+                                          .watch<SaveInputtedDetailGoalModel>()
+                                          .inputtedDetailGoal[
+                                      '$selectedDetailGoal'] ??
+                                  '',
       ),
     );
   }
@@ -121,14 +128,17 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
+              //나가기 버튼
+              CustomBackButton(() {
                 context.read<TestInputtedActionPlanModel>().resetActionPlans();
                 Navigator.pop(context);
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
-              const SizedBox(width: 10),
-              DPTitleText('플랜 만들기', currentWidth).dPTitleText(),
+              },)
+                  .customBackButton(),
+              const SizedBox(width: 15),
+              //페이지 타이틀
+              PageTitle('제3목표 작성').pageTitle(),
               const Spacer(),
+              //AI 버튼
               TextButton(
                 onPressed: () async {
                   setState(() {
@@ -143,25 +153,26 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                 style: TextButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
-                  backgroundColor: const Color(0xff303030),
+                  backgroundColor: const Color.fromARGB(255, 31, 31, 31),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
                 child: _isLoading
-                    ? const CircularProgressIndicator() // 로딩 중일 때 로딩 인디케이터 표시
+                    ? const CircularProgressIndicator(
+                        color: mainRed,
+                      ) // 로딩 중일 때 로딩 인디케이터 표시
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset('assets/img/AIIcon.png',
-                              height: currentWidth < 600 ? 15 : 18),
-                          SizedBox(width: currentWidth < 600 ? 4 : 7),
+                          Image.asset('assets/img/AIIcon.png', height: 20),
+                          SizedBox(width: 5),
                           Text(
-                            'Ask AI',
+                            'Ask 도민호',
                             style: TextStyle(
-                              fontSize: currentWidth < 600 ? 13 : 16,
+                              fontSize: 14,
                               color: Colors.white,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -180,37 +191,23 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(height: currentWidth < 600 ? 15 : 20),
-                    DPGuideText("세부 목표를 위한 구체적인 계획이에요.", currentWidth)
-                        .dPGuideText(),
-                    SizedBox(height: currentWidth < 600 ? 14 : 20),
-                    DPMainGoal(
-                            context
-                                .watch<SelectFinalGoalModel>()
-                                .selectedFinalGoal,
-                            ColorTransform(widget.firstColor).colorTransform(),
-                            currentHeight,
-                            currentWidth)
-                        .dpMainGoal(),
-                    SizedBox(height: currentWidth < 600 ? 20 : 15),
+                    SizedBox(height: 30),
                     Center(
                       child: SizedBox(
-                        width: currentHeight * 0.4,
+                        width: currentHeight * 0.53,
                         child: GridView.builder(
-                          shrinkWrap: true, // GridView를 자식으로 설정
+                          shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
-                            crossAxisSpacing: 1,
-                            mainAxisSpacing: 1,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5,
                           ),
                           itemCount: 9,
                           itemBuilder: (context, index) {
                             if (index == 4) {
-                              // 안전한 null 처리
                               final inputtedDetailGoal = context
                                           .watch<SaveInputtedDetailGoalModel>()
                                           .inputtedDetailGoal[
@@ -220,23 +217,21 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                               return Container(
                                 width: 80,
                                 margin: const EdgeInsets.all(1.0),
+                                padding: const EdgeInsets.all(7.0),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(3),
+                                  borderRadius: BorderRadius.circular(6),
                                   color: const Color(0xff929292),
                                 ),
                                 child: Center(
                                   child: AutoSizeText(
-                                      maxLines: 3, // 최대 줄 수 (필요에 따라 변경 가능)
-                                      minFontSize: 6,
-                                      maxFontSize: 16, // 최소 글씨 크기
-                                      overflow: TextOverflow
-                                          .ellipsis, // 내용이 너무 길 경우 생략 표시
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
                                       inputtedDetailGoal,
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
-                                        color: backgroundColor,
-                                        fontWeight: FontWeight.w600,
-                                      )),
+                                          color: backgroundColor,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15)),
                                 ),
                               );
                             } else {
@@ -249,58 +244,66 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                         ),
                       ),
                     ),
-                    SizedBox(height: currentWidth < 600 ? 15 : 25),
-                    Description2(widget.firstColor, currentWidth)
-                        .description2(),
-                    SizedBox(height: currentWidth < 600 ? 15 : 25),
+                    SizedBox(height: 30),
+                    Description2(widget.firstColor).description2(),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
-            
           ],
         ),
       ),
-      bottomNavigationBar: Padding(padding: fullPadding, child: 
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              NewButton(Colors.black, Colors.white, '취소', () {
-                // TestInputtedActionPlanModel 초기화
-                context.read<TestInputtedActionPlanModel>().resetActionPlans();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DPcreate99Page(
-                            firstColor: widget.firstColor,
-                            mainGoalId: widget.mainGoalId,
-                          )),
-                );
-              }, currentWidth)
-                  .newButton(),
-              NewButton(Colors.black, Colors.white, '완료', () {
-                // 모델 가져오기
-                final testModel = context.read<TestInputtedActionPlanModel>();
-                final saveModel = context.read<SaveInputtedActionPlanModel>();
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              //취소
+          SizedBox(
+            width: 90,
+            height: 45,
+            child: NewButton(Colors.black, Colors.white, '취소', () {
+              context.read<TestInputtedActionPlanModel>().resetActionPlans();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DPcreate99Page(
+                          firstColor: widget.firstColor,
+                          mainGoalId: widget.mainGoalId,
+                        )),
+              );
+            }, currentWidth)
+                .newButton(),
+          ),
+          //저장
+          SizedBox(
+            width: 90,
+            height: 45,
+            child: NewButton(Colors.black, Colors.white, '완료', () {
+              final testModel = context.read<TestInputtedActionPlanModel>();
+              final saveModel = context.read<SaveInputtedActionPlanModel>();
 
-                // TestInputtedActionPlanModel의 데이터를 SaveInputtedActionPlanModel로 복사
-                for (int goalId = 0;
-                    goalId < testModel.inputtedActionPlan.length;
-                    goalId++) {
-                  testModel.inputtedActionPlan[goalId].forEach((key, value) {
-                    saveModel.updateActionPlan(goalId, key, value);
-                  });
-                }
+              for (int goalId = 0;
+                  goalId < testModel.inputtedActionPlan.length;
+                  goalId++) {
+                testModel.inputtedActionPlan[goalId].forEach((key, value) {
+                  saveModel.updateActionPlan(goalId, key, value);
+                });
+              }
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DPcreate99Page(
-                            firstColor: widget.firstColor,
-                            mainGoalId: widget.mainGoalId,
-                          )),
-                );
-              }, currentWidth)
-                  .newButton(),
-            ]),),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DPcreate99Page(
+                          firstColor: widget.firstColor,
+                          mainGoalId: widget.mainGoalId,
+                        )),
+              );
+            }, currentWidth)
+                .newButton(),
+          ),
+        ]),
+      ),
     );
   }
 }

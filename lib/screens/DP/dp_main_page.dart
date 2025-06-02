@@ -232,20 +232,8 @@ class _DPMainState extends State<DPMain> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: appBarPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DPTitleText('도미노 플랜', currentWidth).dPTitleText(),
-              //만다라트 생성 버튼
-              Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                DPIconButton(() async {
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
                   //초기화 로직
                   for (int i = 0; i < 9; i++) {
                     context
@@ -293,12 +281,23 @@ class _DPMainState extends State<DPMain> {
                       ),
                     ),
                   );
-                }, Icons.add)
-                    .dPIconButton(),
-              ],
-            ),
-            ],
-          ),
+                },
+        backgroundColor: mainRed,
+        shape: const CircleBorder(),
+        mini: true,
+        heroTag: null,
+        child: Icon(
+          Icons.add,
+          color: backgroundColor,
+          size: 25,
+        ),
+      ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
+        title: Padding(
+          padding: appBarPadding,
+          child: DPTitleText('도미노 플랜', currentWidth).dPTitleText(),
         ),
         backgroundColor: backgroundColor,
       ),
@@ -311,7 +310,7 @@ class _DPMainState extends State<DPMain> {
             SizedBox(height: currentWidth < 600 ? 10 : 15),
             mainGoals.isEmpty
                 ? Container(
-                    height: currentWidth < 600 ? 300 : 400,
+                    height: 300,
                     decoration: BoxDecoration(
                       color: const Color(0xff2D2D2D),
                       borderRadius: BorderRadius.circular(8),
@@ -325,8 +324,8 @@ class _DPMainState extends State<DPMain> {
                           child: Text(
                             '아직 플랜이 없어요.\n목표를 이루려면\n철저한 계획은 필수!',
                             style: TextStyle(
-                                color: const Color(0xff464646),
-                                fontSize: currentWidth < 600 ? 15 : 20,
+                                color: Color(0xff595959),
+                                fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 height: 1.7),
                           ),
@@ -336,10 +335,10 @@ class _DPMainState extends State<DPMain> {
                           bottom: 0, // 이미지의 하단 여백
                           right: 0, // 이미지의 우측 여백
                           child: Opacity(
-                            opacity: 0.2,
+                            opacity: 0.3,
                             child: Image.asset(
                               'assets/img/emptyDominho.png',
-                              height: currentWidth < 600 ? 190 : 300,
+                              height: 190,
                               // 이미지 크기 유지
                             ),
                           ),

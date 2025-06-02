@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:domino/style/styles.dart';
 
-
-
-
-void showCalendarPopup(BuildContext context, Function(DateTime?) onDateSelected) {
-   final currentWidth = MediaQuery.of(context).size.width;
+void showCalendarPopup(
+    BuildContext context, Function(DateTime?) onDateSelected) {
+  final currentWidth = MediaQuery.of(context).size.width;
 
   showDialog(
     context: context,
@@ -14,20 +12,20 @@ void showCalendarPopup(BuildContext context, Function(DateTime?) onDateSelected)
       DateTime focusedDay = DateTime.now();
       DateTime? tempSelectedDate;
 
-        return AlertDialog(
-          backgroundColor: const Color(0xff262626),
-          contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return SizedBox(
+      return AlertDialog(
+        backgroundColor: const Color(0xff262626),
+        contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: 330,
                 child: TableCalendar(
                   locale: 'ko_KR',
-                  rowHeight: 40,
+                  rowHeight: 45,
                   firstDay: DateTime(2024),
                   lastDay: DateTime(2050),
                   focusedDay: focusedDay,
@@ -39,91 +37,102 @@ void showCalendarPopup(BuildContext context, Function(DateTime?) onDateSelected)
                       focusedDay = focusedDay; // 포커스된 날짜 업데이트
                     });
                   },
-                  calendarStyle:  CalendarStyle(
+                  calendarFormat: CalendarFormat.month,
+                  calendarStyle: CalendarStyle(
+                    outsideDaysVisible: false,
                     markerSize: 0.0,
-
+                    isTodayHighlighted: true,
+                    todayDecoration: const BoxDecoration(
+                        color: mainGrey, shape: BoxShape.circle),
+                    selectedDecoration: const BoxDecoration(
+                      color: mainRed,
+                      shape: BoxShape.circle,
+                    ),
+                    //선택된 날짜
                     selectedTextStyle: TextStyle(
-                    fontSize: 12, // 선택된 날짜의 폰트 크기 고정
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white, // 선택된 날짜의 텍스트 색상
-                  ),
-
-                     selectedDecoration: const BoxDecoration(
-                    color: mainRed,
-                    shape: BoxShape.circle,
-                  ),
-
-                     todayTextStyle: TextStyle(
-                    fontSize: 12, // 오늘 날짜 폰트 크기
-                    fontWeight: FontWeight.w700, // 오늘 날짜 폰트 굵기
-                    color: Colors.white, // 오늘 날짜 텍스트 색상
-                  ),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: backgroundColor,
+                    ),
+                    //오늘 날짜
+                    todayTextStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                     outsideTextStyle: TextStyle(
-                    color:  Color.fromARGB(255, 125, 125, 125),
-                    fontSize: currentWidth < 600 ? 12 : 16,
-                  ),
-                   defaultTextStyle: TextStyle(
-                    color: mainTextColor,
-                    fontSize: currentWidth < 600 ? 13 : 16,
-                  ),
-
-
-
-                     todayDecoration: BoxDecoration(
-                      color: Color(0xff575757), shape: BoxShape.circle),
-
-                     weekendTextStyle: TextStyle(
-                    color: mainTextColor,
-                    fontSize: currentWidth < 600 ? 12 : 16,
-                  ),
-// 주말 텍스트 색상
-                  ),
-                  headerStyle: const HeaderStyle(
-                    formatButtonVisible: false, // 주/월 변경 버튼 숨기기
-                    titleCentered: true, // 헤더의 날짜 중앙 정렬
-                    leftChevronIcon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Color.fromARGB(255, 150, 150, 150),
-                      size: 17,
+                      color: const Color.fromARGB(255, 125, 125, 125),
+                      fontSize: 14,
                     ),
-                    rightChevronIcon: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Color.fromARGB(255, 150, 150, 150),
-                      size: 17,
+                    //보통 날짜
+                    defaultTextStyle: TextStyle(
+                      color: mainTextColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                    titleTextStyle: TextStyle(
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.w500,
+                    //주말 날짜
+                    weekendTextStyle: TextStyle(
+                      color: Color.fromARGB(255, 201, 110, 110),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   daysOfWeekStyle: const DaysOfWeekStyle(
-                    weekdayStyle: TextStyle(color: Colors.grey),
-                    weekendStyle: TextStyle(color: Colors.grey),
+                    weekdayStyle: TextStyle(
+                      color: Color.fromARGB(255, 170, 170, 170),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    weekendStyle: TextStyle(
+                      color: Color.fromARGB(255, 201, 110, 110),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                NewButton(Colors.black, Colors.white, '취소', () {
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                    titleTextStyle:
+                        const TextStyle(color: Colors.white, fontSize: 15),
+                    leftChevronIcon: Icon(
+                      Icons.arrow_back_rounded,
+                      color: const Color.fromARGB(255, 170, 170, 170),
+                      size: 17,
+                    ),
+                    rightChevronIcon: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: const Color.fromARGB(255, 170, 170, 170),
+                      size: 17,
+                    ),
+                    formatButtonVisible: false,
+                  ),
+                ));
+          },
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 90,
+                height: 45,
+                child: NewButton(Colors.black, Colors.white, '취소', () {
                   Navigator.pop(context); // 팝업 닫기
-                }, currentWidth).newButton(),
-                NewButton(
-                  Colors.black,
-                  Colors.white,
-                  '완료',
-                  () {
+                }, currentWidth)
+                    .newButton(),
+              ),
+              SizedBox(
+                width: 90,
+                height: 45,
+                child: NewButton(Colors.black, Colors.white, '완료', () {
                   onDateSelected(tempSelectedDate); // 콜백 호출
                   Navigator.pop(context); // 팝업 닫기
-                },currentWidth
-                ).newButton(),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
+                }, currentWidth)
+                    .newButton(),
+              ),
+            ],
+          )
+        ],
+      );
+    },
+  );
+}

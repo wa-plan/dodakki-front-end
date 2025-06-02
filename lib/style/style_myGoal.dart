@@ -24,7 +24,7 @@ class BlankData {
             style: TextStyle(
               height: 1.5,
               color: Color(0xff595959),
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -33,7 +33,7 @@ class BlankData {
               right: 10,
               child: Opacity(
                 opacity: 0.3,
-                child: Image.asset('assets/img/emptyDominho.png', height: 150),
+                child: Image.asset('assets/img/emptyDominho.png', height: 145),
               ))
         ],
       ),

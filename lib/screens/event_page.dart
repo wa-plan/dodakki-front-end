@@ -6,6 +6,7 @@ import 'package:video_player/video_player.dart';
 class EventPage extends StatefulWidget {
   final int domino;
   final String goalName;
+
   const EventPage({super.key, required this.domino, required this.goalName});
 
   @override
@@ -17,6 +18,7 @@ class _EventPageState extends State<EventPage> {
   late Future<void> _initializeVideoPlayerFuture;
   bool _isContentVisible = true;
   bool _isVideoEnded = false;
+  bool _isCountdownStarted = false;
 
   @override
   void initState() {
@@ -28,9 +30,12 @@ class _EventPageState extends State<EventPage> {
 
     _controller.addListener(() {
       if (_controller.value.position == _controller.value.duration) {
-        setState(() {
-          _isVideoEnded = true;
-        });
+        if (!_isVideoEnded) {
+          setState(() {
+            _isVideoEnded = true;
+            _isCountdownStarted = true; // 카운트다운 시작
+          });
+        }
       }
     });
   }
@@ -41,10 +46,16 @@ class _EventPageState extends State<EventPage> {
     super.dispose();
   }
 
+  void _goToNextPage() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const MyGoal()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.black,
       body: FutureBuilder(
         future: _initializeVideoPlayerFuture,
         builder: (context, snapshot) {
@@ -101,9 +112,7 @@ class _EventPageState extends State<EventPage> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         TextButton(
                           onPressed: () {
                             setState(() {
@@ -116,13 +125,15 @@ class _EventPageState extends State<EventPage> {
                             });
                           },
                           style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            backgroundColor: mainRed,
                           ),
                           child: const Text(
                             '공 굴리기',
                             style: TextStyle(
-                                color: mainRed,
-                                fontWeight: FontWeight.w900),
+                              color: backgroundColor,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 15,
+                            ),
                           ),
                         )
                       ],
@@ -144,41 +155,55 @@ class _EventPageState extends State<EventPage> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           '축하해요!',
-                          style: const TextStyle(
+                          style: TextStyle(
                             height: 2,
                             color: Colors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        // 화면이 렌더링된 후 2초 딜레이
-                        FutureBuilder(
-                          future: Future.delayed(const Duration(seconds: 2)),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              // MyGoal 페이지로 이동
-                              Future.microtask(() {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MyGoal(),
+                        const SizedBox(height: 30),
+
+                        /// ✅ 원형 카운트다운 애니메이션
+                        if (_isCountdownStarted)
+                          TweenAnimationBuilder<double>(
+                            tween: Tween(begin: 1.0, end: 0.0),
+                            duration: const Duration(seconds: 3),
+                            onEnd: _goToNextPage,
+                            builder: (context, value, child) {
+                              int seconds = (value * 3).ceil();
+                              return Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 80,
+                                    height: 80,
+                                    child: CircularProgressIndicator(
+                                      value: value,
+                                      strokeWidth: 6,
+                                      valueColor: const AlwaysStoppedAnimation<Color>(mainRed),
+                                      backgroundColor: Colors.transparent,
+                                    ),
                                   ),
-                                );
-                              });
-                            }
-                            return const SizedBox(); // 빈 위젯 반환
-                          },
-                        ),
+                                  Text(
+                                    '$seconds',
+                                    style: const TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                       ],
                     ),
-                  )
-
-                
+                  ),
               ],
             );
           } else {

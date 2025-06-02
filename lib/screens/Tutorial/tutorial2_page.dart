@@ -21,6 +21,7 @@ class Tutorial2State extends State<Tutorial2> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: backgroundColor,
         body: Padding(
@@ -56,7 +57,7 @@ class Tutorial2State extends State<Tutorial2> {
               //선택지
               Center(
                 child: SizedBox(
-                  width: 270,
+                  width: currentWidth < 600 ? 270 : 350,
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

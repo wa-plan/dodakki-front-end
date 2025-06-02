@@ -42,30 +42,6 @@ Map<Color, Color> colorPalette = {
 
 
 
-//DP_create_guideText
-class DPGuideText {
-  final String text;
-  final double currentWidth;
-
-  DPGuideText(this.text, this.currentWidth);
-
-  Widget dPGuideText() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: currentWidth < 600 ? 15 : 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 //Button
 class Button {
@@ -195,43 +171,7 @@ class Message {
   }
 }
 
-//DPMainGoal
-class DPMainGoal {
-  final String text;
-  final Color color;
-  final double currentHeight;
-  final double currentWidth;
 
-  DPMainGoal(this.text, this.color, this.currentHeight, this.currentWidth);
-
-  Widget dpMainGoal() {
-    return Container(
-        height: currentHeight * 0.05,
-        width: double.infinity,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(3),
-          color: color,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-              offset: const Offset(0, 0), // X, Y 위치 (0,0)
-              blurRadius: 7, // 블러 7
-              spreadRadius: 0, // 스프레드 0
-            ),
-          ],
-        ),
-        child: Text(
-            textAlign: TextAlign.center,
-            text,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: currentWidth < 600 ? 11 : 15,
-              fontWeight: FontWeight.bold,
-            )));
-  }
-}
 
 //ThirdGoalInput
 class DPInput3 {
@@ -245,9 +185,9 @@ class DPInput3 {
     return Container(
       width: 80,
       margin: const EdgeInsets.all(1.0),
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(10),
       decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+          BoxDecoration(borderRadius: BorderRadius.circular(6), color: const Color(0xff5C5C5C)),
       child: Center(
         child: TextFormField(
           initialValue: initialValue,
@@ -259,13 +199,12 @@ class DPInput3 {
           inputFormatters: [
             LengthLimitingTextInputFormatter(15), // 최대 15글자로 제한
           ],
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           decoration: const InputDecoration(
               border: InputBorder.none,
               counterStyle: TextStyle(
-                  height: 0.01,
-                  fontSize: 10,
-                  color: Color.fromARGB(255, 120, 120, 120))),
+                  fontSize: 12,
+                  color: Color.fromARGB(255, 134, 134, 134))),
         ),
       ),
     );
@@ -284,17 +223,17 @@ class DPInput2 {
     return Container(
       width: 80,
       margin: const EdgeInsets.all(1.0),
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color: color,
+        borderRadius: BorderRadius.circular(6),
+        color: const Color(0xff929292),
       ),
       child: Center(
         child: TextFormField(
           controller: controller,
           onChanged: onChangedFunction,
           style: const TextStyle(
-              color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
+              color: backgroundColor, fontSize: 14, fontWeight: FontWeight.w600),
           textAlign: TextAlign.center,
           maxLength: 15,
           maxLines: null,
@@ -304,8 +243,7 @@ class DPInput2 {
           decoration: const InputDecoration(
               border: InputBorder.none,
               counterStyle: TextStyle(
-                  height: 0.01,
-                  fontSize: 10,
+                  fontSize: 12,
                   color: Color.fromARGB(255, 104, 104, 104))),
         ),
       ),
@@ -320,9 +258,10 @@ class DPGrid2 {
   final List<Map<String, dynamic>> secondGoals;
   final Border? border;
   final double maxFontSize;
+  final double currentWidth;
 
   const DPGrid2(this.hintNum, this.mandalart, this.secondGoals,
-      this.maxFontSize, this.border);
+      this.maxFontSize, this.border, this.currentWidth);
 
   Widget dpGrid2() {
     return Container(
@@ -604,15 +543,14 @@ class DPGrid1 {
             BoxDecoration(borderRadius: BorderRadius.circular(3), color: color),
         child: Center(
           child: AutoSizeText(
-              maxLines: 3, // 최대 줄 수 (필요에 따라 변경 가능)
-              minFontSize: 6,
-              maxFontSize: maxFontSize, // 최소 글씨 크기
-              overflow: TextOverflow.ellipsis, // 내용이 너무 길 경우 생략 표시
+              maxLines: 2, 
+              overflow: TextOverflow.ellipsis, 
               text,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: backgroundColor,
                 fontWeight: FontWeight.w600,
+                fontSize: 8,
               )),
         ));
   }

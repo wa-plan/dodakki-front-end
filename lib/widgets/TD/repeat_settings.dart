@@ -13,20 +13,18 @@ class RepeatSettingsState extends State<RepeatSettings> {
   bool everyDay = false;
   bool everyWeek = false;
   bool everyTwoWeek = false;
-  bool everyMonth = false; //변수: 체크박스 체크 여부
+  bool everyMonth = false; 
 
-  // true 값을 가지는 변수의 이름을 반환하는 생성자
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Row(
           children: [
             Transform.scale(
-              scale: 1,
+              scale: 1.2,
               child: Checkbox(
                 visualDensity: VisualDensity.compact,
                 fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -55,14 +53,14 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '매일',
               style: TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         Row(
           children: [
             Transform.scale(
-              scale: 1,
+              scale: 1.2,
               child: Checkbox(
                 visualDensity: VisualDensity.compact,
                 fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -91,14 +89,14 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '매주',
               style: TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         Row(
           children: [
             Transform.scale(
-              scale: 1,
+              scale: 1.2,
               child: Checkbox(
                 visualDensity: VisualDensity.compact,
                 fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -129,14 +127,14 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '격주',
               style: TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         Row(
           children: [
             Transform.scale(
-              scale: 1,
+              scale: 1.2,
               child: Checkbox(
                 visualDensity: VisualDensity.compact,
                 fillColor: WidgetStateProperty.resolveWith<Color>(
@@ -165,7 +163,7 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '매월',
               style: TextStyle(
-                  color: Colors.white, fontSize: currentWidth < 600 ? 14 : 16),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
             ),
           ],
         ),

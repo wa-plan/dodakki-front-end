@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 60),
 
                   //인사말
-                  Description('도닦기에 오신 것을\n환영합니다 :)').description(),
+                  LoginDescription('도닦기에 오신 것을\n환영합니다 :)').loginDescription(),
                   const SizedBox(height: 45),
 
                   //아이디 입력창

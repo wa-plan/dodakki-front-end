@@ -66,7 +66,7 @@ class PieChart extends CustomPainter {
     startAngle += inProgressArcAngle;
     double failArcAngle = 2 * pi * (failPercentage / 100);
 
-    paint.color = const Color(0xff1D1D1D);
+    paint.color = Color.fromARGB(255, 58, 58, 58);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
         failArcAngle, false, paint);
 
@@ -75,7 +75,7 @@ class PieChart extends CustomPainter {
   }
 
   void drawText(Canvas canvas, Size size, String text) {
-    double labelFontSize = getFontSize(size, text) * 1.0; // ✅ "달성률" 크기 (기본값)
+    double labelFontSize = getFontSize(size, text) * 1.1; // ✅ "달성률" 크기 (기본값)
     double percentageFontSize =
         getFontSize(size, text) * 1.4; // ✅ successPercentage% 크기
 

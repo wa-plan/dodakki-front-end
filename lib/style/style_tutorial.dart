@@ -172,12 +172,14 @@ class MandalartOption extends StatefulWidget {
   final List<String> texts;
   final String color;
   final void Function(int index)? onItemSelected;
+  final double currentWidth;
 
   const MandalartOption({
     super.key,
     required this.middleText,
     required this.texts,
     required this.color,
+    required this.currentWidth,
     this.onItemSelected,
   });
 
@@ -215,7 +217,7 @@ class _MandalartOptionState extends State<MandalartOption> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 370,
+      width: widget.currentWidth < 600 ? 370 : 600,
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -459,13 +461,15 @@ class _TodoOptionState extends State<TodoOption> {
 
 //플랜 완성 비주얼 (전체)
 class PlanVisual {
+final double currentWidth;
 
+PlanVisual( this.currentWidth);
 
   Widget planVisual(){
     List<int> secondGoalIndex = [6, 8, 12, 16, 18, 19, 31];
 
     return SizedBox(
-      width: 370,
+      width: currentWidth < 600 ? 370 : 600,
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),

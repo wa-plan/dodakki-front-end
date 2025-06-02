@@ -46,7 +46,7 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
     );
   }
 
-  Widget buildGridCell(int hintNum2) {
+  Widget buildGridCell(int hintNum2, double currentWidth) {
   // 체크: 모든 그리드 박스 컬러가 투명한지 확인
   bool isAllTransparent = widget.secondGoals.isNotEmpty &&
       widget.secondGoals[hintNum2]['thirdGoals'].every((goal) => goal['thirdGoal'] == "");
@@ -64,7 +64,7 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
         children: [
           for (int i = 0; i < 4; i++)
             DPGrid3(hintNum2, i, widget.mandalart, widget.secondGoals, 8, null).dpGrid3(),
-          DPGrid2(hintNum2, widget.mandalart, widget.secondGoals, 8, null).dpGrid2(),
+          DPGrid2(hintNum2, widget.mandalart, widget.secondGoals, 8, null, currentWidth).dpGrid2(),
           for (int i = 5; i < 9; i++)
             DPGrid3(hintNum2, i, widget.mandalart, widget.secondGoals, 8, null).dpGrid3(),
         ],
@@ -76,13 +76,14 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return InteractiveViewer(
       panEnabled: true, // Allow panning (dragging)
         scaleEnabled: true, // Allow zooming
         minScale: 0.5, // Minimum zoom scale (50%)
         maxScale: 3.0, // Maximum zoom scale (300%)
       child: SizedBox(
-        width: widget.currentHeight*0.7,
+        width: widget.currentHeight*0.53,
         child: GridView.builder(
           shrinkWrap: true, // GridView will be wrapped in the available space
           physics: const NeverScrollableScrollPhysics(),
@@ -111,18 +112,18 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
                     crossAxisCount: 3,
                     children: [
                       for (int i = 0; i < 4; i++)
-                        DPGrid2(i, widget.mandalart, widget.secondGoals, 8, null).dpGrid2(),
+                        DPGrid2(i, widget.mandalart, widget.secondGoals, 8, null, currentWidth).dpGrid2(),
                       DPGrid1(widget.mandalart,
                                   ColorTransform(widget.firstColor).colorTransform(), 8)
                               .dpGrid1(),
                       for (int i = 5; i < 9; i++)
-                        DPGrid2(i, widget.mandalart, widget.secondGoals, 8, null).dpGrid2(),
+                        DPGrid2(i, widget.mandalart, widget.secondGoals, 8, null, currentWidth).dpGrid2(),
                     ],
                   ),
                 ),
               );
             }
-            return buildGridCell(index);
+            return buildGridCell(index, currentWidth);
           },
         ),
       ),

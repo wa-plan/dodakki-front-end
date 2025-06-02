@@ -15,6 +15,7 @@ class Tutorial4State extends State<Tutorial4> {
   @override
   Widget build(BuildContext context) {
     int selectedIndex = 100;
+    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
         backgroundColor: backgroundColor,
@@ -43,7 +44,7 @@ class Tutorial4State extends State<Tutorial4> {
             //선택지
             Positioned(
               left: -80,
-              top: 170,
+              top: currentWidth < 600 ? 180 : 190,
               child: MandalartOption(
                   middleText: '스펙왕\n되기',
                   texts: [
@@ -60,7 +61,7 @@ class Tutorial4State extends State<Tutorial4> {
                   color: 'green',
                   onItemSelected: (index) {
                       selectedIndex = index;
-              },),
+              }, currentWidth: currentWidth,),
             ),
           ],
         ),

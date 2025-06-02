@@ -1,5 +1,6 @@
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
+import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
@@ -37,16 +38,19 @@ class _AccountManagementState extends State<AccountManagement> {
           padding: appBarPadding,
           child: Row(
             children: [
-              NewCustomIconButton(() {
-                Navigator.of(context).pop();
-              }, Icons.arrow_back_ios_rounded, currentWidth, 12)
-                  .newCustomIconButton(),
-              SizedBox(width: currentWidth < 600 ? 10 : 14),
-              Text('내 계정',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 17 : 27,
-                      fontWeight: FontWeight.w600)),
+              //나가기 버튼
+              CustomBackButton(
+                () {
+                  Navigator.of(context).pop();
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+
+              //페이지 타이틀
+              PageTitle('내 계정').pageTitle(),
+              const Spacer(),
+
+              
             ],
           ),
         ),
@@ -124,7 +128,7 @@ class _AccountManagementState extends State<AccountManagement> {
               children: [
                 Text(title,
                     style: TextStyle(
-                        fontSize: currentWidth < 600 ? 13 : 16,
+                        fontSize: 15,
                         color: Colors.white,
                         fontWeight: FontWeight.w600)),
                 if (onTap != null)
@@ -164,21 +168,18 @@ class _AccountManagementState extends State<AccountManagement> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                NewCustomIconButton(
-                        () {}, Icons.mail_outline_rounded, currentWidth, 16)
-                    .newCustomIconButton(),
-                const SizedBox(width: 7),
+                
                 Text('이메일',
                     style: TextStyle(
-                        fontSize: currentWidth < 600 ? 13 : 16,
+                        fontSize: 15,
                         color: Colors.white,
                         fontWeight: FontWeight.w600)),
                 Spacer(),
                 Text(title,
                     style: TextStyle(
-                        fontSize: currentWidth < 600 ? 13 : 16,
+                        fontSize: 14,
                         color: Colors.white,
-                        fontWeight: FontWeight.w300)),
+                        fontWeight: FontWeight.w400)),
               ],
             ),
           ],
@@ -224,7 +225,7 @@ class _AccountManagementState extends State<AccountManagement> {
                 children: [
                   Text('로그아웃',
                       style: TextStyle(
-                          fontSize: currentWidth < 600 ? 13 : 16,
+                          fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
                   NewCustomIconButton(() {
@@ -276,7 +277,7 @@ class _AccountManagementState extends State<AccountManagement> {
                 children: [
                   Text('탈퇴하기',
                       style: TextStyle(
-                          fontSize: currentWidth < 600 ? 13 : 16,
+                          fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
                   NewCustomIconButton(() {

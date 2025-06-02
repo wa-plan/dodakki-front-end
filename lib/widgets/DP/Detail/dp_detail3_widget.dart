@@ -23,8 +23,9 @@ class _MandalartGrid4 extends State<MandalartGrid4> {
   @override
   Widget build(BuildContext context) {
     final currentHeight = MediaQuery.of(context).size.height;
+    final currentWidth = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: currentHeight * 0.4,
+      width: currentHeight * 0.53,
       child: GridView(
         shrinkWrap: true, // GridView를 자식으로 설정
         physics: const NeverScrollableScrollPhysics(),
@@ -36,7 +37,7 @@ class _MandalartGrid4 extends State<MandalartGrid4> {
                     widget.secondGoals, 15, null)
                 .dpGrid3(),
           DPGrid2(widget.selectedSecondGoal, widget.mandalart,
-                  widget.secondGoals, 15, null)
+                  widget.secondGoals, 15, null, currentWidth)
               .dpGrid2(),
           for (int i = 4; i < 8; i++)
             DPGrid3(widget.selectedSecondGoal, i, widget.mandalart,

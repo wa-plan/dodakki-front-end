@@ -115,7 +115,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
   void _checkGalleryThenPickImages() async {
     bool granted =
-        await PermissionUtil.checkAndRequestGalleryPermission(context);
+        await PermissionUtil.checkAndRequestGalleryPermission(context, '이미지');
     if (granted) {
       _imageFiles.clear();
       await _pickImages();
