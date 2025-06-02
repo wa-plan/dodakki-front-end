@@ -36,9 +36,10 @@ class EditPageState extends State<EditPage> {
   bool everyMonth = false;
   final formKey = GlobalKey<FormState>();
   String dominoValue = '';
-  late TextEditingController dominoController;
 
-  Future<bool> deleteDomino(int thirdGoalId) async {
+  late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
+
+  Future<bool> deleteDominoToEdit(int thirdGoalId) async {
     final success = await DeleteDominoService.deleteDomino(goalId: thirdGoalId);
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -265,18 +266,23 @@ class EditPageState extends State<EditPage> {
         padding: fullPadding,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SizedBox(
-            width: 90,
-            height: 45,
-            child: NewButton(Colors.black, Colors.white, '이전', () {
-              Navigator.pop(context);
-            }, currentWidth)
-                .newButton(),
-          ),
-          SizedBox(
-            width: 90,
-            height: 45,
-            child: NewButton(Color.fromARGB(255, 155, 51, 51), Colors.white, '삭제', () {
+
+          NewButton(Colors.black, Colors.white, '이전', () {
+            Navigator.pop(context);
+          }, currentWidth)
+              .newButton(),
+          NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
+            DateTime? pickedDate = context.read<DateProvider>().pickedDate;
+            context
+                .read<DateListProvider>()
+                .setInterval(switchValue, pickedDate!);
+            howDeleteDialog(context, widget.goalId, widget.date);
+          }, currentWidth)
+              .newButton(),
+          NewButton(Colors.black, Colors.white, '완료', () async {
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
+
               DateTime? pickedDate = context.read<DateProvider>().pickedDate;
               context
                   .read<DateListProvider>()
@@ -355,6 +361,29 @@ class EditPageState extends State<EditPage> {
                     ),
                   );
                 }
+
+
+                final deleted = await deleteDominoToEdit(widget.goalId);
+                if (!deleted) return;
+
+                final added = await addDomino(
+                  widget.thirdGoalId,
+                  dominoController.text,
+                  dateList,
+                  repetition,
+                );
+                if (!added) return;
+
+                // 성공 메시지 출력 후 페이지 이동
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('도미노가 수정되었습니다.')),
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TdMain(),
+                  ),
+                );
               }
             }, currentWidth)
                 .newButton(),
@@ -370,6 +399,14 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
     final success = await DeleteDominoService.deleteDomino(goalId: thirdGoalId);
 
     if (success) {
+      Message(
+              "도미노가 삭제되었어!.",
+              const Color(0xffFF6767), // 텍스트 색상
+              const Color(0xff412C2C), // 배경 색상
+              borderColor: const Color(0xffFF6767), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
+
       Message(
               "도미노가 삭제되었어!.",
               const Color(0xffFF6767), // 텍스트 색상
@@ -433,11 +470,6 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
               TextButton(
                   onPressed: () {
                     deleteDomino(thirdGoalId);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TdMain(),
-                        ));
                   },
                   child: const Text(
                     '오늘 이후 도미노 모두 삭제',
@@ -451,14 +483,7 @@ void howDeleteDialog(BuildContext context, int thirdGoalId, DateTime date) {
                   onPressed: () {
                     String formattedDate =
                         DateFormat('yyyy-MM-dd').format(date);
-                    print(formattedDate);
-                    //date.toIso8601String()
                     deleteTodayDomino(thirdGoalId, formattedDate);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TdMain(),
-                        ));
                   },
                   child: const Text(
                     '선택한 날짜의 도미노만 삭제',
