@@ -326,10 +326,8 @@ class _MyGoalState extends State<MyGoal> {
                         color: Color(0xff2B2B2B),
                         borderRadius: BorderRadius.circular(10)),
                     width: double.infinity,
-                    child: Center(
-                      child: SizedBox(
+                    child: SizedBox(
                         height: 240,
-                        width: 350,
                         child: PageView.builder(
                           controller: _pageController,
                           itemCount: inProgressIDs.length,
@@ -393,21 +391,23 @@ class _MyGoalState extends State<MyGoal> {
                                 )['bookmark'] ??
                                 'UNBOOKMARK';
 
-                            return GoalCard(
-                              mandalartId: mandalartId,
-                              name: name,
-                              status: status,
-                              photoList: photoList,
-                              dday: dday,
-                              color: color,
-                              successNum: successNum,
-                              bookmark: bookmark,
-                              onBookmarkToggle: (id, action) {},
+                            return Center(
+                              child: GoalCard(
+                                mandalartId: mandalartId,
+                                name: name,
+                                status: status,
+                                photoList: photoList,
+                                dday: dday,
+                                color: color,
+                                successNum: successNum,
+                                bookmark: bookmark,
+                                onBookmarkToggle: (id, action) {},
+                              ),
                             );
                           },
                         ),
                       ),
-                    ),
+                    
                   ),
                   const SizedBox(height: 18),
                   if (inProgressIDs.length != 1 && inProgressIDs.isNotEmpty)
@@ -490,14 +490,14 @@ class _MyGoalState extends State<MyGoal> {
                             color: colorValue,
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          height: currentWidth < 600 ? 35 : 70,
+                          height: 35,
                           child: Center(
                             child: Text(
                               item['name']!,
                               style: TextStyle(
                                   color: backgroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: currentWidth < 600 ? 12 : 20),
+                                  fontSize: 15),
                             ),
                           ),
                         ),
@@ -511,7 +511,7 @@ class _MyGoalState extends State<MyGoal> {
               MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
               const SizedBox(height: 15),
               if (failedIDs.isEmpty)
-              BlankData2("쓰러뜨리지 못한 목표가 없어요").blankData2()    
+              BlankData2("못 쓰러뜨린 목표가 없어요").blankData2()    
               else
                 Column(
                   children: [
@@ -565,8 +565,9 @@ class _MyGoalState extends State<MyGoal> {
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                          height: 35,
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
+                              vertical: 7, horizontal: 10),
                           decoration: BoxDecoration(
                             color: colorValue,
                             borderRadius: BorderRadius.circular(4),
@@ -577,7 +578,7 @@ class _MyGoalState extends State<MyGoal> {
                               style: TextStyle(
                                   color: backgroundColor,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: currentWidth < 600 ? 12 : 20),
+                                  fontSize: 15),
                             ),
                           ),
                         ),

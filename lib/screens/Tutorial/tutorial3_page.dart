@@ -44,7 +44,7 @@ class Tutorial3State extends State<Tutorial3> {
             //선택지
             Positioned(
               left: -80,
-              top: currentWidth < 600 ? 170 : 190,
+              top: currentWidth < 600 ? 180 : 190,
               child: MandalartOption(
                   middleText: '뿌듯한\n학교생활하기',
                   texts: [

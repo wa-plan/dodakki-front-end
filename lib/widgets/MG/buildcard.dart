@@ -65,6 +65,7 @@ class _GoalCardState extends State<GoalCard> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     final colorValue =
         int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', ''));
     int ddayParsed = int.parse(widget.dday);
@@ -89,6 +90,7 @@ class _GoalCardState extends State<GoalCard> {
           );
         },
         child: Container(
+          width: 350,
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
               color: Color(0xff2B2B2B),),
@@ -158,7 +160,7 @@ class _GoalCardState extends State<GoalCard> {
                         if (widget.photoList.isEmpty)
                           SizedBox(
                             height: 105, // 이미지 높이 설정
-                            width: 290, // 가로 크기 제한 (화면의 80%)
+                            width: currentWidth < 390 ? 260 : 290, // 가로 크기 제한 (화면의 80%)
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal, // 가로 스크롤 가능
                               itemCount: 3, // 최대 3개 제한
@@ -180,7 +182,7 @@ class _GoalCardState extends State<GoalCard> {
                         else
                           SizedBox(
                             height: 105, // 이미지 높이 설정
-                            width: 290, // 가로 크기 제한 (화면의 80%)
+                            width: currentWidth < 390 ? 260 : 290, // 가로 크기 제한 (화면의 80%)
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal, // 가로 스크롤 가능
                               itemCount: widget.photoList.length
@@ -222,7 +224,7 @@ class _GoalCardState extends State<GoalCard> {
                         const SizedBox(height: 17),
                         //세 번째 줄
                         SizedBox(
-                          width: 290,
+                          width: currentWidth < 390 ? 260 : 290,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

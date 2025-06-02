@@ -162,59 +162,59 @@ class Edit99Page extends StatelessWidget {
                                                     firstColor: firstColor),
                                           ));
                                     },
-                                    child: Expanded(
-                                      child: GridView(
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 3,
-                                          crossAxisSpacing: 0.5,
-                                          mainAxisSpacing: 0.5,
+                                    child: SizedBox(
+                                      width: 100,
+                                      child: GridView.count(
+                                         crossAxisCount: 3,
+                                            crossAxisSpacing: 0.5,
+                                            mainAxisSpacing: 0.5,
+                                          
+                                          children: [
+                                            for (int i = 0; i < 4; i++)
+                                              DPGrid3_E(
+                                                      context
+                                                              .watch<
+                                                                  SaveInputtedDetailGoalModel>()
+                                                              .inputtedDetailGoal
+                                                              .containsKey('$i')
+                                                          ? context
+                                                                  .watch<
+                                                                      SaveInputtedDetailGoalModel>()
+                                                                  .inputtedDetailGoal['$i'] ??
+                                                              ''
+                                                          : '',
+                                                      const Color(0xff929292),
+                                                      10)
+                                                  .dpGrid3_E(),
+                                      
+                                            // 제1목표 그리드
+                                            DPGrid1(
+                                                    mandalart,
+                                                    ColorTransform(firstColor)
+                                                        .colorTransform(),
+                                                    10)
+                                                .dpGrid1(),
+                                      
+                                            for (int i = 5; i < 9; i++)
+                                              DPGrid3_E(
+                                                      context
+                                                              .watch<
+                                                                  SaveInputtedDetailGoalModel>()
+                                                              .inputtedDetailGoal
+                                                              .containsKey('$i')
+                                                          ? context
+                                                                  .watch<
+                                                                      SaveInputtedDetailGoalModel>()
+                                                                  .inputtedDetailGoal['$i'] ??
+                                                              ''
+                                                          : '',
+                                                      const Color(0xff929292),
+                                                      10)
+                                                  .dpGrid3_E(),
+                                          ],
                                         ),
-                                        children: [
-                                          for (int i = 0; i < 4; i++)
-                                            DPGrid3_E(
-                                                    context
-                                                            .watch<
-                                                                SaveInputtedDetailGoalModel>()
-                                                            .inputtedDetailGoal
-                                                            .containsKey('$i')
-                                                        ? context
-                                                                .watch<
-                                                                    SaveInputtedDetailGoalModel>()
-                                                                .inputtedDetailGoal['$i'] ??
-                                                            ''
-                                                        : '',
-                                                    const Color(0xff929292),
-                                                    10)
-                                                .dpGrid3_E(),
-
-                                          // 제1목표 그리드
-                                          DPGrid1(
-                                                  mandalart,
-                                                  ColorTransform(firstColor)
-                                                      .colorTransform(),
-                                                  10)
-                                              .dpGrid1(),
-
-                                          for (int i = 5; i < 9; i++)
-                                            DPGrid3_E(
-                                                    context
-                                                            .watch<
-                                                                SaveInputtedDetailGoalModel>()
-                                                            .inputtedDetailGoal
-                                                            .containsKey('$i')
-                                                        ? context
-                                                                .watch<
-                                                                    SaveInputtedDetailGoalModel>()
-                                                                .inputtedDetailGoal['$i'] ??
-                                                            ''
-                                                        : '',
-                                                    const Color(0xff929292),
-                                                    10)
-                                                .dpGrid3_E(),
-                                        ],
-                                      ),
                                     ),
+                                    
                                   ),
                                   for (int i = 5; i < 9; i++)
                                     EditSmallgridwithdata(

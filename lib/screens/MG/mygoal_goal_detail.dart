@@ -79,10 +79,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
 
           total = this.successNum + this.inProgressNum + this.failedNum;
           successRate =
-              total == 0 ? 0 : (this.successNum / total * 100).toInt();
+              total == 0 ? 0 : (this.successNum / total * 100).round();
           inProgressRate =
-              total == 0 ? 0 : (this.inProgressNum / total * 100).toInt();
+              total == 0 ? 0 : (this.inProgressNum / total * 100).round();
           failedRate = 100 - successRate - inProgressRate;
+          print(successNum);
+          print(inProgressNum);
+          print(failedNum);
         });
       } else {}
     } catch (e) {

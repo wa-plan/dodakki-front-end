@@ -1,7 +1,6 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -42,8 +41,8 @@ android {
         applicationId = "com.dodakki.domino"
         minSdk = 21
         targetSdk = 34
-        versionCode = 5
-        versionName = '1.0.5'
+        versionCode = 8
+        versionName = '1.0.8'
         multiDexEnabled true
     }
 

@@ -91,15 +91,14 @@ class _AIPopupState extends State<AIPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      child: AlertDialog(
+    return AlertDialog(
         backgroundColor: Colors.transparent,
         contentPadding: const EdgeInsets.all(0),
         elevation: 30.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.0)),
         content: IntrinsicHeight(
           child: Container(
+            width: 300,
             padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
             decoration: const BoxDecoration(
                 color: Color(0xFF303030),
@@ -197,25 +196,32 @@ class _AIPopupState extends State<AIPopup> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                AICard(
-                                  goal: widget.subgoals[0],
-                                  isSelected:
-                                      selectedGoals.contains(widget.subgoals[0]),
-                                  onTap: _toggleGoal,
+                                Expanded(
+                                  child: AICard(
+                                    goal: widget.subgoals[0],
+                                    isSelected:
+                                        selectedGoals.contains(widget.subgoals[0]),
+                                    onTap: _toggleGoal,
+                                  ),
                                 ),
-                                
-                                AICard(
-                                  goal: widget.subgoals[1],
-                                  isSelected:
-                                      selectedGoals.contains(widget.subgoals[1]),
-                                  onTap: _toggleGoal,
+                                const SizedBox(width: 7),
+                                Expanded(
+                                  child: AICard(
+                                    goal: widget.subgoals[1],
+                                    isSelected:
+                                        selectedGoals.contains(widget.subgoals[1]),
+                                    onTap: _toggleGoal,
+                                  ),
                                 ),
+                                const SizedBox(width: 7),
                                 
-                                AICard(
-                                  goal: widget.subgoals[2],
-                                  isSelected:
-                                      selectedGoals.contains(widget.subgoals[2]),
-                                  onTap: _toggleGoal,
+                                Expanded(
+                                  child: AICard(
+                                    goal: widget.subgoals[2],
+                                    isSelected:
+                                        selectedGoals.contains(widget.subgoals[2]),
+                                    onTap: _toggleGoal,
+                                  ),
                                 ),
                               ],
                             ),
@@ -223,25 +229,32 @@ class _AIPopupState extends State<AIPopup> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                AICard(
-                                  goal: widget.subgoals[3],
-                                  isSelected:
-                                      selectedGoals.contains(widget.subgoals[3]),
-                                  onTap: _toggleGoal,
+                                Expanded(
+                                  child: AICard(
+                                    goal: widget.subgoals[3],
+                                    isSelected:
+                                        selectedGoals.contains(widget.subgoals[3]),
+                                    onTap: _toggleGoal,
+                                  ),
                                 ),
+                                const SizedBox(width: 7),
                                 
-                                AICard(
-                                  goal: widget.subgoals[4],
-                                  isSelected:
-                                      selectedGoals.contains(widget.subgoals[4]),
-                                  onTap: _toggleGoal,
-                                ),
+                                Expanded(
+                                  child: AICard(
+                                    goal: widget.subgoals[4],
+                                    isSelected:
+                                        selectedGoals.contains(widget.subgoals[4]),
+                                    onTap: _toggleGoal,
+                                  ),
+                                ),const SizedBox(width: 7),
                                 
-                                AICard(
-                                  goal: widget.subgoals[5],
-                                  isSelected:
-                                      selectedGoals.contains(widget.subgoals[5]),
-                                  onTap: _toggleGoal,
+                                Expanded(
+                                  child: AICard(
+                                    goal: widget.subgoals[5],
+                                    isSelected:
+                                        selectedGoals.contains(widget.subgoals[5]),
+                                    onTap: _toggleGoal,
+                                  ),
                                 ),
                               ],
                             ),
@@ -269,7 +282,7 @@ class _AIPopupState extends State<AIPopup> {
                     ),
                     const SizedBox(height: 40),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: double.infinity,
                       height: 45,
                       child: TextButton(
                         onPressed: _handleApply,
@@ -296,8 +309,7 @@ class _AIPopupState extends State<AIPopup> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -322,7 +334,6 @@ class AICardState extends State<AICard> {
   Widget build(BuildContext context) {
     return Container(
        alignment: Alignment.center,
-                width: 94,
                 height: 94,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(

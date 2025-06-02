@@ -44,7 +44,7 @@ class Tutorial4State extends State<Tutorial4> {
             //선택지
             Positioned(
               left: -80,
-              top: currentWidth < 600 ? 170 : 190,
+              top: currentWidth < 600 ? 180 : 190,
               child: MandalartOption(
                   middleText: '스펙왕\n되기',
                   texts: [
