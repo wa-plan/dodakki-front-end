@@ -320,6 +320,9 @@ class EditPageState extends State<EditPage> {
 }
 
 void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
+  DateTime today = DateTime.now();
+  String todayDate = DateFormat('yyyy-MM-dd').format(today);
+
   void deleteDomino(int goalId) async {
     final success = await DeleteDominoService.deleteDomino(goalId: goalId);
 
@@ -389,6 +392,7 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
               TextButton(
                   onPressed: () {
                     deleteDomino(goalId);
+                    deleteTodayDomino(goalId, todayDate);
                   },
                   child: const Text(
                     '오늘 이후 도미노 모두 삭제',
