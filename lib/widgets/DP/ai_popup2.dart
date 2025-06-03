@@ -35,7 +35,8 @@ class AIPopup2 extends StatefulWidget {
       required this.page,
       required this.secondGoalIds,
       required this.secondGoals,
-      required this.mandalartId});
+      required this.mandalartId,
+      });
 
   @override
   _AIPopupState2 createState() => _AIPopupState2();
@@ -96,6 +97,7 @@ class _AIPopupState2 extends State<AIPopup2> {
               secondGoalIds: widget.secondGoalIds,
               secondGoals: widget.secondGoals,
               mandalartId: widget.mandalartId,
+              been: true
             ),
           ),
         );

@@ -51,7 +51,7 @@ class Tutorial7State extends State<Tutorial7> {
     final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(30, 22, 30, 30),
         child: Column(

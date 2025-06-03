@@ -17,6 +17,7 @@ class EditInput2Page extends StatefulWidget {
   final List<int> secondGoalIds;
   final List<Map<String, dynamic>> secondGoals;
   final int mandalartId;
+  final bool been;
 
   const EditInput2Page(
       {super.key,
@@ -25,7 +26,8 @@ class EditInput2Page extends StatefulWidget {
       required this.mainGoalId,
       required this.secondGoalIds,
       required this.secondGoals,
-      required this.mandalartId});
+      required this.mandalartId,
+      required this.been});
 
   @override
   State<EditInput2Page> createState() => _EditInput2PageState();
@@ -46,7 +48,6 @@ class _EditInput2PageState extends State<EditInput2Page> {
     final updatedGoal = context
         .watch<SaveInputtedDetailGoalModel>()
         .inputtedDetailGoal[selectedDetailGoal.toString()];
-
 
     if (goal != updatedGoal) {
       setState(() {
@@ -78,10 +79,14 @@ class _EditInput2PageState extends State<EditInput2Page> {
     }
   }
 
-  Future<void> _showAIPopup(BuildContext context, int selectedDetailGoal) async {
+  Future<void> _showAIPopup(
+      BuildContext context, int selectedDetailGoal) async {
     await showDialog(
       context: context,
-      builder: (BuildContext context,) => AIPopup2(
+      builder: (
+        BuildContext context,
+      ) =>
+          AIPopup2(
         selectedDetailGoal: selectedDetailGoal,
         mainGoalId: widget.mainGoalId,
         firstColor: widget.firstColor,
@@ -97,13 +102,14 @@ class _EditInput2PageState extends State<EditInput2Page> {
             _showAIPopup(context, selectedDetailGoal);
           }
         },
-        thirdGoal: context
-                                                .watch<
-                                                    SaveInputtedDetailGoalModel>()
-                                                .inputtedDetailGoal[
-                                            context.watch<SelectDetailGoal>().selectedDetailGoal.toString()] ??
-                                        '',
-                                        page: "수정",
+        thirdGoal:
+            context.watch<SaveInputtedDetailGoalModel>().inputtedDetailGoal[
+                    context
+                        .watch<SelectDetailGoal>()
+                        .selectedDetailGoal
+                        .toString()] ??
+                '',
+        page: "수정",
         mandalart: widget.mandalart,
         secondGoalIds: widget.secondGoalIds,
         secondGoals: widget.secondGoals,
@@ -131,11 +137,14 @@ class _EditInput2PageState extends State<EditInput2Page> {
           child: Row(
             children: [
               //나가기 버튼
-              CustomBackButton(() {
-                context.read<TestInputtedActionPlanModel>().resetActionPlans();
-                Navigator.pop(context);
-              }, )
-                  .customBackButton(),
+              CustomBackButton(
+                () {
+                  context
+                      .read<TestInputtedActionPlanModel>()
+                      .resetActionPlans();
+                  Navigator.pop(context);
+                },
+              ).customBackButton(),
               const SizedBox(width: 15),
               //페이지 타이틀
               PageTitle('제3목표 수정').pageTitle(),
@@ -162,13 +171,12 @@ class _EditInput2PageState extends State<EditInput2Page> {
                 ),
                 child: _isLoading
                     ? const CircularProgressIndicator(
-                      color: mainRed,
-                    ) 
+                        color: mainRed,
+                      )
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset('assets/img/AIIcon.png',
-                              height: 20),
+                          Image.asset('assets/img/AIIcon.png', height: 20),
                           SizedBox(width: 5),
                           Text(
                             'Ask 도민호',
@@ -200,7 +208,7 @@ class _EditInput2PageState extends State<EditInput2Page> {
                       child: SizedBox(
                         width: currentHeight * 0.53,
                         child: GridView(
-                          shrinkWrap: true, 
+                          shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -236,10 +244,8 @@ class _EditInput2PageState extends State<EditInput2Page> {
                               margin: const EdgeInsets.all(1.0),
                               child: Center(
                                 child: AutoSizeText(
-                                    maxLines: 3, 
-                                   
-                                    overflow: TextOverflow
-                                        .ellipsis,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
                                     context
                                                 .watch<
                                                     SaveInputtedDetailGoalModel>()
@@ -248,10 +254,9 @@ class _EditInput2PageState extends State<EditInput2Page> {
                                         '',
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                      color: backgroundColor,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15
-                                    )),
+                                        color: backgroundColor,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15)),
                               ),
                             ),
                             // Index 5
@@ -285,65 +290,65 @@ class _EditInput2PageState extends State<EditInput2Page> {
                 ),
               ),
             ),
-            
           ],
         ),
       ),
-      bottomNavigationBar: Padding(padding: fullPadding, child: 
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              SizedBox(
-                width: 90,
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          SizedBox(
+            width: 90,
             height: 45,
-                child: NewButton(
-                  Colors.black,
-                  Colors.white,
-                  '취소',
-                  () {
-                    // TestInputtedActionPlanModel 초기화
-                    context
-                        .read<TestInputtedActionPlanModel>()
-                        .resetActionPlans();
-                    Navigator.pop(context);
-                  }, currentWidth
-                ).newButton(),
-              ),
-              SizedBox(
-                width: 90,
+            child: NewButton(Colors.black, Colors.white, '취소', () {
+              // TestInputtedActionPlanModel 초기화
+              context.read<TestInputtedActionPlanModel>().resetActionPlans();
+              Navigator.pop(context);
+            }, currentWidth)
+                .newButton(),
+          ),
+          SizedBox(
+            width: 90,
             height: 45,
-                child: NewButton(
-                  Colors.black,
-                  Colors.white,
-                  '완료',
-                  () {
-                    // 모델 가져오기
-                    final testModel = context.read<TestInputtedActionPlanModel>();
-                    final saveModel = context.read<SaveInputtedActionPlanModel>();
-                
-                    // TestInputtedActionPlanModel의 데이터를 SaveInputtedActionPlanModel로 복사
-                    for (int goalId = 0;
-                        goalId < testModel.inputtedActionPlan.length;
-                        goalId++) {
-                      testModel.inputtedActionPlan[goalId].forEach((key, value) {
-                        saveModel.updateActionPlan(goalId, key, value);
-                      });
-                    }
-                
-                    Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Edit99Page(
-                          firstColor: widget.firstColor,
-                          mandalart: widget.mandalart,
-                          mandalartId:widget.mandalartId,
-                          secondGoalIds: widget.secondGoalIds,
-                          secondGoals: widget.secondGoals,
-                        )),
+            child: NewButton(Colors.black, Colors.white, '완료', () {
+              // 모델 가져오기
+              final testModel = context.read<TestInputtedActionPlanModel>();
+              final saveModel = context.read<SaveInputtedActionPlanModel>();
 
-              );
-                  },currentWidth
-                ).newButton(),
-              ),
-            ]),),
+              for (int goalId = 0;
+                  goalId < testModel.inputtedActionPlan.length;
+                  goalId++) {
+                testModel.inputtedActionPlan[goalId].forEach((key, value) {
+                  if (value.isNotEmpty) {
+                    saveModel.updateActionPlan(goalId, key, value);
+                  }
+                });
+              }
+              if (widget.been == false) {
+                print('갔다안옴');
+                Navigator.pop(
+                  context,
+                );
+              } else {
+                print('갔다옴');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Edit99Page(
+                      firstColor: widget.firstColor,
+                      mandalart: widget.mandalart,
+                      secondGoalIds: widget.secondGoalIds,
+                      secondGoals: widget.secondGoals,
+                      mandalartId: widget.mandalartId,
+                    ),
+                  ),
+                );
+              }
+            }, currentWidth)
+                .newButton(),
+          ),
+        ]),
+      ),
     );
   }
 }
