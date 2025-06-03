@@ -13,29 +13,36 @@ class Tutorial7 extends StatefulWidget {
 
 class Tutorial7State extends State<Tutorial7> {
   late VideoPlayerController _videoController;
+  late Future<void> _initFuture;
   bool _showVideo = false;
+  bool _isVideoEnded = false;
 
   @override
   void initState() {
     super.initState();
     _videoController =
         VideoPlayerController.asset("assets/img/domino_final.mp4");
+    _initFuture = _videoController.initialize();
+    _videoController.setLooping(false);
+    _videoController.setVolume(1.0);
 
     _videoController.addListener(() {
       if (_videoController.value.position >= _videoController.value.duration &&
-          _videoController.value.isInitialized &&
+          !_isVideoEnded &&
           mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const TdMain()),
-        );
-      }
-    });
+        setState(() {
+          _isVideoEnded = true;
+        });
 
-    _videoController.initialize().then((_) {
-      if (_showVideo) {
-        setState(() {});
-        _videoController.play();
+        // 화면 전환
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const TdMain()),
+            );
+          }
+        });
       }
     });
   }
@@ -52,86 +59,147 @@ class Tutorial7State extends State<Tutorial7> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 22, 30, 30),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      "assets/img/confetti.png",
-                      height: currentWidth < 600 ? 270 : 380,
-                      fit: BoxFit.cover,
+
+      body: FutureBuilder(
+        future: _initFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Stack(
+              children: [
+                /// 🎥 중앙 정렬된 영상 (비율 유지)
+                Center(
+                  child: Transform.scale(
+                    scale: 1.0, // 1.0보다 크면 확대
+                    child: AspectRatio(
+                      aspectRatio: _videoController.value.aspectRatio,
+                      child: VideoPlayer(_videoController),
                     ),
-                    Positioned(
-                      top: currentWidth < 600 ? 60 : 110,
-                      left: 0,
-                      right: 0,
-                      child: Column(
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '달성 완료',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.7,
-                                    color: Color(0xFFFF6767),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '하면\n그동안 모든 도미노로\n너의 목표를\n쓰러뜨릴 수 있어!',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.7,
-                                    color: Color(0xFFD9D9D9),
-                                  ),
-                                ),
-                              ],
+                  ),
+                ),
+
+                /// 🎊 confetti 이미지 – 화면 상단 중앙
+                if (!_showVideo)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.only(top: currentWidth < 600 ? 60 : 80),
+                      child: _showVideo
+                          ? SizedBox(
+                              height: currentWidth < 600 ? 270 : 350) // 공간 유지
+                          : Image.asset(
+                              "assets/img/confetti.png",
+                              height: currentWidth < 600 ? 270 : 350,
+                              fit: BoxFit.cover,
                             ),
-                            textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                /// 📝 텍스트 – 영상 위쪽에 정렬
+                if (!_showVideo)
+                  Align(
+                    alignment: const Alignment(0, -0.6),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '달성 완료',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                height: 1.7,
+                                color: Color(0xFFFF6767),
+                              ),
+                            ),
+                            TextSpan(
+                              text: '하면\n그동안 모든 도미노로\n너의 목표를\n쓰러뜨릴 수 있어!',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                height: 1.7,
+                                color: Color(0xFFD9D9D9),
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+
+                /// ✅ 영상 끝난 후 메시지
+                if (_isVideoEnded)
+                  const Center(
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '그럼 이제\n',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              height: 1.5,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '목표 달성',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xFFFF6767), // 강조 색상
+                              fontWeight: FontWeight.bold,
+                              height: 1.5,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '하러\n가보자!!',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              height: 1.5,
+                            ),
                           ),
                         ],
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: _showVideo
-                    ? _videoController.value.isInitialized
-                        ? AspectRatio(
-                            aspectRatio: _videoController.value.aspectRatio,
-                            child: VideoPlayer(_videoController),
-                          )
-                        : const CircularProgressIndicator()
-                    : Image.asset(
-                        "assets/img/Complete.png",
-                        height: currentWidth < 600 ? 180 : 300,
-                      ),
-              ),
-            ),
-          ],
-        ),
+                  ),
+
+                if (!_showVideo)
+                  Positioned(
+                    bottom: 30,
+                    left: 30,
+                    right: 30,
+                    child: TutorialButton('공 굴리기', () {
+                      setState(() {
+                        _showVideo = true;
+                        _videoController.play();
+                      });
+                    }).tutorialButton(),
+                  ),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
-      bottomNavigationBar: Padding(
-        padding: tutorialPadding,
-        child: TutorialButton('공 굴려서 시작하기', () {
-          setState(() {
-            _showVideo = true;
-            _videoController.play();
-          });
-        }).tutorialButton(),
-      ),
+
+      /// 🔘 버튼은 여기
+      /*bottomNavigationBar: !_showVideo
+          ? Padding(
+              padding: tutorialPadding,
+              child: TutorialButton('공 굴리기', () {
+                setState(() {
+                  _showVideo = true;
+                  _videoController.play();
+                });
+              }).tutorialButton(),
+            )
+          : null,*/
     );
   }
 }
