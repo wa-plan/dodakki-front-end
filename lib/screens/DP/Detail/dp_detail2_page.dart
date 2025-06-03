@@ -43,41 +43,44 @@ class DPdetail3Page extends StatelessWidget {
             ),
           ),
           backgroundColor: backgroundColor),
-      body: Stack(
-        children: [
-          // 화면 전체의 클릭 이벤트 감지를 위한 투명 GestureDetector
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop(); // 빈 영역 클릭 시 팝업 닫기
-            },
-            child: Container(
-              color: Colors.transparent, // 투명 배경으로 클릭 이벤트만 전달
+      body: Padding(
+        padding: fullPadding,
+        child: Stack(
+          children: [
+            // 화면 전체의 클릭 이벤트 감지를 위한 투명 GestureDetector
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop(); // 빈 영역 클릭 시 팝업 닫기
+              },
+              child: Container(
+                color: Colors.transparent, // 투명 배경으로 클릭 이벤트만 전달
+              ),
             ),
-          ),
-          Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: currentWidth < 600 ? 40 : 100,
-                ),
-                // MandalartGrid4가 상호작용 가능한 영역
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      // MandalartGrid4 내부는 아무 동작도 하지 않음
-                    },
-                    child: MandalartGrid5(
-                      mandalart: mandalart,
-                      secondGoals: secondGoals,
-                      selectedSecondGoal: selectedSecondGoal,
-                      firstColor: firstColor,
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: currentWidth < 600 ? 40 : 100,
+                  ),
+                  // MandalartGrid4가 상호작용 가능한 영역
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        // MandalartGrid4 내부는 아무 동작도 하지 않음
+                      },
+                      child: MandalartGrid5(
+                        mandalart: mandalart,
+                        secondGoals: secondGoals,
+                        selectedSecondGoal: selectedSecondGoal,
+                        firstColor: firstColor,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
