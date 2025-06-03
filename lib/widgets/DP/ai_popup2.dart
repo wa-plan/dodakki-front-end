@@ -1,6 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/provider/DP/model.dart';
+import 'package:domino/screens/DP/Create/dp_create3_page.dart';
 import 'package:domino/screens/DP/Create/dp_create4_page.dart';
+import 'package:domino/screens/DP/Edit/dp_edit2_page.dart';
+import 'package:domino/screens/DP/Edit/dp_edit3_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,11 @@ class AIPopup2 extends StatefulWidget {
   final String? mainGoalId;
   final int selectedDetailGoal;
   final String thirdGoal;
+  final String mandalart;
+  final String page;
+  final List<int> secondGoalIds;
+  final List<Map<String, dynamic>> secondGoals;
+  final int mandalartId;
 
   const AIPopup2(
       {super.key,
@@ -22,7 +30,12 @@ class AIPopup2 extends StatefulWidget {
       required this.onRefresh,
       required this.firstColor,
       required this.mainGoalId,
-      required this.thirdGoal});
+      required this.thirdGoal,
+      required this.mandalart,
+      required this.page,
+      required this.secondGoalIds,
+      required this.secondGoals,
+      required this.mandalartId});
 
   @override
   _AIPopupState2 createState() => _AIPopupState2();
@@ -71,15 +84,35 @@ class _AIPopupState2 extends State<AIPopup2> {
       }
 
       // 모든 작업이 완료되면 팝업 닫기
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DPcreateInput2Page(
-              firstColor: widget.firstColor, mainGoalId: widget.mainGoalId),
-        ),
-      );
+      if (widget.page == '수정') {
+        print(widget.page);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditInput2Page(
+              mandalart: widget.mandalart,
+              firstColor: widget.firstColor,
+              mainGoalId: widget.mainGoalId,
+              secondGoalIds: widget.secondGoalIds,
+              secondGoals: widget.secondGoals,
+              mandalartId: widget.mandalartId,
+            ),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DPcreateInput2Page(
+              firstColor: widget.firstColor,
+              mainGoalId: widget.mainGoalId,
+            ),
+          ),
+        );
+      }
     }
   }
+    
 
   void _toggleGoal(String goal) {
     setState(() {

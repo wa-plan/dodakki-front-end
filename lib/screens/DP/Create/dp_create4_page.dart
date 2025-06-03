@@ -106,6 +106,11 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                                           .inputtedDetailGoal[
                                       '$selectedDetailGoal'] ??
                                   '',
+                                  page: "생성",
+        mandalart: "얍얍",
+        secondGoalIds: [],
+        secondGoals: [],
+        mandalartId: 1,
       ),
     );
   }

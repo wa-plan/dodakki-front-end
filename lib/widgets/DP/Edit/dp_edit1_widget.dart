@@ -8,12 +8,18 @@ class EditSmallgridwithdata extends StatelessWidget {
   final String mandalart;
   final String firstColor;
   final int goalId;
+  final List<int> secondGoalIds;
+  final List<Map<String, dynamic>> secondGoals;
+  final int mandalartId;
 
   const EditSmallgridwithdata(
       {super.key,
       required this.goalId,
       required this.mandalart,
-      required this.firstColor});
+      required this.firstColor,
+      required this.secondGoalIds,
+      required this.secondGoals,
+      required this.mandalartId});
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +64,9 @@ class EditSmallgridwithdata extends StatelessWidget {
                   mainGoalId: goalId.toString(),
                   firstColor: firstColor,
                   mandalart: mandalart,
+                  secondGoalIds: secondGoalIds,
+                  secondGoals: secondGoals,
+                  mandalartId: mandalartId,
                 ),
               ),
             );

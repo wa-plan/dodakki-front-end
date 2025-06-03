@@ -148,6 +148,10 @@ class Edit99Page extends StatelessWidget {
                                       goalId: i,
                                       mandalart: mandalart,
                                       firstColor: firstColor,
+                                      secondGoalIds: secondGoalIds,
+              secondGoals: secondGoals,
+              mandalartId: mandalartId,
+                                      
                                     ),
                                   GestureDetector(
                                     onTap: () {
@@ -159,7 +163,10 @@ class Edit99Page extends StatelessWidget {
                                                     mainGoalId:
                                                         mandalartId.toString(),
                                                     mandalart: mandalart,
-                                                    firstColor: firstColor),
+                                                    firstColor: firstColor,
+                                                    mandalartId: mandalartId,
+                                                    secondGoalIds: secondGoalIds,
+                                                    secondGoals: secondGoals,),
                                           ));
                                     },
                                     child: SizedBox(
@@ -221,6 +228,9 @@ class Edit99Page extends StatelessWidget {
                                       goalId: i,
                                       mandalart: mandalart,
                                       firstColor: firstColor,
+                                      secondGoalIds: secondGoalIds,
+              secondGoals: secondGoals,
+              mandalartId: mandalartId,
                                     ),
                                 ],
                               )),

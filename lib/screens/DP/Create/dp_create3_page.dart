@@ -82,6 +82,11 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
           _showAIPopup(context); // 새 팝업 표시
         },
         secondGoal: context.watch<SelectFinalGoalModel>().selectedFinalGoal,
+        page: "생성",
+        mandalart: "얍얍",
+        secondGoalIds: [],
+        secondGoals: [],
+        mandalartId: 1,
       ),
     );
   }

@@ -24,39 +24,44 @@ class _EditInput2State extends State<EditInput2> {
   void initState() {
     super.initState();
 
-    // Save 모델에서 초기값 가져오기
     final saveModel = context.read<SaveInputtedActionPlanModel>();
-    initialValue = saveModel.inputtedActionPlan[widget.selectedDetailGoalId]
-            ['${widget.actionPlanId}'] ??
-        ''; // 초기 값이 없으면 빈 문자열로 설정
+    final testModel = context.read<TestInputtedActionPlanModel>();
 
+    final detailGoalId = widget.selectedDetailGoalId;
+    final actionPlanIdStr = widget.actionPlanId.toString();
 
-    // Test 모델에 초기화 반영
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      for (int detailGoalId = 0;
-          detailGoalId < saveModel.inputtedActionPlan.length;
-          detailGoalId++) {
-        final actionPlanData = saveModel.inputtedActionPlan[detailGoalId];
-        actionPlanData.forEach((actionPlanId, value) {
-          context.read<TestInputtedActionPlanModel>().updateTestActionPlan(
-                detailGoalId,
-                actionPlanId, // actionPlanId를 int로 변환
-                value,
-              );
-        });
-      }
-    });
+    // TestModel에서 값이 있는지 확인
+    final existingValue =
+        testModel.inputtedActionPlan[detailGoalId][actionPlanIdStr];
+
+    if (existingValue != null && existingValue.isNotEmpty) {
+      initialValue = existingValue;
+    } else {
+      // SaveModel에서 초기화
+      initialValue = saveModel.inputtedActionPlan[detailGoalId][actionPlanIdStr] ?? '';
+      // TestModel에도 반영
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        testModel.updateTestActionPlan(
+          detailGoalId,
+          actionPlanIdStr,
+          initialValue,
+        );
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return DPInput3(
-      const Color(0xff5C5C5C), 
-      (value){context.read<TestInputtedActionPlanModel>().updateTestActionPlan(
-                  widget.selectedDetailGoalId,
-                  widget.actionPlanId.toString(),
-                  value.isEmpty ? "" : value,
-                );}, 
-      initialValue).dpInput3();
+      const Color(0xff5C5C5C),
+      (value) {
+        context.read<TestInputtedActionPlanModel>().updateTestActionPlan(
+              widget.selectedDetailGoalId,
+              widget.actionPlanId.toString(),
+              value.isEmpty ? "" : value,
+            );
+      },
+      initialValue,
+    ).dpInput3();
   }
 }
