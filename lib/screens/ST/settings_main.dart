@@ -119,7 +119,9 @@ class _SettingsMainState extends State<SettingsMain> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              MGSubTitle('계정', ).mgSubTitle(context),
+              MGSubTitle(
+                '계정',
+              ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '내 계정',
@@ -137,11 +139,15 @@ class _SettingsMainState extends State<SettingsMain> {
                 },
               ),
               const SizedBox(height: 14),
-              MGSubTitle('알림', ).mgSubTitle(context),
+              MGSubTitle(
+                '알림',
+              ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildCombinedSwitchItem(),
               const SizedBox(height: 14),
-              MGSubTitle('문의', ).mgSubTitle(context),
+              MGSubTitle(
+                '문의',
+              ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '문의하기',
@@ -155,7 +161,9 @@ class _SettingsMainState extends State<SettingsMain> {
                 },
               ),
               const SizedBox(height: 14),
-              MGSubTitle('도움', ).mgSubTitle(context),
+              MGSubTitle(
+                '도움',
+              ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '앱 사용설명서',
@@ -167,7 +175,9 @@ class _SettingsMainState extends State<SettingsMain> {
                 },
               ),
               const SizedBox(height: 14),
-              MGSubTitle('앱 정보', ).mgSubTitle(context),
+              MGSubTitle(
+                '앱 정보',
+              ).mgSubTitle(context),
               const SizedBox(height: 8),
               _buildCombinedNavigationItem()
             ],
@@ -375,7 +385,6 @@ class _SettingsMainState extends State<SettingsMain> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        
                                         NewButton(Colors.black, Colors.white,
                                                 '설정으로 이동', () {
                                           Navigator.of(context).pop();
@@ -548,7 +557,8 @@ class NotificationService {
         AndroidNotificationDetails(
       'counter_channel',
       'Counter Channel',
-      channelDescription: 'This channel is used for counter-related notifications',
+      channelDescription:
+          'This channel is used for counter-related notifications',
       importance: Importance.high,
       icon: '@drawable/smallicon',
       largeIcon: DrawableResourceAndroidBitmap('@drawable/ic_notification'),
@@ -601,7 +611,6 @@ class NotificationService {
     return status;
   }
 }
-
 
 void showServiceRulePopup(BuildContext context, double currentWidth) {
   showDialog(
