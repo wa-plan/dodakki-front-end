@@ -282,7 +282,7 @@ class DPGrid2 {
               ? secondGoals[hintNum]['secondGoal']
               : "",
           maxLines: 3,
-          minFontSize: 6,
+          minFontSize: 3,
           maxFontSize: maxFontSize,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
@@ -325,7 +325,7 @@ class TDGrid2 {
               ? secondGoals[hintNum]['secondGoal']
               : "",
           maxLines: 3,
-          minFontSize: 6,
+          minFontSize: 3,
           maxFontSize: maxFontSize,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
@@ -359,7 +359,7 @@ class DPCreateGrid {
       child: Center(
         child: AutoSizeText(
           maxLines: 3,
-          minFontSize: 6,
+          minFontSize: 3,
           maxFontSize: 10,
           overflow: TextOverflow.ellipsis,
           text,
@@ -417,7 +417,7 @@ class DPGrid3 {
               ? secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal']
               : "",
           maxLines: 3,
-          minFontSize: 6,
+          minFontSize: 3,
           maxFontSize: maxFontSize,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
@@ -512,7 +512,7 @@ class TDGrid3 {
                 ? secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal']
                 : "",
             maxLines: 3,
-            minFontSize: 6,
+            minFontSize: 3,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.black,
@@ -543,7 +543,9 @@ class DPGrid1 {
             BoxDecoration(borderRadius: BorderRadius.circular(3), color: color),
         child: Center(
           child: AutoSizeText(
-              maxLines: 2, 
+            minFontSize: 3,
+            maxFontSize: 13,
+              maxLines: 3, 
               overflow: TextOverflow.ellipsis, 
               text,
               textAlign: TextAlign.center,
