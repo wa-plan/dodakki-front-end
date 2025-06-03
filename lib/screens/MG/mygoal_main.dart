@@ -68,120 +68,97 @@ class _MyGoalState extends State<MyGoal> {
   Future<void> userMandaIdInfo() async {
     if (mandalarts.isNotEmpty) return;
 
-    try {
-      final data = await UserMandaIdService.userManda();
+    final data = await UserMandaIdService.userManda();
 
-      if (data.isNotEmpty) {
-        setState(() {
-          mandalarts = data['mandalarts']!;
-          bookmarks = data['bookmarks']!;
-        });
+    if (data.isNotEmpty) {
+      setState(() {
+        mandalarts = data['mandalarts']!;
+        bookmarks = data['bookmarks']!;
+      });
 
-        final tasks = mandalarts.map((mandalart) async {
-          final String mandalartId = mandalart['id'] ?? '0';
-          await userMandaInfo(mandalartId);
-          await mandaColor(mandalartId);
-        });
+      final tasks = mandalarts.map((mandalart) async {
+        final String mandalartId = mandalart['id'] ?? '0';
+        await userMandaInfo(mandalartId);
+        await mandaColor(mandalartId);
+      });
 
-        await Future.wait(tasks);
+      await Future.wait(tasks);
 
-        failedIDs.sort((a, b) {
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
+      failedIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
 
-        inProgressIDs.sort((a, b) {
-          final aBookmark = bookmarks
-              .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
-          final bBookmark = bookmarks
-              .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
+      inProgressIDs.sort((a, b) {
+        final aBookmark = bookmarks
+            .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
+        final bBookmark = bookmarks
+            .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
 
-          if (aBookmark && !bBookmark) {
-            return -1;
-          }
-          if (!aBookmark && bBookmark) {
-            return 1;
-          }
+        if (aBookmark && !bBookmark) {
+          return -1;
+        }
+        if (!aBookmark && bBookmark) {
+          return 1;
+        }
 
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
 
-        context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
+      context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
 
-        successIDs.sort((a, b) {
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('데이터 로드 중 오류가 발생했습니다: $e')),
-      );
+      successIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
     }
   }
 
   Future<void> userMandaInfo(String mandalartId) async {
     if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
 
-    try {
-      final data = await UserMandaInfoService.userMandaInfo(context,
-          mandalartId: int.parse(mandalartId));
+    final data = await UserMandaInfoService.userMandaInfo(context,
+        mandalartId: int.parse(mandalartId));
 
-      if (data != null) {
-        String id = mandalartId;
-        String name = data['name'] ?? '';
-        String status = data['status']?.toString() ?? '';
-        List<dynamic> photoList = data['photoList'] ?? [];
-        String dday = data['dday']?.toString() ?? '0';
-        int successNum = data['statusNum']?['successNum'] ?? 0;
+    if (data != null) {
+      String id = mandalartId;
+      String name = data['name'] ?? '';
+      String status = data['status']?.toString() ?? '';
+      List<dynamic> photoList = data['photoList'] ?? [];
+      String dday = data['dday']?.toString() ?? '0';
+      int successNum = data['statusNum']?['successNum'] ?? 0;
 
-        setState(() {
-          if (status == "FAIL") failedIDs.add({"id": id, "name": name});
-          if (status == "IN_PROGRESS") {
-            inProgressIDs.add({"id": id, "name": name});
+      setState(() {
+        if (status == "FAIL") failedIDs.add({"id": id, "name": name});
+        if (status == "IN_PROGRESS") {
+          inProgressIDs.add({"id": id, "name": name});
+        }
+        if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
+
+        nameList.add({'mandalartId': id, 'name': name});
+        statusList.add({'mandalartId': id, 'status': status});
+        ddayList.add({'mandalartId': id, 'dday': dday});
+        successNums.add({'mandalartId': id, 'successNum': successNum});
+
+        if (photoList.isNotEmpty) {
+          photos[id] = [];
+          for (var photo in photoList) {
+            photos[id]?.add({
+              'path': photo['path'] ?? '',
+              'id': photo['id'].toString(),
+            });
           }
-          if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
-
-          nameList.add({'mandalartId': id, 'name': name});
-          statusList.add({'mandalartId': id, 'status': status});
-          ddayList.add({'mandalartId': id, 'dday': dday});
-          successNums.add({'mandalartId': id, 'successNum': successNum});
-
-          if (photoList.isNotEmpty) {
-            photos[id] = [];
-            for (var photo in photoList) {
-              photos[id]?.add({
-                'path': photo['path'] ?? '',
-                'id': photo['id'].toString(),
-              });
-            }
-          }
-        });
-      } else {}
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('데이터 로드 실패: $e')),
-      );
-    }
+        }
+      });
+    } else {}
   }
 
   Future<void> mandaColor(String mandalartId) async {
     if (colorList.any((item) => item['id'] == mandalartId)) return;
-
-    try {
-      final data = await MandalartInfoService.mandalartInfo(
-          mandalartId: int.parse(mandalartId));
-      if (data != null) {
-        setState(() {
-          colorList.add({"id": mandalartId, "color": data["color"]});
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('만다라트 조회에 실패했습니다.')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
-      );
+    final data = await MandalartInfoService.mandalartInfo(
+        mandalartId: int.parse(mandalartId));
+    if (data != null) {
+      setState(() {
+        colorList.add({"id": mandalartId, "color": data["color"]});
+      });
     }
   }
 

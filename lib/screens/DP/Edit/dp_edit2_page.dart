@@ -59,10 +59,6 @@ class _EditInput1PageState extends State<EditInput1Page> {
       setState(() {
         _subGoals = subGoals; // 새로운 세부 목표로 업데이트
       });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false; // 로딩 상태 해제
@@ -263,11 +259,10 @@ class _EditInput1PageState extends State<EditInput1Page> {
                     builder: (context) => Edit99Page(
                           firstColor: widget.firstColor,
                           mandalart: widget.mandalart,
-                          mandalartId:widget.mandalartId,
+                          mandalartId: widget.mandalartId,
                           secondGoalIds: widget.secondGoalIds,
                           secondGoals: widget.secondGoals,
                         )),
-
               );
             }, currentWidth)
                 .newButton(),

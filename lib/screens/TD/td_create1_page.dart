@@ -70,92 +70,79 @@ class _AddPage1State extends State<AddPage1> {
   Future<void> userMandaInfo(String mandalartId) async {
     if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
 
-    try {
-      final data = await UserMandaInfoService.userMandaInfo(context,
-          mandalartId: int.parse(mandalartId));
+    final data = await UserMandaInfoService.userMandaInfo(context,
+        mandalartId: int.parse(mandalartId));
 
-      if (data != null) {
-        String id = mandalartId;
-        String name = data['name'] ?? '';
-        String status = data['status']?.toString() ?? '';
-        String dday = data['dday']?.toString() ?? '0';
-        int successNum = data['statusNum']?['successNum'] ?? 0;
+    if (data != null) {
+      String id = mandalartId;
+      String name = data['name'] ?? '';
+      String status = data['status']?.toString() ?? '';
+      String dday = data['dday']?.toString() ?? '0';
+      int successNum = data['statusNum']?['successNum'] ?? 0;
 
-        setState(() {
-          if (status == "FAIL") failedIDs.add({"id": id, "name": name});
-          if (status == "IN_PROGRESS") {
-            inProgressIDs.add({"id": id, "name": name});
-          }
-          if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
+      setState(() {
+        if (status == "FAIL") failedIDs.add({"id": id, "name": name});
+        if (status == "IN_PROGRESS") {
+          inProgressIDs.add({"id": id, "name": name});
+        }
+        if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
 
-          nameList.add({'mandalartId': id, 'name': name});
-          statusList.add({'mandalartId': id, 'status': status});
-          ddayList.add({'mandalartId': id, 'dday': dday});
-          successNums.add({'mandalartId': id, 'successNum': successNum});
-        });
-      } else {}
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('데이터 로드 실패: $e')),
-      );
-    }
+        nameList.add({'mandalartId': id, 'name': name});
+        statusList.add({'mandalartId': id, 'status': status});
+        ddayList.add({'mandalartId': id, 'dday': dday});
+        successNums.add({'mandalartId': id, 'successNum': successNum});
+      });
+    } else {}
   }
 
   Future<void> userMandaIdInfo() async {
     if (mandalarts.isNotEmpty) return;
 
-    try {
-      final data = await UserMandaIdService.userManda();
+    final data = await UserMandaIdService.userManda();
 
-      if (data.isNotEmpty) {
-        setState(() {
-          mandalarts = data['mandalarts']!;
-          bookmarks = data['bookmarks']!;
-        });
+    if (data.isNotEmpty) {
+      setState(() {
+        mandalarts = data['mandalarts']!;
+        bookmarks = data['bookmarks']!;
+      });
 
-        // 비동기 작업 병렬 처리
-        final tasks = mandalarts.map((mandalart) async {
-          final String mandalartId = mandalart['id'] ?? '0';
-          await userMandaInfo(mandalartId);
-        });
+      // 비동기 작업 병렬 처리
+      final tasks = mandalarts.map((mandalart) async {
+        final String mandalartId = mandalart['id'] ?? '0';
+        await userMandaInfo(mandalartId);
+      });
 
-        await Future.wait(tasks); // 모든 작업 완료를 기다림
+      await Future.wait(tasks); // 모든 작업 완료를 기다림
 
-        // id 값을 기준으로 오름차순 정렬
-        failedIDs.sort((a, b) {
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
+      // id 값을 기준으로 오름차순 정렬
+      failedIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
 
-        inProgressIDs.sort((a, b) {
-          // BOOKMARK 상태 확인
-          final aBookmark = bookmarks
-              .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
-          final bBookmark = bookmarks
-              .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
+      inProgressIDs.sort((a, b) {
+        // BOOKMARK 상태 확인
+        final aBookmark = bookmarks
+            .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
+        final bBookmark = bookmarks
+            .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
 
-          // BOOKMARK 상태 기준으로 정렬
-          if (aBookmark && !bBookmark) {
-            return -1; // a가 BOOKMARK 상태이고, b는 UNBOOKMARK 상태
-          }
-          if (!aBookmark && bBookmark) {
-            return 1; // b가 BOOKMARK 상태이고, a는 UNBOOKMARK 상태
-          }
+        // BOOKMARK 상태 기준으로 정렬
+        if (aBookmark && !bBookmark) {
+          return -1; // a가 BOOKMARK 상태이고, b는 UNBOOKMARK 상태
+        }
+        if (!aBookmark && bBookmark) {
+          return 1; // b가 BOOKMARK 상태이고, a는 UNBOOKMARK 상태
+        }
 
-          // 같은 상태라면 id 값 기준 정렬 (오름차순)
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
+        // 같은 상태라면 id 값 기준 정렬 (오름차순)
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
 
-        context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
+      context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
 
-        successIDs.sort((a, b) {
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
-      }
-    } catch (e) {
-      // 에러 발생 시 처리
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('데이터 로드 중 오류가 발생했습니다: $e')),
-      );
+      successIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
     }
   }
 
@@ -266,207 +253,196 @@ class _AddPage1State extends State<AddPage1> {
         backgroundColor: backgroundColor,
       ),
       body: SingleChildScrollView(
-                child: Padding(
-                  padding: fullPadding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      TDQuestion('어떤 목표와 관련됐나요?', currentWidth).tDQuestion(),
-                      SizedBox(height: 15),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color: const Color(0xff2A2A2A),
-                        ),
-                        child: FutureBuilder(
-                          future: MainGoalListService.mainGoalList(context),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Center(
-                                child: Text(
-                                  '목표를 불러오는 데 실패했습니다.',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              );
-                            } else if (snapshot.hasData) {
-                              // createdGoals에 있는 목표만 필터링
-                              List<Map<String, dynamic>> goals = mainGoals;
-                  
-                              // 기본 옵션을 시작으로 추가
-                              List<Map<String, dynamic>> options = [
-                                {'id': '0', 'name': '클릭해서 목표를 선택해 주세요.'},
-                                ...goals
-                              ];
-                  
-                              return DropdownButton<String>(
-                                value: selectedGoalId.isNotEmpty
-                                    ? selectedGoalId
-                                    : '0',
-                                items:
-                                    options.map<DropdownMenuItem<String>>((goal) {
-                                  final goalName = goal['name'] ?? 'Unknown Goal';
-                                  final isGuideText =
-                                      goalName == '클릭해서 목표를 선택해 주세요.';
-                                  return DropdownMenuItem<String>(
-                                    value: goal['id'].toString(),
-                                    child: Text(
-                                      goalName,
-                                      style: TextStyle(
-                                          color: isGuideText
-                                              ? const Color(0xff888888)
-                                              : Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) {
-                                  if (value != null) {
-                                    setState(() {
-                                      selectedGoalId = value;
-                                      if (value == '0') {
-                                        selectedGoalName = '';
-                                      } else {
-                                        final selectedGoal = options.firstWhere(
-                                          (goal) =>
-                                              goal['id'].toString() == value,
-                                        );
-                                        selectedGoalName =
-                                            selectedGoal['name'] ?? '';
-                                        _fetchSecondGoals(selectedGoalId);
-                                      }
-                                    });
-                                  }
-                                },
-                                isExpanded: true,
-                                dropdownColor: const Color(0xff2A2A2A),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13),
-                                icon: Icon(
-                                  Icons.arrow_drop_down_rounded, // 원하는 아이콘으로 변경 가능
-                        color: const Color(0xff888888),
-                        size:30, // 아이 // 아이콘 크기 조절
-                                ),
-                                underline: Container(),
-                                elevation: 0,
-                                borderRadius: BorderRadius.circular(6),
-                              );
-                            } else {
-                              return const Center(
-                                child: Text(
-                                  '목표가 없습니다.',
-                                  style: TextStyle(
-                                          color: Color(0xff888888),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      if (selectedGoalName != "") ...[
-                        SizedBox(height: 40),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            TDQuestion('어떤 플랜과 관련됐나요?', currentWidth)
-                                .tDQuestion(),
-                            SizedBox(height: 15),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                              height: 60,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: const Color(0xff2A2A2A),
-                              ),
-                              child:Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                      thirdGoalName,
-                                      style: TextStyle(
-                                          color:
-                                              thirdGoalName == '제3목표를 클릭하여 선택해주세요.'
-                                                  ? const Color(0xff888888)
-                                                  : Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15),
-                                    ),
-                              ),
-                               
-                            ),
-                            SizedBox(height: 25),
-                            Center(
-                              child: MandalartGrid2(
-                                mandalart: selectedGoalName,
-                                secondGoals: secondGoals,
-                                firstColor: firstColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ],
-                  ),
+        child: Padding(
+          padding: fullPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20),
+              TDQuestion('어떤 목표와 관련됐나요?', currentWidth).tDQuestion(),
+              SizedBox(height: 15),
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: const Color(0xff2A2A2A),
                 ),
-              ),
-            
-        
-      bottomNavigationBar: Padding(padding: fullPadding, child: 
-      Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                //취소버튼
-                SizedBox(
-                  width: 90,
-                  height: 45,
-                  child: NewButton(Colors.black, Colors.white, '취소', () {
-                    context
-                        .read<SelectAPModel>()
-                        .selectAP("제3목표를 클릭하여 선택해주세요.", null);
-                    context
-                        .read<SelectRepeatModel>()
-                        .selectRepeat(false, false, false, false);
-                    Navigator.pop(context);
-                  }, currentWidth)
-                      .newButton(),
-                ),
-
-                //다음버튼
-                SizedBox(
-                  width: 90,
-                  height: 45,
-                  child: NewButton(Colors.black, Colors.white, '다음', () {
-                    if (thirdGoalName != '제3목표를 클릭하여 선택해주세요.') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddPage2(
-                            thirdGoalId: thirdGoalId,
-                            thirdGoalName: thirdGoalName,
-                          ),
+                child: FutureBuilder(
+                  future: MainGoalListService.mainGoalList(context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Center(
+                        child: Text(
+                          '목표를 불러오는 데 실패했습니다.',
+                          style: TextStyle(color: Colors.white),
                         ),
                       );
+                    } else if (snapshot.hasData) {
+                      // createdGoals에 있는 목표만 필터링
+                      List<Map<String, dynamic>> goals = mainGoals;
+
+                      // 기본 옵션을 시작으로 추가
+                      List<Map<String, dynamic>> options = [
+                        {'id': '0', 'name': '클릭해서 목표를 선택해 주세요.'},
+                        ...goals
+                      ];
+
+                      return DropdownButton<String>(
+                        value: selectedGoalId.isNotEmpty ? selectedGoalId : '0',
+                        items: options.map<DropdownMenuItem<String>>((goal) {
+                          final goalName = goal['name'] ?? 'Unknown Goal';
+                          final isGuideText = goalName == '클릭해서 목표를 선택해 주세요.';
+                          return DropdownMenuItem<String>(
+                            value: goal['id'].toString(),
+                            child: Text(
+                              goalName,
+                              style: TextStyle(
+                                  color: isGuideText
+                                      ? const Color(0xff888888)
+                                      : Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          if (value != null) {
+                            setState(() {
+                              selectedGoalId = value;
+                              if (value == '0') {
+                                selectedGoalName = '';
+                              } else {
+                                final selectedGoal = options.firstWhere(
+                                  (goal) => goal['id'].toString() == value,
+                                );
+                                selectedGoalName = selectedGoal['name'] ?? '';
+                                _fetchSecondGoals(selectedGoalId);
+                              }
+                            });
+                          }
+                        },
+                        isExpanded: true,
+                        dropdownColor: const Color(0xff2A2A2A),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 13),
+                        icon: Icon(
+                          Icons.arrow_drop_down_rounded, // 원하는 아이콘으로 변경 가능
+                          color: const Color(0xff888888),
+                          size: 30, // 아이 // 아이콘 크기 조절
+                        ),
+                        underline: Container(),
+                        elevation: 0,
+                        borderRadius: BorderRadius.circular(6),
+                      );
                     } else {
-                      TutorialMessage(
-                        "드롭다운에서 목표를 선택해 주세요.",
-                      ).tutorialMessage(context);
+                      return const Center(
+                        child: Text(
+                          '목표가 없습니다.',
+                          style: TextStyle(
+                              color: Color(0xff888888),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15),
+                        ),
+                      );
                     }
-                  }, currentWidth)
-                      .newButton(),
+                  },
+                ),
+              ),
+              if (selectedGoalName != "") ...[
+                SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TDQuestion('어떤 플랜과 관련됐나요?', currentWidth).tDQuestion(),
+                    SizedBox(height: 15),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      height: 60,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: const Color(0xff2A2A2A),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          thirdGoalName,
+                          style: TextStyle(
+                              color: thirdGoalName == '제3목표를 클릭하여 선택해주세요.'
+                                  ? const Color(0xff888888)
+                                  : Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    Center(
+                      child: MandalartGrid2(
+                        mandalart: selectedGoalName,
+                        secondGoals: secondGoals,
+                        firstColor: firstColor,
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: fullPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //취소버튼
+            SizedBox(
+              width: 90,
+              height: 45,
+              child: NewButton(Colors.black, Colors.white, '취소', () {
+                context
+                    .read<SelectAPModel>()
+                    .selectAP("제3목표를 클릭하여 선택해주세요.", null);
+                context
+                    .read<SelectRepeatModel>()
+                    .selectRepeat(false, false, false, false);
+                Navigator.pop(context);
+              }, currentWidth)
+                  .newButton(),
+            ),
+
+            //다음버튼
+            SizedBox(
+              width: 90,
+              height: 45,
+              child: NewButton(Colors.black, Colors.white, '다음', () {
+                if (thirdGoalName != '제3목표를 클릭하여 선택해주세요.') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddPage2(
+                        thirdGoalId: thirdGoalId,
+                        thirdGoalName: thirdGoalName,
+                      ),
+                    ),
+                  );
+                } else {
+                  TutorialMessage(
+                    "드롭다운에서 목표를 선택해 주세요.",
+                  ).tutorialMessage(context);
+                }
+              }, currentWidth)
+                  .newButton(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

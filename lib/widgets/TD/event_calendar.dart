@@ -98,15 +98,8 @@ class _EventCalendarState extends State<EventCalendar> {
   }
 
   void dominoStatus(int goalId, String attainment, String date) async {
-    final success = await DominoStatusService.dominoStatus(
+    await DominoStatusService.dominoStatus(
         goalId: goalId, attainment: attainment, date: date);
-
-    if (success) {
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('업데이트에 실패했습니다.')),
-      );
-    }
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -618,89 +611,76 @@ void editDialog(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                      width: 16,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Color(int.parse(
-                                color
-                                    .replaceAll('Color(', '')
-                                    .replaceAll(')', '')
-                                    .replaceAll('0x', ''),
-                                radix: 16) +
-                            0xFF000000),
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
+                  width: 16,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Color(int.parse(
+                            color
+                                .replaceAll('Color(', '')
+                                .replaceAll(')', '')
+                                .replaceAll('0x', ''),
+                            radix: 16) +
+                        0xFF000000),
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      content,
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                      width: 160,
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                        maxLines: 2, // 👉 최대 2줄까지만 표시
+                        overflow:
+                            TextOverflow.ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
+                        softWrap: true, // 👉 자동 줄바꿈 허용
                       ),
                     ),
-                    SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          content,
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16),
-                        ),
-                        SizedBox(height: 5),
-                        SizedBox(
-                          width: 160,
-                          child: Text(
-                              title,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600),
-                              maxLines: 2, // 👉 최대 2줄까지만 표시
-                              overflow: TextOverflow
-                                  .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
-                              softWrap: true, // 👉 자동 줄바꿈 허용
-                            ),
-                        ),
-                       
-                        SizedBox(height: 15),
-                        
-                        Text(
-                                '반복',
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                getIntervalText(),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                        
-                       
-                      ],
+                    SizedBox(height: 15),
+                    Text(
+                      '반복',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
                     ),
-                    Spacer(),
-                 
-                 NewCustomIconButton(() {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditPage(
-                                date,
-                                content,
-                                title,
-                                switchvalue,
-                                interval,
-                                mandalartId,
-                                thirdGoalId),
-                          ),
-                        );
-                      }, Icons.edit, currentWidth, 19)
-                          .newCustomIconButton(),
-                 
-               
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      getIntervalText(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                NewCustomIconButton(() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditPage(date, content, title,
+                          switchvalue, interval, mandalartId, thirdGoalId),
+                    ),
+                  );
+                }, Icons.edit, currentWidth, 19)
+                    .newCustomIconButton(),
               ],
             ),
           ),

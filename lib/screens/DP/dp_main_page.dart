@@ -71,105 +71,92 @@ class _DPMainState extends State<DPMain> {
   Future<void> userMandaIdInfo() async {
     if (mandalarts.isNotEmpty) return;
 
-    try {
-      final data = await UserMandaIdService.userManda();
+    final data = await UserMandaIdService.userManda();
 
-      if (data.isNotEmpty) {
-        setState(() {
-          mandalarts = data['mandalarts']!;
-          bookmarks = data['bookmarks']!;
-        });
+    if (data.isNotEmpty) {
+      setState(() {
+        mandalarts = data['mandalarts']!;
+        bookmarks = data['bookmarks']!;
+      });
 
-        // 비동기 작업 병렬 처리
-        final tasks = mandalarts.map((mandalart) async {
-          final String mandalartId = mandalart['id'] ?? '0';
-          await userMandaInfo(mandalartId);
-        });
+      // 비동기 작업 병렬 처리
+      final tasks = mandalarts.map((mandalart) async {
+        final String mandalartId = mandalart['id'] ?? '0';
+        await userMandaInfo(mandalartId);
+      });
 
-        await Future.wait(tasks); // 모든 작업 완료를 기다림
+      await Future.wait(tasks); // 모든 작업 완료를 기다림
 
-        // id 값을 기준으로 오름차순 정렬
-        failedIDs.sort((a, b) {
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
+      // id 값을 기준으로 오름차순 정렬
+      failedIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
 
-        inProgressIDs.sort((a, b) {
-          // BOOKMARK 상태 확인
-          final aBookmark = bookmarks
-              .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
-          final bBookmark = bookmarks
-              .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
+      inProgressIDs.sort((a, b) {
+        // BOOKMARK 상태 확인
+        final aBookmark = bookmarks
+            .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
+        final bBookmark = bookmarks
+            .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
 
-          // BOOKMARK 상태 기준으로 정렬
-          if (aBookmark && !bBookmark) {
-            return -1; // a가 BOOKMARK 상태이고, b는 UNBOOKMARK 상태
-          }
-          if (!aBookmark && bBookmark) {
-            return 1; // b가 BOOKMARK 상태이고, a는 UNBOOKMARK 상태
-          }
+        // BOOKMARK 상태 기준으로 정렬
+        if (aBookmark && !bBookmark) {
+          return -1; // a가 BOOKMARK 상태이고, b는 UNBOOKMARK 상태
+        }
+        if (!aBookmark && bBookmark) {
+          return 1; // b가 BOOKMARK 상태이고, a는 UNBOOKMARK 상태
+        }
 
-          // 같은 상태라면 id 값 기준 정렬 (오름차순)
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
+        // 같은 상태라면 id 값 기준 정렬 (오름차순)
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
 
-        context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
+      context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
 
-        successIDs.sort((a, b) {
-          return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
-        });
-      }
-    } catch (e) {
-      // 에러 발생 시 처리
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('데이터 로드 중 오류가 발생했습니다: $e')),
-      );
+      successIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
     }
   }
 
   Future<void> userMandaInfo(String mandalartId) async {
     if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
 
-    try {
-      final data = await UserMandaInfoService.userMandaInfo(context,
-          mandalartId: int.parse(mandalartId));
+    final data = await UserMandaInfoService.userMandaInfo(context,
+        mandalartId: int.parse(mandalartId));
 
-      if (data != null) {
-        String id = mandalartId;
-        String name = data['name'] ?? '';
-        String status = data['status']?.toString() ?? '';
-        List<dynamic> photoList = data['photoList'] ?? [];
-        String dday = data['dday']?.toString() ?? '0';
-        int successNum = data['statusNum']?['successNum'] ?? 0;
+    if (data != null) {
+      String id = mandalartId;
+      String name = data['name'] ?? '';
+      String status = data['status']?.toString() ?? '';
+      List<dynamic> photoList = data['photoList'] ?? [];
+      String dday = data['dday']?.toString() ?? '0';
+      int successNum = data['statusNum']?['successNum'] ?? 0;
 
-        setState(() {
-          if (status == "FAIL") failedIDs.add({"id": id, "name": name});
-          if (status == "IN_PROGRESS") {
-            inProgressIDs.add({"id": id, "name": name});
+      setState(() {
+        if (status == "FAIL") failedIDs.add({"id": id, "name": name});
+        if (status == "IN_PROGRESS") {
+          inProgressIDs.add({"id": id, "name": name});
+        }
+        if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
+
+        nameList.add({'mandalartId': id, 'name': name});
+        statusList.add({'mandalartId': id, 'status': status});
+        ddayList.add({'mandalartId': id, 'dday': dday});
+        successNums.add({'mandalartId': id, 'successNum': successNum});
+
+        // 사진 리스트를 photos에 저장
+        if (photoList.isNotEmpty) {
+          photos[id] = [];
+          for (var photo in photoList) {
+            photos[id]?.add({
+              'path': photo['path'] ?? '',
+              'id': photo['id'].toString(),
+            });
           }
-          if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
-
-          nameList.add({'mandalartId': id, 'name': name});
-          statusList.add({'mandalartId': id, 'status': status});
-          ddayList.add({'mandalartId': id, 'dday': dday});
-          successNums.add({'mandalartId': id, 'successNum': successNum});
-
-          // 사진 리스트를 photos에 저장
-          if (photoList.isNotEmpty) {
-            photos[id] = [];
-            for (var photo in photoList) {
-              photos[id]?.add({
-                'path': photo['path'] ?? '',
-                'id': photo['id'].toString(),
-              });
-            }
-          }
-        });
-      } else {}
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('데이터 로드 실패: $e')),
-      );
-    }
+        }
+      });
+    } else {}
   }
 
   void _mainGoalList() async {
@@ -234,54 +221,54 @@ class _DPMainState extends State<DPMain> {
       backgroundColor: backgroundColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-                  //초기화 로직
-                  for (int i = 0; i < 9; i++) {
-                    context
-                        .read<SaveInputtedDetailGoalModel>()
-                        .updateDetailGoal(i.toString(), "");
-                  }
+          //초기화 로직
+          for (int i = 0; i < 9; i++) {
+            context
+                .read<SaveInputtedDetailGoalModel>()
+                .updateDetailGoal(i.toString(), "");
+          }
 
-                  for (int i = 0; i < 9; i++) {
-                    context
-                        .read<TestInputtedDetailGoalModel>()
-                        .updateTestDetailGoal(i.toString(), "");
-                  }
+          for (int i = 0; i < 9; i++) {
+            context
+                .read<TestInputtedDetailGoalModel>()
+                .updateTestDetailGoal(i.toString(), "");
+          }
 
-                  for (int i = 0; i < 9; i++) {
-                    context
-                        .read<GoalColor>()
-                        .updateGoalColor(i.toString(), const Color(0xff929292));
-                  }
+          for (int i = 0; i < 9; i++) {
+            context
+                .read<GoalColor>()
+                .updateGoalColor(i.toString(), const Color(0xff929292));
+          }
 
-                  for (int i = 0; i < 9; i++) {
-                    for (int j = 0; j < 9; j++) {
-                      context
-                          .read<SaveInputtedActionPlanModel>()
-                          .updateActionPlan(i, j.toString(), "");
-                    }
-                  }
+          for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+              context
+                  .read<SaveInputtedActionPlanModel>()
+                  .updateActionPlan(i, j.toString(), "");
+            }
+          }
 
-                  for (int i = 0; i < 9; i++) {
-                    for (int j = 0; j < 9; j++) {
-                      context
-                          .read<TestInputtedActionPlanModel>()
-                          .updateTestActionPlan(i, j.toString(), "");
-                    }
-                  }
+          for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+              context
+                  .read<TestInputtedActionPlanModel>()
+                  .updateTestActionPlan(i, j.toString(), "");
+            }
+          }
 
-                  // 살짝 기다려줌 (프레임 간 처리 타이밍 보장)
-                  await Future.delayed(Duration(milliseconds: 10));
+          // 살짝 기다려줌 (프레임 간 처리 타이밍 보장)
+          await Future.delayed(Duration(milliseconds: 10));
 
-                  // 화면 전환
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DPcreateSelectPage(
-                        emptyMainGoals: emptyMainGoals,
-                      ),
-                    ),
-                  );
-                },
+          // 화면 전환
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DPcreateSelectPage(
+                emptyMainGoals: emptyMainGoals,
+              ),
+            ),
+          );
+        },
         backgroundColor: mainRed,
         shape: const CircleBorder(),
         mini: true,
@@ -306,7 +293,6 @@ class _DPMainState extends State<DPMain> {
         padding: fullPadding,
         child: Column(
           children: [
-            
             SizedBox(height: currentWidth < 600 ? 10 : 15),
             mainGoals.isEmpty
                 ? Container(

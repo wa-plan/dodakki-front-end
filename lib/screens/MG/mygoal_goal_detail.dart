@@ -61,38 +61,31 @@ class MyGoalDetailState extends State<MyGoalDetail> {
   Offset _iconPosition = Offset.zero;
 
   Future<void> userMandaInfo(String mandalartId) async {
-    try {
-      final data = await UserMandaInfoService.userMandaInfo(context,
-          mandalartId: int.parse(mandalartId));
+    final data = await UserMandaInfoService.userMandaInfo(context,
+        mandalartId: int.parse(mandalartId));
 
-      if (data != null) {
-        String description = data['description'] ?? '';
-        int failedNum = data['statusNum']?['failed'] ?? 0;
-        int inProgressNum = data['statusNum']?['inProgressNum'] ?? 0;
-        int successNum = data['statusNum']?['successNum'] ?? 0;
+    if (data != null) {
+      String description = data['description'] ?? '';
+      int failedNum = data['statusNum']?['failed'] ?? 0;
+      int inProgressNum = data['statusNum']?['inProgressNum'] ?? 0;
+      int successNum = data['statusNum']?['successNum'] ?? 0;
 
-        setState(() {
-          mandaDescription = description;
-          this.failedNum = failedNum;
-          this.inProgressNum = inProgressNum;
-          this.successNum = successNum;
+      setState(() {
+        mandaDescription = description;
+        this.failedNum = failedNum;
+        this.inProgressNum = inProgressNum;
+        this.successNum = successNum;
 
-          total = this.successNum + this.inProgressNum + this.failedNum;
-          successRate =
-              total == 0 ? 0 : (this.successNum / total * 100).round();
-          inProgressRate =
-              total == 0 ? 0 : (this.inProgressNum / total * 100).round();
-          failedRate = 100 - successRate - inProgressRate;
-          print(successNum);
-          print(inProgressNum);
-          print(failedNum);
-        });
-      } else {}
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('데이터 로드 실패: $e')),
-      );
-    }
+        total = this.successNum + this.inProgressNum + this.failedNum;
+        successRate = total == 0 ? 0 : (this.successNum / total * 100).round();
+        inProgressRate =
+            total == 0 ? 0 : (this.inProgressNum / total * 100).round();
+        failedRate = 100 - successRate - inProgressRate;
+        print(successNum);
+        print(inProgressNum);
+        print(failedNum);
+      });
+    } else {}
   }
 
   void _mandaProgress(int id, String status) async {
@@ -342,7 +335,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                             itemCount: 3,
                             itemBuilder: (context, index) {
                               return Container(
-                                margin: EdgeInsets.only(right: index == 2 ? 0 : 5),
+                                margin:
+                                    EdgeInsets.only(right: index == 2 ? 0 : 5),
                                 width: 105,
                                 height: 105,
                                 decoration: BoxDecoration(
@@ -556,59 +550,59 @@ class MyGoalDetailState extends State<MyGoalDetail> {
   }
 
   Widget statistics({
-  required int rate,
-  required int num,
-  required String text,
-  required Color textColor,
-}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        children: [
-          Text(
-            text,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+    required int rate,
+    required int num,
+    required String text,
+    required Color textColor,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          SizedBox(width: 10),
-          Text(
-            '$rate%',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
+            SizedBox(width: 10),
+            Text(
+              '$rate%',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          Spacer(),
-          Text(
-            '$num개',
-            style: TextStyle(
-              color: textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+            Spacer(),
+            Text(
+              '$num개',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
-      ),
-      const SizedBox(height: 6),
-      // 막대 그래프
-      ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: LinearProgressIndicator(
-          value: rate / 100.0,
-          backgroundColor: const Color(0xff444444),
-          valueColor: AlwaysStoppedAnimation<Color>(textColor),
-          minHeight: 10,
+          ],
         ),
-      ),
-      const SizedBox(height: 6),
-    ],
-  );
-}
+        const SizedBox(height: 6),
+        // 막대 그래프
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: rate / 100.0,
+            backgroundColor: const Color(0xff444444),
+            valueColor: AlwaysStoppedAnimation<Color>(textColor),
+            minHeight: 10,
+          ),
+        ),
+        const SizedBox(height: 6),
+      ],
+    );
+  }
 
   void _updateIconPosition() {
     // 아이콘의 현재 위치를 계산
@@ -662,10 +656,9 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                   child: Text(
                     message,
                     style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500
-                    ),
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
               ),

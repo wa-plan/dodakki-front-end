@@ -149,9 +149,8 @@ class Edit99Page extends StatelessWidget {
                                       mandalart: mandalart,
                                       firstColor: firstColor,
                                       secondGoalIds: secondGoalIds,
-              secondGoals: secondGoals,
-              mandalartId: mandalartId,
-                                      
+                                      secondGoals: secondGoals,
+                                      mandalartId: mandalartId,
                                     ),
                                   GestureDetector(
                                     onTap: () {
@@ -160,68 +159,67 @@ class Edit99Page extends StatelessWidget {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 EditInput1Page(
-                                                    mainGoalId:
-                                                        mandalartId.toString(),
-                                                    mandalart: mandalart,
-                                                    firstColor: firstColor,
-                                                    mandalartId: mandalartId,
-                                                    secondGoalIds: secondGoalIds,
-                                                    secondGoals: secondGoals,),
+                                              mainGoalId:
+                                                  mandalartId.toString(),
+                                              mandalart: mandalart,
+                                              firstColor: firstColor,
+                                              mandalartId: mandalartId,
+                                              secondGoalIds: secondGoalIds,
+                                              secondGoals: secondGoals,
+                                            ),
                                           ));
                                     },
                                     child: SizedBox(
                                       width: 100,
                                       child: GridView.count(
-                                         crossAxisCount: 3,
-                                            crossAxisSpacing: 0.5,
-                                            mainAxisSpacing: 0.5,
-                                          
-                                          children: [
-                                            for (int i = 0; i < 4; i++)
-                                              DPGrid3_E(
-                                                      context
-                                                              .watch<
-                                                                  SaveInputtedDetailGoalModel>()
-                                                              .inputtedDetailGoal
-                                                              .containsKey('$i')
-                                                          ? context
-                                                                  .watch<
-                                                                      SaveInputtedDetailGoalModel>()
-                                                                  .inputtedDetailGoal['$i'] ??
-                                                              ''
-                                                          : '',
-                                                      const Color(0xff929292),
-                                                      10)
-                                                  .dpGrid3_E(),
-                                      
-                                            // 제1목표 그리드
-                                            DPGrid1(
-                                                    mandalart,
-                                                    ColorTransform(firstColor)
-                                                        .colorTransform(),
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 0.5,
+                                        mainAxisSpacing: 0.5,
+                                        children: [
+                                          for (int i = 0; i < 4; i++)
+                                            DPGrid3_E(
+                                                    context
+                                                            .watch<
+                                                                SaveInputtedDetailGoalModel>()
+                                                            .inputtedDetailGoal
+                                                            .containsKey('$i')
+                                                        ? context
+                                                                .watch<
+                                                                    SaveInputtedDetailGoalModel>()
+                                                                .inputtedDetailGoal['$i'] ??
+                                                            ''
+                                                        : '',
+                                                    const Color(0xff929292),
                                                     10)
-                                                .dpGrid1(),
-                                      
-                                            for (int i = 5; i < 9; i++)
-                                              DPGrid3_E(
-                                                      context
-                                                              .watch<
-                                                                  SaveInputtedDetailGoalModel>()
-                                                              .inputtedDetailGoal
-                                                              .containsKey('$i')
-                                                          ? context
-                                                                  .watch<
-                                                                      SaveInputtedDetailGoalModel>()
-                                                                  .inputtedDetailGoal['$i'] ??
-                                                              ''
-                                                          : '',
-                                                      const Color(0xff929292),
-                                                      10)
-                                                  .dpGrid3_E(),
-                                          ],
-                                        ),
+                                                .dpGrid3_E(),
+
+                                          // 제1목표 그리드
+                                          DPGrid1(
+                                                  mandalart,
+                                                  ColorTransform(firstColor)
+                                                      .colorTransform(),
+                                                  10)
+                                              .dpGrid1(),
+
+                                          for (int i = 5; i < 9; i++)
+                                            DPGrid3_E(
+                                                    context
+                                                            .watch<
+                                                                SaveInputtedDetailGoalModel>()
+                                                            .inputtedDetailGoal
+                                                            .containsKey('$i')
+                                                        ? context
+                                                                .watch<
+                                                                    SaveInputtedDetailGoalModel>()
+                                                                .inputtedDetailGoal['$i'] ??
+                                                            ''
+                                                        : '',
+                                                    const Color(0xff929292),
+                                                    10)
+                                                .dpGrid3_E(),
+                                        ],
+                                      ),
                                     ),
-                                    
                                   ),
                                   for (int i = 5; i < 9; i++)
                                     EditSmallgridwithdata(
@@ -229,8 +227,8 @@ class Edit99Page extends StatelessWidget {
                                       mandalart: mandalart,
                                       firstColor: firstColor,
                                       secondGoalIds: secondGoalIds,
-              secondGoals: secondGoals,
-              mandalartId: mandalartId,
+                                      secondGoals: secondGoals,
+                                      mandalartId: mandalartId,
                                     ),
                                 ],
                               )),
@@ -261,25 +259,25 @@ class Edit99Page extends StatelessWidget {
                               // 취소 버튼을 눌렀을 때 실행할 코드
                               Navigator.pop(context);
                             },
-                        
+
                             onSuccess: () async {
                               for (int i = 0; i < 9; i++) {
                                 context
                                     .read<SaveInputtedDetailGoalModel>()
                                     .updateDetailGoal(i.toString(), "");
                               }
-                        
+
                               for (int i = 0; i < 9; i++) {
                                 context
                                     .read<TestInputtedDetailGoalModel>()
                                     .updateTestDetailGoal(i.toString(), "");
                               }
-                        
+
                               for (int i = 0; i < 9; i++) {
                                 context.read<GoalColor>().updateGoalColor(
                                     i.toString(), const Color(0xff929292));
                               }
-                        
+
                               for (int i = 0; i < 9; i++) {
                                 for (int j = 0; j < 9; j++) {
                                   context
@@ -287,15 +285,16 @@ class Edit99Page extends StatelessWidget {
                                       .updateActionPlan(i, j.toString(), "");
                                 }
                               }
-                        
+
                               for (int i = 0; i < 9; i++) {
                                 for (int j = 0; j < 9; j++) {
                                   context
                                       .read<TestInputtedActionPlanModel>()
-                                      .updateTestActionPlan(i, j.toString(), "");
+                                      .updateTestActionPlan(
+                                          i, j.toString(), "");
                                 }
                               }
-                        
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -310,7 +309,7 @@ class Edit99Page extends StatelessWidget {
                       Builder(builder: (context) {
                         return SizedBox(
                           width: 90,
-                        height: 45,
+                          height: 45,
                           child: NewButton(
                             Color.fromARGB(255, 155, 51, 51),
                             Colors.white,
@@ -321,7 +320,7 @@ class Edit99Page extends StatelessWidget {
                               for (var goal in secondGoals) {
                                 secondGoalIds.add(goal['id']);
                               }
-                          
+
                               // 2. thirdGoal ID 리스트 만들고 중복 제거
                               Set<int> thirdGoalIds = {}; // Set으로 중복 제거
                               for (var goal in secondGoals) {
@@ -329,7 +328,7 @@ class Edit99Page extends StatelessWidget {
                                   thirdGoalIds.add(third['id']);
                                 }
                               }
-                          
+
                               // 3. 삭제 다이얼로그 띄우기
                               PopupDialog.show(
                                 context,
@@ -363,7 +362,7 @@ class Edit99Page extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                          
+
                                   // 1) secondGoal 먼저 삭제
                                   bool allSecondDeleted = true;
                                   for (int secondGoalId in secondGoalIds) {
@@ -374,16 +373,9 @@ class Edit99Page extends StatelessWidget {
                                     );
                                     if (!success) {
                                       allSecondDeleted = false;
-                                      Fluttertoast.showToast(
-                                        msg: '목표 삭제 실패: $secondGoalId',
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                      );
                                     }
                                   }
-                          
+
                                   // 2) secondGoal이 모두 성공했을 때만 thirdGoal 삭제
                                   if (allSecondDeleted) {
                                     bool allThirdDeleted = true;
@@ -396,29 +388,24 @@ class Edit99Page extends StatelessWidget {
                                       );
                                       if (!thirdDeleted) {
                                         allThirdDeleted = false;
-                                        Fluttertoast.showToast(
-                                          msg: '세부 목표 삭제 실패: $thirdGoalId',
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                        );
+
                                         break;
                                       }
                                     }
-                          
+
                                     // ✅ 3) 성공 시 팝업 닫고 메인 이동
                                     if (allThirdDeleted) {
                                       Navigator.pop(context); // 로딩 팝업 닫기
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const DPMain()),
+                                            builder: (context) =>
+                                                const DPMain()),
                                       );
                                       return;
                                     }
                                   }
-                          
+
                                   // ❌ 실패했을 경우에도 로딩 팝업 닫기
                                   Navigator.pop(context); // 로딩 팝업 닫기
                                 },

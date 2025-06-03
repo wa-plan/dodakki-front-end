@@ -52,10 +52,6 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
         _subGoals = subGoals; // 새로운 세부 목표로 업데이트
         print('_subGoals=$_subGoals');
       });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false; // 로딩 상태 해제
@@ -174,7 +170,7 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                           child: SizedBox(
                               width: currentHeight * 0.53,
                               child: GridView(
-                                  shrinkWrap: true, 
+                                  shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
@@ -204,10 +200,9 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                                                 .selectedFinalGoal,
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
-                                              color: backgroundColor,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 15
-                                            )),
+                                                color: backgroundColor,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 15)),
                                       ),
                                     ),
                                     const Input1(selectedDetailGoalId: 5),
