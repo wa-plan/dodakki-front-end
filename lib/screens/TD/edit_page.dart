@@ -36,6 +36,7 @@ class EditPageState extends State<EditPage> {
   final formKey = GlobalKey<FormState>();
   String dominoValue = '';
   late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
+  DateTime today = DateTime.now();
 
   Future<bool> deleteDominoToEdit(int thirdGoalId) async {
     final success = await DeleteDominoService.deleteDomino(goalId: thirdGoalId);
@@ -45,6 +46,33 @@ class EditPageState extends State<EditPage> {
       );
     }
     return success;
+  }
+
+  void deleteTodayDominoToEdit(int goalId, String goalDate) async {
+    final success = await DeleteTodayDominoService.deleteTodayDomino(
+        goalId: goalId, goalDate: goalDate);
+
+    if (success) {
+      // 성공적으로 서버에 전송된 경우에 처리할 코드
+      Message(
+              "도미노가 삭제되었어!.",
+              const Color(0xffFF6767), // 텍스트 색상
+              const Color(0xff412C2C), // 배경 색상
+              borderColor: const Color(0xffFF6767), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const TdMain(),
+          ));
+    } else {
+      // 실패한 경우에 처리할 코드
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
+      );
+    }
   }
 
   Future<bool> addDomino(int thirdGoalId, String name, List<DateTime> dateList,
@@ -121,6 +149,7 @@ class EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
+    String todayDate = DateFormat('yyyy-MM-dd').format(today);
     final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -289,6 +318,8 @@ class EditPageState extends State<EditPage> {
                 }
 
                 final deleted = await deleteDominoToEdit(widget.goalId);
+                final delete =
+                    deleteTodayDominoToEdit(widget.goalId, todayDate);
                 if (!deleted) return;
 
                 final added = await addDomino(
