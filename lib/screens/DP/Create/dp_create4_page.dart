@@ -28,6 +28,7 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
   bool _isLoading = false;
   String secondGoal = "";
   String coreGoal = "";
+  bool been = false;
 
   @override
   void didChangeDependencies() {

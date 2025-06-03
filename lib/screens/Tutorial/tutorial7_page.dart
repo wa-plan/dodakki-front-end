@@ -59,6 +59,7 @@ class Tutorial7State extends State<Tutorial7> {
 
     return Scaffold(
       backgroundColor: Colors.black,
+
       body: FutureBuilder(
         future: _initFuture,
         builder: (context, snapshot) {

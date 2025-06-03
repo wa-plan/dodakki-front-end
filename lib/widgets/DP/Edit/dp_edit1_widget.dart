@@ -67,6 +67,7 @@ class EditSmallgridwithdata extends StatelessWidget {
                   secondGoalIds: secondGoalIds,
                   secondGoals: secondGoals,
                   mandalartId: mandalartId,
+                  been: false,
                 ),
               ),
             );
