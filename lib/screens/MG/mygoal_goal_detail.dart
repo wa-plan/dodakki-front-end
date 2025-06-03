@@ -333,23 +333,25 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                     ),
                     //이미지
                     if (goalImage.isEmpty) ...[
-                      SizedBox(
-                        height: 105,
-                        width: currentWidth < 600 ? 290 : double.infinity,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                              width: 105,
-                              height: 105,
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 53, 53, 53),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            );
-                          },
+                      Center(
+                        child: SizedBox(
+                          height: 105,
+                          width: currentWidth < 600 ? 325 : double.infinity,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 3,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.only(right: index == 2 ? 0 : 5),
+                                width: 105,
+                                height: 105,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 53, 53, 53),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       )
                     ] else ...[

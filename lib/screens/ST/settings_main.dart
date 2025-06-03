@@ -459,7 +459,7 @@ class _SettingsMainState extends State<SettingsMain> {
                           fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  Text('1.0.8  ',
+                  Text('1.0.10  ',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.grey,

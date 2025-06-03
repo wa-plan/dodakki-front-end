@@ -78,20 +78,23 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     return InteractiveViewer(
+      onInteractionUpdate: (details) {
+    print('Scale: ${details.scale}, Focal Point: ${details.focalPoint}');
+  },
       panEnabled: true, // Allow panning (dragging)
         scaleEnabled: true, // Allow zooming
         minScale: 0.5, // Minimum zoom scale (50%)
         maxScale: 3.0, // Maximum zoom scale (300%)
       child: SizedBox(
         width: widget.currentHeight*0.53,
-        child: GridView.builder(
-          shrinkWrap: true, // GridView will be wrapped in the available space
+        height: widget.currentHeight * 0.53,
+        child: GridView(
+          shrinkWrap: true, 
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
           ),
-          itemCount: 9,
-          itemBuilder: (context, index) {
+          children: List.generate(9, (index) {
             if (index == 4) {
               return GestureDetector(
                 onTap: () => Navigator.push(
@@ -109,6 +112,7 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
                 child: SizedBox(
                   width: 100,
                   child: GridView.count(
+                    physics: const NeverScrollableScrollPhysics(),
                     crossAxisCount: 3,
                     children: [
                       for (int i = 0; i < 4; i++)
@@ -127,6 +131,6 @@ class _MandalartGrid3 extends State<MandalartGrid3> {
           },
         ),
       ),
-    );
+    ));
   }
 }

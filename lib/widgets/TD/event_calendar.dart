@@ -643,19 +643,22 @@ void editDialog(
                               fontSize: 16),
                         ),
                         SizedBox(height: 5),
-                        Text(
-                            title,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                            maxLines: 1, // 👉 최대 2줄까지만 표시
-                            overflow: TextOverflow
-                                .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
-                            softWrap: true, // 👉 자동 줄바꿈 허용
-                          ),
+                        SizedBox(
+                          width: 160,
+                          child: Text(
+                              title,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600),
+                              maxLines: 2, // 👉 최대 2줄까지만 표시
+                              overflow: TextOverflow
+                                  .ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
+                              softWrap: true, // 👉 자동 줄바꿈 허용
+                            ),
+                        ),
                        
-                        SizedBox(height: 30),
+                        SizedBox(height: 15),
                         
                         Text(
                                 '반복',
