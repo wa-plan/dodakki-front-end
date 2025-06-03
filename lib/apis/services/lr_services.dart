@@ -44,25 +44,13 @@ class LoginService {
             }
           } else {
             if (context.mounted) {
-              Fluttertoast.showToast(
-                msg: '토큰을 받아오지 못했습니다.',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-              );
+              
             }
           }
           return false;
         } else {
           if (context.mounted) {
-            Fluttertoast.showToast(
-              msg: '서버 응답 형식이 올바르지 않습니다.',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            );
+            
           }
         }
         return false;
@@ -80,13 +68,7 @@ class LoginService {
       }
     } catch (e) {
       if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return false;
     }
@@ -100,13 +82,7 @@ class ChangePasswordService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -166,16 +142,7 @@ class RegistrationService {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                '계정생성이 완료되었습니다.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-              ),
-              backgroundColor: Colors.green,
-            ),
-          );
+          
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -185,30 +152,12 @@ class RegistrationService {
         }
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                '계정생성에 실패했습니다.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-              ),
-              backgroundColor: Colors.red,
-            ),
-          );
+          
         }
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              '계정생성에 실패했습니다.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
+        
       }
     }
   }
@@ -242,13 +191,7 @@ class IdFindService {
         return '실패';
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return '실패';
     }
   }
@@ -282,13 +225,7 @@ class PwFindService {
         return '실패';
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return '실패';
     }
   }
@@ -301,13 +238,7 @@ class SignOutService {
 
     if (token == null) {
       if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return null;
     }
@@ -325,13 +256,7 @@ class SignOutService {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '탈퇴가 성공적으로 이루어졌습니다.',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-          );
+          
 
           Navigator.pushReplacement(
             context,
@@ -342,25 +267,13 @@ class SignOutService {
         }
       } else {
         if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '탈퇴 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
         }
         return null;
       }
     } catch (e) {
       if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return null;
     }
@@ -376,13 +289,7 @@ class MorningAlertService {
     String? token = prefs.getString('authToken');
 
     if (token == null || token.isEmpty) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -403,23 +310,11 @@ class MorningAlertService {
         
         return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -431,13 +326,7 @@ class NightAlertService {
     String? token = prefs.getString('authToken');
 
     if (token == null || token.isEmpty) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -458,23 +347,11 @@ class NightAlertService {
         
         return true; //성공한 경우 'on' 또는 'off' 값을 반환
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }

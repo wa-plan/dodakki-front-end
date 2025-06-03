@@ -15,13 +15,7 @@ class MainGoalListService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
 
@@ -37,7 +31,7 @@ class MainGoalListService {
       );
 
       if (response.statusCode == 200) {
-        print('토큰: $token');
+        
         final List<dynamic> jsonResponse =
             json.decode(utf8.decode(response.bodyBytes));
 
@@ -49,23 +43,11 @@ class MainGoalListService {
             .toList();
         return mainGoals;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return null;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
   }
@@ -81,13 +63,7 @@ class AddSecondGoalService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -115,23 +91,11 @@ class AddSecondGoalService {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
         } else {
-          Fluttertoast.showToast(
-            msg: '목표 생성 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         allSuccess = false;
       }
     }
@@ -196,23 +160,11 @@ class SecondGoalListService {
 
         return mainGoals;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return null;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
   }
@@ -235,13 +187,7 @@ class AddThirdGoalService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -286,23 +232,11 @@ class AddThirdGoalService {
 
           if (response.statusCode == 200 || response.statusCode == 201) {
           } else {
-            Fluttertoast.showToast(
-              msg: '목표 생성 실패: ${response.body}',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            );
+            
             allSuccess = false;
           }
         } catch (e) {
-          Fluttertoast.showToast(
-            msg: '오류 발생: $e',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       }
@@ -321,13 +255,7 @@ class DeleteMandalartService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -345,23 +273,11 @@ class DeleteMandalartService {
       if (response.statusCode == 204) {
         return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -376,13 +292,7 @@ class DeleteThirdGoalService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -400,23 +310,11 @@ class DeleteThirdGoalService {
       if (response.statusCode == 204) {
         return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -431,13 +329,7 @@ class EditSecondGoalService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -468,23 +360,11 @@ class EditSecondGoalService {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
         } else {
-          Fluttertoast.showToast(
-            msg: '목표 수정 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         allSuccess = false;
       }
     }
@@ -502,13 +382,7 @@ class EditGoalColorService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -538,23 +412,11 @@ class EditGoalColorService {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
         } else {
-          Fluttertoast.showToast(
-            msg: '목표 수정 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         allSuccess = false;
       }
     }
@@ -588,13 +450,7 @@ class EditThirdGoalService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -644,23 +500,11 @@ class EditThirdGoalService {
 
           if (response.statusCode == 200 || response.statusCode == 201) {
           } else {
-            Fluttertoast.showToast(
-              msg: '목표 생성 실패: ${response.body}',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            );
+            
             allSuccess = false;
           }
         } catch (e) {
-          Fluttertoast.showToast(
-            msg: '오류 발생: $e',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       }
@@ -678,13 +522,7 @@ class MainGoalDetailService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
 
@@ -714,23 +552,11 @@ class MainGoalDetailService {
             .toList();
         return mainGoalsDetail;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return null;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
   }

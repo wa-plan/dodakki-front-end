@@ -66,13 +66,7 @@ class DominoInfoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return [];
     }
 
@@ -114,13 +108,7 @@ class AddDominoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -149,31 +137,13 @@ class AddDominoService {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
       } else if (response.statusCode == 401) {
-        Fluttertoast.showToast(
-          msg: '도미노 저장 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       } else {
-        Fluttertoast.showToast(
-          msg: '도미노 저장 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return false;
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '도미노 저장 오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -188,13 +158,7 @@ class DominoStatusService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -216,31 +180,13 @@ class DominoStatusService {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
       } else if (response.statusCode >= 400) {
-        Fluttertoast.showToast(
-          msg: '도미노 변경 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       } else {
-        Fluttertoast.showToast(
-          msg: '도미노 변경 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return false;
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '도미노 변경 오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -255,13 +201,7 @@ class EditDominoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -285,31 +225,13 @@ class EditDominoService {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
       } else if (response.statusCode >= 400) {
-        Fluttertoast.showToast(
-          msg: '도미노 수정 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       } else {
-        Fluttertoast.showToast(
-          msg: '도미노 수정 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return false;
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '도미노 수정 오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -325,13 +247,7 @@ class EditDominoNewService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -356,40 +272,16 @@ class EditDominoNewService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '도미노 목표가 변경되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+        
         return true;
       } else if (response.statusCode >= 400) {
-        Fluttertoast.showToast(
-          msg: '도미노 수정 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       } else {
-        Fluttertoast.showToast(
-          msg: '도미노 수정 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return false;
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '도미노 수정 오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -401,13 +293,7 @@ class DeleteDominoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -430,31 +316,13 @@ class DeleteDominoService {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
       } else if (response.statusCode >= 400) {
-        Fluttertoast.showToast(
-          msg: '삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       } else {
-        Fluttertoast.showToast(
-          msg: '도미노 삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return false;
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -467,13 +335,7 @@ class DeleteTodayDominoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
@@ -495,31 +357,13 @@ class DeleteTodayDominoService {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
       } else if (response.statusCode >= 400) {
-        Fluttertoast.showToast(
-          msg: '오늘의 도미노 삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       } else {
-        Fluttertoast.showToast(
-          msg: '오늘의 도미노 삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return false;
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
@@ -532,13 +376,7 @@ class MandalartInfoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null; // 로그인 토큰 없으면 null 반환
     }
 
@@ -560,21 +398,9 @@ class MandalartInfoService {
         print('서버 응답 데이터: $decodedResponse');
         return decodedResponse; // 성공 시 데이터 반환
       } else if (response.statusCode >= 400) {
-        Fluttertoast.showToast(
-          msg: '조회 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       } else {
-        Fluttertoast.showToast(
-          msg: '조회 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
       }
       return null; // 실패 시 null 반환
     } catch (e) {
@@ -591,13 +417,7 @@ class MandaIdListService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
 
@@ -621,13 +441,7 @@ class MandaIdListService {
         print('idList: $idList');
         return idList;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return null;
       }
     } catch (e) {

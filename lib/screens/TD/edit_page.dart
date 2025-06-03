@@ -49,14 +49,6 @@ class EditPageState extends State<EditPage> {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      Message(
-              "도미노가 삭제되었어!.",
-              const Color(0xffFF6767), // 텍스트 색상
-              const Color(0xff412C2C), // 배경 색상
-              borderColor: const Color(0xffFF6767), // 테두리 색상
-              icon: Icons.block)
-          .message(context);
-
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -303,10 +295,17 @@ class EditPageState extends State<EditPage> {
                   dateList = [pickedDate];
                 }
 
-                final deleted = await deleteDominoToEdit(widget.goalId);
-                final delete =
-                    deleteTodayDominoToEdit(widget.goalId, todayDate);
-                if (!deleted) return;
+                // 🔹 도미노 삭제
+                final dominoDeleted = await deleteDominoToEdit(widget.goalId);
+                if (!dominoDeleted) return;
+
+                // 🔹 오늘 도미노 삭제
+                final todayDeleted =
+                    await DeleteTodayDominoService.deleteTodayDomino(
+                  goalId: widget.goalId,
+                  goalDate: todayDate,
+                );
+                if (!todayDeleted) return;
 
                 final added = await addDomino(
                   widget.thirdGoalId,
@@ -342,14 +341,6 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
 
-      Message(
-              "도미노가 삭제되었어!.",
-              const Color(0xffFF6767), // 텍스트 색상
-              const Color(0xff412C2C), // 배경 색상
-              borderColor: const Color(0xffFF6767), // 테두리 색상
-              icon: Icons.block)
-          .message(context);
-
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -364,13 +355,6 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      Message(
-              "도미노가 삭제되었어!.",
-              const Color(0xffFF6767), // 텍스트 색상
-              const Color(0xff412C2C), // 배경 색상
-              borderColor: const Color(0xffFF6767), // 테두리 색상
-              icon: Icons.block)
-          .message(context);
 
       Navigator.push(
           context,
