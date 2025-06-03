@@ -25,7 +25,7 @@ class _MyGoalState extends State<MyGoal> {
   String description = '';
   String selectedImage = "assets/img/profile_smp4.png";
 
-  late PageController _pageController; 
+  late PageController _pageController;
   int successNum = 0;
   String mandaDescription = '';
   String bookmark = 'UNBOOKMARK';
@@ -39,29 +39,31 @@ class _MyGoalState extends State<MyGoal> {
   List<Map<dynamic, dynamic>> successNums = [];
   Map<String, List<Map<String, String>>> photos = {};
   String? profile;
-  String defaultImage = 'assets/img/profile_smp4.png'; 
+  String defaultImage = 'assets/img/profile_smp4.png';
 
   List<Map<String, String>> mandalarts = [];
   List<Map<String, String>> bookmarks = [];
 
- void userInfo() async {
-  final data = await UserInfoService.userInfo();
-  if (data.isNotEmpty) {
-    setState(() {
-      nickname = (data['nickname']?.toString().isEmpty ?? true)
-          ? '당신은 어떤 사람인가요?'
-          : data['nickname'];
+  void userInfo() async {
+    final data = await UserInfoService.userInfo();
+    if (data.isNotEmpty) {
+      setState(() {
+        nickname = (data['nickname']?.toString().isEmpty ?? true)
+            ? '당신은 어떤 사람인가요?'
+            : data['nickname'];
 
-      description = (data['description']?.toString().isEmpty ?? true)
-          ? '프로필 편집을 통해 \n자신을 표현해주세요.'
-          : data['description'];
+        description = (data['description']?.toString().isEmpty ?? true)
+            ? '프로필 편집을 통해 \n자신을 표현해주세요.'
+            : data['description'];
 
-      final profile = data['profile']?.toString() ?? '';
-      selectedImage = profile == 'https://dodakkibucket.s3.ap-northeast-2.amazonaws.com/baseImage.png' ? defaultImage : profile;
-    });
+        final profile = data['profile']?.toString() ?? '';
+        selectedImage = profile ==
+                'https://dodakkibucket.s3.ap-northeast-2.amazonaws.com/baseImage.png'
+            ? defaultImage
+            : profile;
+      });
+    }
   }
-}
-
 
   Future<void> userMandaIdInfo() async {
     if (mandalarts.isNotEmpty) return;
@@ -81,12 +83,11 @@ class _MyGoalState extends State<MyGoal> {
           await mandaColor(mandalartId);
         });
 
-        await Future.wait(tasks); 
+        await Future.wait(tasks);
 
         failedIDs.sort((a, b) {
           return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
         });
-   
 
         inProgressIDs.sort((a, b) {
           final aBookmark = bookmarks
@@ -95,10 +96,10 @@ class _MyGoalState extends State<MyGoal> {
               .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
 
           if (aBookmark && !bBookmark) {
-            return -1; 
+            return -1;
           }
           if (!aBookmark && bBookmark) {
-            return 1; 
+            return 1;
           }
 
           return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
@@ -194,7 +195,7 @@ class _MyGoalState extends State<MyGoal> {
 
   @override
   void dispose() {
-    _pageController.dispose(); 
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -327,87 +328,85 @@ class _MyGoalState extends State<MyGoal> {
                         borderRadius: BorderRadius.circular(10)),
                     width: double.infinity,
                     child: SizedBox(
-                        height: 240,
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: inProgressIDs.length,
-                          itemBuilder: (context, index) {
-                            String mandalartId =
-                                inProgressIDs[index]['id'] ?? ''; // id 값
+                      height: 240,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: inProgressIDs.length,
+                        itemBuilder: (context, index) {
+                          String mandalartId =
+                              inProgressIDs[index]['id'] ?? ''; // id 값
 
-                            String name =
-                                inProgressIDs[index]['name'] ?? ''; // name 값
+                          String name =
+                              inProgressIDs[index]['name'] ?? ''; // name 값
 
-                            String status = statusList.firstWhere(
-                                  (element) =>
-                                      element['mandalartId'] ==
-                                      mandalartId, // mandalartId와 비교
-                                  orElse: () =>
-                                      {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                                )['status'] ??
-                                '';
+                          String status = statusList.firstWhere(
+                                (element) =>
+                                    element['mandalartId'] ==
+                                    mandalartId, // mandalartId와 비교
+                                orElse: () =>
+                                    {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                              )['status'] ??
+                              '';
 
-                            String dday = ddayList.firstWhere(
-                                  (element) =>
-                                      element['mandalartId'] ==
-                                      mandalartId, // mandalartId와 비교
-                                  orElse: () =>
-                                      {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                                )['dday'] ??
-                                '0';
+                          String dday = ddayList.firstWhere(
+                                (element) =>
+                                    element['mandalartId'] ==
+                                    mandalartId, // mandalartId와 비교
+                                orElse: () =>
+                                    {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                              )['dday'] ??
+                              '0';
 
-                            String color = colorList.firstWhere(
-                                  (element) =>
-                                      element['id'] ==
-                                      mandalartId, // mandalartId와 비교
-                                  orElse: () => {
-                                    'color': '0xff000000'
-                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                                )['color'] ??
-                                '0xff000000';
+                          String color = colorList.firstWhere(
+                                (element) =>
+                                    element['id'] ==
+                                    mandalartId, // mandalartId와 비교
+                                orElse: () => {
+                                  'color': '0xff000000'
+                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                              )['color'] ??
+                              '0xff000000';
 
-                            int successNum = successNums.firstWhere(
-                                  (element) =>
-                                      element['mandalartId'] ==
-                                      mandalartId, // mandalartId와 비교
-                                  orElse: () => {
-                                    'successNum': 0
-                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                                )['successNum'] ??
-                                0;
+                          int successNum = successNums.firstWhere(
+                                (element) =>
+                                    element['mandalartId'] ==
+                                    mandalartId, // mandalartId와 비교
+                                orElse: () => {
+                                  'successNum': 0
+                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                              )['successNum'] ??
+                              0;
 
-                            List<String> photoList = (photos[mandalartId] ?? [])
-                                .map<String>(
-                                    (photo) => photo['path'].toString())
-                                .toList();
+                          List<String> photoList = (photos[mandalartId] ?? [])
+                              .map<String>((photo) => photo['path'].toString())
+                              .toList();
 
-                            String bookmark = bookmarks.firstWhere(
-                                  (element) =>
-                                      element['id'] ==
-                                      mandalartId, // mandalartId와 비교
-                                  orElse: () => {
-                                    'bookmark': 'UNBOOKMARK'
-                                  }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                                )['bookmark'] ??
-                                'UNBOOKMARK';
+                          String bookmark = bookmarks.firstWhere(
+                                (element) =>
+                                    element['id'] ==
+                                    mandalartId, // mandalartId와 비교
+                                orElse: () => {
+                                  'bookmark': 'UNBOOKMARK'
+                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                              )['bookmark'] ??
+                              'UNBOOKMARK';
 
-                            return Center(
-                              child: GoalCard(
-                                mandalartId: mandalartId,
-                                name: name,
-                                status: status,
-                                photoList: photoList,
-                                dday: dday,
-                                color: color,
-                                successNum: successNum,
-                                bookmark: bookmark,
-                                onBookmarkToggle: (id, action) {},
-                              ),
-                            );
-                          },
-                        ),
+                          return Center(
+                            child: GoalCard(
+                              mandalartId: mandalartId,
+                              name: name,
+                              status: status,
+                              photoList: photoList,
+                              dday: dday,
+                              color: color,
+                              successNum: successNum,
+                              bookmark: bookmark,
+                              onBookmarkToggle: (id, action) {},
+                            ),
+                          );
+                        },
                       ),
-                    
+                    ),
                   ),
                   const SizedBox(height: 18),
                   if (inProgressIDs.length != 1 && inProgressIDs.isNotEmpty)
@@ -420,7 +419,7 @@ class _MyGoalState extends State<MyGoal> {
               const SizedBox(height: 40),
 
               //이번주의 응원
-              MGSubTitle('이번주의 응원!').mgSubTitle(context),
+              MGSubTitle('이번주의 응원d!').mgSubTitle(context),
               const SizedBox(height: 15),
               const CheeringMessage(),
               const SizedBox(height: 40),
@@ -429,26 +428,20 @@ class _MyGoalState extends State<MyGoal> {
               MGSubTitle('쓰러뜨린 목표').mgSubTitle(context),
               const SizedBox(height: 15),
               if (successIDs.isEmpty)
-              BlankData2("함께 목표를 쓰러뜨려봐요").blankData2()                
+                BlankData2("함께 목표를 쓰러뜨려봐요").blankData2()
               else
                 Column(
                   children: [
                     ...successIDs.map((item) {
                       String status = statusList.firstWhere(
-                            (element) =>
-                                element['mandalartId'] ==
-                                item['id'], 
-                            orElse: () =>
-                                {'status': ''}, 
+                            (element) => element['mandalartId'] == item['id'],
+                            orElse: () => {'status': ''},
                           )['status'] ??
                           '';
 
                       String dday = ddayList.firstWhere(
-                            (element) =>
-                                element['mandalartId'] ==
-                                item['id'], 
-                            orElse: () =>
-                                {'dday': ''}, 
+                            (element) => element['mandalartId'] == item['id'],
+                            orElse: () => {'dday': ''},
                           )['dday'] ??
                           '0';
 
@@ -458,10 +451,8 @@ class _MyGoalState extends State<MyGoal> {
 
                       final color = colorList.firstWhere(
                           (element) => element['id'] == item['id'],
-                          orElse: () => {
-                                'color': 'Color(0xff000000)'
-                              } 
-                          )['color'];
+                          orElse: () =>
+                              {'color': 'Color(0xff000000)'})['color'];
 
                       final colorValue = Color(int.parse(
                           color!.replaceAll('Color(', '').replaceAll(')', '')));
@@ -511,26 +502,20 @@ class _MyGoalState extends State<MyGoal> {
               MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
               const SizedBox(height: 15),
               if (failedIDs.isEmpty)
-              BlankData2("못 쓰러뜨린 목표가 없어요").blankData2()    
+                BlankData2("못 쓰러뜨린 목표가 없어요").blankData2()
               else
                 Column(
                   children: [
                     ...failedIDs.map((item) {
                       String status = statusList.firstWhere(
-                            (element) =>
-                                element['mandalartId'] ==
-                                item['id'],
-                            orElse: () =>
-                                {'status': ''},
+                            (element) => element['mandalartId'] == item['id'],
+                            orElse: () => {'status': ''},
                           )['status'] ??
                           '';
 
                       String dday = ddayList.firstWhere(
-                            (element) =>
-                                element['mandalartId'] ==
-                                item['id'],
-                            orElse: () =>
-                                {'dday': ''},
+                            (element) => element['mandalartId'] == item['id'],
+                            orElse: () => {'dday': ''},
                           )['dday'] ??
                           '0';
 
@@ -539,10 +524,8 @@ class _MyGoalState extends State<MyGoal> {
                           .toList();
                       final color = colorList.firstWhere(
                           (element) => element['id'] == item['id'],
-                          orElse: () => {
-                                'color': 'Color(0xff000000)'
-                              } 
-                          )['color'];
+                          orElse: () =>
+                              {'color': 'Color(0xff000000)'})['color'];
 
                       final colorValue = Color(int.parse(
                           color!.replaceAll('Color(', '').replaceAll(')', '')));

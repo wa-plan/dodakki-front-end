@@ -146,22 +146,22 @@ class TutorialButton {
 
   Widget tutorialButton() {
     return TextButton(
-        onPressed: () => function(),
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          backgroundColor: mainRed,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
-          ),
+      onPressed: () => function(),
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        backgroundColor: mainRed,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6.0),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: backgroundColor,
-            fontSize: 17,
-            fontWeight: FontWeight.w700,
-          ),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: backgroundColor,
+          fontSize: 17,
+          fontWeight: FontWeight.w700,
         ),
+      ),
     );
   }
 }
@@ -461,11 +461,11 @@ class _TodoOptionState extends State<TodoOption> {
 
 //플랜 완성 비주얼 (전체)
 class PlanVisual {
-final double currentWidth;
+  final double currentWidth;
 
-PlanVisual( this.currentWidth);
+  PlanVisual(this.currentWidth);
 
-  Widget planVisual(){
+  Widget planVisual() {
     List<int> secondGoalIndex = [6, 8, 12, 16, 18, 19, 31];
 
     return SizedBox(
@@ -480,31 +480,27 @@ PlanVisual( this.currentWidth);
         ),
         itemCount: 42,
         itemBuilder: (context, index) {
-        
-           if (index == 13) {
+          if (index == 13) {
             return PlanVisualBox1('뿌듯한\n학교생활', mainRed).planVisualBox1();
-          } else if (index == 20 || index == 34){
-            return PlanVisualBox1('스펙왕\n되기', mainGreen).planVisualBox1();
-          } else if (index == 27){
+          } else if (index == 20 || index == 34) {
+            return PlanVisualBox1('대학교\n최강인싸', mainGreen).planVisualBox1();
+          } else if (index == 27) {
             return PlanVisualBox1('동아리\n들어가기', mainBlue).planVisualBox1();
-          } else if (secondGoalIndex.contains(index)){
+          } else if (secondGoalIndex.contains(index)) {
             return PlanVisualBox1('', Color(0xff5C5C5C)).planVisualBox1();
-          } else if (index == 7){
-            return PlanVisualBox2('제1목표', mainRed, Color(0xff5C5C5C) ).planVisualBox2();
-          } else if (index == 14){
-            return PlanVisualBox2('제2목표', mainGreen, Color(0xff5C5C5C) ).planVisualBox2();
-          } else if (index == 21){
-            return PlanVisualBox2('제3목표', mainBlue, Color(0xff3B3B3B) ).planVisualBox2();
-          }
-            else {
+          } else if (index == 7) {
+            return PlanVisualBox2('제1목표', mainRed, Color(0xff5C5C5C))
+                .planVisualBox2();
+          } else if (index == 14) {
+            return PlanVisualBox2('제2목표', mainGreen, Color(0xff5C5C5C))
+                .planVisualBox2();
+          } else if (index == 21) {
+            return PlanVisualBox2('제3목표', mainBlue, Color(0xff3B3B3B))
+                .planVisualBox2();
+          } else {
             return PlanVisualBox1('', Color(0xff3B3B3B)).planVisualBox1();
-            
-            
           }
         },
-            
-        
-        
       ),
     );
   }
@@ -517,25 +513,25 @@ class PlanVisualBox1 {
 
   const PlanVisualBox1(this.text, this.color);
 
-  Widget planVisualBox1(){
+  Widget planVisualBox1() {
     return Container(
-              padding: const EdgeInsets.all(7),
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: backgroundColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),),
-              ),
-              
-            );
+      padding: const EdgeInsets.all(7),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: backgroundColor,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -547,25 +543,25 @@ class PlanVisualBox2 {
 
   const PlanVisualBox2(this.text, this.textcolor, this.backcolor);
 
-  Widget planVisualBox2(){
+  Widget planVisualBox2() {
     return Container(
-              padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                color: backcolor,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: textcolor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                  ),),
-              ),
-              
-            );
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: backcolor,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: textcolor,
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
   }
 }

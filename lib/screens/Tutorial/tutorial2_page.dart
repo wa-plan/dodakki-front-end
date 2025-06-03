@@ -12,12 +12,7 @@ class Tutorial2 extends StatefulWidget {
 
 class Tutorial2State extends State<Tutorial2> {
   int selectedIndex = 100;
-  List<String> texts = [
-    '돈 많은\n백수되기',
-    '뿌듯한\n학교생활하기',
-    '행복한\n휴학생활하기',
-    '알찬 방학\n보내기'
-  ];
+  List<String> texts = ['대학교\n자퇴하기', '뿌듯한\n학교생활하기', '3년\n휴학하기', 'F학점\n비 내리기'];
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +35,29 @@ class Tutorial2State extends State<Tutorial2> {
                   ProgressTitle('제1목표 만들기').progressTitle(),
                   SizedBox(height: 17),
 
-                  //질문
-                  Text(
-                    '새 학기를 시작하는\n도민호를 위한 제1목표는?',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        height: 1.5),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '새내기',
+                          style: TextStyle(
+                            color: Color(0xFFFF7D7D), // 강조 색상
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '로 대학에 입학하는\n도민호를 위한 제1목표는?',
+                          style: TextStyle(
+                            color: Colors.white, // 기본 색상
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
                   SizedBox(height: 20),
@@ -61,7 +71,8 @@ class Tutorial2State extends State<Tutorial2> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 13,
                       mainAxisSpacing: 13,
