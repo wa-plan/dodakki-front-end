@@ -396,7 +396,7 @@ class _MyGoalState extends State<MyGoal> {
               const SizedBox(height: 40),
 
               //이번주의 응원
-              MGSubTitle('이번주의 응원d!').mgSubTitle(context),
+              MGSubTitle('이번주의 응원!').mgSubTitle(context),
               const SizedBox(height: 15),
               const CheeringMessage(),
               const SizedBox(height: 40),
