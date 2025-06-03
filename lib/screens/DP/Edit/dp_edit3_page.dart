@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:domino/screens/DP/Edit/dp_edit1_page.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
@@ -13,12 +14,18 @@ class EditInput2Page extends StatefulWidget {
   final String mandalart;
   final String firstColor;
   final String? mainGoalId;
+  final List<int> secondGoalIds;
+  final List<Map<String, dynamic>> secondGoals;
+  final int mandalartId;
 
   const EditInput2Page(
       {super.key,
       required this.firstColor,
       required this.mandalart,
-      required this.mainGoalId});
+      required this.mainGoalId,
+      required this.secondGoalIds,
+      required this.secondGoals,
+      required this.mandalartId});
 
   @override
   State<EditInput2Page> createState() => _EditInput2PageState();
@@ -96,6 +103,11 @@ class _EditInput2PageState extends State<EditInput2Page> {
                                                 .inputtedDetailGoal[
                                             context.watch<SelectDetailGoal>().selectedDetailGoal.toString()] ??
                                         '',
+                                        page: "수정",
+        mandalart: widget.mandalart,
+        secondGoalIds: widget.secondGoalIds,
+        secondGoals: widget.secondGoals,
+        mandalartId: widget.mandalartId,
       ),
     );
   }
@@ -316,7 +328,18 @@ class _EditInput2PageState extends State<EditInput2Page> {
                       });
                     }
                 
-                    Navigator.pop(context);
+                    Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Edit99Page(
+                          firstColor: widget.firstColor,
+                          mandalart: widget.mandalart,
+                          mandalartId:widget.mandalartId,
+                          secondGoalIds: widget.secondGoalIds,
+                          secondGoals: widget.secondGoals,
+                        )),
+
+              );
                   },currentWidth
                 ).newButton(),
               ),
