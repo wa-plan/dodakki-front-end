@@ -69,7 +69,7 @@ class _EventPageState extends State<EventPage> {
                 ),
                 if (_isContentVisible && !_isVideoEnded)
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
+                    padding: const EdgeInsets.fromLTRB(40, 90, 30, 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
