@@ -68,10 +68,6 @@ class _EditInput2PageState extends State<EditInput2Page> {
       setState(() {
         _subGoals = subGoals; // 새로운 세부 목표로 업데이트
       });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false; // 로딩 상태 해제

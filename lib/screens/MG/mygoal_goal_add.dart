@@ -29,34 +29,24 @@ class _MyGoalAddState extends State<MyGoalAdd> {
   List<String> _imageFiles = [];
 
   Future<void> _pickImages() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.image,
-        withData: kIsWeb, // 웹에서는 true, 모바일에서는 false
-      );
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
+      withData: kIsWeb, // 웹에서는 true, 모바일에서는 false
+    );
 
-      if (result != null) {
-        // 파일 업로드 서비스 호출
-        List<String> uploadedUrls =
-            await UploadFilesService.uploadFiles(result.files);
+    if (result != null) {
+      // 파일 업로드 서비스 호출
+      List<String> uploadedUrls =
+          await UploadFilesService.uploadFiles(result.files);
 
-        if (uploadedUrls.isNotEmpty) {
-          setState(() {
-            _imageFiles = [
-              ...{..._imageFiles, ...uploadedUrls}
-            ].take(3).toList();
-          });
-        }
+      if (uploadedUrls.isNotEmpty) {
+        setState(() {
+          _imageFiles = [
+            ...{..._imageFiles, ...uploadedUrls}
+          ].take(3).toList();
+        });
       }
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
     }
   }
 

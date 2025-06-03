@@ -44,57 +44,28 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   /// 📌 **카메라로 사진 촬영 및 업로드**
   Future<void> _takePhoto() async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: 800, // 최대 너비
-        maxHeight: 800, // 최대 높이
-        imageQuality: 80, // 품질 (0~100)
-      );
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 800, // 최대 너비
+      maxHeight: 800, // 최대 높이
+      imageQuality: 80, // 품질 (0~100)
+    );
 
-      if (pickedFile == null) {
-        return;
-      }
+    if (pickedFile == null) {
+      return;
+    }
 
-      File imageFile = File(pickedFile.path);
+    File imageFile = File(pickedFile.path);
 
-      if (!imageFile.existsSync()) {
-        Fluttertoast.showToast(
-          msg: '촬영된 이미지가 저장되지 않았습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        return;
-      }
+    // 📌 촬영한 사진을 서버에 업로드
+    String uploadedUrl = await _uploadCamera(imageFile);
 
-      // 📌 촬영한 사진을 서버에 업로드
-      String uploadedUrl = await _uploadCamera(imageFile);
-
-      if (uploadedUrl.isNotEmpty) {
-        setState(() {
-          _imageFiles.clear(); // 이전 이미지 제거
-          _imageFiles.add(uploadedUrl); // 새 URL 저장
-          profile = uploadedUrl; // ✅ 상태에 반영 (중요!)
-        });
-      } else {
-        Fluttertoast.showToast(
-          msg: '이미지 업로드에 실패했습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-      }
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: '사진 촬영 오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+    if (uploadedUrl.isNotEmpty) {
+      setState(() {
+        _imageFiles.clear(); // 이전 이미지 제거
+        _imageFiles.add(uploadedUrl); // 새 URL 저장
+        profile = uploadedUrl; // ✅ 상태에 반영 (중요!)
+      });
     }
   }
 
@@ -126,101 +97,68 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   Future<void> _pickImages() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.image,
-        withData: kIsWeb, // 웹에서는 true, 모바일에서는 false
-      );
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
+      withData: kIsWeb, // 웹에서는 true, 모바일에서는 false
+    );
 
-      if (result == null || result.files.isEmpty) {
-        return; // 파일을 선택하지 않았으면 함수 종료
-      }
-      String uploadedUrl = await UploadFileService.uploadFiles(result.files);
-
-      if (uploadedUrl.isEmpty) {
-        Fluttertoast.showToast(
-          msg: '파일 업로드에 실패했습니다. 다시 시도해주세요.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        return; // 업로드가 실패했으므로 함수 종료
-      }
-
-      setState(() {
-        _imageFiles.add(uploadedUrl); // URL을 _imageFiles에 추가
-      });
-
-      setState(() {
-        _imageFiles.clear();
-        _imageFiles.add(uploadedUrl);
-        profile = uploadedUrl; // 🔥 여기서 profile 변수 갱신!
-      });
-
-      
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+    if (result == null || result.files.isEmpty) {
+      return; // 파일을 선택하지 않았으면 함수 종료
     }
+    String uploadedUrl = await UploadFileService.uploadFiles(result.files);
+
+    if (uploadedUrl.isEmpty) {
+      return; // 업로드가 실패했으므로 함수 종료
+    }
+
+    setState(() {
+      _imageFiles.add(uploadedUrl); // URL을 _imageFiles에 추가
+    });
+
+    setState(() {
+      _imageFiles.clear();
+      _imageFiles.add(uploadedUrl);
+      profile = uploadedUrl; // 🔥 여기서 profile 변수 갱신!
+    });
   }
 
   Future<void> _uploadSelectedImage() async {
-    try {
-      print('📤 _uploadSelectedImage 호출됨');
+    print('📤 _uploadSelectedImage 호출됨');
 
-      // ✅ selectedImage가 asset이 아닌 경우 생략
-      if (widget.selectedImage.isEmpty ||
-          !widget.selectedImage.startsWith("assets/")) {
-        print('⏭️ selectedImage가 asset이 아님 — 업로드 생략: ${widget.selectedImage}');
-        return;
-      }
+    // ✅ selectedImage가 asset이 아닌 경우 생략
+    if (widget.selectedImage.isEmpty ||
+        !widget.selectedImage.startsWith("assets/")) {
+      print('⏭️ selectedImage가 asset이 아님 — 업로드 생략: ${widget.selectedImage}');
+      return;
+    }
 
-      print('📷 selectedImage 경로: ${widget.selectedImage}');
+    print('📷 selectedImage 경로: ${widget.selectedImage}');
 
-      ByteData byteData = await rootBundle.load(widget.selectedImage);
-      Uint8List imageBytes = byteData.buffer.asUint8List();
+    ByteData byteData = await rootBundle.load(widget.selectedImage);
+    Uint8List imageBytes = byteData.buffer.asUint8List();
 
-      final directory = await getTemporaryDirectory();
-      final filePath = '${directory.path}/profile_image.png';
-      final file = File(filePath);
-      await file.writeAsBytes(imageBytes);
-      print('📁 파일로 저장 완료: $filePath');
+    final directory = await getTemporaryDirectory();
+    final filePath = '${directory.path}/profile_image.png';
+    final file = File(filePath);
+    await file.writeAsBytes(imageBytes);
+    print('📁 파일로 저장 완료: $filePath');
 
-      PlatformFile selectedFile = PlatformFile(
-        name: 'profile_image.png',
-        path: filePath,
-        size: imageBytes.length,
-      );
+    PlatformFile selectedFile = PlatformFile(
+      name: 'profile_image.png',
+      path: filePath,
+      size: imageBytes.length,
+    );
 
-      List<PlatformFile> fileList = [selectedFile];
-      String uploadedUrl = await UploadFileService.uploadFiles(fileList);
+    List<PlatformFile> fileList = [selectedFile];
+    String uploadedUrl = await UploadFileService.uploadFiles(fileList);
 
-      if (uploadedUrl.isNotEmpty) {
-        setState(() {
-          _imageFiles.clear();
-          _imageFiles.add(uploadedUrl);
-          profile = uploadedUrl;
-        });
-        print('✅ 이미지 업로드 성공: $uploadedUrl');
-      } else {
-        print('⚠️ 업로드 실패: 빈 URL');
-      }
-    } catch (e) {
-      print('❌ 이미지 업로드 중 예외 발생: $e');
-      Fluttertoast.showToast(
-        msg: '이미지 업로드 오류: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+    if (uploadedUrl.isNotEmpty) {
+      setState(() {
+        _imageFiles.clear();
+        _imageFiles.add(uploadedUrl);
+        profile = uploadedUrl;
+      });
     }
   }
 
@@ -232,7 +170,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   }) {
     // 우선순위: profile > selected > camera
     String imageToShow = "";
-  
 
     if (profileImage.isNotEmpty &&
         profileImage !=
@@ -339,9 +276,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => MyGoal()
-                    ),
+                    MaterialPageRoute(builder: (context) => MyGoal()),
                   );
                 },
               ).customBackButton(),
@@ -402,7 +337,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     image: getImageProvider(
                                       selectedImage: widget.selectedImage,
                                       profileImage:
-                                     profile ?? widget.profileImage,
+                                          profile ?? widget.profileImage,
                                       cameraImage: widget.cameraImage,
                                       fallbackAsset: defaultImage,
                                     ),
@@ -546,16 +481,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                 const SizedBox(height: 10),
                 BottomButton('도민호 이미지', Icons.star, () async {
                   Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProfileSampleGallery(
-                                  selectedImage: widget.selectedImage,
-                                  profileImage: widget.profileImage),
-                            ),
-                          );
-
-                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileSampleGallery(
+                          selectedImage: widget.selectedImage,
+                          profileImage: widget.profileImage),
+                    ),
+                  );
                 }).bottomButton()
               ],
             ),

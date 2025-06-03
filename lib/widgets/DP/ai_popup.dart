@@ -4,7 +4,6 @@ import 'package:domino/screens/DP/Create/dp_create3_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit2_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
-import 'package:domino/widgets/DP/Edit/dp_edit2_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';

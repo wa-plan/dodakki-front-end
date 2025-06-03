@@ -71,10 +71,6 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
       setState(() {
         _subGoals = subGoals; // 새로운 세부 목표로 업데이트
       });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false; // 로딩 상태 해제
@@ -102,12 +98,11 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
             _showAIPopup(context, selectedDetailGoal);
           }
         },
-        thirdGoal:  context
-                                          .watch<SaveInputtedDetailGoalModel>()
-                                          .inputtedDetailGoal[
-                                      '$selectedDetailGoal'] ??
-                                  '',
-                                  page: "생성",
+        thirdGoal: context
+                .watch<SaveInputtedDetailGoalModel>()
+                .inputtedDetailGoal['$selectedDetailGoal'] ??
+            '',
+        page: "생성",
         mandalart: "얍얍",
         secondGoalIds: [],
         secondGoals: [],
@@ -135,11 +130,14 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
           child: Row(
             children: [
               //나가기 버튼
-              CustomBackButton(() {
-                context.read<TestInputtedActionPlanModel>().resetActionPlans();
-                Navigator.pop(context);
-              },)
-                  .customBackButton(),
+              CustomBackButton(
+                () {
+                  context
+                      .read<TestInputtedActionPlanModel>()
+                      .resetActionPlans();
+                  Navigator.pop(context);
+                },
+              ).customBackButton(),
               const SizedBox(width: 15),
               //페이지 타이틀
               PageTitle('제3목표 작성').pageTitle(),
@@ -264,7 +262,7 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
         padding: fullPadding,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              //취소
+          //취소
           SizedBox(
             width: 90,
             height: 45,

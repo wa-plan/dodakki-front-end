@@ -1,8 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:domino/provider/DP/model.dart';
-import 'package:domino/screens/DP/Create/dp_create3_page.dart';
 import 'package:domino/screens/DP/Create/dp_create4_page.dart';
-import 'package:domino/screens/DP/Edit/dp_edit2_page.dart';
 import 'package:domino/screens/DP/Edit/dp_edit3_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
@@ -23,20 +21,20 @@ class AIPopup2 extends StatefulWidget {
   final List<Map<String, dynamic>> secondGoals;
   final int mandalartId;
 
-  const AIPopup2(
-      {super.key,
-      required this.selectedDetailGoal,
-      required this.subgoals,
-      required this.onRefresh,
-      required this.firstColor,
-      required this.mainGoalId,
-      required this.thirdGoal,
-      required this.mandalart,
-      required this.page,
-      required this.secondGoalIds,
-      required this.secondGoals,
-      required this.mandalartId,
-      });
+  const AIPopup2({
+    super.key,
+    required this.selectedDetailGoal,
+    required this.subgoals,
+    required this.onRefresh,
+    required this.firstColor,
+    required this.mainGoalId,
+    required this.thirdGoal,
+    required this.mandalart,
+    required this.page,
+    required this.secondGoalIds,
+    required this.secondGoals,
+    required this.mandalartId,
+  });
 
   @override
   _AIPopupState2 createState() => _AIPopupState2();
@@ -91,14 +89,13 @@ class _AIPopupState2 extends State<AIPopup2> {
           context,
           MaterialPageRoute(
             builder: (context) => EditInput2Page(
-              mandalart: widget.mandalart,
-              firstColor: widget.firstColor,
-              mainGoalId: widget.mainGoalId,
-              secondGoalIds: widget.secondGoalIds,
-              secondGoals: widget.secondGoals,
-              mandalartId: widget.mandalartId,
-              been: true
-            ),
+                mandalart: widget.mandalart,
+                firstColor: widget.firstColor,
+                mainGoalId: widget.mainGoalId,
+                secondGoalIds: widget.secondGoalIds,
+                secondGoals: widget.secondGoals,
+                mandalartId: widget.mandalartId,
+                been: true),
           ),
         );
       } else {
@@ -114,7 +111,6 @@ class _AIPopupState2 extends State<AIPopup2> {
       }
     }
   }
-    
 
   void _toggleGoal(String goal) {
     setState(() {
@@ -129,228 +125,218 @@ class _AIPopupState2 extends State<AIPopup2> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        backgroundColor: Colors.transparent,
-        contentPadding: const EdgeInsets.all(0),
-        elevation: 30.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.0)),
-        content: SizedBox(
-          width: 330,
-          child: IntrinsicHeight(
-            child: Container(
-              
-              padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-              decoration: const BoxDecoration(
-                  color: Color(0xFF303030),
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              child: 
-              Stack(
-                children: [
-                  Positioned(
-                            bottom: -20, // 이미지의 하단 여백
-                            right: 0, // 이미지의 우측 여백
-                            child: Opacity(
-                              opacity: 0.3,
-                              child: Image.asset(
-                                'assets/img/emptyDominho.png',
-                                height: 190,
-                                // 이미지 크기 유지
+      backgroundColor: Colors.transparent,
+      contentPadding: const EdgeInsets.all(0),
+      elevation: 30.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.0)),
+      content: SizedBox(
+        width: 330,
+        child: IntrinsicHeight(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+            decoration: const BoxDecoration(
+                color: Color(0xFF303030),
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            child: Stack(
+              children: [
+                Positioned(
+                  bottom: -20, // 이미지의 하단 여백
+                  right: 0, // 이미지의 우측 여백
+                  child: Opacity(
+                    opacity: 0.3,
+                    child: Image.asset(
+                      'assets/img/emptyDominho.png',
+                      height: 190,
+                      // 이미지 크기 유지
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 15, 20),
+                  child: Column(children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(7, 1, 7, 1),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff503333),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Text(
+                                    widget.thirdGoal,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: mainRed,
+                                        height: 1.7),
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  "를 위해",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 7),
+                            Text(
+                              "  내가 추천하는 건..!",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
                               ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 32,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 53, 53, 53),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Icon(
+                              Icons.close,
+                              color: Color(0xff646464),
+                              size: 17,
                             ),
                           ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 15, 20),
-                    child: Column(children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.fromLTRB(7, 1, 7, 1),
-                                          decoration: BoxDecoration(
-                                              color: Color(0xff503333),
-                                              borderRadius: BorderRadius.circular(5)),
-                                          child: Text(
-                                            widget.thirdGoal,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                                color: mainRed,
-                                                height: 1.7),
-                                          ),
-                                        ),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          "를 위해",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 7),
-                                    Text(
-                                          "  내가 추천하는 건..!",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                              ),
-                                        ),
-                                  ],
-                                ),
-                           
-                          Container(
-                            width: 32,
-                            height: 22,
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 53, 53, 53),
-                              borderRadius: BorderRadius.circular(25),
-                              
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Icon(
-                                Icons.close,
-                                color: Color(0xff646464),
-                                size: 17,
+                        )
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: AICard(
+                                goal: widget.subgoals[0],
+                                isSelected:
+                                    selectedGoals.contains(widget.subgoals[0]),
+                                onTap: _toggleGoal,
                               ),
                             ),
-                          )
+                            const SizedBox(width: 7),
+                            Expanded(
+                              child: AICard(
+                                goal: widget.subgoals[1],
+                                isSelected:
+                                    selectedGoals.contains(widget.subgoals[1]),
+                                onTap: _toggleGoal,
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Expanded(
+                              child: AICard(
+                                goal: widget.subgoals[2],
+                                isSelected:
+                                    selectedGoals.contains(widget.subgoals[2]),
+                                onTap: _toggleGoal,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 7),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: AICard(
+                                goal: widget.subgoals[3],
+                                isSelected:
+                                    selectedGoals.contains(widget.subgoals[3]),
+                                onTap: _toggleGoal,
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Expanded(
+                              child: AICard(
+                                goal: widget.subgoals[4],
+                                isSelected:
+                                    selectedGoals.contains(widget.subgoals[4]),
+                                onTap: _toggleGoal,
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Expanded(
+                              child: AICard(
+                                goal: widget.subgoals[5],
+                                isSelected:
+                                    selectedGoals.contains(widget.subgoals[5]),
+                                onTap: _toggleGoal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    TextButton(
+                      onPressed: widget.onRefresh,
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.refresh,
+                            color: Color(0xFF5E5E5E),
+                            size: 20,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            '클릭하여 새로고침',
+                            style: TextStyle(
+                                color: Color(0xFF5E5E5E), fontSize: 14),
+                          ),
                         ],
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 15),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: AICard(
-                                      goal: widget.subgoals[0],
-                                      isSelected:
-                                          selectedGoals.contains(widget.subgoals[0]),
-                                      onTap: _toggleGoal,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 7),
-                                
-                                  Expanded(
-                                    child: AICard(
-                                      goal: widget.subgoals[1],
-                                      isSelected:
-                                          selectedGoals.contains(widget.subgoals[1]),
-                                      onTap: _toggleGoal,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 7),
-                                 
-                                  Expanded(
-                                    child: AICard(
-                                      goal: widget.subgoals[2],
-                                      isSelected:
-                                          selectedGoals.contains(widget.subgoals[2]),
-                                      onTap: _toggleGoal,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 7),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: AICard(
-                                      goal: widget.subgoals[3],
-                                      isSelected:
-                                          selectedGoals.contains(widget.subgoals[3]),
-                                      onTap: _toggleGoal,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 7),
-                                
-                                  Expanded(
-                                    child: AICard(
-                                      goal: widget.subgoals[4],
-                                      isSelected:
-                                          selectedGoals.contains(widget.subgoals[4]),
-                                      onTap: _toggleGoal,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 7),
-                             
-                                  Expanded(
-                                    child: AICard(
-                                      goal: widget.subgoals[5],
-                                      isSelected:
-                                          selectedGoals.contains(widget.subgoals[5]),
-                                      onTap: _toggleGoal,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          TextButton(
-                              onPressed: widget.onRefresh,
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    Icons.refresh,
-                                    color: Color(0xFF5E5E5E),
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    '클릭하여 새로고침',
-                                    style:
-                                        TextStyle(color: Color(0xFF5E5E5E), fontSize: 14),
-                                  ),
-                                ],
-                              ),
-                            ),
-                      
-                      const SizedBox(height: 40),
-                      SizedBox(
-                          width: double.infinity,
-                          height: 45,
-                          child: TextButton(
-                            onPressed: _handleApply,
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                              backgroundColor: mainRed,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
-                            ),
-                            child: Text(
-                              '지금 바로 적용하기',
-                              style: TextStyle(
-                                color: backgroundColor,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                    ),
+                    const SizedBox(height: 40),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 45,
+                      child: TextButton(
+                        onPressed: _handleApply,
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          backgroundColor: mainRed,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6.0),
                           ),
                         ),
-                    
-                    ]),
-                  ),
-                ],
-              ),
+                        child: Text(
+                          '지금 바로 적용하기',
+                          style: TextStyle(
+                            color: backgroundColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 }
 
@@ -375,33 +361,26 @@ class AICardState extends State<AICard> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-                height: 95,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color:
-                      widget.isSelected ? Colors.white : const Color(0xFF282828),
-                  borderRadius: BorderRadius.circular(4),
-                ),
+      height: 95,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: widget.isSelected ? Colors.white : const Color(0xFF282828),
+        borderRadius: BorderRadius.circular(4),
+      ),
       child: GestureDetector(
         onTap: () {
           widget.onTap(widget.goal);
         },
         child: AutoSizeText(
-                  widget.goal,
-                  maxLines: 3,
-
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: widget.isSelected
-                        ? const Color(0xFF303030)
-                        : Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14
-                  ),
-                ),
-             
-        
+          widget.goal,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: widget.isSelected ? const Color(0xFF303030) : Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 14),
+        ),
       ),
     );
   }
