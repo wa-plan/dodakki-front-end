@@ -151,6 +151,7 @@ class EditPageState extends State<EditPage> {
   Widget build(BuildContext context) {
     String todayDate = DateFormat('yyyy-MM-dd').format(today);
     final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
