@@ -11,7 +11,6 @@ class Tutorial3 extends StatefulWidget {
 }
 
 class Tutorial3State extends State<Tutorial3> {
-
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
@@ -46,22 +45,24 @@ class Tutorial3State extends State<Tutorial3> {
               left: -80,
               top: currentWidth < 600 ? 180 : 190,
               child: MandalartOption(
-                  middleText: '뿌듯한\n학교생활하기',
-                  texts: [
-                    '',
-                    '방 청소\n잘하기',
-                    '스펙왕\n되기',
-                    '',
-                    '',
-                    '피아노\n연습하기',
-                    '',
-                    '스타일\n변신하기',
-                    'F학점\n받아보기'
-                  ],
-                  color: 'red',
-                  onItemSelected: (index) {
-                      selectedIndex = index;
-              },currentWidth: currentWidth,),
+                middleText: '뿌듯한\n학교생활하기',
+                texts: [
+                  '',
+                  '침대 밖으로\n안 나오기',
+                  '대학교\n최강인싸되기',
+                  '',
+                  '',
+                  '도서관 가서\n낮잠 자기',
+                  '',
+                  '삭발하기',
+                  'F학점\n받아보기'
+                ],
+                color: 'red',
+                onItemSelected: (index) {
+                  selectedIndex = index;
+                },
+                currentWidth: currentWidth,
+              ),
             ),
           ],
         ),
@@ -75,13 +76,14 @@ class Tutorial3State extends State<Tutorial3> {
                 context,
                 MaterialPageRoute(builder: (context) => const Tutorial4()),
               );
-            } else if (selectedIndex == 0 || selectedIndex == 3 || selectedIndex == 6) {
-               TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
+            } else if (selectedIndex == 0 ||
+                selectedIndex == 3 ||
+                selectedIndex == 6) {
+              TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
             } else {
               TutorialMessage("아닌데...다시 한번 잘 생각해봐!").tutorialMessage(context);
             }
-          })
-              .tutorialButton(),
+          }).tutorialButton(),
         ));
   }
 }

@@ -11,7 +11,6 @@ class Tutorial4 extends StatefulWidget {
 }
 
 class Tutorial4State extends State<Tutorial4> {
-
   @override
   Widget build(BuildContext context) {
     int selectedIndex = 100;
@@ -35,7 +34,7 @@ class Tutorial4State extends State<Tutorial4> {
                   SizedBox(height: 17),
 
                   //질문
-                  TutorialQuestion('스펙왕 되기', '달성해야 할 제3목표는?', 'green')
+                  TutorialQuestion('대학교 최강인싸되기', '달성해야 할 제3목표는?', 'green')
                       .tutorialQuestion(),
                   SizedBox(height: 20),
                 ],
@@ -46,22 +45,24 @@ class Tutorial4State extends State<Tutorial4> {
               left: -80,
               top: currentWidth < 600 ? 180 : 190,
               child: MandalartOption(
-                  middleText: '스펙왕\n되기',
-                  texts: [
-                    '',
-                    '해외여행\n가기',
-                    '동아리\n들어가기',
-                    '',
-                    '',
-                    '요리\n배우기',
-                    '',
-                    '자취\n시작하기',
-                    '헬스장\n등록하기'
-                  ],
-                  color: 'green',
-                  onItemSelected: (index) {
-                      selectedIndex = index;
-              }, currentWidth: currentWidth,),
+                middleText: '대학교\n최강인싸되기',
+                texts: [
+                  '',
+                  '혼밥 100회\n도전하기',
+                  '동아리\n들어가기',
+                  '',
+                  '',
+                  '비둘기와\n친해지기',
+                  '',
+                  '인성파탄자 되기',
+                  '침묵 챌린지\n30일 하기'
+                ],
+                color: 'green',
+                onItemSelected: (index) {
+                  selectedIndex = index;
+                },
+                currentWidth: currentWidth,
+              ),
             ),
           ],
         ),
@@ -75,13 +76,14 @@ class Tutorial4State extends State<Tutorial4> {
                 context,
                 MaterialPageRoute(builder: (context) => const Tutorial5()),
               );
-            } else if (selectedIndex == 0 || selectedIndex == 3 || selectedIndex == 6) {
-               TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
+            } else if (selectedIndex == 0 ||
+                selectedIndex == 3 ||
+                selectedIndex == 6) {
+              TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
             } else {
               TutorialMessage("아닌데...다시 한번 잘 생각해봐!").tutorialMessage(context);
             }
-          })
-              .tutorialButton(),
+          }).tutorialButton(),
         ));
   }
 }
