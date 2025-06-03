@@ -406,6 +406,7 @@ class _DPMainState extends State<DPMain> {
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(30),
+                                  margin: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                     color: Color(0xff2A2A2A),
                                     borderRadius: BorderRadius.circular(8),

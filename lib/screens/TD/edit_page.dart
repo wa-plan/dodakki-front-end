@@ -40,11 +40,6 @@ class EditPageState extends State<EditPage> {
 
   Future<bool> deleteDominoToEdit(int thirdGoalId) async {
     final success = await DeleteDominoService.deleteDomino(goalId: thirdGoalId);
-    if (!success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
-      );
-    }
     return success;
   }
 
@@ -54,24 +49,11 @@ class EditPageState extends State<EditPage> {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      Message(
-              "도미노가 삭제되었어!.",
-              const Color(0xffFF6767), // 텍스트 색상
-              const Color(0xff412C2C), // 배경 색상
-              borderColor: const Color(0xffFF6767), // 테두리 색상
-              icon: Icons.block)
-          .message(context);
-
       Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const TdMain(),
           ));
-    } else {
-      // 실패한 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
-      );
     }
   }
 
@@ -83,11 +65,6 @@ class EditPageState extends State<EditPage> {
       dates: dateList,
       repetition: repetition,
     );
-    if (!success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 추가에 실패했습니다.')),
-      );
-    }
     return success;
   }
 
@@ -318,10 +295,17 @@ class EditPageState extends State<EditPage> {
                   dateList = [pickedDate];
                 }
 
-                final deleted = await deleteDominoToEdit(widget.goalId);
-                final delete =
-                    deleteTodayDominoToEdit(widget.goalId, todayDate);
-                if (!deleted) return;
+                // 🔹 도미노 삭제
+                final dominoDeleted = await deleteDominoToEdit(widget.goalId);
+                if (!dominoDeleted) return;
+
+                // 🔹 오늘 도미노 삭제
+                final todayDeleted =
+                    await DeleteTodayDominoService.deleteTodayDomino(
+                  goalId: widget.goalId,
+                  goalDate: todayDate,
+                );
+                if (!todayDeleted) return;
 
                 final added = await addDomino(
                   widget.thirdGoalId,
@@ -331,10 +315,6 @@ class EditPageState extends State<EditPage> {
                 );
                 if (!added) return;
 
-                // 성공 메시지 출력 후 페이지 이동
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('도미노가 수정되었습니다.')),
-                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -361,24 +341,11 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
 
-      Message(
-              "도미노가 삭제되었어!.",
-              const Color(0xffFF6767), // 텍스트 색상
-              const Color(0xff412C2C), // 배경 색상
-              borderColor: const Color(0xffFF6767), // 테두리 색상
-              icon: Icons.block)
-          .message(context);
-
       Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const TdMain(),
           ));
-    } else {
-      // 실패한 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
-      );
     }
   }
 
@@ -388,24 +355,12 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
 
     if (success) {
       // 성공적으로 서버에 전송된 경우에 처리할 코드
-      Message(
-              "도미노가 삭제되었어!.",
-              const Color(0xffFF6767), // 텍스트 색상
-              const Color(0xff412C2C), // 배경 색상
-              borderColor: const Color(0xffFF6767), // 테두리 색상
-              icon: Icons.block)
-          .message(context);
 
       Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const TdMain(),
           ));
-    } else {
-      // 실패한 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('도미노 삭제에 실패했습니다.')),
-      );
     }
   }
 

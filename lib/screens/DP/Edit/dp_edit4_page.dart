@@ -52,14 +52,15 @@ class EditColorPageState extends State<EditColorPage> {
     final List<String> color = Provider.of<GoalColor>(context, listen: false)
         .selectedGoalColor
         .values
-        .map((color) => color.toString())
+        .map((color) => '0x${color.value.toRadixString(16)}')
         .toList();
-
+    print(color);
     List<int> secondGoalId =
         Provider.of<SaveEditedDetailGoalIdModel>(context, listen: false)
             .editedDetailGoalId
             .values
             .toList();
+    print(secondGoalId);
 
     final success = await EditGoalColorService.editGoalColor(
       secondGoalId: secondGoalId,
@@ -279,8 +280,7 @@ class EditColorPageState extends State<EditColorPage> {
 
                     Navigator.pop(context);
                   });
-                })
-                    .customBackButton(),
+                }).customBackButton(),
                 const SizedBox(width: 15),
                 //페이지 타이틀
                 PageTitle('색깔 수정하기').pageTitle(),
@@ -306,9 +306,8 @@ class EditColorPageState extends State<EditColorPage> {
                         Center(
                           child: SizedBox(
                             width: currentHeight * 0.45,
-                            
                             child: GridView(
-                              shrinkWrap: true, 
+                              shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -416,8 +415,7 @@ class EditColorPageState extends State<EditColorPage> {
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 6,
-                                  crossAxisSpacing:
-                                      20,
+                                  crossAxisSpacing: 20,
                                   mainAxisSpacing: 20,
                                 ),
                                 children: List.generate(colors.length, (index) {
@@ -470,77 +468,80 @@ class EditColorPageState extends State<EditColorPage> {
                       SizedBox(
                         width: 90,
                         height: 45,
-                        child: LoginButton('완료', () async {
-                          // 👉 로딩 팝업 띄우기
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) => AlertDialog(
-                              backgroundColor: backgroundColor,
-                              content: Row(
-                                children: const [
-                                  CircularProgressIndicator(color: mainRed),
-                                  SizedBox(width: 20),
-                                  Text("만다라트를 수정하는 중이야..!",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600)),
-                                ],
+                        child: LoginButton(
+                          '완료',
+                          () async {
+                            // 👉 로딩 팝업 띄우기
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => AlertDialog(
+                                backgroundColor: backgroundColor,
+                                content: Row(
+                                  children: const [
+                                    CircularProgressIndicator(color: mainRed),
+                                    SizedBox(width: 20),
+                                    Text("만다라트를 수정하는 중이야..!",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        
-                          // 1. Second Goal 수정
-                          final secondGoalSuccess = await _editSecondGoal();
-                        
-                          if (secondGoalSuccess) {
-                            // 2. Goal Color 수정
-                            final goalColorSuccess = await _editColor();
-                        
-                            if (goalColorSuccess) {
-                              // 3. Third Goal 수정
-                              final thirdGoalSuccess = await _editThirdGoal();
-                        
-                              if (thirdGoalSuccess) {
-                                // 4. 상태 초기화
-                                for (int i = 0; i < 9; i++) {
-                                  context
-                                      .read<SaveInputtedDetailGoalModel>()
-                                      .updateDetailGoal(i.toString(), "");
-                                }
-                        
-                                for (int i = 0; i < 9; i++) {
-                                  context.read<GoalColor>().updateGoalColor(
-                                      i.toString(), const Color(0xff929292));
-                                }
-                        
-                                for (int i = 0; i < 9; i++) {
-                                  for (int j = 0; j < 9; j++) {
+                            );
+
+                            // 1. Second Goal 수정
+                            final secondGoalSuccess = await _editSecondGoal();
+
+                            if (secondGoalSuccess) {
+                              // 2. Goal Color 수정
+                              final goalColorSuccess = await _editColor();
+
+                              if (goalColorSuccess) {
+                                // 3. Third Goal 수정
+                                final thirdGoalSuccess = await _editThirdGoal();
+
+                                if (thirdGoalSuccess) {
+                                  // 4. 상태 초기화
+                                  for (int i = 0; i < 9; i++) {
                                     context
-                                        .read<SaveInputtedActionPlanModel>()
-                                        .updateActionPlan(i, j.toString(), "");
+                                        .read<SaveInputtedDetailGoalModel>()
+                                        .updateDetailGoal(i.toString(), "");
                                   }
+
+                                  for (int i = 0; i < 9; i++) {
+                                    context.read<GoalColor>().updateGoalColor(
+                                        i.toString(), const Color(0xff929292));
+                                  }
+
+                                  for (int i = 0; i < 9; i++) {
+                                    for (int j = 0; j < 9; j++) {
+                                      context
+                                          .read<SaveInputtedActionPlanModel>()
+                                          .updateActionPlan(
+                                              i, j.toString(), "");
+                                    }
+                                  }
+
+                                  // ✅ 로딩 팝업 닫기 후 페이지 이동
+                                  Navigator.pop(context); // 로딩 팝업 닫기
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EditCompletePage(),
+                                    ),
+                                  );
+                                  return;
                                 }
-                        
-                                // ✅ 로딩 팝업 닫기 후 페이지 이동
-                                Navigator.pop(context); // 로딩 팝업 닫기
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const EditCompletePage(),
-                                  ),
-                                );
-                                return;
                               }
                             }
-                          }
-                        
-                          // ❌ 실패했을 경우에도 팝업 닫기
-                          Navigator.pop(context);
-                        }, )
-                            .loginButton(),
+
+                            // ❌ 실패했을 경우에도 팝업 닫기
+                            Navigator.pop(context);
+                          },
+                        ).loginButton(),
                       ),
                     ]),
               ],

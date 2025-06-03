@@ -83,7 +83,7 @@ class Tutorial7State extends State<Tutorial7> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding:
-                          EdgeInsets.only(top: currentWidth < 600 ? 60 : 80),
+                          EdgeInsets.only(top: currentWidth < 600 ? 90 : 100),
                       child: _showVideo
                           ? SizedBox(
                               height: currentWidth < 600 ? 270 : 350) // 공간 유지
@@ -98,7 +98,7 @@ class Tutorial7State extends State<Tutorial7> {
                 /// 📝 텍스트 – 영상 위쪽에 정렬
                 if (!_showVideo)
                   Align(
-                    alignment: const Alignment(0, -0.6),
+                    alignment: const Alignment(0, -0.57),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Text.rich(
@@ -114,7 +114,7 @@ class Tutorial7State extends State<Tutorial7> {
                               ),
                             ),
                             TextSpan(
-                              text: '하면\n그동안 모든 도미노로\n너의 목표를\n쓰러뜨릴 수 있어!',
+                              text: '하면\n그동안 모은 도미노로\n너의 목표를\n쓰러뜨릴 수 있어!',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
@@ -131,34 +131,35 @@ class Tutorial7State extends State<Tutorial7> {
 
                 /// ✅ 영상 끝난 후 메시지
                 if (_isVideoEnded)
-                  const Center(
+                  const Align(
+                    alignment: Alignment(0, -0.57),
                     child: Text.rich(
                       TextSpan(
                         children: [
                           TextSpan(
                             text: '그럼 이제\n',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 30,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               height: 1.5,
                             ),
                           ),
                           TextSpan(
                             text: '목표 달성',
                             style: TextStyle(
-                              fontSize: 20,
-                              color: Color(0xFFFF6767), // 강조 색상
-                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: mainRed, // 강조 색상
+                              fontWeight: FontWeight.w600,
                               height: 1.5,
                             ),
                           ),
                           TextSpan(
                             text: '하러\n가보자!!',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 30,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               height: 1.5,
                             ),
                           ),

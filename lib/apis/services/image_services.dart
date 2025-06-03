@@ -20,13 +20,7 @@ class UploadFileService {
       String? token = prefs.getString('authToken');
 
       if (token == null || token.isEmpty) {
-        Fluttertoast.showToast(
-          msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return ''; // 토큰이 없으면 빈 문자열 반환
       }
 
@@ -71,23 +65,11 @@ class UploadFileService {
         // 서버 응답 본문은 URL이므로 해당 URL을 변수에 저장
         uploadedUrl = responseBody;
       } else {
-        Fluttertoast.showToast(
-          msg: '파일 업로드 실패: ${response.statusCode}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return ''; // 업로드 실패 시 빈 문자열 반환
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return ''; // 오류 발생 시 빈 문자열 반환
     }
 
@@ -105,13 +87,7 @@ class UploadFilesService {
       String? token = prefs.getString('authToken');
 
       if (token == null || token.isEmpty) {
-        Fluttertoast.showToast(
-          msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return [];
       }
 
@@ -146,23 +122,11 @@ class UploadFilesService {
         if (response.statusCode == 200) {
           uploadedUrls.add(responseBody); // ✅ 그대로 사용하면 됨
         } else {
-          Fluttertoast.showToast(
-            msg: '파일 업로드 실패: ${response.statusCode}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
         }
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return [];
     }
 
@@ -178,13 +142,7 @@ class DeleteFileService {
       String? token = prefs.getString('authToken');
 
       if (token == null || token.isEmpty) {
-        Fluttertoast.showToast(
-          msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false; // 토큰이 없으면 삭제 실패
       }
 
@@ -200,23 +158,11 @@ class DeleteFileService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '이미지 삭제 실패: ${response.statusCode}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
   }
