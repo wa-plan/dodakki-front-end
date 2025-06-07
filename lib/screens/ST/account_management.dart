@@ -9,6 +9,7 @@ import 'package:domino/widgets/popup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AccountManagement extends StatefulWidget {
   final String email;
@@ -49,8 +50,6 @@ class _AccountManagementState extends State<AccountManagement> {
               //페이지 타이틀
               PageTitle('내 계정').pageTitle(),
               const Spacer(),
-
-              
             ],
           ),
         ),
@@ -65,13 +64,17 @@ class _AccountManagementState extends State<AccountManagement> {
               child: ListView(
                 children: [
                   const SizedBox(height: 15),
-                  MGSubTitle('정보', ).mgSubTitle(context),
+                  MGSubTitle(
+                    '정보',
+                  ).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildSettingItem2(
                     title: widget.email,
                   ),
                   const SizedBox(height: 14),
-                  MGSubTitle('보안', ).mgSubTitle(context),
+                  MGSubTitle(
+                    '보안',
+                  ).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildSettingItem(
                     title: '비밀번호 변경하기',
@@ -89,7 +92,9 @@ class _AccountManagementState extends State<AccountManagement> {
                     },
                   ),
                   const SizedBox(height: 14),
-                  MGSubTitle('종료', ).mgSubTitle(context),
+                  MGSubTitle(
+                    '종료',
+                  ).mgSubTitle(context),
                   const SizedBox(height: 8),
                   _buildCombinedSwitchItem()
                 ],
@@ -168,7 +173,6 @@ class _AccountManagementState extends State<AccountManagement> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                
                 Text('이메일',
                     style: TextStyle(
                         fontSize: 15,
@@ -243,73 +247,51 @@ class _AccountManagementState extends State<AccountManagement> {
             ),
           ),
           const SizedBox(height: 13),
-          GestureDetector(
-            onTap: () {
-              PopupDialog.show(
-                context,
-                '한번 떠나면,\n지금까지의 기록이 없어져!',
-                '잠깐만!!',
-                true, // cancel
-                false, // delete
-                true, //signout
-                false, // success
-
-                onCancel: () {
-                  Navigator.of(context).pop();
-                },
-                onDelete: () {},
-                onSignOut: () {
-                  SignOutService.signOut(context);
-                  Navigator.of(context).pop();
-                  Navigator.push(
+          Container(
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('탈퇴하기',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600)),
+                NewCustomIconButton(() {
+                  PopupDialog.show(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const MyApp(),
-                    ),
-                  );
-                },
-              );
-            },
-            child: Container(
-              color: Colors.transparent,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('탈퇴하기',
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600)),
-                  NewCustomIconButton(() {
-                    PopupDialog.show(
-                      context,
-                      '지금 떠나면,\n지금까지의 기록이 없어져..!',
-                      '잠깐만!!',
-                      true, // cancel
-                      false, // delete
-                      true, //signout
-                      false, // success
-                      onCancel: () {
-                        Navigator.of(context).pop();
-                      },
-                      onDelete: () {},
-                      onSignOut: () {
-                        SignOutService.signOut(context);
-                        Navigator.of(context).pop();
-                        Navigator.push(
+                    '지금 떠나면,\n지금까지의 기록이 없어져..!',
+                    '잠깐만!!',
+                    true, // cancel
+                    false, // delete
+                    true, //signout
+                    false, // success
+                    onCancel: () {
+                      Navigator.of(context).pop();
+                    },
+                    onDelete: () {},
+                    onSignOut: () async {
+                      print("탈퇴버튼 누름");
+
+                      final success = await SignOutService.signOut(context);
+
+                      if (!context.mounted) return;
+
+                      if (success) {
+                        Navigator.of(context).pop(); // 팝업 닫기
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MyApp(),
-                          ),
+                              builder: (context) => const MyApp()),
                         );
-                      },
-                    );
-                  }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
-                      .newCustomIconButton(),
-                ],
-              ),
+                      }
+                    },
+                  );
+                }, Icons.arrow_forward_ios_rounded, currentWidth, 14)
+                    .newCustomIconButton(),
+              ],
             ),
-          )
+          ),
         ],
       ),
     );

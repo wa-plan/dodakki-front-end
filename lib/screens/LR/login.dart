@@ -51,7 +51,18 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (userId != null && password != null) {
-        bool isSuccess = await _loginService.login(context, userId, password);
+        bool isSuccess = await _loginService.login(
+          context,
+          userId,
+          password,
+          showErrorMessage: false,
+        );
+        if (isSuccess && context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TdMain()),
+          );
+        }
 
         if (isSuccess) {
           if (context.mounted) {

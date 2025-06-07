@@ -22,7 +22,6 @@ const fullPadding = EdgeInsets.fromLTRB(20.0, 10, 20.0, 20.0);
 const tabletPadding = EdgeInsets.fromLTRB(40.0, 30, 40.0, 20);
 const tabletFullPadding = EdgeInsets.fromLTRB(40.0, 10, 40.0, 20);
 
-
 //colorPalette
 Map<Color, Color> colorPalette = {
   const Color(0xffFF7A7A): const Color(0xffFFC2C2),
@@ -39,9 +38,6 @@ Map<Color, Color> colorPalette = {
   const Color(0xff11D1C2): const Color(0xffAAF4EF),
   Colors.transparent: const Color(0xff5C5C5C),
 };
-
-
-
 
 //Button
 class Button {
@@ -79,7 +75,7 @@ class NewButton {
   final Color buttonColor;
   final Color textColor;
   final String text;
-  final Function function;
+  final VoidCallback function;
   final double currentWidth;
 
   NewButton(this.buttonColor, this.textColor, this.text, this.function,
@@ -107,8 +103,6 @@ class NewButton {
   }
 }
 
-
-
 //Fluttertoast
 class Message {
   final String text;
@@ -118,9 +112,9 @@ class Message {
   final IconData? icon; // 아이콘 추가
 
   Message(
-     this.text,
-     this.textColor,
-     this.bgColor, {
+    this.text,
+    this.textColor,
+    this.bgColor, {
     required this.borderColor, // 기본 테두리 색상
     required this.icon,
   });
@@ -171,8 +165,6 @@ class Message {
   }
 }
 
-
-
 //ThirdGoalInput
 class DPInput3 {
   final Color? color;
@@ -186,8 +178,9 @@ class DPInput3 {
       width: 80,
       margin: const EdgeInsets.all(1.0),
       padding: const EdgeInsets.all(10),
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(6), color: const Color(0xff5C5C5C)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          color: const Color(0xff5C5C5C)),
       child: Center(
         child: TextFormField(
           initialValue: initialValue,
@@ -203,8 +196,7 @@ class DPInput3 {
           decoration: const InputDecoration(
               border: InputBorder.none,
               counterStyle: TextStyle(
-                  fontSize: 12,
-                  color: Color.fromARGB(255, 134, 134, 134))),
+                  fontSize: 12, color: Color.fromARGB(255, 134, 134, 134))),
         ),
       ),
     );
@@ -233,7 +225,9 @@ class DPInput2 {
           controller: controller,
           onChanged: onChangedFunction,
           style: const TextStyle(
-              color: backgroundColor, fontSize: 14, fontWeight: FontWeight.w600),
+              color: backgroundColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w600),
           textAlign: TextAlign.center,
           maxLength: 15,
           maxLines: null,
@@ -243,8 +237,7 @@ class DPInput2 {
           decoration: const InputDecoration(
               border: InputBorder.none,
               counterStyle: TextStyle(
-                  fontSize: 12,
-                  color: Color.fromARGB(255, 104, 104, 104))),
+                  fontSize: 12, color: Color.fromARGB(255, 104, 104, 104))),
         ),
       ),
     );
@@ -543,10 +536,10 @@ class DPGrid1 {
             BoxDecoration(borderRadius: BorderRadius.circular(3), color: color),
         child: Center(
           child: AutoSizeText(
-            minFontSize: 3,
-            maxFontSize: 13,
-              maxLines: 3, 
-              overflow: TextOverflow.ellipsis, 
+              minFontSize: 3,
+              maxFontSize: 13,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               text,
               textAlign: TextAlign.center,
               style: const TextStyle(
@@ -717,8 +710,6 @@ class NewCustomTextField {
   }
 }
 
-
-
 class ColorOption2 extends StatelessWidget {
   final Color colorCode;
   final bool isSelected;
@@ -773,9 +764,9 @@ class Tag {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(25),
-            ),
+          color: bgColor,
+          borderRadius: BorderRadius.circular(25),
+        ),
         child: Text(
           text,
           style: const TextStyle(
@@ -857,15 +848,14 @@ class CustomIconButton {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02), 
-            offset: const Offset(0, 0), 
-            blurRadius: 15, 
-            spreadRadius: 0, 
+            color: Colors.black.withOpacity(0.02),
+            offset: const Offset(0, 0),
+            blurRadius: 15,
+            spreadRadius: 0,
           ),
         ],
         color: const Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
-        
       ),
       child: GestureDetector(
         onTap: () {
@@ -898,15 +888,14 @@ class NewCustomIconButton {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02), 
-            offset: const Offset(0, 0), 
-            blurRadius: 15, 
-            spreadRadius: 0, 
+            color: Colors.black.withOpacity(0.02),
+            offset: const Offset(0, 0),
+            blurRadius: 15,
+            spreadRadius: 0,
           ),
         ],
         color: Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
-        
       ),
       child: GestureDetector(
         onTap: () {
