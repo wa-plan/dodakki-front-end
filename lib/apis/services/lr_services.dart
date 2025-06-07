@@ -7,12 +7,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:domino/style/style_tutorial.dart';
 
 String? baseUrl = dotenv.env['BASE_URL'];
 
 class LoginService {
   Future<bool> login(
-      BuildContext context, String userId, String password) async {
+    BuildContext context,
+    String userId,
+    String password, {
+    bool showErrorMessage = true, // ✅ 메시지 출력 여부 추가
+  }) async {
     final url = Uri.parse('$baseUrl/api/auth/login');
 
     final body = jsonEncode({
@@ -42,20 +47,12 @@ class LoginService {
             if (context.mounted) {
               return true;
             }
-          } else {
-            if (context.mounted) {
-              
-            }
           }
           return false;
-        } else {
-          if (context.mounted) {
-            
-          }
         }
         return false;
       } else {
-        if (context.mounted) {
+        if (context.mounted && showErrorMessage) {
           Message(
             "입력하신 정보가 올바르지 않습니다.",
             const Color(0xffFF6767), // 텍스트 색상
@@ -67,9 +64,7 @@ class LoginService {
         return false;
       }
     } catch (e) {
-      if (context.mounted) {
-        
-      }
+      if (context.mounted) {}
       return false;
     }
   }
@@ -82,7 +77,6 @@ class ChangePasswordService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -142,7 +136,6 @@ class RegistrationService {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
-          
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -152,13 +145,11 @@ class RegistrationService {
         }
       } else {
         if (context.mounted) {
-          
+          TutorialMessage("아이디가 중복되었습니다").tutorialMessage(context);
         }
       }
     } catch (e) {
-      if (context.mounted) {
-        
-      }
+      if (context.mounted) {}
     }
   }
 }
@@ -191,7 +182,6 @@ class IdFindService {
         return '실패';
       }
     } catch (e) {
-      
       return '실패';
     }
   }
@@ -220,30 +210,23 @@ class PwFindService {
       );
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response.body; // Adjust based on your API response
-        
       } else {
         return '실패';
       }
     } catch (e) {
-      
       return '실패';
     }
   }
 }
 
 class SignOutService {
-  static Future<String?> signOut(BuildContext context) async {
+  static Future<bool> signOut(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
 
-    if (token == null) {
-      if (context.mounted) {
-        
-      }
-      return null;
-    }
+    if (token == null) return false;
 
-    final url = Uri.parse('$baseUrl/api/user/me/password');
+    final url = Uri.parse('$baseUrl/api/user/me');
 
     try {
       final response = await http.delete(
@@ -255,29 +238,13 @@ class SignOutService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        if (context.mounted) {
-          
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MyApp(),
-            ),
-          );
-        }
+        return true; // ✅ 성공
       } else {
-        if (context.mounted) {
-          
-        }
-        return null;
+        return false; // ✅ 실패
       }
     } catch (e) {
-      if (context.mounted) {
-        
-      }
-      return null;
+      return false; // ✅ 예외 발생
     }
-    return null;
   }
 }
 
@@ -289,7 +256,6 @@ class MorningAlertService {
     String? token = prefs.getString('authToken');
 
     if (token == null || token.isEmpty) {
-      
       return false;
     }
 
@@ -307,14 +273,11 @@ class MorningAlertService {
           body: body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else {
-        
         return false;
       }
     } catch (e) {
-      
       return false;
     }
   }
@@ -326,7 +289,6 @@ class NightAlertService {
     String? token = prefs.getString('authToken');
 
     if (token == null || token.isEmpty) {
-      
       return false;
     }
 
@@ -344,14 +306,11 @@ class NightAlertService {
           body: body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true; //성공한 경우 'on' 또는 'off' 값을 반환
       } else {
-        
         return false;
       }
     } catch (e) {
-      
       return false;
     }
   }

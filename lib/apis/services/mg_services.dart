@@ -55,16 +55,11 @@ class AddGoalService {
       print('📡 응답 본문: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -104,16 +99,11 @@ class EditGoalNameService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -128,7 +118,6 @@ class EditGoalDateService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -147,16 +136,11 @@ class EditGoalDateService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -171,7 +155,6 @@ class EditGoalDescriptionService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -191,16 +174,11 @@ class EditGoalDescriptionService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-       
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -215,7 +193,6 @@ class EditGoalPhotoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -234,16 +211,11 @@ class EditGoalPhotoService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -258,7 +230,6 @@ class EditGoalColorService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -277,16 +248,11 @@ class EditGoalColorService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -302,7 +268,6 @@ class EditProfileService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -325,16 +290,11 @@ class EditProfileService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -346,7 +306,6 @@ class UserInfoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return {};
     }
 
@@ -389,13 +348,9 @@ class UserInfoService {
           'profile': profile
         };
       } else if (response.statusCode >= 400) {
-        
-      } else {
-        
-      }
+      } else {}
       return {};
     } catch (e) {
-      
       return {};
     }
   }
@@ -448,13 +403,9 @@ class UserMandaIdService {
           'bookmarks': bookmarkList,
         };
       } else if (response.statusCode >= 400) {
-        
-      } else {
-        
-      }
+      } else {}
       return {'mandalarts': [], 'bookmarks': []};
     } catch (e) {
-      
       return {'mandalarts': [], 'bookmarks': []};
     }
   }
@@ -467,7 +418,6 @@ class UserMandaInfoService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return null; // 로그인 토큰 없으면 null 반환
     }
 
@@ -486,17 +436,11 @@ class UserMandaInfoService {
           jsonDecode(utf8.decode(response.bodyBytes)); // UTF-8로 디코딩
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
-
         return decodedResponse; // 성공 시 데이터 반환
       } else if (response.statusCode >= 400) {
-        
-      } else {
-        
-      }
+      } else {}
       return null; // 실패 시 null 반환
     } catch (e) {
-      
       return null; // 오류 발생 시 null 반환
     }
   }
@@ -511,7 +455,6 @@ class MandaBookmarkService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -533,16 +476,11 @@ class MandaBookmarkService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -557,7 +495,6 @@ class MandaProgressService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -579,16 +516,11 @@ class MandaProgressService {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        
         return true;
       } else if (response.statusCode == 401) {
-        
-      } else {
-        
-      }
+      } else {}
       return false;
     } catch (e) {
-      
       return false;
     }
   }
@@ -600,7 +532,6 @@ class CheeringService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return [];
     }
 
@@ -623,17 +554,11 @@ class CheeringService {
           return {'id': id, 'name': name};
         }).toList();
 
-        
-
         return mandaList;
       } else if (response.statusCode >= 400) {
-        
-      } else {
-        
-      }
+      } else {}
       return [];
     } catch (e) {
-      
       return [];
     }
   }
@@ -647,7 +572,6 @@ class UploadImage {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -668,14 +592,11 @@ class UploadImage {
       Response response = await dio.post(s3Url, data: formData);
 
       if (response.statusCode == 200) {
-        
         return true;
       } else {
-        
         return false;
       }
     } on DioException catch (e) {
-      
       return false;
     }
   }
@@ -690,7 +611,6 @@ class DeleteFirstGoalService {
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
@@ -709,11 +629,9 @@ class DeleteFirstGoalService {
         // Handle successful deletion
         return true;
       } else {
-        
         return false;
       }
     } catch (e) {
-      
       return false;
     }
   }
