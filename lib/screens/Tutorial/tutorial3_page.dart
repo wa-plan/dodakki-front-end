@@ -34,7 +34,8 @@ class Tutorial3State extends State<Tutorial3> {
                   SizedBox(height: 17),
 
                   //질문
-                  TutorialQuestion('뿌듯한 학교생활하기', '달성해야 할 제2목표는?', 'red')
+                  TutorialQuestion(
+                          "", '뿌듯한 학교생활하기', "를 위한", '달성해야 할 제2목표는?', 'red')
                       .tutorialQuestion(),
                   SizedBox(height: 20),
                 ],

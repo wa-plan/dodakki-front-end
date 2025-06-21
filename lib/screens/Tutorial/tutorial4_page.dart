@@ -1,3 +1,4 @@
+import 'package:domino/screens/Tutorial/tutorial4_2page.dart';
 import 'package:domino/screens/Tutorial/tutorial5_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,8 @@ class Tutorial4State extends State<Tutorial4> {
                   SizedBox(height: 17),
 
                   //질문
-                  TutorialQuestion('대학교 최강인싸되기', '달성해야 할 제3목표는?', 'green')
+                  TutorialQuestion(
+                          "", '대학교 최강인싸되기', "를 위한", '달성해야 할 제3목표는?', 'green')
                       .tutorialQuestion(),
                   SizedBox(height: 20),
                 ],
@@ -74,7 +76,7 @@ class Tutorial4State extends State<Tutorial4> {
             if (selectedIndex == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Tutorial5()),
+                MaterialPageRoute(builder: (context) => const Tutorial4_2()),
               );
             } else if (selectedIndex == 0 ||
                 selectedIndex == 3 ||

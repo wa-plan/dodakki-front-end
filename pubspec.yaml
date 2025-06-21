@@ -151,6 +151,18 @@ flutter:
     - assets/img/smallicon.png
     - assets/img/symbol.png
     - assets/img/popup.png
+    - assets/img/menu_screen1.png
+    - assets/img/menu_screen2.png
+    - assets/img/menu_screen3.png
+    - assets/img/tt_menu_icon1.png
+    - assets/img/tt_menu_icon2.png
+    - assets/img/tt_menu_icon3.png
+    - assets/img/option1.png
+    - assets/img/option2.png
+    - assets/img/option3.png
+    - assets/img/option4.png
+    - assets/img/option5.png
+
 
     
 
