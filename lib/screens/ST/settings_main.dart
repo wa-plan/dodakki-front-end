@@ -466,7 +466,7 @@ class _SettingsMainState extends State<SettingsMain> {
                           fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  Text('1.0.10  ',
+                  Text('1.0.11  ',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.grey,
