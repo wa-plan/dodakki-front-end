@@ -20,11 +20,13 @@ const gradientColor = [
 const appBarPadding = EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20);
 const fullPadding = EdgeInsets.fromLTRB(20.0, 10, 20.0, 20.0);
 
+
 class NewButton {
   final Color buttonColor;
   final Color textColor;
   final String text;
   final Function function;
+
 
   NewButton(
     this.buttonColor,
@@ -54,6 +56,7 @@ class NewButton {
     );
   }
 }
+
 
 class Message {
   final String text;
@@ -116,6 +119,7 @@ class Message {
   }
 }
 
+
 //도미노 페이지 인디케이터
 class PageIndicator extends StatelessWidget {
   final List<Map<String, dynamic>> goals;
@@ -157,6 +161,7 @@ class PageIndicator extends StatelessWidget {
           }),
         );
       },
+
     );
   }
 }
@@ -193,6 +198,7 @@ class FreeGrid {
     );
   }
 }
+
 
 class ColorTransform {
   final String color;
@@ -346,6 +352,8 @@ class Tag {
   }
 }
 
+
+
 class NewCustomIconButton {
   final Function function;
   final IconData icon;
@@ -360,7 +368,7 @@ class NewCustomIconButton {
       width: 30,
       height: 30,
       decoration: BoxDecoration(
-        
+
         color: Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
       ),

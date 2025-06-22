@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:domino/screens/Tutorial/tutorial1_page.dart';
 
 class SettingsMain extends StatefulWidget {
   const SettingsMain({super.key});
@@ -121,6 +122,14 @@ class _SettingsMainState extends State<SettingsMain> {
               MGSubTitle(
                 '계정',
               ).mgSubTitle(context),
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Tutorial1()),
+                    );
+                  },
+                  child: Text('튜토리얼')),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '내 계정',

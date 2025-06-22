@@ -15,6 +15,8 @@ import 'package:domino/apis/services/image_services.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:domino/utils/permission_util.dart';
+import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
 
 class ProfileEdit extends StatefulWidget {
   final String selectedImage;
@@ -123,12 +125,11 @@ class _ProfileEditState extends State<ProfileEdit> {
     });
   }
 
-  Future<void> _uploadSelectedImage() async {
+  /*Future<void> _uploadSelectedImage() async {
     print('📤 _uploadSelectedImage 호출됨');
 
     // ✅ selectedImage가 asset이 아닌 경우 생략
-    if (widget.selectedImage.isEmpty ||
-        !widget.selectedImage.startsWith("assets/")) {
+    if (widget.selectedImage.isEmpty) {
       print('⏭️ selectedImage가 asset이 아님 — 업로드 생략: ${widget.selectedImage}');
       return;
     }
@@ -158,7 +159,71 @@ class _ProfileEditState extends State<ProfileEdit> {
         _imageFiles.clear();
         _imageFiles.add(uploadedUrl);
         profile = uploadedUrl;
+        print('함수 내부 _imageFiles: $uploadedUrl');
       });
+    }
+  }*/
+
+  Future<void> _uploadSelectedImage() async {
+    print('📤 _uploadSelectedImage 호출됨');
+
+    if (widget.selectedImage.isEmpty) {
+      print('⏭️ selectedImage가 비어 있음 — 업로드 생략');
+      return;
+    }
+
+    print('📷 selectedImage 경로: ${widget.selectedImage}');
+
+    late Uint8List imageBytes;
+    String filename = 'profile_image.png';
+
+    try {
+      if (widget.selectedImage.startsWith('http')) {
+        // ✅ URL 이미지 처리
+        final response = await http.get(Uri.parse(widget.selectedImage));
+        if (response.statusCode == 200) {
+          imageBytes = response.bodyBytes;
+          filename = path.basename(widget.selectedImage);
+          print('🌐 네트워크 이미지 다운로드 완료');
+        } else {
+          print('⚠️ 이미지 다운로드 실패: ${response.statusCode}');
+          return;
+        }
+      } else {
+        // ✅ 로컬 asset 처리
+        final byteData = await rootBundle.load(widget.selectedImage);
+        imageBytes = byteData.buffer.asUint8List();
+        filename = path.basename(widget.selectedImage);
+        print('📦 로컬 asset 로드 완료');
+      }
+
+      // ✅ 임시 파일로 저장
+      final directory = await getTemporaryDirectory();
+      final filePath = path.join(directory.path, filename);
+      final file = File(filePath);
+      await file.writeAsBytes(imageBytes);
+      print('📁 파일로 저장 완료: $filePath');
+
+      // ✅ 업로드
+      final selectedFile = PlatformFile(
+        name: filename,
+        path: filePath,
+        size: imageBytes.length,
+      );
+
+      final fileList = [selectedFile];
+      final uploadedUrl = await UploadFileService.uploadFiles(fileList);
+
+      if (uploadedUrl.isNotEmpty) {
+        setState(() {
+          _imageFiles.clear();
+          _imageFiles.add(uploadedUrl);
+          profile = uploadedUrl;
+          print('✅ 업로드 완료: $uploadedUrl');
+        });
+      }
+    } catch (e) {
+      print('❌ 업로드 중 오류 발생: $e');
     }
   }
 
@@ -248,6 +313,9 @@ class _ProfileEditState extends State<ProfileEdit> {
     super.initState();
     userInfo();
     _nicknamecontroller.addListener(_onNicknameChanged);
+    print('selectedImage:${widget.selectedImage}');
+    print('cameraImage:${widget.cameraImage}');
+    print('profileImage:${widget.profileImage}');
   }
 
   @override
@@ -406,7 +474,12 @@ class _ProfileEditState extends State<ProfileEdit> {
           padding: fullPadding,
           //저장하기 버튼
           child: LoginButton('저장하기', () async {
-            await _uploadSelectedImage();
+            print('확인: ${widget.selectedImage}');
+
+            // ✅ 이미지 파일이 없을 경우에만 업로드 시도
+            if (_imageFiles.isEmpty) {
+              await _uploadSelectedImage();
+            }
 
             String profileToUpload;
 

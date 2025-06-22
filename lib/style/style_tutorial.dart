@@ -71,11 +71,14 @@ class ProgressTitle {
 
 //질문
 class TutorialQuestion {
+  final String text0;
   final String text1;
   final String text2;
+  final String text3;
   final String color;
 
-  const TutorialQuestion(this.text1, this.text2, this.color);
+  const TutorialQuestion(
+      this.text0, this.text1, this.text2, this.text3, this.color);
 
   Color textColorDefiner(String color) {
     late Color textColor;
@@ -98,8 +101,10 @@ class TutorialQuestion {
       backColor = const Color(0xff24541D);
     } else if (color == 'red') {
       backColor = const Color(0xff503333);
-    } else {
+    } else if (color == 'blue') {
       backColor = const Color(0xff265362);
+    } else {
+      backColor = const Color(0xff222222);
     }
 
     return backColor;
@@ -109,42 +114,53 @@ class TutorialQuestion {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(7, 1, 7, 1),
-              decoration: BoxDecoration(
-                  color: backColorDefiner(color),
-                  borderRadius: BorderRadius.circular(5)),
-              child: Text(
-                text1,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: textColorDefiner(color),
-                    height: 1.7),
-              ),
-            ),
-            SizedBox(width: 4),
-            Text(
-              "를 위해",
-              style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  height: 1.7),
-            ),
-          ],
-        ),
-        SizedBox(height: 2),
         Text(
-          text2,
+          text0,
           style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
               height: 1.7),
         ),
+        if (color != 'x') ...[
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(7, 1, 7, 1),
+                decoration: BoxDecoration(
+                    color: backColorDefiner(color),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Text(
+                  text1,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: textColorDefiner(color),
+                      height: 1.7),
+                ),
+              ),
+              SizedBox(width: 4),
+              Text(
+                text2,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  height: 1.7,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 2),
+          Text(
+            text3,
+            style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                height: 1.7),
+          ),
+        ]
       ],
     );
   }
@@ -207,9 +223,11 @@ class _MandalartOptionState extends State<MandalartOption> {
     late Color textColor;
 
     if (color == 'green') {
-      textColor = mainBlue;
-    } else {
       textColor = mainGreen;
+    } else if (color == 'red') {
+      textColor = mainRed;
+    } else {
+      textColor = mainBlue;
     }
 
     return textColor;
@@ -219,9 +237,11 @@ class _MandalartOptionState extends State<MandalartOption> {
     late Color backColor;
 
     if (color == 'green') {
-      backColor = const Color(0xff265362);
-    } else {
       backColor = const Color(0xff24541D);
+    } else if (color == 'red') {
+      backColor = const Color(0xff513333);
+    } else {
+      backColor = const Color(0xff265362);
     }
 
     return backColor;
@@ -468,6 +488,208 @@ class _TodoOptionState extends State<TodoOption> {
               ),
             );
           }),
+    );
+  }
+}
+
+class ImageOption extends StatefulWidget {
+  final List<String> imageUrls;
+  final String color; // 예: "red"
+  final void Function(int index)? onItemSelected;
+
+  const ImageOption({
+    super.key,
+    required this.imageUrls,
+    required this.color,
+    this.onItemSelected,
+  });
+
+  @override
+  _ImageOptionState createState() => _ImageOptionState();
+}
+
+class _ImageOptionState extends State<ImageOption> {
+  int selectedIndex = 100;
+
+  /// 문자열 컬러 → 실제 색상 매핑 함수
+  Color getSelectedColor(String name) {
+    switch (name.toLowerCase()) {
+      case 'red':
+        return const Color(0xFFFF6767);
+      case 'blue':
+        return Color(0xff5DD8FF);
+      default:
+        return Colors.white; // 기본값
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Color selectedIconColor = getSelectedColor(widget.color);
+
+    return SizedBox(
+      width: double.infinity,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: widget.imageUrls.length,
+        itemBuilder: (context, index) {
+          final isSelected = selectedIndex == index;
+
+          return Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                  widget.onItemSelected?.call(index);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent, // 배경색 없애기
+                    borderRadius: BorderRadius.circular(8.68),
+                    border: Border.all(
+                      color:
+                          isSelected ? selectedIconColor : Colors.transparent,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Stack(
+                    //fit: StackFit.expand,
+                    children: [
+                      // 배경 이미지
+                      Image.asset(
+                        widget.imageUrls[index],
+                        fit: BoxFit.cover,
+                      ),
+
+                      // 체크 아이콘 (오른쪽 상단)
+                      Positioned(
+                        top: 15,
+                        right: 15,
+                        child: Icon(
+                          Icons.check_circle_rounded,
+                          size: 18,
+                          color: isSelected
+                              ? selectedIconColor
+                              : const Color(0xFF3C3C3C),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class real extends StatefulWidget {
+  final List<String> imageUrls;
+  final String color; // 예: "red"
+  final void Function(int index)? onItemSelected;
+
+  const real({
+    super.key,
+    required this.imageUrls,
+    required this.color,
+    this.onItemSelected,
+  });
+
+  @override
+  _realState createState() => _realState();
+}
+
+class _realState extends State<real> {
+  int selectedIndex = 100;
+
+  /// 문자열 컬러 → 실제 색상 매핑 함수
+  Color getSelectedColor(String name) {
+    switch (name.toLowerCase()) {
+      case 'red':
+        return const Color(0xFFFF6767);
+      case 'blue':
+        return Color(0xff5DD8FF);
+      default:
+        return Colors.white; // 기본값
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Color selectedIconColor = getSelectedColor(widget.color);
+
+    return SizedBox(
+      width: double.infinity,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: widget.imageUrls.length,
+        itemBuilder: (context, index) {
+          final isSelected = selectedIndex == index;
+
+          return Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                  widget.onItemSelected?.call(index);
+                },
+                child: AspectRatio(
+                  aspectRatio: widget.color == 'red' ? 696 / 500 : 722 / 202,
+                  child: Container(
+                    //margin: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Color(0xff323232),
+                      borderRadius: BorderRadius.circular(8.68),
+                      border: Border.all(
+                        color:
+                            isSelected ? selectedIconColor : Colors.transparent,
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        // 배경 이미지
+                        Image.asset(
+                          widget.imageUrls[index],
+                          fit: BoxFit.cover,
+                        ),
+
+                        // 체크 아이콘 (오른쪽 상단)
+                        Positioned(
+                          top: 15,
+                          right: 15,
+                          child: Icon(
+                            Icons.check_circle_rounded,
+                            size: 18,
+                            color: isSelected
+                                ? selectedIconColor
+                                : const Color(0xFF3C3C3C),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 }

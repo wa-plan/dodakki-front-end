@@ -60,6 +60,7 @@ dependencies:
   device_info_plus: ^11.3.0
   confetti: ^0.8.0
   flutter_speed_dial: ^7.0.0
+  path: ^1.9.0
 
 #새로고침 해결해야 함...
 flutter_native_splash:
@@ -158,6 +159,19 @@ flutter:
     - assets/img/sampleImage10.png
     - assets/img/sampleImage11.png
     - assets/img/sampleImage12.png
+    - assets/img/menu_screen1.png
+    - assets/img/menu_screen2.png
+    - assets/img/menu_screen3.png
+    - assets/img/tt_menu_icon1.png
+    - assets/img/tt_menu_icon2.png
+    - assets/img/tt_menu_icon3.png
+    - assets/img/option1.png
+    - assets/img/option2.png
+    - assets/img/option3.png
+    - assets/img/option4.png
+    - assets/img/option5.png
+
+
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
