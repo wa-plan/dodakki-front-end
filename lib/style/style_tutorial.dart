@@ -7,36 +7,49 @@ import 'package:fluttertoast/fluttertoast.dart';
 const tutorialPadding = EdgeInsets.fromLTRB(36, 55, 36, 20);
 
 //프로그레스바
-class ProgressBar {
+class ProgressBar extends StatelessWidget {
   final int current;
   final int total;
 
-  const ProgressBar(this.current, this.total);
+  const ProgressBar(this.current, this.total, {super.key});
 
-  Widget progressBar() {
+  @override
+  Widget build(BuildContext context) {
     return Row(
-      children: [
-        for (int i = 0; i < total; i++)
-          Row(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color:
-                      i + 1 == current ? Colors.white : const Color(0xff515151),
-                  borderRadius: BorderRadius.circular(1.5),
-                ),
-                width: 7,
-                height: 7,
-              ),
-              const SizedBox(
-                width: 6,
-              ),
-            ],
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(total, (index) {
+        bool isPast = index < current;
+        bool isCurrent = index == current;
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 400),
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          width: 7,
+          height: 16,
+          decoration: BoxDecoration(
+            gradient: isCurrent
+                ? const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xffFF6767), // mainRed
+                      Color(0xffFF4C4C), // gradientRed
+                    ],
+                  )
+                : null,
+            color: isCurrent ? null : const Color(0xff515151),
+            borderRadius: BorderRadius.circular(2),
           ),
-      ],
+          transform: isPast
+              ? Matrix4.rotationZ(0.5) // 기울기 (도미노 쓰러짐)
+              : Matrix4.identity(),
+          transformAlignment: Alignment.center,
+        );
+      }),
     );
   }
 }
+
 
 //프로그레스 타이틀
 class ProgressTitle {

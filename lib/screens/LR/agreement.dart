@@ -40,7 +40,7 @@ class _AgreementState extends State<Agreement> {
               const Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
-              ProgressBar(1, 2).progressBar()
+              ProgressBar(1, 2)
             ],
           ),
         ),

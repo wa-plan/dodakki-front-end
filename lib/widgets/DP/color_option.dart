@@ -14,7 +14,7 @@ class ColorOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          context.read<GoalColor>().updateGoalColor('$selectIndex', colorCode);
+          context.read<SaveGoalColor>().updateGoalColor('$selectIndex', colorCode);
         },
         child: 
             Container(

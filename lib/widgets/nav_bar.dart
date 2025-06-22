@@ -74,7 +74,7 @@ class NavBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10.5,
                 color: isSelected ? mainRed : const Color(0xffAAAAAA),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

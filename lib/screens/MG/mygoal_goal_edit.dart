@@ -326,7 +326,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                           });
                         }
                       });
-                    }, currentWidth)
+                    }, )
                         .newButton(),
                   ),
                 ],
@@ -515,48 +515,12 @@ class _MygoalEditState extends State<MygoalEdit> {
             SizedBox(
               width: 90,
               height: 45,
-              child: NewButton(Colors.black, Colors.white, '이전', () {
+              child: NewButton(Colors.black, Colors.white, '취소', () {
                 Navigator.pop(context);
-              }, currentWidth)
+              })
                   .newButton(),
             ),
-            //삭제버튼
-            SizedBox(
-              width: 90,
-              height: 45,
-              child: NewButton(
-                      Color.fromARGB(255, 155, 51, 51), Colors.white, '삭제', () {
-                PopupDialog.show(
-                  context,
-                  '헐 진짜..?\n이 목표는 없어지는거야?',
-                  '잠깐!',
-                  true, // cancel
-                  true, // delete
-                  false, //signout
-                  false, // success
-                  onCancel: () {
-                    Navigator.of(context).pop();
-                  },
-                  onDelete: () async {
-                    bool isDeleted =
-                        await DeleteFirstGoalService.deleteFirstGoal(
-                      context,
-                      int.parse(widget.id),
-                    );
-                    if (isDeleted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyGoal(),
-                        ),
-                      );
-                    }
-                  },
-                  onSignOut: () {},
-                );
-              }, currentWidth)
-                  .newButton(),
-            ),
+            
             //완료버튼
             SizedBox(
               width: 90,
@@ -633,7 +597,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   );
                   //Navigator.pop(context);
                 }
-              }, currentWidth)
+              })
                   .newButton(),
             ),
           ],

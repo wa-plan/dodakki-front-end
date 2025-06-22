@@ -117,7 +117,7 @@ void showCalendarPopup(
                 height: 45,
                 child: NewButton(Colors.black, Colors.white, '취소', () {
                   Navigator.pop(context); // 팝업 닫기
-                }, currentWidth)
+                })
                     .newButton(),
               ),
               SizedBox(
@@ -126,7 +126,7 @@ void showCalendarPopup(
                 child: NewButton(Colors.black, Colors.white, '완료', () {
                   onDateSelected(tempSelectedDate); // 콜백 호출
                   Navigator.pop(context); // 팝업 닫기
-                }, currentWidth)
+                })
                     .newButton(),
               ),
             ],

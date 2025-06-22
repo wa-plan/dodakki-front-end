@@ -13,6 +13,8 @@ class GoalCard extends StatefulWidget {
   final int successNum;
   final String bookmark;
   final Function(String id, String action) onBookmarkToggle;
+  final int pageIndex;
+  final List<List<String>> pageImages;
 
   const GoalCard(
       {super.key,
@@ -24,7 +26,9 @@ class GoalCard extends StatefulWidget {
       required this.color,
       required this.successNum,
       required this.bookmark,
-      required this.onBookmarkToggle});
+      required this.onBookmarkToggle,
+      required this.pageIndex,
+      required this.pageImages});
 
   @override
   State<GoalCard> createState() => _GoalCardState();
@@ -33,6 +37,7 @@ class GoalCard extends StatefulWidget {
 class _GoalCardState extends State<GoalCard> {
   late bool isBookmarked;
   late Color starColor;
+
 
   Future<void> _mandaBookmark(String mandalartId, String bookmark) async {
     // 서버에 북마크 상태 전송
@@ -61,11 +66,11 @@ class _GoalCardState extends State<GoalCard> {
     // 초기 bookmark 상태에 따라 색상 설정
     isBookmarked = widget.bookmark == 'BOOKMARK';
     starColor = isBookmarked ? mainGold : Color.fromARGB(255, 71, 71, 71);
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
     final colorValue =
         int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', ''));
     int ddayParsed = int.parse(widget.dday);
@@ -90,10 +95,12 @@ class _GoalCardState extends State<GoalCard> {
           );
         },
         child: Container(
-          width: 350,
-          padding: EdgeInsets.all(15),
+          width: double.infinity,
+          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
-              color: Color(0xff2B2B2B),),
+              color: Color(0xff2B2B2B),
+              borderRadius: BorderRadius.circular(10)),
           child: Column(children: [
             //첫번째 줄 (북마크/제1목표/디데이)
 
@@ -149,6 +156,7 @@ class _GoalCardState extends State<GoalCard> {
             //두 번째 + 세 번째 줄
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //첫번째 열
                 SizedBox(
@@ -160,20 +168,22 @@ class _GoalCardState extends State<GoalCard> {
                         if (widget.photoList.isEmpty)
                           SizedBox(
                             height: 105, // 이미지 높이 설정
-                            width: currentWidth < 390 ? 260 : 290, // 가로 크기 제한 (화면의 80%)
+                            width: 290, // 가로 크기 제한 (화면의 80%)
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal, // 가로 스크롤 가능
-                              itemCount: 3, // 최대 3개 제한
-                              itemBuilder: (context, index) {
+                              itemCount: widget.pageImages[widget.pageIndex].length,
+                              itemBuilder: (context, i) {
                                 return Container(
                                   margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                  
                                   width: 105,
                                   height: 105,
                                   decoration: BoxDecoration(
                                     color: Color.fromARGB(255, 53, 53, 53),
-                                    borderRadius:
-                                        BorderRadius.circular(6),
+                                    borderRadius: BorderRadius.circular(6),
+                                   image: DecorationImage(
+                    image: AssetImage(widget.pageImages[widget.pageIndex][i]),
+                    fit: BoxFit.cover,
+                  ),
                                   ),
                                 );
                               },
@@ -182,7 +192,7 @@ class _GoalCardState extends State<GoalCard> {
                         else
                           SizedBox(
                             height: 105, // 이미지 높이 설정
-                            width: currentWidth < 390 ? 260 : 290, // 가로 크기 제한 (화면의 80%)
+                            width: 290, // 가로 크기 제한 (화면의 80%)
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal, // 가로 스크롤 가능
                               itemCount: widget.photoList.length
@@ -224,7 +234,7 @@ class _GoalCardState extends State<GoalCard> {
                         const SizedBox(height: 17),
                         //세 번째 줄
                         SizedBox(
-                          width: currentWidth < 390 ? 260 : 290,
+                          width: 290,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

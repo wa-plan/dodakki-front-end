@@ -212,7 +212,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                           });
                         }
                       });
-                    }, currentWidth)
+                    })
                         .newButton(),
                   ),
                 ],
@@ -468,7 +468,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
         child:
 
             //완료버튼
-            LoginButton('완료', () {
+            LoginButton('목표 세우기', () {
           if (_nameController.text == '') {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('목표를 입력해 주세요.')),

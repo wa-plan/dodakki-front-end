@@ -85,7 +85,7 @@ class PermissionUtil {
                                 child: NewButton(mainGrey, Colors.white, '취소',
                                     () {
                                   Navigator.of(context).pop();
-                                }, currentWidth).newButton(),
+                                }).newButton(),
                               ),
                               SizedBox(
                                 width: 110,
@@ -93,7 +93,7 @@ class PermissionUtil {
                                     () {
                                   Navigator.of(context).pop();
                                   openAppSettings();
-                                }, currentWidth).newButton(),
+                                }).newButton(),
                               ),
                             ],
                           ),

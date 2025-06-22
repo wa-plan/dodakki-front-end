@@ -24,9 +24,11 @@ class Tutorial5State extends State<Tutorial5> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //프로그레스 바
-              ProgressBar(4, 4).progressBar(),
-              SizedBox(height: 10),
+
+                  //프로그레스 바
+                  ProgressBar(4, 4),
+                  SizedBox(height: 10),
+
 
               //프로그레스 타이틀
               ProgressTitle('TO-DO 만들기').progressTitle(),

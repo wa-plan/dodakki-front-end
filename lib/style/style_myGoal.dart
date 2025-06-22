@@ -1,6 +1,21 @@
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
+final List<String> sampleImages = [
+    'assets/img/sampleImage1.png',
+    "assets/img/sampleImage2.png",
+    "assets/img/sampleImage3.png",
+    "assets/img/sampleImage4.png",
+    "assets/img/sampleImage5.png",
+    'assets/img/sampleImage6.png',
+    "assets/img/sampleImage7.png",
+    "assets/img/sampleImage8.png",
+    "assets/img/sampleImage9.png",
+    "assets/img/sampleImage10.png",
+    "assets/img/sampleImage11.png",
+    "assets/img/sampleImage12.png",
+  ];
+
 //비어있는 데이터 (for 쓰러뜨릴 목표)
 class BlankData {
   final String text;
@@ -25,7 +40,7 @@ class BlankData {
               height: 1.5,
               color: Color(0xff595959),
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
           Positioned(
@@ -84,7 +99,7 @@ class BlankData2 {
               style: TextStyle(
                 color: Color(0xff595959),
                 fontSize: 16,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
             Column(

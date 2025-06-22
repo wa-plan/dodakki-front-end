@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
-              ProgressBar(2, 2).progressBar()
+              ProgressBar(2, 2)
             ],
           ),
         ),
