@@ -4,9 +4,9 @@ import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_todaysDomino.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
+import 'package:domino/widgets/DP/td_create1_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/TD/td_create2_page.dart';
-import 'package:domino/widgets/DP/td_create1_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/DP/model.dart';
 
@@ -246,7 +246,7 @@ class _AddPage1State extends State<AddPage1> {
               const Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
-              ProgressBar(1, 2).progressBar()
+              ProgressBar(0, 2)
             ],
           ),
         ),
@@ -383,10 +383,10 @@ class _AddPage1State extends State<AddPage1> {
                     ),
                     SizedBox(height: 25),
                     Center(
-                      child: MandalartGrid2(
-                        mandalart: selectedGoalName,
+                      child: TDMandalart(
+                        firstGoalName: selectedGoalName,
                         secondGoals: secondGoals,
-                        firstColor: firstColor,
+                        firstGoalColor: ColorTransform(firstColor).colorTransform(),
                       ),
                     ),
                   ],
@@ -413,7 +413,7 @@ class _AddPage1State extends State<AddPage1> {
                     .read<SelectRepeatModel>()
                     .selectRepeat(false, false, false, false);
                 Navigator.pop(context);
-              }, currentWidth)
+              })
                   .newButton(),
             ),
 
@@ -422,7 +422,7 @@ class _AddPage1State extends State<AddPage1> {
               width: 90,
               height: 45,
               child: NewButton(Colors.black, Colors.white, '다음', () {
-                if (thirdGoalName != '제3목표를 클릭하여 선택해주세요.') {
+                if (thirdGoalName != '제3목표를 클릭하여 선택해주세요.' && thirdGoalName != "") {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -434,10 +434,10 @@ class _AddPage1State extends State<AddPage1> {
                   );
                 } else {
                   TutorialMessage(
-                    "드롭다운에서 목표를 선택해 주세요.",
+                    "목표를 선택해 주세요.",
                   ).tutorialMessage(context);
                 }
-              }, currentWidth)
+              })
                   .newButton(),
             ),
           ],

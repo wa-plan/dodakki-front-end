@@ -17,29 +17,19 @@ class TdMain extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       //오늘의 도미노 추가 버튼
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.read<SelectAPModel>().selectAP("제3목표를 클릭하여 선택해주세요.", null);
+      floatingActionButton: FloatingButton(Icons.add, () {
+        context.read<SelectAPModel>().selectAP("제3목표를 클릭하여 선택해주세요.", null);
 
-          context
-              .read<SelectRepeatModel>()
-              .selectRepeat(false, false, false, false);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddPage1(),
-              ));
-        },
-        backgroundColor: mainRed,
-        shape: const CircleBorder(),
-        mini: true,
-        heroTag: null,
-        child: Icon(
-          Icons.add,
-          color: backgroundColor,
-          size: 25,
-        ),
-      ),
+        context
+            .read<SelectRepeatModel>()
+            .selectRepeat(false, false, false, false);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddPage1(),
+            ));
+      }, 25)
+          .floatingButton(),
 
       //appBar
       appBar: AppBar(

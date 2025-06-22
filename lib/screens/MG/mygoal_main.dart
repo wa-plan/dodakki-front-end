@@ -20,6 +20,7 @@ class MyGoal extends StatefulWidget {
 }
 
 class _MyGoalState extends State<MyGoal> {
+  late final List<List<String>> pageImages;
   final String message = "";
   String nickname = '';
   String description = '';
@@ -112,6 +113,26 @@ class _MyGoalState extends State<MyGoal> {
     }
   }
 
+  List<List<String>> getUniquePageImages(List<String> allImages, int imagesPerPage) {
+  final shuffled = List<String>.from(allImages)..shuffle();
+  final pages = <List<String>>[];
+
+  int startIndex = 0;
+  int totalImages = shuffled.length;
+  int totalPages = (totalImages / imagesPerPage).ceil();
+
+  for (int i = 0; i < totalPages; i++) {
+    int endIndex = startIndex + imagesPerPage;
+    if (endIndex > totalImages) endIndex = totalImages;
+
+    pages.add(shuffled.sublist(startIndex, endIndex));
+    startIndex = endIndex;
+  }
+
+  return pages;
+}
+
+
   Future<void> userMandaInfo(String mandalartId) async {
     if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
 
@@ -168,6 +189,7 @@ class _MyGoalState extends State<MyGoal> {
     _pageController = PageController();
     userInfo();
     userMandaIdInfo();
+    pageImages = getUniquePageImages(sampleImages, 3);
   }
 
   @override
@@ -180,6 +202,13 @@ class _MyGoalState extends State<MyGoal> {
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: FloatingButton(Icons.add, () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyGoalAdd()),
+        );
+      }, 25)
+          .floatingButton(),
       backgroundColor: backgroundColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -276,22 +305,8 @@ class _MyGoalState extends State<MyGoal> {
               ),
               SizedBox(height: currentWidth < 600 ? 40 : 50),
               //쓰러뜨릴 목표
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  MGSubTitle('쓰러뜨릴 목표').mgSubTitle(context),
-                  //목표 추가 버튼
-                  NewCustomIconButton(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MyGoalAdd()),
-                    );
-                  }, Icons.add, currentWidth, 22)
-                      .newCustomIconButton(),
-                ],
-              ),
+              MGSubTitle('쓰러뜨릴 목표').mgSubTitle(context),
+
               SizedBox(
                 height: 15,
               ),
@@ -299,77 +314,73 @@ class _MyGoalState extends State<MyGoal> {
                 if (inProgressIDs.isEmpty)
                   BlankData("엇!\n아직 쓰러뜨릴 목표가 없어요!\n어서 만들어봅시다!", 220).blankData()
                 else ...[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xff2B2B2B),
-                        borderRadius: BorderRadius.circular(10)),
-                    width: double.infinity,
-                    child: SizedBox(
-                      height: 240,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: inProgressIDs.length,
-                        itemBuilder: (context, index) {
-                          String mandalartId =
-                              inProgressIDs[index]['id'] ?? ''; // id 값
+                  SizedBox(
+                    height: 250,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: inProgressIDs.length,
+                      itemBuilder: (context, index) {
+                        String mandalartId =
+                            inProgressIDs[index]['id'] ?? ''; // id 값
 
-                          String name =
-                              inProgressIDs[index]['name'] ?? ''; // name 값
+                        String name =
+                            inProgressIDs[index]['name'] ?? ''; // name 값
 
-                          String status = statusList.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () =>
-                                    {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['status'] ??
-                              '';
+                        String status = statusList.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['status'] ??
+                            '';
 
-                          String dday = ddayList.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () =>
-                                    {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['dday'] ??
-                              '0';
+                        String dday = ddayList.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['dday'] ??
+                            '0';
 
-                          String color = colorList.firstWhere(
-                                (element) =>
-                                    element['id'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'color': '0xff000000'
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['color'] ??
-                              '0xff000000';
+                        String color = colorList.firstWhere(
+                              (element) =>
+                                  element['id'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () => {
+                                'color': '0xff000000'
+                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['color'] ??
+                            '0xff000000';
 
-                          int successNum = successNums.firstWhere(
-                                (element) =>
-                                    element['mandalartId'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'successNum': 0
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['successNum'] ??
-                              0;
+                        int successNum = successNums.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'successNum': 0}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['successNum'] ??
+                            0;
 
-                          List<String> photoList = (photos[mandalartId] ?? [])
-                              .map<String>((photo) => photo['path'].toString())
-                              .toList();
+                        List<String> photoList = (photos[mandalartId] ?? [])
+                            .map<String>((photo) => photo['path'].toString())
+                            .toList();
 
-                          String bookmark = bookmarks.firstWhere(
-                                (element) =>
-                                    element['id'] ==
-                                    mandalartId, // mandalartId와 비교
-                                orElse: () => {
-                                  'bookmark': 'UNBOOKMARK'
-                                }, // 일치하는 항목이 없을 경우 빈 문자열 반환
-                              )['bookmark'] ??
-                              'UNBOOKMARK';
+                        String bookmark = bookmarks.firstWhere(
+                              (element) =>
+                                  element['id'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () => {
+                                'bookmark': 'UNBOOKMARK'
+                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['bookmark'] ??
+                            'UNBOOKMARK';
 
-                          return Center(
+                        return Center(
+                            key: ValueKey(name),
                             child: GoalCard(
+                              key: ValueKey(name),
                               mandalartId: mandalartId,
                               name: name,
                               status: status,
@@ -379,17 +390,18 @@ class _MyGoalState extends State<MyGoal> {
                               successNum: successNum,
                               bookmark: bookmark,
                               onBookmarkToggle: (id, action) {},
+                              pageIndex: index,
+                              pageImages: pageImages,
                             ),
                           );
-                        },
-                      ),
+                        
+                      },
                     ),
                   ),
                   const SizedBox(height: 18),
                   if (inProgressIDs.length != 1 && inProgressIDs.isNotEmpty)
                     Center(
-                      child: PageIndicator(_pageController, inProgressIDs)
-                          .pageIndicator(),
+                      child: PageIndicator(_pageController, inProgressIDs),
                     ),
                 ],
               ]),

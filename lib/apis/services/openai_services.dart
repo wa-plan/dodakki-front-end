@@ -84,7 +84,8 @@ Future<List<String>> generateThirdGoals(
       "max_tokens": 150,
       "temperature": 0.7,
     }),
-  );
+  ) .timeout(const Duration(seconds: 10));
+  
 
   if (response.statusCode != 200) {
     throw Exception(

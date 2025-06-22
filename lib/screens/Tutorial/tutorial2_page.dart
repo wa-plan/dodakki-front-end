@@ -28,7 +28,7 @@ class Tutorial2State extends State<Tutorial2> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //프로그레스 바
-                  ProgressBar(1, 4).progressBar(),
+                  ProgressBar(1, 4),
                   SizedBox(height: 10),
 
                   //프로그레스 타이틀

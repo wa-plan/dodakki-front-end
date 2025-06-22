@@ -10,6 +10,7 @@ import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
 void main() async {
   // 앱 실행 전에 NotificationService 인스턴스 생성
   // final notificationService = NotificationService();
@@ -27,18 +28,16 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PasswordProvider()),
         ChangeNotifierProvider(create: (_) => SelectFinalGoalModel()),
         ChangeNotifierProvider(create: (_) => SelectFinalGoalId()),
-        ChangeNotifierProvider(create: (_) => SaveInputtedDetailGoalModel()),
-        ChangeNotifierProvider(create: (_) => SaveInputtedActionPlanModel()),
+        ChangeNotifierProvider(create: (_) => SaveSecondGoalModel()),
+        ChangeNotifierProvider(create: (_) => SaveThirdGoalModel()),
         ChangeNotifierProvider(create: (_) => SelectDetailGoal()),
-        ChangeNotifierProvider(create: (_) => GoalColor()),
+        ChangeNotifierProvider(create: (_) => SaveGoalColor()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => NavBarProvider()),
         ChangeNotifierProvider(create: (_) => SelectAPModel()),
         ChangeNotifierProvider(create: (_) => SaveEditedDetailGoalIdModel()),
         ChangeNotifierProvider(create: (_) => SaveEditedActionPlanIdModel()),
         ChangeNotifierProvider(create: (_) => SaveMandalartCreatedGoal()),
-        ChangeNotifierProvider(create: (_) => TestInputtedDetailGoalModel()),
-        ChangeNotifierProvider(create: (_) => TestInputtedActionPlanModel()),
         ChangeNotifierProvider(create: (_) => GoalOrder()),
         ChangeNotifierProvider(create: (_) => SelectRepeatModel()),
       ],
