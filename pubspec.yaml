@@ -158,8 +158,6 @@ flutter:
     - assets/img/sampleImage10.png
     - assets/img/sampleImage11.png
     - assets/img/sampleImage12.png
-    - assets/img/sampleImage13.png
-
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

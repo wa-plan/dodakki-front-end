@@ -14,7 +14,6 @@ final List<String> sampleImages = [
     "assets/img/sampleImage10.png",
     "assets/img/sampleImage11.png",
     "assets/img/sampleImage12.png",
-    "assets/img/sampleImage13.png"
   ];
 
 //비어있는 데이터 (for 쓰러뜨릴 목표)
