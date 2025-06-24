@@ -123,14 +123,6 @@ class _SettingsMainState extends State<SettingsMain> {
               MGSubTitle(
                 '계정',
               ).mgSubTitle(context),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Tutorial1()),
-                    );
-                  },
-                  child: Text('튜토리얼')),
               const SizedBox(height: 8),
               _buildSettingItem(
                 title: '내 계정',

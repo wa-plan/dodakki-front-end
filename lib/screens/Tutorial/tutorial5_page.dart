@@ -36,7 +36,7 @@ class Tutorial5State extends State<Tutorial5> {
               TutorialQuestion(
                       "", '동아리 들어가기', "를 위해", '실천으로 옮길 수 있는 TO-DO는?', 'blue')
                   .tutorialQuestion(),
-              SizedBox(height: 5),
+              SizedBox(height: 15),
 
               // 선택지
               ImageOption(

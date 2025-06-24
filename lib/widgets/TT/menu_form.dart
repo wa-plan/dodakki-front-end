@@ -54,13 +54,13 @@ class TTmenuForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 22),
           TutorialQuestion(
                   description1, description2, "를 위한", description3, color)
               .tutorialQuestion(),
           const SizedBox(height: 50),
-          SizedBox(
-            height: 445,
+          AspectRatio(
+            aspectRatio: 795 / 1143,
             child: Image.asset(
               imageUrl,
               width: double.infinity,

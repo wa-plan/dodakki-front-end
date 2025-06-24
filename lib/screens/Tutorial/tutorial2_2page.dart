@@ -20,33 +20,39 @@ class Tutorial2_2State extends State<Tutorial2_2> {
 
     return Scaffold(
         backgroundColor: backgroundColor,
-        body: Padding(
-          padding: tutorialPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //프로그레스 바
-              ProgressBar(1, 4).progressBar(),
-              SizedBox(height: 10),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: tutorialPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //프로그레스 바
+                ProgressBar(1, 4).progressBar(),
+                SizedBox(height: 10),
 
-              //프로그레스 타이틀
-              ProgressTitle('제1목표 만들기').progressTitle(),
-              SizedBox(height: 17),
+                //프로그레스 타이틀
+                ProgressTitle('제1목표 만들기').progressTitle(),
+                SizedBox(height: 17),
 
-              //질문
-              TutorialQuestion("", '새내기', "로 대학에 입학하는", '도민호를 위한 제1목표는?', 'red')
-                  .tutorialQuestion(),
-              SizedBox(height: 5),
-              ImageOption(
-                imageUrls: ['assets/img/option1.png', 'assets/img/option2.png'],
-                color: 'red',
-                onItemSelected: (index) {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                },
-              ),
-            ],
+                //질문
+                TutorialQuestion(
+                        "", '새내기', "로 대학에 입학하는", '도민호를 위한 제1목표는?', 'red')
+                    .tutorialQuestion(),
+                SizedBox(height: 15),
+                ImageOption(
+                  imageUrls: [
+                    'assets/img/option1.png',
+                    'assets/img/option2.png'
+                  ],
+                  color: 'red',
+                  onItemSelected: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar:

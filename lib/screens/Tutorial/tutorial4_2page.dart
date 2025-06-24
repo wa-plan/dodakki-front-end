@@ -17,27 +17,29 @@ class Tutorial4_2State extends State<Tutorial4_2> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backgroundColor,
-        body: Stack(
-          children: [
-            Padding(
-              padding: tutorialPadding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TTmenuForm(
-                    icon: 'assets/img/tt_menu_icon3.png',
-                    title: '오늘의 도미노',
-                    description1: '이제 마지막 단계야!',
-                    description2: '동아리 들어가기',
-                    description3: '구체적인 TO-DO를 만들어보자!',
-                    imageUrl: 'assets/img/menu_screen3.png',
-                    color: 'blue',
-                  )
-                ],
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Padding(
+                padding: tutorialPadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TTmenuForm(
+                      icon: 'assets/img/tt_menu_icon3.png',
+                      title: '오늘의 도미노',
+                      description1: '이제 마지막 단계야!',
+                      description2: '동아리 들어가기',
+                      description3: '구체적인 TO-DO를 만들어보자!',
+                      imageUrl: 'assets/img/menu_screen3.png',
+                      color: 'blue',
+                    )
+                  ],
+                ),
               ),
-            ),
-            //도민호 이미지
-          ],
+              //도민호 이미지
+            ],
+          ),
         ),
         bottomNavigationBar:
             //버튼

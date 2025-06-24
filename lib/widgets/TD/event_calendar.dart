@@ -343,12 +343,6 @@ class _EventCalendarState extends State<EventCalendar> {
                                 value[index].interval = 0;
                               }
 
-                              print('thirdgoalID: ${value[index].thirdGoalId}');
-
-                              //int? thirdGoalId = await getThirdGoalId(
-                              //    value[index].id, value[index].thirdGoal);
-                              //print('thirdGoalId=$thirdGoalId');
-
                               editDialog(
                                   context,
                                   _focusedDay,
@@ -482,7 +476,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                         ),
                                       ),
                                       SizedBox(
-                                          width: currentWidth < 600 ? 28 : 30),
+                                          width: currentWidth < 600 ? 24 : 30),
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -511,7 +505,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                         ),
                                       ),
                                       SizedBox(
-                                          width: currentWidth < 600 ? 28 : 30),
+                                          width: currentWidth < 600 ? 24 : 30),
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
