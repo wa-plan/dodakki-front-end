@@ -9,6 +9,7 @@ import 'dart:typed_data';
 import 'package:domino/screens/MG/mygoal_goal_edit.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/widgets/popup.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class MyGoalDetail extends StatefulWidget {
   final String id;
@@ -81,9 +82,6 @@ class MyGoalDetailState extends State<MyGoalDetail> {
         inProgressRate =
             total == 0 ? 0 : (this.inProgressNum / total * 100).round();
         failedRate = 100 - successRate - inProgressRate;
-        print(successNum);
-        print(inProgressNum);
-        print(failedNum);
       });
     } else {}
   }
@@ -127,6 +125,83 @@ class MyGoalDetailState extends State<MyGoalDetail> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
+      floatingActionButton: SpeedDial(
+        buttonSize: Size(45, 45),
+        gradient: LinearGradient(colors: gradientColor),
+        animatedIcon: AnimatedIcons.menu_close,
+        overlayColor: Colors.black,
+        foregroundColor: backgroundColor,
+        gradientBoxShape: BoxShape.circle,
+        spacing: 20,
+        spaceBetweenChildren: 10,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.delete, color: Colors.white, size: 20),
+            backgroundColor: Color(0xff303030),
+            labelBackgroundColor: Colors.white,
+            elevation: 0,
+            labelStyle: const TextStyle(
+              fontWeight: FontWeight.w600, color: backgroundColor, fontSize: 15
+            ),
+            label: '삭제하기',
+            shape: CircleBorder(),
+            onTap: () async {
+              PopupDialog.show(
+                  context,
+                  '헐 진짜..?\n이 목표는 없어지는거야?',
+                  '잠깐!',
+                  true, // cancel
+                  true, // delete
+                  false, //signout
+                  false, // success
+                  onCancel: () {
+                    Navigator.of(context).pop();
+                  },
+                  onDelete: () async {
+                    bool isDeleted =
+                        await DeleteFirstGoalService.deleteFirstGoal(
+                      context,
+                      int.parse(widget.id),
+                    );
+                    if (isDeleted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyGoal(),
+                        ),
+                      );
+                    }
+                  },
+                  onSignOut: () {},
+                );
+              
+            }
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.edit, color: Colors.white, size: 20),
+            backgroundColor: Color(0xff303030),
+            labelBackgroundColor: Colors.white,
+            elevation: 0,
+            labelStyle: const TextStyle(
+              fontWeight: FontWeight.w600, color: backgroundColor, fontSize: 15
+            ),
+            label: '수정하기',
+            shape: CircleBorder(),
+            onTap: () {
+              Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MygoalEdit(
+                              id: widget.id,
+                              dday: dday,
+                              name: name,
+                              description: mandaDescription,
+                              color: color,
+                              goalImage: goalImage)));
+            }, 
+          ),
+        ],
+      ),
       appBar: AppBar(
           scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
@@ -142,23 +217,25 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                     Navigator.of(context).pop();
                   },
                 ).customBackButton(),
+
+              
                 //진행 상태 드롭다운
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 5, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 15, 0),
                       height: 35,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
                           color: Color(0xff303030)),
-                      child: Center(
-                        child: DropdownButton<String>(
-                          icon: Icon(Icons.arrow_drop_down_rounded),
-                          iconSize: 30,
+                      child: DropdownButton<String>(
+                          icon: Icon(Icons.circle),
+                          iconSize: 10,
+                          iconEnabledColor: _selectedStatus == "진행 중" ? mainGreen : mainGrey,
                           elevation: 0,
                           underline: const SizedBox.shrink(),
-                          dropdownColor: const Color(0xff303030),
+                          dropdownColor: Colors.black,
                           value: _selectedStatus,
                           items: _status
                               .map(
@@ -173,7 +250,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
-                              fontWeight: FontWeight.w500),
+                              fontWeight: FontWeight.w600),
                           onChanged: (value) {
                             setState(() {
                               _selectedStatus = value;
@@ -261,25 +338,12 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                             });
                           },
                         ),
-                      ),
+                     
                     ),
                   ],
                 ),
 
-                //수정 버튼
-                NewCustomIconButton(() {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MygoalEdit(
-                              id: widget.id,
-                              dday: dday,
-                              name: name,
-                              description: mandaDescription,
-                              color: color,
-                              goalImage: goalImage)));
-                }, Icons.edit, currentWidth, 20)
-                    .newCustomIconButton()
+                
               ],
             ),
           ),

@@ -17,6 +17,7 @@ class Tutorial4State extends State<Tutorial4> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backgroundColor,
+
         body: SingleChildScrollView(
           child: Stack(
             children: [
@@ -34,6 +35,7 @@ class Tutorial4State extends State<Tutorial4> {
                       imageUrl: 'assets/img/menu_screen2.png',
                       color: 'red',
                     )
+
                   ],
                 ),
               ),

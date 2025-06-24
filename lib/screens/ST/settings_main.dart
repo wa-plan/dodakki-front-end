@@ -1,4 +1,3 @@
-import 'package:domino/screens/LR/agreement.dart';
 import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
@@ -232,7 +231,6 @@ class _SettingsMainState extends State<SettingsMain> {
   }
 
   Widget _buildCombinedSwitchItem() {
-    final currentWidth = MediaQuery.of(context).size.width;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
@@ -304,7 +302,7 @@ class _SettingsMainState extends State<SettingsMain> {
         fit: BoxFit.fill,
         child: Switch(
           activeColor: Colors.white,
-          activeTrackColor: const Color(0xff00C300),
+          activeTrackColor: mainRed,
           inactiveTrackColor: const Color(0xff474747),
           inactiveThumbColor: Colors.white,
           trackOutlineColor: WidgetStateProperty.resolveWith<Color?>(
@@ -390,7 +388,7 @@ class _SettingsMainState extends State<SettingsMain> {
                                                 '설정으로 이동', () {
                                           Navigator.of(context).pop();
                                           openAppSettings();
-                                        }, currentWidth)
+                                        })
                                             .newButton(),
                                       ],
                                     ),
@@ -469,7 +467,7 @@ class _SettingsMainState extends State<SettingsMain> {
                           fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  Text('1.0.10  ',
+                  Text('1.0.11  ',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.grey,
@@ -703,7 +701,7 @@ void showServiceRulePopup(BuildContext context, double currentWidth) {
                     children: [
                       NewButton(Colors.black, Colors.white, '닫기', () {
                         Navigator.pop(context);
-                      }, currentWidth)
+                      })
                           .newButton(),
                     ],
                   )
@@ -833,7 +831,7 @@ void showPersonalInfoPopup(BuildContext context, double currentWidth) {
                     children: [
                       NewButton(Colors.black, Colors.white, '닫기', () {
                         Navigator.pop(context);
-                      }, currentWidth)
+                      })
                           .newButton(),
                     ],
                   )

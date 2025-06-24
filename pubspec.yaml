@@ -58,6 +58,8 @@ dependencies:
   path_provider: ^2.1.5
   flutter_launcher_icons: ^0.14.1
   device_info_plus: ^11.3.0
+  confetti: ^0.8.0
+  flutter_speed_dial: ^7.0.0
   path: ^1.9.0
 
 #새로고침 해결해야 함...
@@ -111,7 +113,6 @@ flutter:
     - assets/img/vector2.png
     - assets/img/vector3.png
     - assets/img/vector4.png
-    - assets/img/Dominho_mono.png
     - assets/img/Tutorial2.png
     - assets/img/profile_smp1.png
     - assets/img/profile_smp2.png
@@ -121,26 +122,15 @@ flutter:
     - assets/img/profile_smp6.png
     - assets/img/profile_smp7.png
     - assets/img/profile_smp8.png
-    - assets/img/completed_goals.png #쓰러뜨린 목표
-    - assets/img/failed_goals.png #쓰러뜨리지 못한 목표
     - assets/img/if_no_img.png
-    - assets/img/domino_calculate.png
     - assets/img/domino.png
-    - assets/img/MG_domino.png
     - assets/img/profile_smp9.png
     - assets/img/domino_final.mp4 #도미노 쓰러지는 영상
     - assets/img/confetti_final.mp4 #폭죽 터지는 영상
-    - assets/img/MG_white_yellow.png
-    - assets/img/MG_blue.png
-    - assets/img/MG_green.png
-    - assets/img/MG_red.png
-    - assets/img/MG_orange.png
     - assets/img/splash.png
-    - assets/img/AI_icon.png
     - assets/img/new2_splash.png
     - assets/img/splash(2).png
     - assets/img/newBG.png
-    - assets/img/AIIcon.png
     - assets/img/Complete.png
     - assets/img/confetti.png
     - assets/img/tr_1.png
@@ -151,6 +141,24 @@ flutter:
     - assets/img/smallicon.png
     - assets/img/symbol.png
     - assets/img/popup.png
+    - assets/img/AI.png
+    - assets/img/floating.png
+    - assets/img/Ex1.png
+    - assets/img/Ex2.png
+    - assets/img/Ex3.png
+    - assets/img/Ex4.png
+    - assets/img/sampleImage1.png
+    - assets/img/sampleImage2.png
+    - assets/img/sampleImage3.png
+    - assets/img/sampleImage4.png
+    - assets/img/sampleImage5.png
+    - assets/img/sampleImage6.png
+    - assets/img/sampleImage7.png
+    - assets/img/sampleImage8.png
+    - assets/img/sampleImage9.png
+    - assets/img/sampleImage10.png
+    - assets/img/sampleImage11.png
+    - assets/img/sampleImage12.png
     - assets/img/menu_screen1.png
     - assets/img/menu_screen2.png
     - assets/img/menu_screen3.png

@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:math' as math;
+
 
 String? baseUrl = dotenv.env['BASE_URL'];
 
@@ -173,15 +175,8 @@ class SecondGoalListService {
 class AddThirdGoalService {
   static Future<bool> addThirdGoal({
     required List<int> secondGoalId,
-    required List<String> third0,
-    required List<String> third1,
-    required List<String> third2,
-    required List<String> third3,
-    required List<String> third4,
-    required List<String> third5,
-    required List<String> third6,
-    required List<String> third7,
-    required List<String> third8,
+    required List<List<String>> thirdValues,
+   
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
@@ -195,29 +190,17 @@ class AddThirdGoalService {
 
     bool allSuccess = true;
 
-    List<List<String>> allThirdGoals = [
-      third0,
-      third1,
-      third2,
-      third3,
-      third4,
-      third5,
-      third6,
-      third7,
-      third8
-    ];
+    final minLen = math.min(secondGoalId.length, thirdValues.length);
 
-    for (int i = 0; i < secondGoalId.length; i++) {
-      if (i >= allThirdGoals.length) break;
+    for (int i = 0; i < minLen; i++) {
+      final curSecondGoalId = secondGoalId[i];
+      final curThirdGoals = thirdValues[i];
 
-      List<String> currentThirdGoals = allThirdGoals[i];
-
-      for (int j = 0; j < currentThirdGoals.length; j++) {
-        final thirdGoalName = currentThirdGoals[j];
+      for (final thirdGoalName in curThirdGoals) {
 
         final body = json.encode({
-          "secondGoalId": secondGoalId[i],
-          "name": thirdGoalName,
+          'secondGoalId': curSecondGoalId,
+          'name': thirdGoalName,
         });
 
         try {
@@ -427,65 +410,30 @@ class EditGoalColorService {
 
 class EditThirdGoalService {
   static Future<bool> editThirdGoal({
-    required List<int> third0id,
-    required List<int> third1id,
-    required List<int> third2id,
-    required List<int> third3id,
-    required List<int> third4id,
-    required List<int> third5id,
-    required List<int> third6id,
-    required List<int> third7id,
-    required List<int> third8id,
-    required List<String> third0,
-    required List<String> third1,
-    required List<String> third2,
-    required List<String> third3,
-    required List<String> third4,
-    required List<String> third5,
-    required List<String> third6,
-    required List<String> third7,
-    required List<String> third8,
+    required List<List<int>> thirdGoalIds,    
+    required List<List<String>> thirdGoals,    
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
 
     if (token == null) {
-      
       return false;
     }
 
     final url = Uri.parse('$baseUrl/api/thirdgoal');
     bool allSuccess = true;
 
-    List<List<int>> allThirdGoalIds = [
-      third0id,
-      third1id,
-      third2id,
-      third3id,
-      third4id,
-      third5id,
-      third6id,
-      third7id,
-      third8id
-    ];
+    final goalCount = math.min(thirdGoalIds.length, thirdGoals.length);
 
-    List<List<String>> allThirdGoals = [
-      third0,
-      third1,
-      third2,
-      third3,
-      third4,
-      third5,
-      third6,
-      third7,
-      third8
-    ];
+    for (int i = 0; i < goalCount; i++) {
+      final idList = thirdGoalIds[i];
+      final goalList = thirdGoals[i];
+      final loopCount = math.min(idList.length, goalList.length);
 
-    for (int i = 0; i < allThirdGoalIds.length; i++) {
-      for (int j = 0; j < allThirdGoalIds[i].length; j++) {
+      for (int j = 0; j < loopCount; j++) {
         final body = json.encode({
-          "thirdGoalId": allThirdGoalIds[i][j],
-          "newThirdGoal": allThirdGoals[i][j],
+          "thirdGoalId": idList[j],
+          "newThirdGoal": goalList[j],
         });
 
         try {
@@ -498,13 +446,10 @@ class EditThirdGoalService {
             body: body,
           );
 
-          if (response.statusCode == 200 || response.statusCode == 201) {
-          } else {
-            
+          if (response.statusCode != 200 && response.statusCode != 201) {
             allSuccess = false;
           }
         } catch (e) {
-          
           allSuccess = false;
         }
       }
@@ -513,6 +458,7 @@ class EditThirdGoalService {
     return allSuccess;
   }
 }
+
 
 class MainGoalDetailService {
   static Future<List<Map<String, dynamic>>?> mainGoalDetailList(

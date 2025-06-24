@@ -21,6 +21,7 @@ class Tutorial5State extends State<Tutorial5> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+
               Padding(
                 padding: tutorialPadding,
                 child: Column(
@@ -29,6 +30,7 @@ class Tutorial5State extends State<Tutorial5> {
                     //프로그레스 바
                     ProgressBar(2, 4).progressBar(),
                     SizedBox(height: 10),
+
 
                     //프로그레스 타이틀
                     ProgressTitle('제2목표 만들기').progressTitle(),

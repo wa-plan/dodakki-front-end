@@ -2,7 +2,9 @@ import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:domino/apis/services/td_services.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
+import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
+import 'package:domino/widgets/popup.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/widgets/TD/edit_calendar.dart';
 import 'package:domino/widgets/TD/edit_repeat_settings.dart';
@@ -35,7 +37,7 @@ class EditPageState extends State<EditPage> {
   bool everyMonth = false;
   final formKey = GlobalKey<FormState>();
   String dominoValue = '';
-  late TextEditingController dominoController; //텍스트폼필드에 기본으로 들어갈 초기 텍스트 값
+  late TextEditingController dominoController;
   DateTime today = DateTime.now();
 
   Future<bool> deleteDominoToEdit(int thirdGoalId) async {
@@ -48,7 +50,6 @@ class EditPageState extends State<EditPage> {
         goalId: goalId, goalDate: goalDate);
 
     if (success) {
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -68,7 +69,6 @@ class EditPageState extends State<EditPage> {
     return success;
   }
 
-  //텍스트폼필드 함수 만들기
   renderTextFormField(
       {required FormFieldSetter onSaved,
       required FormFieldValidator validator,
@@ -93,7 +93,7 @@ class EditPageState extends State<EditPage> {
                 },
                 icon: Icon(
                   Icons.cancel,
-                  size: currentWidth < 600 ? 14 : 16,
+                  size: 18,
                   color: const Color.fromARGB(255, 98, 98, 98),
                 ),
               )
@@ -119,8 +119,6 @@ class EditPageState extends State<EditPage> {
         everyTwoWeek = provider.everyTwoWeek;
         everyMonth = provider.everyMonth;
       });
-
-      print("goalId: ${widget.goalId}, thirdGoalId: ${widget.thirdGoalId}");
     });
   }
 
@@ -138,193 +136,202 @@ class EditPageState extends State<EditPage> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomIconButton(() {
-                Navigator.pop(context);
-              }, Icons.keyboard_arrow_left_rounded, currentWidth)
-                  .customIconButton(),
-              SizedBox(width: currentWidth < 600 ? 10 : 14),
-              Text('도미노 수정하기',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: currentWidth < 600 ? 17 : 27,
-                      fontWeight: FontWeight.w600)),
+              //뒤로가기 버튼
+              CustomBackButton(
+                () {
+                  PopupDialog.show(context, '지금 나가면,\n수정한 내용이 사라져!', '잠깐!',
+                      true, false, false, true, onCancel: () {
+                    Navigator.pop(context);
+                  }, onSuccess: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  });
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+
+              //페이지 타이틀
+              PageTitle('도미노 수정하기').pageTitle(),
             ],
           ),
         ),
         backgroundColor: backgroundColor,
       ),
-      body: Padding(
-        padding: fullPadding,
-        child: Column(children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
-                  TDQuestion('더 구체적으로 바꿔보세요.', currentWidth).tDQuestion(),
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
-                  Form(
-                    key: formKey,
-                    child: renderTextFormField(
-                      currentWidth: currentWidth,
-                      onSaved: (value) {
-                        setState(() {
-                          dominoValue = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value.length < 1) {
-                          return '한 글자 이상 써주세요';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: currentWidth < 600 ? 40 : 40),
-                  TDQuestion('언제 실행하고 싶나요?', currentWidth).tDQuestion(),
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
-
-                  Center(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Color(0xff2A2A2A)),
-                          padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
-                          width: currentWidth < 600 ? 400 : 500,
-                          child: EditCalendar(widget.date))), //추가할 때 달력
-
-                  SizedBox(height: currentWidth < 600 ? 15 : 25),
-
-                  //반복하기 기능
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end, //오른쪽 정렬
-                    children: [
-                      Text(
-                        '반복하기',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: currentWidth < 600 ? 13 : 16),
+      body: SingleChildScrollView(
+              child: Padding(
+                padding: fullPadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 20),
+                    TDQuestion('더 구체적으로 바꿔보세요.', currentWidth).tDQuestion(),
+                    SizedBox(height: 15),
+                    Form(
+                      key: formKey,
+                      child: renderTextFormField(
+                        currentWidth: currentWidth,
+                        onSaved: (value) {
+                          setState(() {
+                            dominoValue = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value.length < 1) {
+                            return '한 글자 이상 써주세요';
+                          }
+                          return null;
+                        },
                       ),
-                      SizedBox(height: currentWidth < 600 ? 10 : 15),
-                      SizedBox(
-                        height: currentWidth < 600 ? 35 : 45,
-                        width: currentWidth < 600 ? 45 : 55,
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: Switch(
-                            activeTrackColor: const Color(0xff00C300),
-                            inactiveTrackColor: const Color(0xff474747),
-                            inactiveThumbColor: Colors.white,
-                            trackOutlineColor:
-                                WidgetStateProperty.resolveWith<Color?>(
-                              (Set<WidgetState> states) {
-                                if (true) {
-                                  return Colors.transparent;
-                                }
+                    ),
+                    SizedBox(height: 40),
+                    TDQuestion('언제 실행하고 싶나요?', currentWidth).tDQuestion(),
+                    SizedBox(height: 15),
+                
+                     Container(
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                    width: double.infinity,
+                            child: EditCalendar(widget.date)), 
+                
+                
+                    //반복하기 기능
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '반복하기',
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                        SizedBox(width: 10),
+                        SizedBox(
+                          height: 42,
+                          width: 52,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Switch(
+                              activeColor: Colors.white,
+                              activeTrackColor: mainRed,
+                              inactiveTrackColor: const Color(0xff474747),
+                              inactiveThumbColor: Colors.white,
+                              trackOutlineColor:
+                                  WidgetStateProperty.resolveWith<Color?>(
+                                (Set<WidgetState> states) {
+                                  if (true) {
+                                    return Colors.transparent;
+                                  }
+                                },
+                              ),
+                              value: switchValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  switchValue = value;
+                                });
                               },
                             ),
-                            value: switchValue,
-                            onChanged: (value) {
-                              setState(() {
-                                print(
-                                    '전달할 값 $everyDay, $everyWeek, $everyTwoWeek, $everyMonth)');
-                                switchValue = value;
-                              });
-                            },
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-
-                  if (switchValue)
-                    EditRepeatSettings(
-                      everyDay,
-                      everyWeek,
-                      everyTwoWeek,
-                      everyMonth,
-                      key: ValueKey(
-                          '$everyDay-$everyWeek-$everyTwoWeek-$everyMonth'), // 👈 추가!
+                      ],
                     ),
-                ],
+                
+                    if (switchValue)
+                      EditRepeatSettings(
+                        everyDay,
+                        everyWeek,
+                        everyTwoWeek,
+                        everyMonth,
+                        key: ValueKey(
+                            '$everyDay-$everyWeek-$everyTwoWeek-$everyMonth'),
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ]),
-      ),
+        
+       
       bottomNavigationBar: Padding(
         padding: fullPadding,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          NewButton(Colors.black, Colors.white, '이전', () {
-            Navigator.pop(context);
-          }, currentWidth)
-              .newButton(),
-          NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
-            DateTime? pickedDate = context.read<DateProvider>().pickedDate;
-            context
-                .read<DateListProvider>()
-                .setInterval(switchValue, pickedDate!);
-            howDeleteDialog(context, widget.goalId, widget.date);
-          }, currentWidth)
-              .newButton(),
-          NewButton(Colors.black, Colors.white, '완료', () async {
-            if (formKey.currentState!.validate()) {
-              formKey.currentState!.save();
-
+          SizedBox(
+            width: 90,
+            height: 45,
+            child: NewButton(Colors.black, Colors.white, '취소', () {
+              //주의 팝업
+              PopupDialog.show(context, '지금 나가면,\n수정한 내용이 사라져!', '잠깐!', true,
+                  false, false, true, onCancel: () {
+                Navigator.pop(context);
+              }, onSuccess: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              });
+            }).newButton(),
+          ),
+          SizedBox(
+            width: 90,
+            height: 45,
+            child: NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
               DateTime? pickedDate = context.read<DateProvider>().pickedDate;
+              context
+                  .read<DateListProvider>()
+                  .setInterval(switchValue, pickedDate!);
+              howDeleteDialog(context, widget.goalId, widget.date);
+            }).newButton(),
+          ),
+          SizedBox(
+            width: 90,
+            height: 45,
+            child: NewButton(Colors.black, Colors.white, '완료', () async {
+              if (formKey.currentState!.validate()) {
+                formKey.currentState!.save();
 
-              if (pickedDate == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('날짜를 선택해 주세요.')),
-                );
-              } else {
-                // 🔹 반복 설정을 적용
-                context
-                    .read<DateListProvider>()
-                    .setInterval(switchValue, pickedDate);
-                // 🔹 반복 정보 가져오기
-                String repetition =
-                    context.read<DateListProvider>().repeatInfo();
-                List<DateTime> dateList =
-                    context.read<DateListProvider>().dateList;
+                DateTime? pickedDate = context.read<DateProvider>().pickedDate;
 
-                // 🔹 날짜 리스트가 비어 있으면 기본값 설정
-                if (dateList.isEmpty) {
-                  dateList = [pickedDate];
+                if (pickedDate == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('날짜를 선택해 주세요.')),
+                  );
+                } else {
+                  context
+                      .read<DateListProvider>()
+                      .setInterval(switchValue, pickedDate);
+                  String repetition =
+                      context.read<DateListProvider>().repeatInfo();
+                  List<DateTime> dateList =
+                      context.read<DateListProvider>().dateList;
+
+                  if (dateList.isEmpty) {
+                    dateList = [pickedDate];
+                  }
+
+                  final dominoDeleted = await deleteDominoToEdit(widget.goalId);
+                  if (!dominoDeleted) return;
+
+                  final todayDeleted =
+                      await DeleteTodayDominoService.deleteTodayDomino(
+                    goalId: widget.goalId,
+                    goalDate: todayDate,
+                  );
+                  if (!todayDeleted) return;
+
+                  final added = await addDomino(
+                    widget.thirdGoalId,
+                    dominoController.text,
+                    dateList,
+                    repetition,
+                  );
+                  if (!added) return;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TdMain(),
+                    ),
+                  );
                 }
-
-                // 🔹 도미노 삭제
-                final dominoDeleted = await deleteDominoToEdit(widget.goalId);
-                if (!dominoDeleted) return;
-
-                // 🔹 오늘 도미노 삭제
-                final todayDeleted =
-                    await DeleteTodayDominoService.deleteTodayDomino(
-                  goalId: widget.goalId,
-                  goalDate: todayDate,
-                );
-                if (!todayDeleted) return;
-
-                final added = await addDomino(
-                  widget.thirdGoalId,
-                  dominoController.text,
-                  dateList,
-                  repetition,
-                );
-                if (!added) return;
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const TdMain(),
-                  ),
-                );
               }
-            }
-          }, currentWidth)
-              .newButton(),
+            }).newButton(),
+          ),
         ]),
       ),
     );
@@ -339,8 +346,6 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
     final success = await DeleteDominoService.deleteDomino(goalId: goalId);
 
     if (success) {
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
-
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -354,8 +359,6 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
         goalId: goalId, goalDate: goalDate);
 
     if (success) {
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
-
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -368,10 +371,10 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
     context: context,
     builder: (context) {
       return Dialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4))),
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.fromLTRB(5, 25, 5, 25),
+          decoration: BoxDecoration(
+              color: backgroundColor, borderRadius: BorderRadius.circular(5)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -384,7 +387,7 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
                   child: const Text(
                     '오늘 이후 도미노 모두 삭제',
                     style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   )),
               const SizedBox(
                 height: 10,
@@ -398,7 +401,7 @@ void howDeleteDialog(BuildContext context, int goalId, DateTime date) {
                   child: const Text(
                     '선택한 날짜의 도미노만 삭제',
                     style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   )),
             ],
           ),

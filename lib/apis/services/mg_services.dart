@@ -18,7 +18,6 @@ class AddGoalService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
-    print("🔐 저장된 authToken: $token");
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -51,8 +50,7 @@ class AddGoalService {
         body: body,
       );
 
-      print('📡 요청 응답 상태 코드: ${response.statusCode}');
-      print('📡 응답 본문: ${response.body}');
+    
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;

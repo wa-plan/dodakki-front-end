@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'package:domino/apis/services/td_services.dart';
-import 'package:domino/provider/DP/model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:domino/screens/TD/td_create1_page.dart';
 import 'package:domino/screens/TD/edit_page.dart';
 import 'package:intl/intl.dart';
 import 'package:domino/style/styles.dart';
@@ -357,14 +354,12 @@ class _EventCalendarState extends State<EventCalendar> {
                             },
                             child: Container(
                               margin: EdgeInsets.fromLTRB(
-                                  0, 0, 0, currentWidth < 600 ? 10 : 14),
-                              padding: currentWidth < 600
-                                  ? EdgeInsets.fromLTRB(15, 15, 30, 15)
-                                  : EdgeInsets.fromLTRB(20, 25, 35, 25),
+                                  0, 0, 0, 13),
+                              padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
                               decoration: BoxDecoration(
                                 color: const Color(0xff2A2A2A),
                                 borderRadius: BorderRadius.circular(
-                                    currentWidth < 600 ? 5 : 8),
+                                    8),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black
@@ -384,8 +379,8 @@ class _EventCalendarState extends State<EventCalendar> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Container(
-                                        width: currentWidth < 600 ? 13 : 14,
-                                        height: currentWidth < 600 ? 60 : 55,
+                                        width: 13,
+                                        height: 60,
                                         decoration: BoxDecoration(
                                           color: Color(int.parse(
                                             value[index]
@@ -403,8 +398,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                          
                                         children: [
                                           SizedBox(
                                             width:
@@ -432,8 +426,8 @@ class _EventCalendarState extends State<EventCalendar> {
                                             child: Text(
                                               value[index].goalName,
                                               overflow: TextOverflow
-                                                  .ellipsis, // 길면 ...으로 생략
-                                              maxLines: 2, // 한 줄로 제한
+                                                  .ellipsis, 
+                                              maxLines: 2, 
                                               style: TextStyle(
                                                   fontSize: currentWidth < 600
                                                       ? 14
@@ -463,12 +457,11 @@ class _EventCalendarState extends State<EventCalendar> {
                                               formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.zero, // 패딩 최소화
-                                          constraints:
-                                              BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                          padding: EdgeInsets.all(20),
+                                          color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.clear_outlined,
-                                            size: currentWidth < 600 ? 21 : 25,
+                                            size: 23,
                                             color: value[index].didZero
                                                 ? mainGold
                                                 : const Color(0xff646464),
@@ -477,6 +470,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                       ),
                                       SizedBox(
                                           width: currentWidth < 600 ? 24 : 30),
+
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -492,12 +486,11 @@ class _EventCalendarState extends State<EventCalendar> {
                                               "IN_PROGRESS", formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.zero, // 패딩 최소화
-                                          constraints:
-                                              BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                          padding: EdgeInsets.all(20),
+                                          color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.change_history_outlined,
-                                            size: currentWidth < 600 ? 21 : 25,
+                                            size: 23,
                                             color: value[index].didHalf
                                                 ? mainGold
                                                 : const Color(0xff646464),
@@ -506,6 +499,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                       ),
                                       SizedBox(
                                           width: currentWidth < 600 ? 24 : 30),
+
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -521,12 +515,11 @@ class _EventCalendarState extends State<EventCalendar> {
                                               "SUCCESS", formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.zero, // 패딩 최소화
-                                          constraints:
-                                              BoxConstraints(), // 기본 제약 조건 제거 (필요 시)
+                                          padding: EdgeInsets.all(20),
+                                          color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.circle_outlined,
-                                            size: currentWidth < 600 ? 21 : 25,
+                                            size: 23,
                                             color: value[index].didAll
                                                 ? mainGold
                                                 : const Color(0xff646464),
@@ -553,6 +546,7 @@ class _EventCalendarState extends State<EventCalendar> {
   }
 }
 
+//오늘의 도미노 상세 팝업
 void editDialog(
     BuildContext context,
     DateTime date,
@@ -566,11 +560,11 @@ void editDialog(
     double currentWidth) {
   String getIntervalText() {
     if (!switchvalue) {
-      return 'X';
+      return '';
     }
 
-    String weekday = DateFormat('EEEE', 'ko_KR').format(date); // 요일을 한국어로 변환
-    String dayOfMonth = date.day.toString(); // 날짜 가져오기
+    String weekday = DateFormat('EEEE', 'ko_KR').format(date);
+    String dayOfMonth = date.day.toString(); 
 
     if (interval == 1) {
       return '매일';
@@ -582,7 +576,7 @@ void editDialog(
       return '매월 $dayOfMonth일';
     }
 
-    return 'X'; // 기본값
+    return ''; 
   }
 
   showDialog(
@@ -638,32 +632,33 @@ void editDialog(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w600),
-                        maxLines: 2, // 👉 최대 2줄까지만 표시
+                        maxLines: 2, 
                         overflow:
-                            TextOverflow.ellipsis, // 👉 2줄 이상일 경우 "..."으로 표시
-                        softWrap: true, // 👉 자동 줄바꿈 허용
+                            TextOverflow.ellipsis, 
+                        softWrap: true, 
                       ),
                     ),
                     SizedBox(height: 15),
-                    Text(
-                      '반복',
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
+                    if (switchvalue) 
+                        Text(
+                          '반복',
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          getIntervalText(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      getIntervalText(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
                 Spacer(),
                 NewCustomIconButton(() {
                   Navigator.push(

@@ -163,7 +163,7 @@ class AddPage2State extends State<AddPage2> {
               const Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
-              ProgressBar(2, 2).progressBar()
+              ProgressBar(1, 2)
             ],
           ),
         ),
@@ -260,7 +260,7 @@ class AddPage2State extends State<AddPage2> {
               context
                   .read<SelectRepeatModel>()
                   .selectRepeat(false, false, false, false);
-            }, currentWidth)
+            })
                 .newButton(),
           ),
           SizedBox(
@@ -296,7 +296,7 @@ class AddPage2State extends State<AddPage2> {
                   );
                 }
               }
-            }, currentWidth)
+            })
                 .newButton(),
           ),
         ]),
