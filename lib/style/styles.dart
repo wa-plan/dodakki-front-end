@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:domino/provider/DP/model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 //color
 const backgroundColor = Color(0xff222222);
@@ -15,71 +11,29 @@ const mainTextColor = Colors.white;
 const mainGold = Color.fromARGB(255, 255, 217, 79);
 const mainGreen = Color(0xff72FF5B);
 const mainBlue = Color(0xff5DD8FF);
+const gradientColor = [
+              mainRed, 
+              Color(0xffFF4C4C), 
+            ];
 
 //padding
 const appBarPadding = EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20);
 const fullPadding = EdgeInsets.fromLTRB(20.0, 10, 20.0, 20.0);
-const tabletPadding = EdgeInsets.fromLTRB(40.0, 30, 40.0, 20);
-const tabletFullPadding = EdgeInsets.fromLTRB(40.0, 10, 40.0, 20);
 
-//colorPalette
-Map<Color, Color> colorPalette = {
-  const Color(0xffFF7A7A): const Color(0xffFFC2C2),
-  const Color(0xffFFB82D): const Color(0xffFFD19B),
-  const Color(0xffFCFF62): const Color(0xffFEFFCD),
-  const Color(0xff72FF5B): const Color(0xffC1FFB7),
-  const Color(0xff5DD8FF): const Color(0xff94E5FF),
-  const Color(0xff929292): const Color(0xff5C5C5C),
-  const Color(0xffFF5794): const Color(0xffFF8EB7),
-  const Color(0xffAE7CFF): const Color(0xffD0B4FF),
-  const Color(0xffC77B7F): const Color(0xffEBB6B9),
-  const Color(0xff009255): const Color(0xff6DE1B0),
-  const Color(0xff3184FF): const Color(0xff8CBAFF),
-  const Color(0xff11D1C2): const Color(0xffAAF4EF),
-  Colors.transparent: const Color(0xff5C5C5C),
-};
 
-//Button
-class Button {
+class NewButton {
   final Color buttonColor;
   final Color textColor;
   final String text;
   final Function function;
 
-  Button(this.buttonColor, this.textColor, this.text, this.function);
 
-  Widget button() {
-    return TextButton(
-      onPressed: () => function(),
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-        backgroundColor: buttonColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6.0),
-        ),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-}
-
-//NewButton
-class NewButton {
-  final Color buttonColor;
-  final Color textColor;
-  final String text;
-  final VoidCallback function;
-  final double currentWidth;
-
-  NewButton(this.buttonColor, this.textColor, this.text, this.function,
-      this.currentWidth);
+  NewButton(
+    this.buttonColor,
+    this.textColor,
+    this.text,
+    this.function,
+  );
 
   Widget newButton() {
     return TextButton(
@@ -103,7 +57,7 @@ class NewButton {
   }
 }
 
-//Fluttertoast
+
 class Message {
   final String text;
   final Color textColor;
@@ -165,393 +119,87 @@ class Message {
   }
 }
 
-//ThirdGoalInput
-class DPInput3 {
-  final Color? color;
-  final Function(String value) onChangedFunction;
-  final String initialValue;
 
-  DPInput3(this.color, this.onChangedFunction, this.initialValue);
+//도미노 페이지 인디케이터
+class PageIndicator extends StatelessWidget {
+  final List<Map<String, dynamic>> goals;
+  final PageController controller;
 
-  Widget dpInput3() {
-    return Container(
-      width: 80,
-      margin: const EdgeInsets.all(1.0),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          color: const Color(0xff5C5C5C)),
-      child: Center(
-        child: TextFormField(
-          initialValue: initialValue,
-          onChanged: onChangedFunction,
-          textAlign: TextAlign.center,
-          textInputAction: TextInputAction.newline,
-          maxLength: 15,
-          maxLines: null,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(15), // 최대 15글자로 제한
-          ],
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          decoration: const InputDecoration(
-              border: InputBorder.none,
-              counterStyle: TextStyle(
-                  fontSize: 12, color: Color.fromARGB(255, 134, 134, 134))),
-        ),
-      ),
-    );
-  }
-}
+  const PageIndicator(this.controller, this.goals, {super.key});
 
-//SecondGoalInput
-class DPInput2 {
-  final Color? color;
-  final TextEditingController controller;
-  final Function(String value) onChangedFunction;
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        int currentPage = controller.hasClients
+            ? controller.page?.round() ?? controller.initialPage
+            : 0;
 
-  DPInput2(this.color, this.controller, this.onChangedFunction);
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(goals.length, (index) {
+            bool isPast = index < currentPage;
+            bool isCurrent = index == currentPage;
 
-  Widget dpInput2() {
-    return Container(
-      width: 80,
-      margin: const EdgeInsets.all(1.0),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        color: const Color(0xff929292),
-      ),
-      child: Center(
-        child: TextFormField(
-          controller: controller,
-          onChanged: onChangedFunction,
-          style: const TextStyle(
-              color: backgroundColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w600),
-          textAlign: TextAlign.center,
-          maxLength: 15,
-          maxLines: null,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(15), // 최대 15글자로 제한
-          ],
-          decoration: const InputDecoration(
-              border: InputBorder.none,
-              counterStyle: TextStyle(
-                  fontSize: 12, color: Color.fromARGB(255, 104, 104, 104))),
-        ),
-      ),
-    );
-  }
-}
-
-//SecondGoalGrid
-class DPGrid2 {
-  final int hintNum;
-  final String mandalart;
-  final List<Map<String, dynamic>> secondGoals;
-  final Border? border;
-  final double maxFontSize;
-  final double currentWidth;
-
-  const DPGrid2(this.hintNum, this.mandalart, this.secondGoals,
-      this.maxFontSize, this.border, this.currentWidth);
-
-  Widget dpGrid2() {
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color:
-            secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
-                ? NewColorTransform(secondGoals[hintNum]['color'])
-                    .newcolorTransform()
-                : Colors.transparent,
-        border: border,
-      ),
-      margin: const EdgeInsets.all(1.0),
-      child: Center(
-        child: AutoSizeText(
-          secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
-              ? secondGoals[hintNum]['secondGoal']
-              : "",
-          maxLines: 3,
-          minFontSize: 3,
-          maxFontSize: maxFontSize,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-//TDGrid2
-class TDGrid2 {
-  final int hintNum;
-  final String mandalart;
-  final List<Map<String, dynamic>> secondGoals;
-  final Border? border;
-  final double maxFontSize;
-
-  const TDGrid2(this.hintNum, this.mandalart, this.secondGoals,
-      this.maxFontSize, this.border);
-
-  Widget tdGrid2() {
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color:
-            secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
-                ? ColorTransform(secondGoals[hintNum]['color']).colorTransform()
-                : Colors.transparent,
-        border: border,
-      ),
-      margin: const EdgeInsets.all(1.0),
-      child: Center(
-        child: AutoSizeText(
-          secondGoals.isNotEmpty && secondGoals[hintNum]['secondGoal'] != ""
-              ? secondGoals[hintNum]['secondGoal']
-              : "",
-          maxLines: 3,
-          minFontSize: 3,
-          maxFontSize: maxFontSize,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-//Grid for Creating
-class DPCreateGrid {
-  final String text;
-  final Color? color;
-  final Border? border;
-
-  const DPCreateGrid(this.text, this.color, this.border);
-
-  Widget dPCreateGrid() {
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color: color,
-        border: border,
-      ),
-      margin: const EdgeInsets.all(1.0),
-      child: Center(
-        child: AutoSizeText(
-          maxLines: 3,
-          minFontSize: 3,
-          maxFontSize: 10,
-          overflow: TextOverflow.ellipsis,
-          text,
-          style:
-              const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-//ThirdGoalGrid
-class DPGrid3 {
-  final int hintNum2;
-  final int hintNum3;
-  final String mandalart;
-  final List<Map<String, dynamic>> secondGoals;
-  final Border? border;
-  final double maxFontSize;
-
-  const DPGrid3(this.hintNum2, this.hintNum3, this.mandalart, this.secondGoals,
-      this.maxFontSize, this.border);
-
-  Widget dpGrid3() {
-    final color = secondGoals.isNotEmpty &&
-            secondGoals[hintNum2]['thirdGoals'].asMap().containsKey(hintNum3)
-        ? Color(int.parse(secondGoals[hintNum2]['color']
-            .replaceAll('Color(', '')
-            .replaceAll(')', '')))
-        : Colors.transparent;
-
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color: secondGoals.isNotEmpty &&
-                secondGoals[hintNum2]['thirdGoals'].isNotEmpty &&
-                secondGoals[hintNum2]['thirdGoals']
-                    .asMap()
-                    .containsKey(hintNum3) &&
-                secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal'] == ""
-            ? Colors.transparent
-            : colorPalette[color],
-        border: border,
-      ),
-      margin: const EdgeInsets.all(1.0),
-      child: Center(
-        child: AutoSizeText(
-          secondGoals.isNotEmpty &&
-                  secondGoals[hintNum2]['thirdGoals'].isNotEmpty &&
-                  secondGoals[hintNum2]['thirdGoals']
-                      .asMap()
-                      .containsKey(hintNum3)
-              ? secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal']
-              : "",
-          maxLines: 3,
-          minFontSize: 3,
-          maxFontSize: maxFontSize,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-//ThirdGoalGrid for TD
-class TDGrid3 {
-  final int hintNum2;
-  final int hintNum3;
-  final String mandalart;
-  final List<Map<String, dynamic>> secondGoals;
-  final bool isSelected;
-  final VoidCallback onSelect;
-  final BuildContext context; // Pass context explicitly
-
-  const TDGrid3(
-    this.hintNum2,
-    this.hintNum3,
-    this.mandalart,
-    this.secondGoals,
-    this.isSelected,
-    this.onSelect,
-    this.context, // Add context as a parameter
-  );
-
-  Widget tdGrid3() {
-    // Determine the cell color
-    final color = secondGoals.isNotEmpty &&
-            secondGoals[hintNum2]['thirdGoals'].asMap().containsKey(hintNum3)
-        ? Color(int.parse(secondGoals[hintNum2]['color']
-            .replaceAll('Color(', '')
-            .replaceAll(')', '')))
-        : Colors.transparent;
-
-    // Define the GestureDetector widget
-    return GestureDetector(
-      onTap: () {
-        onSelect();
-        if (secondGoals.isNotEmpty &&
-            secondGoals[hintNum2]['thirdGoals'].isNotEmpty &&
-            secondGoals[hintNum2]['thirdGoals'].asMap().containsKey(hintNum3)) {
-          final thirdGoal =
-              secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal'] ?? "";
-          final id = secondGoals[hintNum2]['thirdGoals'][hintNum3]['id'];
-          context
-              .read<SelectAPModel>()
-              .selectAP(thirdGoal.isEmpty ? "플랜선택없음" : thirdGoal, id);
-        } else {
-          context.read<SelectAPModel>().selectAP("플랜선택없음", null);
-        }
+            return AnimatedContainer(
+              duration: Duration(milliseconds: 400),
+              margin: EdgeInsets.symmetric(horizontal: 6),
+              width: 7,
+              height: 16,
+              decoration: BoxDecoration(
+                color: isCurrent
+                    ? mainRed
+                    : mainGrey,
+                borderRadius: BorderRadius.circular(2),
+              ),
+              transform: isPast
+                  ? Matrix4.rotationZ(0.5) // 쓰러진 효과
+                  : Matrix4.identity(),
+              transformAlignment: Alignment.center,
+            );
+          }),
+        );
       },
-      child: Container(
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          color: secondGoals.isNotEmpty &&
-                  secondGoals[hintNum2]['thirdGoals'].isNotEmpty &&
-                  secondGoals[hintNum2]['thirdGoals']
-                      .asMap()
-                      .containsKey(hintNum3) &&
-                  secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal'] ==
-                      ""
-              ? Colors.transparent
-              : colorPalette[color],
-          border: isSelected &&
-                  secondGoals.isNotEmpty &&
-                  secondGoals[hintNum2]['thirdGoals'].isNotEmpty &&
-                  secondGoals[hintNum2]['thirdGoals']
-                      .asMap()
-                      .containsKey(hintNum3) &&
-                  secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal'] !=
-                      ""
-              ? Border.all(color: Colors.white, width: 5)
-              : null,
-        ),
-        margin: const EdgeInsets.all(1.0),
-        child: Center(
-          child: AutoSizeText(
-            secondGoals.isNotEmpty &&
-                    secondGoals[hintNum2]['thirdGoals'].isNotEmpty &&
-                    secondGoals[hintNum2]['thirdGoals']
-                        .asMap()
-                        .containsKey(hintNum3)
-                ? secondGoals[hintNum2]['thirdGoals'][hintNum3]['thirdGoal']
-                : "",
-            maxLines: 3,
-            minFontSize: 3,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
+
     );
   }
 }
 
-//FirstGoalGrid
-class DPGrid1 {
+class FreeGrid {
   final String text;
   final Color color;
   final double maxFontSize;
 
-  const DPGrid1(this.text, this.color, this.maxFontSize);
+  const FreeGrid(this.text, this.color, this.maxFontSize);
 
-  Widget dpGrid1() {
+  Widget freeGrid() {
     return Container(
-        padding: const EdgeInsets.all(3),
-        margin: const EdgeInsets.all(1.0),
-        decoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(3), color: color),
-        child: Center(
-          child: AutoSizeText(
-              minFontSize: 3,
-              maxFontSize: 13,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              text,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: backgroundColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 8,
-              )),
-        ));
+      padding: const EdgeInsets.all(3),
+      margin: const EdgeInsets.all(1.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: color,
+      ),
+      child: Center(
+        child: AutoSizeText(
+          text,
+          maxLines: 3,
+          minFontSize: 3,
+          maxFontSize: maxFontSize,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 }
 
-//ColorTransformer(String>Color)
+
 class ColorTransform {
   final String color;
 
@@ -569,79 +217,6 @@ class ColorTransform {
   }
 }
 
-class NewColorTransform {
-  final String color;
-
-  const NewColorTransform(this.color);
-
-  Color newcolorTransform() {
-    Color newColor =
-        Color(int.parse(color.replaceAll('Color(', '').replaceAll(')', '')));
-    return newColor;
-  }
-}
-
-//TextFormField
-class CustomTextField {
-  final String hintText;
-  final TextEditingController controller;
-  final FormFieldValidator<String?> validator;
-  final bool obscureText;
-  final int maxLines;
-
-  const CustomTextField(this.hintText, this.controller, this.validator,
-      this.obscureText, this.maxLines);
-
-  Widget textField({
-    bool obscureText = false,
-    void Function()? onClear,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      maxLines: maxLines,
-      style: const TextStyle(color: Colors.white, fontSize: 14),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: const Color(0xff2A2A2A),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        hintText: hintText,
-        contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-        hintStyle: const TextStyle(
-            color: Color(0xffAAAAAA),
-            fontSize: 12,
-            fontWeight: FontWeight.w400),
-        suffixIcon: controller.text.isNotEmpty
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
-                children: [
-                  GestureDetector(
-                    onTap: onClear ??
-                        () {
-                          controller.clear();
-                        },
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 13, 10, 10),
-                      child: const Icon(
-                        Icons.cancel,
-                        size: 14,
-                        color: Color.fromARGB(255, 98, 98, 98),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : null,
-      ),
-      validator: validator,
-    );
-  }
-}
-
-//NewTextFormField
 class NewCustomTextField {
   final String hintText;
   final TextEditingController controller;
@@ -750,7 +325,6 @@ class ColorOption2 extends StatelessWidget {
   }
 }
 
-//태그
 class Tag {
   final Color bgColor;
   final String text;
@@ -778,100 +352,8 @@ class Tag {
   }
 }
 
-//Grid for Editing
-class DPGrid3_E {
-  final String text;
-  final Color? color;
-  final double maxFontSize;
 
-  const DPGrid3_E(this.text, this.color, this.maxFontSize);
 
-  Widget dpGrid3_E() {
-    return Container(
-      padding: const EdgeInsets.all(3),
-      margin: const EdgeInsets.all(1.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        color: color,
-      ),
-      child: Center(
-        child: AutoSizeText(
-            maxLines: 3, // 최대 줄 수 (필요에 따라 변경 가능)
-            minFontSize: 6,
-            maxFontSize: maxFontSize, // 최소 글씨 크기
-            overflow: TextOverflow.ellipsis, // 내용이 너무 길 경우 생략 표시
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: backgroundColor,
-              fontWeight: FontWeight.w600,
-            )),
-      ),
-    );
-  }
-}
-
-//Grid for Editing
-class PageIndicator {
-  final List<Map<String, dynamic>> goals;
-  final PageController controller;
-
-  const PageIndicator(this.controller, this.goals);
-
-  Widget pageIndicator() {
-    return SmoothPageIndicator(
-      controller: controller,
-      count: goals.length,
-      effect: const SlideEffect(
-        dotHeight: 8.0,
-        radius: 2.0,
-        dotWidth: 8.0,
-        activeDotColor: Colors.white,
-        dotColor: Color(0xff3C3C3C),
-      ),
-    );
-  }
-}
-
-//icon button
-class CustomIconButton {
-  final Function function;
-  final IconData icon;
-  final double currentWidth;
-
-  const CustomIconButton(this.function, this.icon, this.currentWidth);
-
-  Widget customIconButton() {
-    return Container(
-      width: currentWidth < 600 ? 33 : 50,
-      height: currentWidth < 600 ? 22 : 35,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            offset: const Offset(0, 0),
-            blurRadius: 15,
-            spreadRadius: 0,
-          ),
-        ],
-        color: const Color(0xff303030),
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          Future.microtask(() => function()); // 아주 다음 이벤트 큐로 미뤄서 실행
-        },
-        child: Icon(
-          icon,
-          color: const Color(0xff646464),
-          size: currentWidth < 600 ? 18 : 25,
-        ),
-      ),
-    );
-  }
-}
-
-//icon button
 class NewCustomIconButton {
   final Function function;
   final IconData icon;
@@ -883,23 +365,16 @@ class NewCustomIconButton {
 
   Widget newCustomIconButton() {
     return Container(
-      width: 45,
+      width: 30,
       height: 30,
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            offset: const Offset(0, 0),
-            blurRadius: 15,
-            spreadRadius: 0,
-          ),
-        ],
+
         color: Color(0xff303030),
         borderRadius: BorderRadius.circular(25),
       ),
       child: GestureDetector(
         onTap: () {
-          function(); // 함수 호출
+          function(); 
         },
         child: Icon(
           icon,

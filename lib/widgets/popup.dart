@@ -29,20 +29,19 @@ class PopupDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
     List<Widget> buttons = [];
     if (delete) {
       buttons.add(
         SizedBox(
           width: 110,
           child: NewButton(
-                  const Color.fromARGB(255, 128, 22, 15),
-                  Colors.white,
+                  mainRed,
+                  backgroundColor,
                   '삭제',
                   () => onDelete != null
                       ? onDelete!()
                       : Navigator.of(context).pop(),
-                  currentWidth)
+                  )
               .newButton(),
         ),
       );
@@ -58,7 +57,7 @@ class PopupDialog extends StatelessWidget {
                   () => onSignOut != null
                       ? onSignOut!()
                       : Navigator.of(context).pop(),
-                  currentWidth)
+                  )
               .newButton(),
         ),
       );
@@ -74,7 +73,7 @@ class PopupDialog extends StatelessWidget {
                   () => onSuccess != null
                       ? onSuccess!()
                       : Navigator.of(context).pop(),
-                  currentWidth)
+                  )
               .newButton(),
         ),
       );
@@ -143,7 +142,7 @@ class PopupDialog extends StatelessWidget {
                                   Colors.white,
                                   '취소',
                                   () => Navigator.of(context).pop(),
-                                  currentWidth)
+                                )
                               .newButton(),
                         ),
                       ...buttons,

@@ -1,27 +1,37 @@
-//DP 디테일 페이지에서 이동한 3x3 만다라트 페이지
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
-import 'package:domino/widgets/DP/Detail/dp_detail2_widget.dart';
+import 'package:domino/widgets/DP/Create/Around9Grid.dart';
 import 'package:flutter/material.dart';
 
 class DPdetail3Page extends StatelessWidget {
-  final String mandalart;
-  final int mandalartId;
+  final String firstGoalName;
+  final Color firstGoalColor;
+  final int secondGoalIndex;
+  final bool thirdGoal;
   final List<Map<String, dynamic>> secondGoals;
-  final int selectedSecondGoal;
-  final String firstColor;
 
   const DPdetail3Page(
       {super.key,
-      required this.mandalart,
-      required this.mandalartId,
+      required this.firstGoalName,
+      required this.firstGoalColor,
       required this.secondGoals,
-      required this.selectedSecondGoal,
-      required this.firstColor});
+      required this.secondGoalIndex,
+      required this.thirdGoal});
+  static const List<int> centerSecondGoalOrder = [0, 1, 2, 3, 5, 6, 7, 8];
+
+  Color secondColorDefiner(String secondText, Color secondColor) {
+    if (secondText.isEmpty) return Colors.transparent;
+    return secondColor;
+  }
+
+  Color thirdColorDefiner(
+      String thirdText, Color secondColor, String secondText) {
+    if (secondText.isEmpty || thirdText.isEmpty) return Colors.transparent;
+    return colorPalette[secondColor] ?? Colors.transparent;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -29,55 +39,94 @@ class DPdetail3Page extends StatelessWidget {
           titleSpacing: 0.0,
           title: Padding(
             padding: appBarPadding,
-            child: Row(
-              children: [
-                CustomBackButton(() {
-                Navigator.of(context).pop();
-              })
-                  .customBackButton(),
-                SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle(mandalart).pageTitle(),
-              ],
-            ),
+            child: CustomBackButton(() {
+              Navigator.of(context).pop();
+            }).customBackButton(),
           ),
           backgroundColor: backgroundColor),
       body: Padding(
         padding: fullPadding,
-        child: Stack(
+        child: Column(
           children: [
-            // 화면 전체의 클릭 이벤트 감지를 위한 투명 GestureDetector
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop(); // 빈 영역 클릭 시 팝업 닫기
-              },
-              child: Container(
-                color: Colors.transparent, // 투명 배경으로 클릭 이벤트만 전달
-              ),
+           
+           
+            SizedBox(
+              height: 40,
             ),
             Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: currentWidth < 600 ? 40 : 100,
-                  ),
-                  // MandalartGrid4가 상호작용 가능한 영역
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        // MandalartGrid4 내부는 아무 동작도 하지 않음
-                      },
-                      child: MandalartGrid5(
-                        mandalart: mandalart,
-                        secondGoals: secondGoals,
-                        selectedSecondGoal: selectedSecondGoal,
-                        firstColor: firstColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              child: SizedBox(
+                  width: 300,
+                  child: thirdGoal == false
+                      ?
+                      //중앙 그리드일 경우,
+                      GridView.count(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 1,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: List.generate(9, (innerIndex) {
+                            if (innerIndex == 4) {
+                              return FreeGrid(firstGoalName, firstGoalColor, 15)
+                                  .freeGrid();
+                            } else {
+                              final secondIndex = centerSecondGoalOrder[
+                                  innerIndex > 4 ? innerIndex - 1 : innerIndex];
+                              final secondGoal = secondGoals[secondIndex];
+                              final secondText = secondGoal['secondGoal'] ?? '';
+                              final secondColor =
+                                  ColorTransform(secondGoal['color'])
+                                      .colorTransform();
+                              return FreeGrid(
+                                      secondText,
+                                      secondColorDefiner(
+                                          secondText, secondColor),
+                                      15)
+                                  .freeGrid();
+                            }
+                          }),
+                        )
+
+                      //외곽 그리드일 경우,
+                      : GridView.count(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 1,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: List.generate(9, (index) {
+                            final secondGoal = secondGoals[secondGoalIndex];
+                            final secondText = secondGoal['secondGoal'] ?? '';
+                            final secondColor =
+                                ColorTransform(secondGoal['color'])
+                                    .colorTransform();
+                            final thirdGoals =
+                                secondGoal['thirdGoals'] as List<dynamic>? ??
+                                    [];
+                            if (index == 4) {
+                              if (secondGoals.length <= index) {
+                                return const SizedBox();
+                              }
+
+                              return FreeGrid(
+                                secondText,
+                                secondColorDefiner(secondText, secondColor),
+                                15,
+                              ).freeGrid();
+                            } else {
+                              final adjustedIndex =
+                                  index > 4 ? index - 1 : index;
+                              final thirdText = thirdGoals.length >
+                                      adjustedIndex
+                                  ? thirdGoals[adjustedIndex]['thirdGoal'] ?? ''
+                                  : '';
+                              final thirdColor = thirdColorDefiner(
+                                  thirdText, secondColor, secondText);
+                              return FreeGrid(thirdText, thirdColor, 15)
+                                  .freeGrid();
+                            }
+                          }),
+                        )),
             ),
           ],
         ),

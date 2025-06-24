@@ -18,6 +18,7 @@ class Tutorial3State extends State<Tutorial3> {
 
     return Scaffold(
         backgroundColor: backgroundColor,
+
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -29,6 +30,7 @@ class Tutorial3State extends State<Tutorial3> {
                     //프로그레스 바
                     ProgressBar(2, 4).progressBar(),
                     SizedBox(height: 10),
+
 
                     //프로그레스 타이틀
                     ProgressTitle('제2목표 만들기').progressTitle(),

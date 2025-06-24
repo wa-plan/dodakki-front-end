@@ -263,7 +263,7 @@ class CustomBackButton {
 
   Widget customBackButton() {
     return Container(
-      width: 45,
+      width: 30,
       height: 30,
       decoration: BoxDecoration(
         boxShadow: [
@@ -282,7 +282,7 @@ class CustomBackButton {
           function();
         },
         child: Icon(
-          Icons.arrow_back_ios_rounded,
+          Icons.arrow_back_rounded,
           color: const Color(0xff646464),
           size: 20,
         ),
