@@ -1,115 +1,92 @@
 import 'package:domino/screens/Tutorial/tutorial7_page.dart';
+import 'package:domino/screens/Tutorial/tutorial6_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/style/styles.dart';
 
-class Tutorial6 extends StatelessWidget {
+class Tutorial6 extends StatefulWidget {
   const Tutorial6({super.key});
 
   @override
+  State<Tutorial6> createState() => Tutorial6State();
+}
+
+class Tutorial6State extends State<Tutorial6> {
+  @override
   Widget build(BuildContext context) {
+    int selectedIndex = 100;
     final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
         backgroundColor: backgroundColor,
-        body: Stack(
-          children: [
-            //비주얼
-            Positioned(top: 40, left: 5, child: PlanVisual(currentWidth).planVisual()),
-            //그라데이션
-            Positioned(
-                top: 0,
-                child: Container(
-                  width: currentWidth < 600 ? 400 : 630,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        backgroundColor, // 시작 색
-                        backgroundColor.withOpacity(0.95),
-                        backgroundColor.withOpacity(0.9),
-                        backgroundColor.withOpacity(0.7),
-                        backgroundColor.withOpacity(0) // 끝은 완전 투명
-                      ],
-                    ),
-                  ),
-                )),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: tutorialPadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //프로그레스 바
+                    ProgressBar(3, 4).progressBar(),
+                    SizedBox(height: 10),
 
-            Padding(
-              padding: EdgeInsets.fromLTRB(36, 55, 36, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //프로그레스 타이틀
-                  ProgressTitle('플랜 완성!').progressTitle(),
-                  SizedBox(height: 17),
+                    //프로그레스 타이틀
+                    ProgressTitle('제3목표 만들기').progressTitle(),
+                    SizedBox(height: 17),
 
-                  //질문
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      '고마워! 이렇게만 하면\n목표를 달성할 수 있겠어!',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          height: 1.5),
-                    ),
-                  ),
-                  Spacer(),
-                  //TO-DO 스텝
-                  Text(
-                  'TO-DO',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                  ),),
-                  SizedBox(height: 5),                  //TO-DO 박스
-                  Container(
-                    height: 55,
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          '🔎',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          '동아리 지원요강 확인하기',
-                          style: TextStyle(
-                            color: backgroundColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                    //질문
+                    TutorialQuestion(
+                            "", '대학교 최강인싸되기', "를 위한", '달성해야 할 제3목표는?', 'green')
+                        .tutorialQuestion(),
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
-            ),
-          ],
+              //선택지
+              Transform.translate(
+                offset: Offset(-80, 0),
+                //top: currentWidth < 600 ? 180 : 190,
+                child: MandalartOption(
+                  middleText: '대학교\n최강인싸되기',
+                  texts: [
+                    '',
+                    '혼밥 100회\n도전하기',
+                    '동아리\n들어가기',
+                    '',
+                    '',
+                    '비둘기와\n친해지기',
+                    '',
+                    '인성파탄자 되기',
+                    '침묵 챌린지\n30일 하기'
+                  ],
+                  color: 'green',
+                  onItemSelected: (index) {
+                    selectedIndex = index;
+                  },
+                  currentWidth: currentWidth,
+                ),
+              ),
+            ],
+          ),
         ),
         bottomNavigationBar:
             //버튼
             Padding(
           padding: tutorialPadding,
           child: TutorialButton('다음', () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Tutorial7()),
-            );
+            if (selectedIndex == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tutorial7()),
+              );
+            } else if (selectedIndex == 0 ||
+                selectedIndex == 3 ||
+                selectedIndex == 6) {
+              TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
+            } else {
+              TutorialMessage("아닌데...다시 한번 잘 생각해봐!").tutorialMessage(context);
+            }
           }).tutorialButton(),
         ));
   }

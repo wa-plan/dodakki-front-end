@@ -2,6 +2,7 @@ import 'package:domino/screens/Tutorial/tutorial3_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:domino/widgets/TT/menu_form.dart';
 
 class Tutorial2 extends StatefulWidget {
   const Tutorial2({super.key});
@@ -11,19 +12,14 @@ class Tutorial2 extends StatefulWidget {
 }
 
 class Tutorial2State extends State<Tutorial2> {
-  int selectedIndex = 100;
-  List<String> texts = ['대학교\n자퇴하기', '뿌듯한\n학교생활하기', '3년\n휴학하기', 'F학점\n비 내리기'];
-
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: backgroundColor,
-        body: Padding(
-          padding: tutorialPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        body: SingleChildScrollView(
+          child: Stack(
             children: [
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -140,8 +136,10 @@ class Tutorial2State extends State<Tutorial2> {
                       );
                     },
                   ),
+
                 ),
-              )
+              ),
+              //도민호 이미지
             ],
           ),
         ),
@@ -149,19 +147,11 @@ class Tutorial2State extends State<Tutorial2> {
             //버튼
             Padding(
           padding: tutorialPadding,
-          child: TutorialButton('다음', () {
-            if (selectedIndex == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Tutorial3()),
-              );
-            } else if (selectedIndex == 0 ||
-                selectedIndex == 2 ||
-                selectedIndex == 3) {
-              TutorialMessage("아닌데...다시 한번 잘 생각해봐!").tutorialMessage(context);
-            } else {
-              TutorialMessage("어떤 계획을 세워야할 지 선택해줘!").tutorialMessage(context);
-            }
+          child: TutorialButton('다음!', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Tutorial3()),
+            );
           }).tutorialButton(),
         ));
   }
