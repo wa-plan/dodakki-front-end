@@ -19,7 +19,6 @@ class Tutorial3State extends State<Tutorial3> {
 
     return Scaffold(
         backgroundColor: backgroundColor,
-
         body: SingleChildScrollView(
           child: Padding(
             padding: tutorialPadding,
@@ -27,13 +26,12 @@ class Tutorial3State extends State<Tutorial3> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //프로그레스 바
-                ProgressBar(1, 4).progressBar(),
+                ProgressBar(0, 4),
                 SizedBox(height: 10),
 
                 //프로그레스 타이틀
                 ProgressTitle('제1목표 만들기').progressTitle(),
                 SizedBox(height: 17),
-
 
                 //질문
                 TutorialQuestion(

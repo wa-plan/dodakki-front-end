@@ -16,7 +16,7 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: List.generate(total, (index) {
         bool isPast = index < current;
         bool isCurrent = index == current;
@@ -49,7 +49,6 @@ class ProgressBar extends StatelessWidget {
     );
   }
 }
-
 
 //프로그레스 타이틀
 class ProgressTitle {
