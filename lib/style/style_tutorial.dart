@@ -330,7 +330,7 @@ class _MandalartOptionState extends State<MandalartOption> {
                         color: selectedIndex == index
                             ? textColorDefiner(widget.color)
                             : Colors.white,
-                        fontSize: 14,
+                        fontSize: widget.currentWidth < 600 ? 12 : 14,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -547,7 +547,7 @@ class _ImageOptionState extends State<ImageOption> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.transparent, // 배경색 없애기
+                    color: Color(0xff323232), // 배경색 없애기
                     borderRadius: BorderRadius.circular(8.68),
                     border: Border.all(
                       color:
@@ -559,9 +559,13 @@ class _ImageOptionState extends State<ImageOption> {
                     //fit: StackFit.expand,
                     children: [
                       // 배경 이미지
-                      Image.asset(
-                        widget.imageUrls[index],
-                        fit: BoxFit.cover,
+                      AspectRatio(
+                        aspectRatio:
+                            widget.color == 'red' ? 696 / 452 : 722 / 202,
+                        child: Image.asset(
+                          widget.imageUrls[index],
+                          fit: BoxFit.cover,
+                        ),
                       ),
 
                       // 체크 아이콘 (오른쪽 상단)

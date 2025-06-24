@@ -18,54 +18,57 @@ class Tutorial3State extends State<Tutorial3> {
 
     return Scaffold(
         backgroundColor: backgroundColor,
-        body: Stack(
-          children: [
-            Padding(
-              padding: tutorialPadding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //프로그레스 바
-                  ProgressBar(2, 4),
-                  SizedBox(height: 10),
 
-                  //프로그레스 타이틀
-                  ProgressTitle('제2목표 만들기').progressTitle(),
-                  SizedBox(height: 17),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: tutorialPadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //프로그레스 바
+                    ProgressBar(2, 4).progressBar(),
+                    SizedBox(height: 10),
 
-                  //질문
-                  TutorialQuestion(
-                          "", '뿌듯한 학교생활하기', "를 위한", '달성해야 할 제2목표는?', 'red')
-                      .tutorialQuestion(),
-                  SizedBox(height: 20),
-                ],
+
+                    //프로그레스 타이틀
+                    ProgressTitle('제2목표 만들기').progressTitle(),
+                    SizedBox(height: 17),
+
+                    //질문
+                    TutorialQuestion(
+                            "", '뿌듯한 학교생활하기', "를 위한", '달성해야 할 제2목표는?', 'red')
+                        .tutorialQuestion(),
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
-            ),
-            //선택지
-            Positioned(
-              left: -80,
-              top: currentWidth < 600 ? 180 : 190,
-              child: MandalartOption(
-                middleText: '뿌듯한\n학교생활하기',
-                texts: [
-                  '',
-                  '침대 밖으로\n안 나오기',
-                  '대학교\n최강인싸되기',
-                  '',
-                  '',
-                  '도서관 가서\n낮잠 자기',
-                  '',
-                  '삭발하기',
-                  'F학점\n받아보기'
-                ],
-                color: 'red',
-                onItemSelected: (index) {
-                  selectedIndex = index;
-                },
-                currentWidth: currentWidth,
+              //선택지
+              Transform.translate(
+                offset: const Offset(-80, 0),
+                child: MandalartOption(
+                  middleText: '뿌듯한\n학교생활하기',
+                  texts: [
+                    '',
+                    '침대 밖으로\n안 나오기',
+                    '대학교\n최강인싸되기',
+                    '',
+                    '',
+                    '도서관 가서\n낮잠 자기',
+                    '',
+                    '삭발하기',
+                    'F학점\n받아보기'
+                  ],
+                  color: 'red',
+                  onItemSelected: (index) {
+                    selectedIndex = index;
+                  },
+                  currentWidth: currentWidth,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         bottomNavigationBar:
             //버튼

@@ -19,54 +19,58 @@ class Tutorial4State extends State<Tutorial4> {
 
     return Scaffold(
         backgroundColor: backgroundColor,
-        body: Stack(
-          children: [
-            Padding(
-              padding: tutorialPadding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //프로그레스 바
-                  ProgressBar(3, 4),
-                  SizedBox(height: 10),
 
-                  //프로그레스 타이틀
-                  ProgressTitle('제3목표 만들기').progressTitle(),
-                  SizedBox(height: 17),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: tutorialPadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //프로그레스 바
+                    ProgressBar(3, 4).progressBar(),
+                    SizedBox(height: 10),
 
-                  //질문
-                  TutorialQuestion(
-                          "", '대학교 최강인싸되기', "를 위한", '달성해야 할 제3목표는?', 'green')
-                      .tutorialQuestion(),
-                  SizedBox(height: 20),
-                ],
+
+                    //프로그레스 타이틀
+                    ProgressTitle('제3목표 만들기').progressTitle(),
+                    SizedBox(height: 17),
+
+                    //질문
+                    TutorialQuestion(
+                            "", '대학교 최강인싸되기', "를 위한", '달성해야 할 제3목표는?', 'green')
+                        .tutorialQuestion(),
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
-            ),
-            //선택지
-            Positioned(
-              left: -80,
-              top: currentWidth < 600 ? 180 : 190,
-              child: MandalartOption(
-                middleText: '대학교\n최강인싸되기',
-                texts: [
-                  '',
-                  '혼밥 100회\n도전하기',
-                  '동아리\n들어가기',
-                  '',
-                  '',
-                  '비둘기와\n친해지기',
-                  '',
-                  '인성파탄자 되기',
-                  '침묵 챌린지\n30일 하기'
-                ],
-                color: 'green',
-                onItemSelected: (index) {
-                  selectedIndex = index;
-                },
-                currentWidth: currentWidth,
+              //선택지
+              Transform.translate(
+                offset: Offset(-80, 0),
+                //top: currentWidth < 600 ? 180 : 190,
+                child: MandalartOption(
+                  middleText: '대학교\n최강인싸되기',
+                  texts: [
+                    '',
+                    '혼밥 100회\n도전하기',
+                    '동아리\n들어가기',
+                    '',
+                    '',
+                    '비둘기와\n친해지기',
+                    '',
+                    '인성파탄자 되기',
+                    '침묵 챌린지\n30일 하기'
+                  ],
+                  color: 'green',
+                  onItemSelected: (index) {
+                    selectedIndex = index;
+                  },
+                  currentWidth: currentWidth,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         bottomNavigationBar:
             //버튼
