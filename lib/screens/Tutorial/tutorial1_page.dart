@@ -1,4 +1,3 @@
-import 'package:domino/screens/Tutorial/tutorial2_1page.dart';
 import 'package:domino/screens/Tutorial/tutorial2_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
@@ -80,7 +79,7 @@ class Tutorial1State extends State<Tutorial1> {
           child: TutorialButton('도와줄게!', () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Tutorial2_1()),
+              MaterialPageRoute(builder: (context) => const Tutorial2()),
             );
           }).tutorialButton(),
         ));
