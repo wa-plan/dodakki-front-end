@@ -353,13 +353,11 @@ class _EventCalendarState extends State<EventCalendar> {
                                   currentWidth);
                             },
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(
-                                  0, 0, 0, 13),
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 13),
                               padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
                               decoration: BoxDecoration(
                                 color: const Color(0xff2A2A2A),
-                                borderRadius: BorderRadius.circular(
-                                    8),
+                                borderRadius: BorderRadius.circular(8),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black
@@ -398,7 +396,6 @@ class _EventCalendarState extends State<EventCalendar> {
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                          
                                         children: [
                                           SizedBox(
                                             width:
@@ -425,9 +422,8 @@ class _EventCalendarState extends State<EventCalendar> {
                                                 currentWidth < 600 ? 100 : 200,
                                             child: Text(
                                               value[index].goalName,
-                                              overflow: TextOverflow
-                                                  .ellipsis, 
-                                              maxLines: 2, 
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
                                               style: TextStyle(
                                                   fontSize: currentWidth < 600
                                                       ? 14
@@ -457,7 +453,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                               formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(20),
+                                          padding: EdgeInsets.all(9),
                                           color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.clear_outlined,
@@ -468,9 +464,6 @@ class _EventCalendarState extends State<EventCalendar> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                          width: currentWidth < 600 ? 24 : 30),
-
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -486,7 +479,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                               "IN_PROGRESS", formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(20),
+                                          padding: EdgeInsets.all(9),
                                           color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.change_history_outlined,
@@ -497,9 +490,6 @@ class _EventCalendarState extends State<EventCalendar> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                          width: currentWidth < 600 ? 24 : 30),
-
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -515,7 +505,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                               "SUCCESS", formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(20),
+                                          padding: EdgeInsets.all(9),
                                           color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.circle_outlined,
@@ -564,7 +554,7 @@ void editDialog(
     }
 
     String weekday = DateFormat('EEEE', 'ko_KR').format(date);
-    String dayOfMonth = date.day.toString(); 
+    String dayOfMonth = date.day.toString();
 
     if (interval == 1) {
       return '매일';
@@ -576,7 +566,7 @@ void editDialog(
       return '매월 $dayOfMonth일';
     }
 
-    return ''; 
+    return '';
   }
 
   showDialog(
@@ -632,33 +622,32 @@ void editDialog(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w600),
-                        maxLines: 2, 
-                        overflow:
-                            TextOverflow.ellipsis, 
-                        softWrap: true, 
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
                       ),
                     ),
                     SizedBox(height: 15),
-                    if (switchvalue) 
-                        Text(
-                          '반복',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          getIntervalText(),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
+                    if (switchvalue)
+                      Text(
+                        '반복',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    SizedBox(
+                      height: 5,
                     ),
+                    Text(
+                      getIntervalText(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
                 Spacer(),
                 NewCustomIconButton(() {
                   Navigator.push(

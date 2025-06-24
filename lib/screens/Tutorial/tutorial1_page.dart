@@ -16,7 +16,6 @@ class Tutorial1State extends State<Tutorial1> {
     return Scaffold(
         backgroundColor: backgroundColor,
         body: Stack(
-
           children: [
             Padding(
               padding: tutorialPadding,
@@ -24,8 +23,8 @@ class Tutorial1State extends State<Tutorial1> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //프로그레스 바
-                  ProgressBar(0, 4),
-                  SizedBox(height: 10),
+                  //ProgressBar(0, 4),
+                  //SizedBox(height: 10),
 
                   //프로그레스 타이틀
                   ProgressTitle('튜토리얼 시작').progressTitle(),
@@ -42,7 +41,6 @@ class Tutorial1State extends State<Tutorial1> {
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: Colors.white, // 이미지 위에 잘 보이도록 텍스트 색상 설정
-
                           ),
                         ),
                         SizedBox(height: 10),
