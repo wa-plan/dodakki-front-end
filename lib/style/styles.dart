@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 //color
@@ -237,6 +238,9 @@ class NewCustomTextField {
       controller: controller,
       obscureText: obscureText,
       maxLines: maxLines,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50), // 👈 글자 수 제한
+      ],
       style: const TextStyle(color: Colors.white, fontSize: 16),
       decoration: InputDecoration(
         errorBorder: OutlineInputBorder(borderSide: BorderSide(color: mainRed)),

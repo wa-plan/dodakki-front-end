@@ -20,7 +20,6 @@ class MyGoal extends StatefulWidget {
 }
 
 class _MyGoalState extends State<MyGoal> {
-  late final List<List<String>> pageImages;
   final String message = "";
   String nickname = '';
   String description = '';
@@ -113,26 +112,6 @@ class _MyGoalState extends State<MyGoal> {
     }
   }
 
-  List<List<String>> getUniquePageImages(List<String> allImages, int imagesPerPage) {
-  final shuffled = List<String>.from(allImages)..shuffle();
-  final pages = <List<String>>[];
-
-  int startIndex = 0;
-  int totalImages = shuffled.length;
-  int totalPages = (totalImages / imagesPerPage).ceil();
-
-  for (int i = 0; i < totalPages; i++) {
-    int endIndex = startIndex + imagesPerPage;
-    if (endIndex > totalImages) endIndex = totalImages;
-
-    pages.add(shuffled.sublist(startIndex, endIndex));
-    startIndex = endIndex;
-  }
-
-  return pages;
-}
-
-
   Future<void> userMandaInfo(String mandalartId) async {
     if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
 
@@ -189,7 +168,6 @@ class _MyGoalState extends State<MyGoal> {
     _pageController = PageController();
     userInfo();
     userMandaIdInfo();
-    pageImages = getUniquePageImages(sampleImages, 3);
   }
 
   @override
@@ -275,13 +253,17 @@ class _MyGoalState extends State<MyGoal> {
                                   fontWeight: FontWeight.w600)),
                           const SizedBox(height: 8),
                           //프로필 설명
-                          Text(
-                            description,
-                            style: TextStyle(
-                                height: 1.5,
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400),
+                          SizedBox(
+                            width: currentWidth * 0.5,
+                            child: Text(
+                              description,
+                              softWrap: true,
+                              style: TextStyle(
+                                  height: 1.5,
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
                         ],
                       ),
@@ -378,23 +360,21 @@ class _MyGoalState extends State<MyGoal> {
                             'UNBOOKMARK';
 
                         return Center(
+                          key: ValueKey(name),
+                          child: GoalCard(
                             key: ValueKey(name),
-                            child: GoalCard(
-                              key: ValueKey(name),
-                              mandalartId: mandalartId,
-                              name: name,
-                              status: status,
-                              photoList: photoList,
-                              dday: dday,
-                              color: color,
-                              successNum: successNum,
-                              bookmark: bookmark,
-                              onBookmarkToggle: (id, action) {},
-                              pageIndex: index,
-                              pageImages: pageImages,
-                            ),
-                          );
-                        
+                            mandalartId: mandalartId,
+                            name: name,
+                            status: status,
+                            photoList: photoList,
+                            dday: dday,
+                            color: color,
+                            successNum: successNum,
+                            bookmark: bookmark,
+                            onBookmarkToggle: (id, action) {},
+                            pageIndex: index,
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -420,71 +400,73 @@ class _MyGoalState extends State<MyGoal> {
                 BlankData2("함께 목표를 쓰러뜨려봐요").blankData2()
               else
                 Column(
-                  children: [
-                    ...successIDs.map((item) {
-                      String status = statusList.firstWhere(
-                            (element) => element['mandalartId'] == item['id'],
-                            orElse: () => {'status': ''},
-                          )['status'] ??
-                          '';
+                  children: List.generate(successIDs.length, (i) {
+                    final item = successIDs[i];
 
-                      String dday = ddayList.firstWhere(
-                            (element) => element['mandalartId'] == item['id'],
-                            orElse: () => {'dday': ''},
-                          )['dday'] ??
-                          '0';
+                    String status = statusList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'status': ''},
+                        )['status'] ??
+                        '';
 
-                      List<String> photoList = (photos[item['id']] ?? [])
-                          .map<String>((photo) => photo['path'].toString())
-                          .toList();
+                    String dday = ddayList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'dday': ''},
+                        )['dday'] ??
+                        '0';
 
-                      final color = colorList.firstWhere(
-                          (element) => element['id'] == item['id'],
-                          orElse: () =>
-                              {'color': 'Color(0xff000000)'})['color'];
+                    List<String> photoList = (photos[item['id']] ?? [])
+                        .map<String>((photo) => photo['path'].toString())
+                        .toList();
 
-                      final colorValue = Color(int.parse(
-                          color!.replaceAll('Color(', '').replaceAll(')', '')));
+                    final color = colorList.firstWhere(
+                        (element) => element['id'] == item['id'],
+                        orElse: () => {'color': 'Color(0xff000000)'})['color'];
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyGoalDetail(
-                                      id: item['id']!,
-                                      name: item['name']!,
-                                      status: status,
-                                      photoList: photoList,
-                                      dday: int.parse(dday),
-                                      color: color,
-                                      colorValue: colorValue.value,
-                                    )),
-                          );
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 7, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: colorValue,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          height: 35,
-                          child: Center(
-                            child: Text(
-                              item['name']!,
-                              style: TextStyle(
-                                  color: backgroundColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15),
+                    final colorValue = Color(int.parse(
+                        color!.replaceAll('Color(', '').replaceAll(')', '')));
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyGoalDetail(
+                              id: item['id']!,
+                              name: item['name']!,
+                              status: status,
+                              photoList: photoList,
+                              dday: int.parse(dday),
+                              color: color,
+                              colorValue: colorValue.value,
+                              pageIndex: i, // ← 인덱스 안전하게 전달!
                             ),
                           ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: colorValue,
+                          borderRadius: BorderRadius.circular(4),
                         ),
-                      );
-                    }),
-                  ],
+                        height: 35,
+                        child: Center(
+                          child: Text(
+                            item['name']!,
+                            style: TextStyle(
+                                color: backgroundColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
+
               const SizedBox(height: 40),
 
               //쓰러뜨리지 못한 목표
@@ -494,71 +476,73 @@ class _MyGoalState extends State<MyGoal> {
                 BlankData2("못 쓰러뜨린 목표가 없어요").blankData2()
               else
                 Column(
-                  children: [
-                    ...failedIDs.map((item) {
-                      String status = statusList.firstWhere(
-                            (element) => element['mandalartId'] == item['id'],
-                            orElse: () => {'status': ''},
-                          )['status'] ??
-                          '';
+                  children: List.generate(failedIDs.length, (i) {
+                    final item = failedIDs[i];
 
-                      String dday = ddayList.firstWhere(
-                            (element) => element['mandalartId'] == item['id'],
-                            orElse: () => {'dday': ''},
-                          )['dday'] ??
-                          '0';
+                    String status = statusList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'status': ''},
+                        )['status'] ??
+                        '';
 
-                      List<String> photoList = (photos[item['id']] ?? [])
-                          .map<String>((photo) => photo['path'].toString())
-                          .toList();
-                      final color = colorList.firstWhere(
-                          (element) => element['id'] == item['id'],
-                          orElse: () =>
-                              {'color': 'Color(0xff000000)'})['color'];
+                    String dday = ddayList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'dday': ''},
+                        )['dday'] ??
+                        '0';
 
-                      final colorValue = Color(int.parse(
-                          color!.replaceAll('Color(', '').replaceAll(')', '')));
+                    List<String> photoList = (photos[item['id']] ?? [])
+                        .map<String>((photo) => photo['path'].toString())
+                        .toList();
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyGoalDetail(
-                                      id: item['id']!,
-                                      name: item['name']!,
-                                      status: status,
-                                      photoList: photoList,
-                                      dday: int.parse(dday),
-                                      color: color,
-                                      colorValue: colorValue.value,
-                                    )),
-                          );
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                          height: 35,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 7, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: colorValue,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Center(
-                            child: Text(
-                              item['name']!,
-                              style: TextStyle(
-                                  color: backgroundColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15),
+                    final color = colorList.firstWhere(
+                        (element) => element['id'] == item['id'],
+                        orElse: () => {'color': 'Color(0xff000000)'})['color'];
+
+                    final colorValue = Color(int.parse(
+                        color!.replaceAll('Color(', '').replaceAll(')', '')));
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyGoalDetail(
+                              id: item['id']!,
+                              name: item['name']!,
+                              status: status,
+                              photoList: photoList,
+                              dday: int.parse(dday),
+                              color: color,
+                              colorValue: colorValue.value,
+                              pageIndex: i, // ✅ 고유 인덱스 넘기기
                             ),
                           ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                        height: 35,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: colorValue,
+                          borderRadius: BorderRadius.circular(4),
                         ),
-                      );
-                    }),
-                    const SizedBox(height: 30),
-                  ],
+                        child: Center(
+                          child: Text(
+                            item['name']!,
+                            style: TextStyle(
+                                color: backgroundColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
+              const SizedBox(height: 30),
             ],
           ),
         ),

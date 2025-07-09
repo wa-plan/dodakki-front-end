@@ -1,4 +1,5 @@
 import 'package:domino/screens/MG/mygoal_goal_detail.dart';
+import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/apis/services/mg_services.dart';
@@ -14,21 +15,20 @@ class GoalCard extends StatefulWidget {
   final String bookmark;
   final Function(String id, String action) onBookmarkToggle;
   final int pageIndex;
-  final List<List<String>> pageImages;
 
-  const GoalCard(
-      {super.key,
-      required this.mandalartId,
-      required this.name,
-      required this.status,
-      required this.photoList,
-      required this.dday,
-      required this.color,
-      required this.successNum,
-      required this.bookmark,
-      required this.onBookmarkToggle,
-      required this.pageIndex,
-      required this.pageImages});
+  const GoalCard({
+    super.key,
+    required this.mandalartId,
+    required this.name,
+    required this.status,
+    required this.photoList,
+    required this.dday,
+    required this.color,
+    required this.successNum,
+    required this.bookmark,
+    required this.onBookmarkToggle,
+    required this.pageIndex,
+  });
 
   @override
   State<GoalCard> createState() => _GoalCardState();
@@ -37,7 +37,6 @@ class GoalCard extends StatefulWidget {
 class _GoalCardState extends State<GoalCard> {
   late bool isBookmarked;
   late Color starColor;
-
 
   Future<void> _mandaBookmark(String mandalartId, String bookmark) async {
     // 서버에 북마크 상태 전송
@@ -66,11 +65,11 @@ class _GoalCardState extends State<GoalCard> {
     // 초기 bookmark 상태에 따라 색상 설정
     isBookmarked = widget.bookmark == 'BOOKMARK';
     starColor = isBookmarked ? mainGold : Color.fromARGB(255, 71, 71, 71);
-    
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     final colorValue =
         int.parse(widget.color.replaceAll('Color(', '').replaceAll(')', ''));
     int ddayParsed = int.parse(widget.dday);
@@ -90,6 +89,7 @@ class _GoalCardState extends State<GoalCard> {
                 dday: ddayParsed,
                 color: widget.color,
                 colorValue: colorValue,
+                pageIndex: widget.pageIndex,
               ),
             ),
           );
@@ -101,10 +101,12 @@ class _GoalCardState extends State<GoalCard> {
           decoration: BoxDecoration(
               color: Color(0xff2B2B2B),
               borderRadius: BorderRadius.circular(10)),
-          child: Column(children: [
+          child: Column(
+            children: [
             //첫번째 줄 (북마크/제1목표/디데이)
 
-            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center, children: [
               //북마크
               GestureDetector(
                 onTap: _toggleBookmark,
@@ -156,7 +158,7 @@ class _GoalCardState extends State<GoalCard> {
             //두 번째 + 세 번째 줄
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //첫번째 열
                 SizedBox(
@@ -167,11 +169,11 @@ class _GoalCardState extends State<GoalCard> {
                         //목표 이미지
                         if (widget.photoList.isEmpty)
                           SizedBox(
-                            height: 105, // 이미지 높이 설정
-                            width: 290, // 가로 크기 제한 (화면의 80%)
+                            height: 105,
+                            width: currentWidth < 375 ? 240 : 255,
                             child: ListView.builder(
-                              scrollDirection: Axis.horizontal, // 가로 스크롤 가능
-                              itemCount: widget.pageImages[widget.pageIndex].length,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 3,
                               itemBuilder: (context, i) {
                                 return Container(
                                   margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
@@ -180,10 +182,15 @@ class _GoalCardState extends State<GoalCard> {
                                   decoration: BoxDecoration(
                                     color: Color.fromARGB(255, 53, 53, 53),
                                     borderRadius: BorderRadius.circular(6),
-                                   image: DecorationImage(
-                    image: AssetImage(widget.pageImages[widget.pageIndex][i]),
-                    fit: BoxFit.cover,
-                  ),
+                                    image: i == 0
+                                        ? DecorationImage(
+                                            image: AssetImage(
+                                              sampleImages[widget.pageIndex %
+                                                  sampleImages.length],
+                                            ),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
                                   ),
                                 );
                               },
@@ -192,7 +199,7 @@ class _GoalCardState extends State<GoalCard> {
                         else
                           SizedBox(
                             height: 105, // 이미지 높이 설정
-                            width: 290, // 가로 크기 제한 (화면의 80%)
+                            width: currentWidth < 375 ? 240 : 255, // 가로 크기 제한 (화면의 80%)
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal, // 가로 스크롤 가능
                               itemCount: widget.photoList.length
@@ -234,7 +241,7 @@ class _GoalCardState extends State<GoalCard> {
                         const SizedBox(height: 17),
                         //세 번째 줄
                         SizedBox(
-                          width: 290,
+                          width: currentWidth < 375 ? 240 : 255,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

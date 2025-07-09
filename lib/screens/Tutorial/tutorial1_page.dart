@@ -22,14 +22,7 @@ class Tutorial1State extends State<Tutorial1> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //프로그레스 바
-                  //ProgressBar(0, 4),
-                  //SizedBox(height: 10),
-
-                  //프로그레스 타이틀
-                  ProgressTitle('튜토리얼 시작').progressTitle(),
-                  SizedBox(height: 35),
-
+                  SizedBox(height:70),
                   //소개글
                   Center(
                     child: Column(
@@ -63,7 +56,7 @@ class Tutorial1State extends State<Tutorial1> {
             ),
             //도민호 이미지
             Positioned(
-              top: 215,
+              top: 240,
               right: 0,
               child: Image.asset(
                 "assets/img/tr_1.png",

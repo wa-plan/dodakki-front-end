@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:domino/screens/MG/profile_img_samplegallery.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:domino/apis/services/image_services.dart';
@@ -458,7 +457,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                     const SizedBox(height: 40),
 
                     //설명 부분
-                    const FieldTitle('당신은 어떤 사람인가요?').fieldTitle(),
+                    const FieldTitle('당신은 어떤 사람이 되고 싶나요?').fieldTitle(),
                     const SizedBox(height: 10),
                     NewCustomTextField('명랑하면서 도전적인 사람?', _explaincontroller,
                             (value) => null, false, 3, currentWidth)
