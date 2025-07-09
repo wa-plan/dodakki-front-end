@@ -546,7 +546,7 @@ class _ImageOptionState extends State<ImageOption> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Color(0xff323232), // 배경색 없애기
+                    color: Colors.transparent,
                     borderRadius: BorderRadius.circular(8.68),
                     border: Border.all(
                       color:
@@ -594,108 +594,7 @@ class _ImageOptionState extends State<ImageOption> {
   }
 }
 
-class real extends StatefulWidget {
-  final List<String> imageUrls;
-  final String color; // 예: "red"
-  final void Function(int index)? onItemSelected;
 
-  const real({
-    super.key,
-    required this.imageUrls,
-    required this.color,
-    this.onItemSelected,
-  });
-
-  @override
-  _realState createState() => _realState();
-}
-
-class _realState extends State<real> {
-  int selectedIndex = 100;
-
-  /// 문자열 컬러 → 실제 색상 매핑 함수
-  Color getSelectedColor(String name) {
-    switch (name.toLowerCase()) {
-      case 'red':
-        return const Color(0xFFFF6767);
-      case 'blue':
-        return Color(0xff5DD8FF);
-      default:
-        return Colors.white; // 기본값
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final Color selectedIconColor = getSelectedColor(widget.color);
-
-    return SizedBox(
-      width: double.infinity,
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: widget.imageUrls.length,
-        itemBuilder: (context, index) {
-          final isSelected = selectedIndex == index;
-
-          return Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                  widget.onItemSelected?.call(index);
-                },
-                child: AspectRatio(
-                  aspectRatio: widget.color == 'red' ? 696 / 500 : 722 / 202,
-                  child: Container(
-                    //margin: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Color(0xff323232),
-                      borderRadius: BorderRadius.circular(8.68),
-                      border: Border.all(
-                        color:
-                            isSelected ? selectedIconColor : Colors.transparent,
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        // 배경 이미지
-                        Image.asset(
-                          widget.imageUrls[index],
-                          fit: BoxFit.cover,
-                        ),
-
-                        // 체크 아이콘 (오른쪽 상단)
-                        Positioned(
-                          top: 15,
-                          right: 15,
-                          child: Icon(
-                            Icons.check_circle_rounded,
-                            size: 18,
-                            color: isSelected
-                                ? selectedIconColor
-                                : const Color(0xFF3C3C3C),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              )
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
 
 //플랜 완성 비주얼 (전체)
 class PlanVisual {

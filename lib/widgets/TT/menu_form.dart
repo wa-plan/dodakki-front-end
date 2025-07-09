@@ -34,6 +34,7 @@ class TTmenuForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
+          SizedBox(height: 20,),
           Row(
             children: [
               Image.asset(
@@ -54,7 +55,7 @@ class TTmenuForm extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 15),
           TutorialQuestion(
                   description1, description2, "를 위한", description3, color)
               .tutorialQuestion(),

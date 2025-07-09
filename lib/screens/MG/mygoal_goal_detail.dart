@@ -3,6 +3,7 @@ import 'package:domino/screens/MG/piechart.dart';
 import 'package:domino/screens/event_page.dart';
 import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
@@ -19,6 +20,7 @@ class MyGoalDetail extends StatefulWidget {
   final int dday;
   final String color;
   final int colorValue;
+  final int pageIndex;
 
   const MyGoalDetail(
       {super.key,
@@ -28,7 +30,8 @@ class MyGoalDetail extends StatefulWidget {
       required this.photoList,
       required this.dday,
       required this.color,
-      required this.colorValue});
+      required this.colorValue,
+      required this.pageIndex});
 
   @override
   MyGoalDetailState createState() => MyGoalDetailState();
@@ -242,7 +245,12 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                 (e) => DropdownMenuItem<String>(
                                   value: e,
                                   child: Center(
-                                    child: Text(e),
+                                    child: Row(
+                                      children: [
+                                        Text(e),
+                                        SizedBox(width: 5)
+                                      ],
+                                    ),
                                   ),
                                 ),
                               )
@@ -406,6 +414,15 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                 decoration: BoxDecoration(
                                   color: Color.fromARGB(255, 53, 53, 53),
                                   borderRadius: BorderRadius.circular(6),
+                                  image: index == 0
+                                        ? DecorationImage(
+                                            image: AssetImage(
+                                              sampleImages[widget.pageIndex %
+                                                  sampleImages.length],
+                                            ),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
                                 ),
                               );
                             },

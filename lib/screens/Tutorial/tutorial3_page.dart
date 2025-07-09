@@ -15,7 +15,6 @@ class Tutorial3State extends State<Tutorial3> {
 
   @override
   Widget build(BuildContext context) {
-    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
         backgroundColor: backgroundColor,
@@ -25,19 +24,19 @@ class Tutorial3State extends State<Tutorial3> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 30),
                 //프로그레스 바
                 ProgressBar(0, 4),
                 SizedBox(height: 10),
 
                 //프로그레스 타이틀
                 ProgressTitle('제1목표 만들기').progressTitle(),
-                SizedBox(height: 17),
 
                 //질문
                 TutorialQuestion(
                         "", '새내기', "로 대학에 입학하는", '도민호를 위한 제1목표는?', 'red')
                     .tutorialQuestion(),
-                SizedBox(height: 15),
+                SizedBox(height: 30),    
                 ImageOption(
                   imageUrls: [
                     'assets/img/option1.png',

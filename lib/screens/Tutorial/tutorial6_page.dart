@@ -27,19 +27,20 @@ class Tutorial6State extends State<Tutorial6> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 30),
                     //프로그레스 바
                     ProgressBar(2, 4),
                     SizedBox(height: 10),
 
                     //프로그레스 타이틀
                     ProgressTitle('제3목표 만들기').progressTitle(),
-                    SizedBox(height: 17),
+                    SizedBox(height: 10),
 
                     //질문
                     TutorialQuestion(
                             "", '대학교 최강인싸되기', "를 위한", '달성해야 할 제3목표는?', 'green')
                         .tutorialQuestion(),
-                    SizedBox(height: 20),
+                        SizedBox(height: 10), 
                   ],
                 ),
               ),
