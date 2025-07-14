@@ -594,8 +594,6 @@ class _ImageOptionState extends State<ImageOption> {
   }
 }
 
-
-
 //플랜 완성 비주얼 (전체)
 class PlanVisual {
   final double currentWidth;
@@ -618,7 +616,7 @@ class PlanVisual {
         itemCount: 42,
         itemBuilder: (context, index) {
           if (index == 13) {
-            return PlanVisualBox1('뿌듯한\n학교생활', mainRed).planVisualBox1();
+            return PlanVisualBox1('씐나는\n학교생활', mainRed).planVisualBox1();
           } else if (index == 20 || index == 34) {
             return PlanVisualBox1('대학교\n최강인싸', mainGreen).planVisualBox1();
           } else if (index == 27) {

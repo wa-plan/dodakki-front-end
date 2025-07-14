@@ -33,6 +33,8 @@ class LoginService {
         },
         body: body,
       );
+      print('🔢 응답 status code: ${response.statusCode}');
+      print('📃 응답 body: ${response.body}');
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final responseData = jsonDecode(response.body);
@@ -144,11 +146,13 @@ class RegistrationService {
           );
         }
       } else {
+        print('❌ 회원가입 실패 - 상태코드 ${response.statusCode}');
         if (context.mounted) {
           TutorialMessage("아이디가 중복되었습니다").tutorialMessage(context);
         }
       }
     } catch (e) {
+      print('❗ 예외 발생: $e');
       if (context.mounted) {}
     }
   }

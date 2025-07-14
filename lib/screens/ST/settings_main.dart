@@ -231,7 +231,6 @@ class _SettingsMainState extends State<SettingsMain> {
   }
 
   Widget _buildCombinedSwitchItem() {
-
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 14),
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 24),
@@ -385,11 +384,10 @@ class _SettingsMainState extends State<SettingsMain> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         NewButton(Colors.black, Colors.white,
-                                                '설정으로 이동', () {
+                                            '설정으로 이동', () {
                                           Navigator.of(context).pop();
                                           openAppSettings();
-                                        })
-                                            .newButton(),
+                                        }).newButton(),
                                       ],
                                     ),
                                     SizedBox(
@@ -467,7 +465,7 @@ class _SettingsMainState extends State<SettingsMain> {
                           fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
-                  Text('1.0.12  ',
+                  Text('1.0.14  ',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.grey,
@@ -701,8 +699,7 @@ void showServiceRulePopup(BuildContext context, double currentWidth) {
                     children: [
                       NewButton(Colors.black, Colors.white, '닫기', () {
                         Navigator.pop(context);
-                      })
-                          .newButton(),
+                      }).newButton(),
                     ],
                   )
                 ],
@@ -831,8 +828,7 @@ void showPersonalInfoPopup(BuildContext context, double currentWidth) {
                     children: [
                       NewButton(Colors.black, Colors.white, '닫기', () {
                         Navigator.pop(context);
-                      })
-                          .newButton(),
+                      }).newButton(),
                     ],
                   )
                 ],

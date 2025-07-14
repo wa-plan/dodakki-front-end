@@ -36,34 +36,31 @@ class Tutorial5State extends State<Tutorial5> {
 
                     //질문
                     TutorialQuestion(
-                            "", '뿌듯한 학교생활하기', "를 위한", '달성해야 할 제2목표는?', 'red')
+                            "", '씐나는 학교생활하기', "를 위한", '달성해야 할 제2목표는?', 'red')
                         .tutorialQuestion(),
-                        SizedBox(height: 10), 
+                    SizedBox(height: 10),
                   ],
                 ),
               ),
               //선택지
-              Transform.translate(
-                offset: const Offset(-80, 0),
-                child: MandalartOption(
-                  middleText: '뿌듯한\n학교생활하기',
-                  texts: [
-                    '',
-                    '침대 밖으로\n안 나오기',
-                    '대학교\n최강인싸되기',
-                    '',
-                    '',
-                    '도서관 가서\n낮잠 자기',
-                    '',
-                    '삭발하기',
-                    'F학점\n받아보기'
-                  ],
-                  color: 'red',
-                  onItemSelected: (index) {
-                    selectedIndex = index;
-                  },
-                  currentWidth: currentWidth,
-                ),
+              MandalartOption(
+                middleText: '씐나는\n학교생활하기',
+                texts: [
+                  '',
+                  '침대 밖으로\n안 나오기',
+                  '대학교\n최강인싸되기',
+                  'F학점\n받아보기',
+                  '',
+                  '도서관 가서\n낮잠 자기',
+                  '',
+                  '삭발하기',
+                  ''
+                ],
+                color: 'red',
+                onItemSelected: (index) {
+                  selectedIndex = index;
+                },
+                currentWidth: currentWidth,
               ),
             ],
           ),
