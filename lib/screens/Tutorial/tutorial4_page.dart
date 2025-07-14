@@ -17,7 +17,6 @@ class Tutorial4State extends State<Tutorial4> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backgroundColor,
-
         body: SingleChildScrollView(
           child: Stack(
             children: [
@@ -30,12 +29,11 @@ class Tutorial4State extends State<Tutorial4> {
                       icon: 'assets/img/tt_menu_icon2.png',
                       title: '도미노 플랜',
                       description1: '이제 두번째 단계야!',
-                      description2: '뿌듯한 학교생활 하기',
+                      description2: '씐나는 학교생활 하기',
                       description3: '계획을 세워보자!',
                       imageUrl: 'assets/img/menu_screen2.png',
                       color: 'red',
                     )
-
                   ],
                 ),
               ),

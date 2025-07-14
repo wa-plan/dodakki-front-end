@@ -40,33 +40,29 @@ class Tutorial6State extends State<Tutorial6> {
                     TutorialQuestion(
                             "", '대학교 최강인싸되기', "를 위한", '달성해야 할 제3목표는?', 'green')
                         .tutorialQuestion(),
-                        SizedBox(height: 10), 
+                    SizedBox(height: 10),
                   ],
                 ),
               ),
               //선택지
-              Transform.translate(
-                offset: Offset(-80, 0),
-                //top: currentWidth < 600 ? 180 : 190,
-                child: MandalartOption(
-                  middleText: '대학교\n최강인싸되기',
-                  texts: [
-                    '',
-                    '혼밥 100회\n도전하기',
-                    '동아리\n들어가기',
-                    '',
-                    '',
-                    '비둘기와\n친해지기',
-                    '',
-                    '인성파탄자 되기',
-                    '침묵 챌린지\n30일 하기'
-                  ],
-                  color: 'green',
-                  onItemSelected: (index) {
-                    selectedIndex = index;
-                  },
-                  currentWidth: currentWidth,
-                ),
+              MandalartOption(
+                middleText: '대학교\n최강인싸되기',
+                texts: [
+                  '',
+                  '혼밥 100회\n도전하기',
+                  '동아리\n들어가기',
+                  '',
+                  '',
+                  '비둘기와\n친해지기',
+                  '침묵 챌린지\n30일 하기',
+                  '인성파탄자 되기',
+                  ''
+                ],
+                color: 'green',
+                onItemSelected: (index) {
+                  selectedIndex = index;
+                },
+                currentWidth: currentWidth,
               ),
             ],
           ),
