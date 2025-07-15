@@ -49,7 +49,7 @@ class Tutorial6State extends State<Tutorial6> {
                 middleText: '대학교\n최강인싸되기',
                 texts: [
                   '',
-                  '혼밥 100회\n도전하기',
+                  '침대 밖으로\n안 나오기',
                   '동아리\n들어가기',
                   '',
                   '',
