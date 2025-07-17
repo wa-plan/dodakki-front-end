@@ -36,7 +36,7 @@ class DPdetailPage extends StatelessWidget {
       floatingActionButton: SpeedDial(
         buttonSize: Size(45, 45),
         gradient: LinearGradient(colors: gradientColor),
-        animatedIcon: AnimatedIcons.menu_close,
+        icon: Icons.edit,
         overlayColor: Colors.black,
         foregroundColor: backgroundColor,
         gradientBoxShape: BoxShape.circle,
@@ -44,111 +44,111 @@ class DPdetailPage extends StatelessWidget {
         spaceBetweenChildren: 10,
         children: [
           SpeedDialChild(
-            child: const Icon(Icons.delete, color: Colors.white, size: 20),
-            backgroundColor: Color(0xff303030),
-            labelBackgroundColor: Colors.white,
-            elevation: 0,
-            labelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, color: backgroundColor, fontSize: 15
-            ),
-            label: '삭제하기',
-            shape: CircleBorder(),
-            onTap: () async {
-              PopupDialog.show(
-                context,
-                '멋진 계획이었는데,\n이대로 보낼꺼야..?',
-                '헐..!',
-                true,
-                true,
-                false,
-                false,
-                onCancel: () {
-                  Navigator.of(context).pop();
-                },
-                onDelete: () async {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) => AlertDialog(
-                      backgroundColor: backgroundColor,
-                      content: Container(
-                        height: 130,
-                        padding: EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const DominoLoading(),
-                            SizedBox(height: 20),
-                            Text(
-                              "만다라트 삭제 중! 🪦",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
+              child: const Icon(Icons.delete, color: Colors.white, size: 20),
+              backgroundColor: backgroundColor,
+              labelBackgroundColor: Colors.white,
+              elevation: 0,
+              labelStyle: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: backgroundColor,
+                  fontSize: 15),
+              label: '삭제하기',
+              shape: CircleBorder(),
+              onTap: () async {
+                PopupDialog.show(
+                  context,
+                  '멋진 계획이었는데,\n이대로 보낼꺼야..?',
+                  '헐..!',
+                  true,
+                  true,
+                  false,
+                  false,
+                  onCancel: () {
+                    Navigator.of(context).pop();
+                  },
+                  onDelete: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) => AlertDialog(
+                        backgroundColor: backgroundColor,
+                        content: Container(
+                          height: 130,
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const DominoLoading(),
+                              SizedBox(height: 20),
+                              Text(
+                                "만다라트 삭제 중! 🪦",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
+                    );
 
-                  final List<int> secondGoalIds = secondGoals
-                      .map<int>(
-                          (sg) => (sg['id'] ?? 0) as int) // 각 secondGoal id
-                      .where((id) => id != 0) // 0 제외
-                      .toSet() // 중복 제거
-                      .toList();
+                    final List<int> secondGoalIds = secondGoals
+                        .map<int>(
+                            (sg) => (sg['id'] ?? 0) as int) // 각 secondGoal id
+                        .where((id) => id != 0) // 0 제외
+                        .toSet() // 중복 제거
+                        .toList();
+                    print(secondGoalIds);
 
-                  final List<int> thirdGoalIds = secondGoals
-                      .expand<int>((sg) => // 각 secondGoal 안의 thirdGoals
-                          (sg['thirdGoals'] as List<dynamic>? ?? [])
-                              .map<int>((tg) => (tg['id'] ?? 0) as int))
-                      .where((id) => id != 0) // 0 제외
-                      .toSet() // 중복 제거
-                      .toList();
+                    final List<int> thirdGoalIds = secondGoals
+                        .expand<int>((sg) => // 각 secondGoal 안의 thirdGoals
+                            (sg['thirdGoals'] as List<dynamic>? ?? [])
+                                .map<int>((tg) => (tg['id'] ?? 0) as int))
+                        .where((id) => id != 0) // 0 제외
+                        .toSet() // 중복 제거
+                        .toList();
+                    print(thirdGoalIds);
 
-                  bool allSecondDeleted = true;
-                  for (final id in secondGoalIds) {
-                    final ok = await DeleteMandalartService.deleteMandalart(
-                        context, id);
-                    if (!ok) allSecondDeleted = false;
-                  }
-
-                  bool allThirdDeleted = true;
-                  if (allSecondDeleted) {
-                    for (final id in thirdGoalIds) {
-                      final ok = await DeleteThirdGoalService.deleteThirdGoal(
+                    bool allSecondDeleted = true;
+                    for (final id in secondGoalIds) {
+                      final ok = await DeleteMandalartService.deleteMandalart(
                           context, id);
-                      if (!ok) {
-                        allThirdDeleted = false;
-                        break;
+                      if (!ok) allSecondDeleted = false;
+                    }
+
+                    bool allThirdDeleted = true;
+                    if (allSecondDeleted) {
+                      for (final id in thirdGoalIds) {
+                        final ok = await DeleteThirdGoalService.deleteThirdGoal(
+                            context, id);
+                        if (!ok) {
+                          allThirdDeleted = false;
+                          break;
+                        }
                       }
                     }
-                  }
-                  if (allThirdDeleted){
-                     Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DPMain(
-                    
-                  ),
-                ),
-              );
-                  }
-
-                },
-              );
-            }
-          ),
+                    if (allThirdDeleted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DPMain(),
+                        ),
+                      );
+                    }
+                  },
+                );
+              }),
           SpeedDialChild(
             child: const Icon(Icons.edit, color: Colors.white, size: 20),
-            backgroundColor: Color(0xff303030),
+            backgroundColor: backgroundColor,
             labelBackgroundColor: Colors.white,
             elevation: 0,
             labelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, color: backgroundColor, fontSize: 15
-            ),
+                fontWeight: FontWeight.w600,
+                color: backgroundColor,
+                fontSize: 15),
             label: '수정하기',
             shape: CircleBorder(),
             onTap: () {
@@ -196,7 +196,7 @@ class DPdetailPage extends StatelessWidget {
                   ),
                 ),
               );
-            }, 
+            },
           ),
         ],
       ),
@@ -217,40 +217,45 @@ class DPdetailPage extends StatelessWidget {
         padding: fullPadding,
         child: Column(
           children: [
+            //❤️디데이 태그
             DdayTag(int.parse(dday)).ddayTag(),
             SizedBox(height: 20),
-            //페이지 타이틀
-            PageTitle(firstGoalName).pageTitle(),
-            SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(3),
-              ),
-              child: Center(
-                  child: InteractiveViewer(
-                      onInteractionUpdate: (details) {},
-                      panEnabled: true,
-                      scaleEnabled: true,
-                      minScale: 0.5,
-                      maxScale: 3.0,
-                      child: MainMandalart(
-                        firstGoalName: firstGoalName,
-                        secondGoals: secondGoals,
-                        mandalartId: mandalartId,
-                        firstGoalColor: firstGoalColor,
-                        size: 320,
-                        detail: true,
-                      ))),
-            ),
-            SizedBox(height: 100),
+            //❤️만다라트 타이틀
             Text(
-              "확대 및 클릭하여 자세히 볼 수 있어요",
+              firstGoalName,
               style: TextStyle(
-                  color: const Color(0xff717171),
-                  fontSize: currentWidth < 600 ? 13 : 15,
-                  fontWeight: FontWeight.w500),
+                color: Colors.white,
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 30),
+            //❤️만다라트
+            Center(
+                child: InteractiveViewer(
+                    onInteractionUpdate: (details) {},
+                    panEnabled: true,
+                    scaleEnabled: true,
+                    minScale: 0.5,
+                    maxScale: 3.0,
+                    child: MainMandalart(
+                      firstGoalName: firstGoalName,
+                      secondGoals: secondGoals,
+                      mandalartId: mandalartId,
+                      firstGoalColor: firstGoalColor,
+                      size: currentWidth < 600 ? 320 : 500,
+                      detail: true,
+                      currentWidth: currentWidth,
+                    ))),
+
+            SizedBox(height: 100),
+            //❤️안내 문구
+            Text(
+              "확대 및 클릭해서 자세히 볼 수 있어요",
+              style: TextStyle(
+                  color: settingGrey,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
             ),
           ],
         ),

@@ -5,8 +5,8 @@ import 'package:domino/widgets/popup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-const secondGoalColor = Color(0xff929292);
-const thirdGoalColor = Color(0xff5C5C5C);
+const secondGoalColor = Color(0xff919191);
+const thirdGoalColor = Color(0xff505050);
 
 const List<Color> colors = [
   Color(0xffFF7A7A),
@@ -33,21 +33,14 @@ class DdayTag {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 2.0),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 51, 51, 51),
+        color: Color(0xff3A3A3A),
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05), // 검은색 10% 투명도
-            offset: const Offset(0, 0), // X, Y 위치 (0,0)
-            blurRadius: 7, // 블러 7
-            spreadRadius: 0, // 스프레드 0
-          ),
-        ],
+        
       ),
       child: Text(
         dday < 0 ? 'D+${dday * -1}' : 'D-$dday',
         style: TextStyle(
-          color: Color.fromARGB(255, 105, 105, 105),
+          color: Color(0xffAAAAAA),
           fontSize: 13,
           fontWeight: FontWeight.w600,
         ),
@@ -111,24 +104,25 @@ class DPTitleText {
 class DPMainGoal {
   final String text;
   final Color color;
+  final double currentWidth;
 
-  DPMainGoal(this.text, this.color);
+  DPMainGoal(this.text, this.color, this.currentWidth);
 
   Widget dpMainGoal() {
     return Container(
         height: 43,
-        width: double.infinity,
+        width: currentWidth < 600 ? double.infinity : 500,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(3),
+          borderRadius: BorderRadius.circular(5),
           color: color,
         ),
         child: Text(
             textAlign: TextAlign.center,
             text,
             style: TextStyle(
-              color: Colors.black,
+              color: backgroundColor,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             )));

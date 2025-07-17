@@ -17,34 +17,26 @@ class Tutorial7State extends State<Tutorial7> {
     return Scaffold(
         backgroundColor: backgroundColor,
         body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Padding(
-                padding: tutorialPadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TTmenuForm(
-                      icon: 'assets/img/tt_menu_icon3.png',
-                      title: '오늘의 도미노',
-                      description1: '이제 마지막 단계야!',
-                      description2: '동아리 들어가기',
-                      description3: '구체적인 TO-DO를 만들어보자!',
-                      imageUrl: 'assets/img/menu_screen3.png',
-                      color: 'blue',
-                    )
-                  ],
+          child: Padding(
+                  padding: tutorialPadding,
+                  child: TTmenuForm(
+                        icon: 'assets/img/td_icon.png',
+                        title: '오늘의 도미노',
+                        description1: '마지막 단계는 실천으로 옮기기!\n계획을 구체적인 TO-DO로 만들어보자.',
+                        description2: '',
+                        description3: '',
+                        imageUrl: 'assets/img/menu_screen3.png',
+                        color: 'x',
+                      )
+                   
                 ),
-              ),
-              //도민호 이미지
-            ],
-          ),
         ),
+              
         bottomNavigationBar:
             //버튼
             Padding(
-          padding: tutorialPadding,
-          child: TutorialButton('다음!', () {
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 20),
+          child: TutorialButton('다음', () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Tutorial8()),

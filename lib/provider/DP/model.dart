@@ -32,7 +32,7 @@ class GoalOrder with ChangeNotifier {
 }
 
 class SelectAPModel with ChangeNotifier {
-  String _selectedAPName = "제3목표를 클릭하여 선택해주세요."; 
+  String _selectedAPName = "만다라트에서 플랜을 선택해주세요."; 
   String get selectedAPName => _selectedAPName;
   int? _selectedAPID; 
   int? get selectedAPID => _selectedAPID;

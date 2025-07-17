@@ -37,18 +37,17 @@ class LoginButton {
   }
 }
 
-//텍스트 필드
-class LoginTextField {
+//아이디 입력창
+class CustomTextField {
   final String hintText;
   final TextEditingController controller;
   final FormFieldValidator<String?> validator;
   final bool obscureText;
-  final IconData icon;
 
-  const LoginTextField(this.hintText, this.controller, this.validator,
-      this.obscureText, this.icon);
+  const CustomTextField(this.hintText, this.controller, this.validator,
+      this.obscureText);
 
-  Widget loginTextField({
+  Widget customTextField({
     bool obscureText = false,
     void Function()? onClear,
   }) {
@@ -56,24 +55,16 @@ class LoginTextField {
       cursorColor: mainRed,
       controller: controller,
       obscureText: obscureText,
-      style: const TextStyle(color: Colors.white, fontSize: 16),
+      style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
       decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: 17, right: 8),
-          child: Icon(
-            icon,
-            size: 19,
-            color: Color(0xffAAAAAA),
-          ),
-        ),
-        prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+        
         errorBorder: OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
         focusedErrorBorder:
             OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
         errorStyle: TextStyle(
             color: mainRed, fontSize: 12, fontWeight: FontWeight.w400),
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffAAAAAA))),
+            borderSide: BorderSide(color: settingGrey, width: 2)),
         filled: true,
         fillColor: const Color(0xff2A2A2A).withOpacity(0.9),
         enabledBorder: OutlineInputBorder(
@@ -81,14 +72,14 @@ class LoginTextField {
           borderRadius: BorderRadius.circular(6),
         ),
         hintText: hintText,
-        contentPadding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+        contentPadding: const EdgeInsets.fromLTRB(22, 17, 22, 17),
         hintStyle: TextStyle(
-            color: Color(0xffAAAAAA),
+            color: settingGrey,
             fontSize: 15,
-            fontWeight: FontWeight.w400),
+            fontWeight: FontWeight.w600),
         suffixIcon: controller.text.isNotEmpty
             ? Column(
-                mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
+                mainAxisAlignment: MainAxisAlignment.center, 
                 children: [
                   GestureDetector(
                     onTap: onClear ??
@@ -96,11 +87,11 @@ class LoginTextField {
                           controller.clear();
                         },
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
                       child: const Icon(
                         Icons.cancel,
                         size: 17,
-                        color: Color(0xffAAAAAA),
+                        color: settingGrey,
                       ),
                     ),
                   ),
@@ -113,6 +104,7 @@ class LoginTextField {
   }
 }
 
+//비밀번호 입력창
 class PasswordTextField extends StatefulWidget {
   final String hintText;
   final TextEditingController controller;
@@ -155,10 +147,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       cursorColor: mainRed,
       style: const TextStyle(color: Colors.white, fontSize: 16),
       decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: 17, right: 8),
-          child: Icon(widget.icon, size: 19, color: const Color(0xffAAAAAA)),
-        ),
+        
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: mainRed),
@@ -172,7 +161,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           fontWeight: FontWeight.w400,
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xffAAAAAA)),
+          borderSide: BorderSide(color: Color(0xffAAAAAA), width: 2),
         ),
         filled: true,
         fillColor: const Color(0xff2A2A2A),
@@ -181,12 +170,11 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           borderRadius: BorderRadius.circular(6),
         ),
         hintText: widget.hintText,
-        hintStyle: const TextStyle(
-          color: Color(0xffAAAAAA),
-          fontSize: 15,
-          fontWeight: FontWeight.w400,
-        ),
-        contentPadding: const EdgeInsets.fromLTRB(15, 13, 15, 13),
+        hintStyle: TextStyle(
+            color: settingGrey,
+            fontSize: 15,
+            fontWeight: FontWeight.w600),
+        contentPadding: const EdgeInsets.fromLTRB(22, 17, 22, 17),
         suffixIcon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -209,8 +197,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                   padding: const EdgeInsets.fromLTRB(0, 15, 10, 10),
                   child: const Icon(
                     Icons.cancel,
-                    size: 17,
-                    color: Color(0xffAAAAAA),
+                        size: 17,
+                        color: settingGrey,
                   ),
                 ),
               ),
@@ -235,9 +223,8 @@ class LoginEtcButton {
       child: TextButton(
         onPressed: () => function(),
         style: TextButton.styleFrom(
-          side: const BorderSide(color: Color(0xff545454), width: 1),
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          backgroundColor: Color(0xff313131),
+          backgroundColor: Color(0xff2C2C2C),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.0),
           ),
@@ -247,7 +234,7 @@ class LoginEtcButton {
           style: TextStyle(
             color: Color(0xffCECECE),
             fontSize: 15,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -262,32 +249,16 @@ class CustomBackButton {
   const CustomBackButton(this.function);
 
   Widget customBackButton() {
-    return Container(
-      width: 30,
-      height: 30,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            offset: const Offset(0, 0),
-            blurRadius: 15,
-            spreadRadius: 0,
-          ),
-        ],
-        color: Color(0xff303030),
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: GestureDetector(
+    return GestureDetector(
         onTap: () {
           function();
         },
         child: Icon(
-          Icons.arrow_back_rounded,
-          color: const Color(0xff646464),
-          size: 20,
+          Icons.arrow_circle_left_rounded,
+          color: settingGrey,
+          size: 26,
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -317,9 +288,9 @@ class LoginDescription {
       text,
       style: const TextStyle(
         color: Colors.white,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.w600,
-        height: 1.4,
+        height: 1.6,
       ),
     );
   }
@@ -378,10 +349,10 @@ class DropDownDescription {
       child: ExpansionTile(
         backgroundColor: backColor,
         collapsedBackgroundColor: backColor,
-        childrenPadding: const EdgeInsets.fromLTRB(25, 0, 25, 20),
+        childrenPadding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
         tilePadding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-        iconColor: const Color(0xffAAAAAA),
-        collapsedIconColor: const Color(0xffAAAAAA),
+        iconColor: titleColor,
+        collapsedIconColor: titleColor,
         shape: const Border(),
         title: Text(
           title,
@@ -389,7 +360,7 @@ class DropDownDescription {
           style: TextStyle(
             color: titleColor,
             fontSize: 15,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w600,
           ),
         ),
         children: [
@@ -397,8 +368,9 @@ class DropDownDescription {
             text,
             style: TextStyle(
               color: textColor,
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              height: 1.7
             ),
           ),
         ],
@@ -439,13 +411,11 @@ class FeedBack {
         onPressed: () {},
         style: TextButton.styleFrom(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          backgroundColor: Color(0xff452D2D),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
-          ),
+          
         ),
         child: Text(
           text,
+          maxLines: 2,
           style: TextStyle(
             color: mainRed,
             fontSize: 15,

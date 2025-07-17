@@ -1,4 +1,5 @@
 import 'package:domino/provider/DP/model.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/DP/Create/dp_description2_widget.dart';
@@ -51,6 +52,8 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -60,31 +63,31 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
-              CustomBackButton(() {
-                Navigator.pop(
-                  context,
-                );
-              }).customBackButton(),
+              //❤️뒤로가기 버튼
+              CustomBackButton(
+                () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
+              ).customBackButton(),
               SizedBox(width: 15),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText(
+                      widget.edit == false ? '플랜 만들기' : '플랜 수정하기', currentWidth)
+                  .dPTitleText(),
+              Spacer(),
 
-              //페이지 타이틀
-              PageTitle(widget.edit == false ? '제2목표 작성' : '제2목표 수정')
-                  .pageTitle(),
-              const Spacer(),
-
-              //AI 버튼
+              //❤️AI 버튼
               Container(
-                height: 40,
+                height: 35,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xff313131),
-                      Color(0xff573434), 
-                    ],
-                  ),
+                  color: Color(0xff2C2C2C),
                   borderRadius: BorderRadius.circular(35),
                 ),
                 child: TextButton(
@@ -105,7 +108,6 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                       ),
                     );
 
-                    // 팝업에서 전달된 결과가 있다면 처리
                     if (result != null && result is List<String>) {
                       final selectedGoals = result;
 
@@ -161,59 +163,88 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 30),
-                      SizedBox(
-                          width: double.infinity,
-                          child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 5,
-                                      mainAxisSpacing: 5),
-                              itemCount: 9,
-                              itemBuilder: (context, index) {
-                                if (index == 4) {
-                                  //제1목표 그리드
-                                  return FreeGrid(widget.firstGoalName,
-                                          widget.firstGoalColor, 15)
-                                      .freeGrid();
-                                } else {
-                                  //제2목표 그리드
-                                  return Container(
-                                    width: 80,
-                                    margin: const EdgeInsets.all(1.0),
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: const Color(0xff929292),
-                                    ),
-                                    child: Center(
-                                      child: TextFormField(
-                                        controller: controllers[index],
-                                        style: const TextStyle(
-                                            color: backgroundColor,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.center,
-                                        maxLength: 15,
-                                        maxLines: null,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(15),
-                                        ],
-                                        decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            counterStyle: TextStyle(
-                                                fontSize: 12,
-                                                color: Color.fromARGB(
-                                                    255, 104, 104, 104))),
+                      SizedBox(height: 10),
+                      //❤️설명 문구
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 15,
+                            height: 1.7,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Pretendard',
+                            color: Colors.white,
+                          ),
+                          children: [
+                            const TextSpan(text: '최종 목표를 달성할 수 있는\n'),
+                            TextSpan(
+                              text: '세부 목표',
+                              style: TextStyle(
+                                color: mainRed,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Pretendard',
+                                fontSize: 15,
+                              ),
+                            ),
+                            const TextSpan(text: '를 만들어봐요!'),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 25),
+                      //❤️만다라트
+                      Center(
+                        child: SizedBox(
+                            width: currentWidth < 600 ? double.infinity : 500,
+                            child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 5,
+                                        mainAxisSpacing: 5),
+                                itemCount: 9,
+                                itemBuilder: (context, index) {
+                                  if (index == 4) {
+                                    //제1목표 그리드
+                                    return FreeGrid(widget.firstGoalName,
+                                            widget.firstGoalColor, 15, currentWidth)
+                                        .freeGrid();
+                                  } else {
+                                    //제2목표 그리드
+                                    return Container(
+                                      width: 80,
+                                      margin: const EdgeInsets.all(2),
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: const Color(0xff929292),
                                       ),
-                                    ),
-                                  );
-                                }
-                              })),
+                                      child: Center(
+                                        child: TextFormField(
+                                          controller: controllers[index],
+                                          style: const TextStyle(
+                                              color: backgroundColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                          textAlign: TextAlign.center,
+                                          maxLength: 15,
+                                          maxLines: null,
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(15),
+                                          ],
+                                          decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                              counterStyle: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color.fromARGB(255, 121, 121, 121))),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                })),
+                      ),
                       SizedBox(height: 30),
+                      //❤️Smart 기법 드롭다운
                       Description2(widget.firstGoalColor),
                       SizedBox(height: 20),
                     ],
@@ -226,14 +257,13 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
         padding: fullPadding,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          //취소버튼
-          SizedBox(
-            width: 90,
-            height: 45,
+          //❤️이전/취소 버튼
+          Expanded(
+            flex: 1,
             child: NewButton(
-              Colors.black,
-              Colors.white,
-              '취소',
+              Color(0xff2C2C2C),
+              settingGrey,
+              "취소",
               () {
                 Navigator.pop(
                   context,
@@ -241,18 +271,18 @@ class _DPcreateInput1Page extends State<DPcreateInput1Page> {
               },
             ).newButton(),
           ),
-          //저장버튼
-          SizedBox(
-            width: 90,
-            height: 45,
-            child: NewButton(Colors.black, Colors.white, '저장', () {
+          SizedBox(width: 15),
+          //❤️완료 버튼
+          Expanded(
+            flex: currentWidth < 330 ? 2 : 3,
+            child: NewButton(mainRed, backgroundColor, '완료', () {
               final model = context.read<SaveSecondGoalModel>();
               for (int i = 0; i < controllers.length; i++) {
                 model.updateSecondGoal('$i', controllers[i].text);
               }
               Navigator.pop(context);
             }).newButton(),
-          )
+          ),
         ]),
       ),
     );

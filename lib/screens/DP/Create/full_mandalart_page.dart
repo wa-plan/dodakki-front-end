@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:math';
-import 'package:domino/main.dart';
 import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
@@ -16,7 +13,6 @@ import 'package:domino/widgets/DP/Create/Around9Grid.dart';
 import 'package:domino/widgets/DP/Create/middle9Grid.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/DP/model.dart';
-
 
 class DPcreate99Page extends StatefulWidget {
   final bool edit;
@@ -38,61 +34,16 @@ class DPcreate99Page extends StatefulWidget {
   State<DPcreate99Page> createState() => _DPcreate99PageState();
 }
 
-class _DPcreate99PageState extends State<DPcreate99Page>
-    with SingleTickerProviderStateMixin, RouteAware {
-  double _currentAngle = 0.0;
-  double _nextAngle = 0.0;
-  Timer? _timer;
-
-  void _scheduleNextRotation() {
-    if (_timer?.isActive ?? false) return; // 중복 방지
-    _timer = Timer(const Duration(milliseconds: 3000), () {
-      if (!mounted) return;
-      setState(() {
-        _currentAngle = _nextAngle;
-        _nextAngle += pi / 2;
-      });
-      _scheduleNextRotation();
-    });
-  }
-
-  void _stopRotation() {
-    _timer?.cancel();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)!);
-  }
-
-  @override
-  void dispose() {
-    _stopRotation();
-    routeObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  // 다음 페이지로 넘어갈 때 호출
-  @override
-  void didPushNext() {
-    _stopRotation();
-  }
-
-  // 이전 페이지로 돌아올 때 호출
-  @override
-  void didPopNext() {
-    _scheduleNextRotation();
-  }
-
+class _DPcreate99PageState extends State<DPcreate99Page> {
   @override
   void initState() {
     super.initState();
-    _scheduleNextRotation();
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -102,25 +53,36 @@ class _DPcreate99PageState extends State<DPcreate99Page>
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
-              CustomBackButton(() {
-                PopupDialog.show(context, '지금 나가면,\n작성한 내용이 사라져!', '잠깐!', true,
-                    false, false, true, onCancel: () {
-                  Navigator.pop(context);
-                }, onSuccess: () {
-                  resetAllProviders(context);
-                  Navigator.push(
+              //❤️뒤로가기 버튼
+              CustomBackButton(
+                () {
+                  PopupDialog.show(context, '지금 나가면,\n작성한 내용이 사라져!', '잠깐!',
+                      true, false, false, true, onCancel: () {
+                    Navigator.pop(context);
+                  }, onSuccess: () {
+                    resetAllProviders(context);
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DPMain(),
                       ),
                     );
-                });
-              }).customBackButton(),
-              const SizedBox(width: 15),
-              PageTitle(widget.edit == false ? '만다라트 작성' : '만다라트 수정')
-                  .pageTitle(),
-              const Spacer(),
+                  });
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText(
+                      widget.edit == false ? '플랜 만들기' : '플랜 수정하기', currentWidth)
+                  .dPTitleText(),
+              Spacer(),
+
+              //❤️프로그레스 바 (from style_tutorial.dart)
               widget.edit == true ? ProgressBar(0, 2) : ProgressBar(1, 3)
             ],
           ),
@@ -137,12 +99,14 @@ class _DPcreate99PageState extends State<DPcreate99Page>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    DPMainGoal(widget.firstGoalName, widget.firstGoalColor)
+                    //❤️최종 목표 박스 위젯
+                    DPMainGoal(widget.firstGoalName, widget.firstGoalColor, currentWidth)
                         .dpMainGoal(),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 18),
+                    //❤️만다라트 위젯
                     Center(
                       child: SizedBox(
-                        width: double.infinity,
+                        width: currentWidth < 600 ? double.infinity : 500,
                         child: GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -159,7 +123,8 @@ class _DPcreate99PageState extends State<DPcreate99Page>
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => DPcreateInput1Page(
+                                        builder: (context) =>
+                                            DPcreateInput1Page(
                                           edit: widget.edit,
                                           firstGoalColor: widget.firstGoalColor,
                                           firstGoalName: widget.firstGoalName,
@@ -171,6 +136,7 @@ class _DPcreate99PageState extends State<DPcreate99Page>
                                     firstGoalName: widget.firstGoalName,
                                     firstColor: widget.firstGoalColor,
                                     needColor: false,
+                                    currentWidth: currentWidth,
                                   ),
                                 );
                               } else {
@@ -179,13 +145,18 @@ class _DPcreate99PageState extends State<DPcreate99Page>
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => DPcreateInput2Page(
+                                        builder: (context) =>
+                                            DPcreateInput2Page(
                                           edit: widget.edit,
                                           firstGoalName: widget.firstGoalName,
                                           firstGoalColor: widget.firstGoalColor,
                                           secondGoalIndex: index,
-                                          secondGoalName: context.select<SaveSecondGoalModel, String>(
-                                            (model) => model.secondGoal[index.toString()] ?? '',
+                                          secondGoalName: context.select<
+                                              SaveSecondGoalModel, String>(
+                                            (model) =>
+                                                model.secondGoal[
+                                                    index.toString()] ??
+                                                '',
                                           ),
                                         ),
                                       ),
@@ -194,52 +165,50 @@ class _DPcreate99PageState extends State<DPcreate99Page>
                                   child: Around9Grid(
                                     secondGoalIndex: index,
                                     needColor: false,
+                                    currentWidth: currentWidth,
                                   ),
                                 );
                               }
                             }),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        _stopRotation();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ManadaEx(),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            '만다라트 구경하기',
-                            style: TextStyle(
-                              color: Color(0xffA1A1A1),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
+                    //❤️만다라트 예시 버튼
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ManadaEx(),
+                              ),
+                            );
+                          },
+                          
+                          child: Container(
+                            width: 150,
+                            padding: EdgeInsets.fromLTRB(30, 10, 0, 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const Text(
+                                  '만다라트 예시',
+                                  style: TextStyle(
+                                    color: settingGrey,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(width: 7),
+                                Icon(Icons.tips_and_updates_rounded, color: mainRed, size: 20)
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          TweenAnimationBuilder<double>(
-                            tween: Tween<double>(
-                                begin: _currentAngle, end: _nextAngle),
-                            duration: const Duration(milliseconds: 1000),
-                            builder: (context, angle, child) {
-                              return Transform.rotate(
-                                angle: angle,
-                                child: child,
-                              );
-                            },
-                            child: Image.asset(
-                              'assets/img/floating.png',
-                              scale: 4,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -253,12 +222,12 @@ class _DPcreate99PageState extends State<DPcreate99Page>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              width: 90,
-              height: 45,
+            //❤️이전/취소 버튼
+            Expanded(
+              flex: 1,
               child: NewButton(
-                Colors.black,
-                Colors.white,
+                Color(0xff2C2C2C),
+                settingGrey,
                 widget.edit == true ? "취소" : '이전',
                 () {
                   PopupDialog.show(
@@ -276,28 +245,33 @@ class _DPcreate99PageState extends State<DPcreate99Page>
                       resetAllProviders(context);
                       Navigator.pop(context);
                       Navigator.pop(context);
-                      _stopRotation;
                     },
                   );
                 },
               ).newButton(),
             ),
-            SizedBox(
-              width: 90,
-              height: 45,
+            SizedBox(width: 15),
+            //❤️다음 버튼
+            Expanded(
+              flex: currentWidth < 330 ? 2 : 3,
               child: NewButton(
-                Colors.black,
-                Colors.white,
+                mainRed,
+                backgroundColor,
                 '다음',
                 () {
-                  final isAllEmpty =
+                  final isSecondGoalAllEmpty =
+                      context.read<SaveSecondGoalModel>().isAllEmpty();
+
+                  final isThirdGoalAllEmpty =
                       context.read<SaveThirdGoalModel>().isAllEmpty();
 
-                  if (isAllEmpty) {
-                    TutorialMessage('루틴이나 일정은 제3목표로만 만들 수 있어!')
+                  if (isSecondGoalAllEmpty) {
+                    TutorialMessage('세부 목표를 하나라도 채워줘!')
+                        .tutorialMessage(context);
+                  } else if (isThirdGoalAllEmpty) {
+                    TutorialMessage('루틴이나 일정은 실행계획으로만 만들 수 있어!')
                         .tutorialMessage(context);
                   } else {
-                    _stopRotation;
                     Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -32,6 +32,8 @@ class DPdetail3Page extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -48,11 +50,10 @@ class DPdetail3Page extends StatelessWidget {
         padding: fullPadding,
         child: Column(
           children: [
-           
-           
             SizedBox(
               height: 40,
             ),
+            //❤️만다라트
             Center(
               child: SizedBox(
                   width: 300,
@@ -67,7 +68,7 @@ class DPdetail3Page extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           children: List.generate(9, (innerIndex) {
                             if (innerIndex == 4) {
-                              return FreeGrid(firstGoalName, firstGoalColor, 15)
+                              return FreeGrid(firstGoalName, firstGoalColor, 15, currentWidth)
                                   .freeGrid();
                             } else {
                               final secondIndex = centerSecondGoalOrder[
@@ -81,7 +82,7 @@ class DPdetail3Page extends StatelessWidget {
                                       secondText,
                                       secondColorDefiner(
                                           secondText, secondColor),
-                                      15)
+                                      15, currentWidth)
                                   .freeGrid();
                             }
                           }),
@@ -90,8 +91,8 @@ class DPdetail3Page extends StatelessWidget {
                       //외곽 그리드일 경우,
                       : GridView.count(
                           crossAxisCount: 3,
-                          crossAxisSpacing: 1,
-                          mainAxisSpacing: 1,
+                          crossAxisSpacing: 3,
+                          mainAxisSpacing: 3,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           children: List.generate(9, (index) {
@@ -111,7 +112,7 @@ class DPdetail3Page extends StatelessWidget {
                               return FreeGrid(
                                 secondText,
                                 secondColorDefiner(secondText, secondColor),
-                                15,
+                                15, currentWidth
                               ).freeGrid();
                             } else {
                               final adjustedIndex =
@@ -122,7 +123,7 @@ class DPdetail3Page extends StatelessWidget {
                                   : '';
                               final thirdColor = thirdColorDefiner(
                                   thirdText, secondColor, secondText);
-                              return FreeGrid(thirdText, thirdColor, 15)
+                              return FreeGrid(thirdText, thirdColor, 15, currentWidth)
                                   .freeGrid();
                             }
                           }),

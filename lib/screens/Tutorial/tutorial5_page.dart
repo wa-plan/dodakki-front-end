@@ -26,41 +26,73 @@ class Tutorial5State extends State<Tutorial5> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 30),
-                    //프로그레스 바
-                    ProgressBar(1, 4),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
+                    //❤️메뉴 아이콘
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/img/dp_icon.png',
+                          height: currentWidth < 600 ? 17 : 26,
+                          width: currentWidth < 600 ? 17 : 26,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(width: 8),
+                        //❤️메뉴 텍스트
+                        Text(
+                          '도미노 플랜',
+                          style: TextStyle(
+                            fontSize: currentWidth < 600 ? 18 : 29,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
 
-                    //프로그레스 타이틀
-                    ProgressTitle('제2목표 만들기').progressTitle(),
-
-                    //질문
-                    TutorialQuestion(
-                            "", '씐나는 학교생활하기', "를 위한", '달성해야 할 제2목표는?', 'red')
-                        .tutorialQuestion(),
-                    SizedBox(height: 10),
+                    //❤️질문
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard',
+                            color: Colors.white,
+                            height: 1.8),
+                        children: [
+                          TextSpan(
+                            text: '씐나는 학교생활 하기',
+                            style: TextStyle(color: mainRed),
+                          ),
+                          TextSpan(
+                            text: '를 위해\n',
+                          ),
+                          TextSpan(text: '달성해야 할 세부 목표는?'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    //❤️선택지
+                    MandalartOption(
+                      middleText: '씐나는\n학교생활\n하기',
+                      texts: [
+                        '',
+                        '침대 밖으로\n안 나오기',
+                        '슈퍼 인싸\n되기',
+                        'F학점\n받아보기',
+                        '',
+                        '도서관 가서\n낮잠 자기',
+                        '',
+                        '삭발하기',
+                        ''
+                      ],
+                      color: 'red',
+                      onItemSelected: (index) {
+                        selectedIndex = index;
+                      },
+                      currentWidth: currentWidth,
+                    ),
                   ],
                 ),
-              ),
-              //선택지
-              MandalartOption(
-                middleText: '씐나는\n학교생활하기',
-                texts: [
-                  '',
-                  '침대 밖으로\n안 나오기',
-                  '대학교\n최강인싸되기',
-                  'F학점\n받아보기',
-                  '',
-                  '도서관 가서\n낮잠 자기',
-                  '',
-                  '삭발하기',
-                  ''
-                ],
-                color: 'red',
-                onItemSelected: (index) {
-                  selectedIndex = index;
-                },
-                currentWidth: currentWidth,
               ),
             ],
           ),
@@ -68,7 +100,7 @@ class Tutorial5State extends State<Tutorial5> {
         bottomNavigationBar:
             //버튼
             Padding(
-          padding: tutorialPadding,
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 20),
           child: TutorialButton('다음', () {
             if (selectedIndex == 2) {
               Navigator.push(

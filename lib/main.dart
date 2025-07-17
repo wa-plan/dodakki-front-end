@@ -1,3 +1,4 @@
+import 'package:domino/screens/ST/settings_main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,6 @@ import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
 void main() async {
   // 앱 실행 전에 NotificationService 인스턴스 생성
   // final notificationService = NotificationService();
@@ -23,7 +23,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DateProvider()),
-        //ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => DateListProvider()),
         ChangeNotifierProvider(create: (_) => PasswordProvider()),
         ChangeNotifierProvider(create: (_) => SelectFinalGoalModel()),
@@ -41,7 +40,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => GoalOrder()),
         ChangeNotifierProvider(create: (_) => SelectRepeatModel()),
       ],
-      child: const MyApp(), // MyApp 클래스를 사용
+      child: const MyApp(), 
     ),
   );
 }

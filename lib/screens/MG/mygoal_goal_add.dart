@@ -1,3 +1,4 @@
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_myGoal.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:domino/style/styles.dart';
 import 'package:domino/widgets/MG/calender.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:domino/apis/services/image_services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
 import 'package:domino/utils/permission_util.dart';
@@ -127,16 +127,20 @@ class _MyGoalAddState extends State<MyGoalAdd> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼
               CustomBackButton(
                 () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('목표 세우기').pageTitle(),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('목표 만들기', currentWidth).dPTitleText(),
             ],
           ),
         ),
@@ -148,7 +152,8 @@ class _MyGoalAddState extends State<MyGoalAdd> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 어떤 목표인가요?
+              SizedBox(height: 10),
+              //❤️어떤 목표인가요?
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -156,7 +161,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   const Tag(Color(0xff503333), '필수').tag()
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               NewCustomTextField('', _nameController, (value) {
                 return null;
               }, false, 1, currentWidth)
@@ -164,7 +169,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
               const SizedBox(height: 40),
 
-              //언제까지 목표를 이루고 싶나요?
+              //❤️언제까지 목표를 이루고 싶나요?
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -172,7 +177,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                   const Tag(Color(0xff503333), '필수').tag()
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -183,20 +188,20 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                       padding: const EdgeInsets.fromLTRB(20, 5, 15, 5),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
-                          color: const Color(0xff2A2A2A)),
+                          color: const Color(0xff2C2C2C)),
                       child: Text(
                         _selectedDate != null
                             ? DateFormat('yyyy년 MM월 dd일')
                                 .format(_selectedDate!) // 선택된 날짜 포맷팅
 
-                            : '달력에서 날짜를 선택해 주세요.', // null인 경우 출력
+                            : '날짜를 선택해 주세요.', // null인 경우 출력
 
                         style: TextStyle(
                           color: _selectedDate != null
                               ? Colors.white
-                              : Color(0xffAAAAAA),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                              : settingGrey,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -212,8 +217,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                           });
                         }
                       });
-                    })
-                        .newButton(),
+                    }).newButton(),
                   ),
                 ],
               ),
@@ -257,19 +261,17 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                       Text(
                         "확실하지 않아요",
                         style: TextStyle(
-                            fontFamily: "Pretendard",
                             color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
                       ),
                       SizedBox(height: 5),
                       Text(
                         '그럼 오늘부터 날짜를 세어나갈게요.',
                         style: TextStyle(
-                            fontFamily: "Pretendard",
-                            color: Color(0xff909090),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500),
+                            color: settingGrey,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -278,9 +280,9 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
               const SizedBox(height: 40),
 
-              //목표에 대해서 더 알려주세요.
+              //❤️목표에 대해서 더 알려주세요.
               const Question(question: '목표에 대해서 더 알려주세요.'),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               NewCustomTextField('', _descriptionController, (value) {
                 return null;
               }, false, 4, currentWidth)
@@ -288,12 +290,12 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
               const SizedBox(height: 40),
 
-              // 목표를 보여주는 사진이 있나요?
+              //❤️목표를 보여주는 사진이 있나요?
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Question(question: '목표를 보여주는 사진이 있나요?'),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
                       Expanded(
@@ -396,7 +398,7 @@ class _MyGoalAddState extends State<MyGoalAdd> {
 
               const SizedBox(height: 40),
 
-              // 목표를 색깔로 표현해주세요.
+              //❤️목표를 색깔로 표현해주세요.
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -408,53 +410,56 @@ class _MyGoalAddState extends State<MyGoalAdd> {
                     ],
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
-                  Container(
-                    padding: EdgeInsets.all(13),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: Color(0xff2A2A2A)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ColorOption2(
-                          colorCode: const Color(0xffFF7A7A),
-                          isSelected: _selectedColor == const Color(0xffFF7A7A),
-                          onTap: () =>
-                              _onColorSelected(const Color(0xffFF7A7A)),
-                        ),
-                        ColorOption2(
-                          colorCode: const Color(0xffFFB82D),
-                          isSelected: _selectedColor == const Color(0xffFFB82D),
-                          onTap: () =>
-                              _onColorSelected(const Color(0xffFFB82D)),
-                        ),
-                        ColorOption2(
-                          colorCode: const Color(0xffFCFF62),
-                          isSelected: _selectedColor == const Color(0xffFCFF62),
-                          onTap: () =>
-                              _onColorSelected(const Color(0xffFCFF62)),
-                        ),
-                        ColorOption2(
-                          colorCode: const Color(0xff72FF5B),
-                          isSelected: _selectedColor == const Color(0xff72FF5B),
-                          onTap: () =>
-                              _onColorSelected(const Color(0xff72FF5B)),
-                        ),
-                        ColorOption2(
-                          colorCode: const Color(0xff5DD8FF),
-                          isSelected: _selectedColor == const Color(0xff5DD8FF),
-                          onTap: () =>
-                              _onColorSelected(const Color(0xff5DD8FF)),
-                        ),
-                        ColorOption2(
-                          colorCode: const Color(0xffffffff),
-                          isSelected: _selectedColor == const Color(0xffffffff),
-                          onTap: () =>
-                              _onColorSelected(const Color(0xffffffff)),
-                        ),
-                      ],
+                  Center(
+                    child: Container(
+                      width: currentWidth < 600 ? double.infinity : 500,
+                      padding: EdgeInsets.all(13),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Color(0xff2C2C2C)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ColorOption2(
+                            colorCode: const Color(0xffFF7A7A),
+                            isSelected: _selectedColor == const Color(0xffFF7A7A),
+                            onTap: () =>
+                                _onColorSelected(const Color(0xffFF7A7A)),
+                          ),
+                          ColorOption2(
+                            colorCode: const Color(0xffFFB82D),
+                            isSelected: _selectedColor == const Color(0xffFFB82D),
+                            onTap: () =>
+                                _onColorSelected(const Color(0xffFFB82D)),
+                          ),
+                          ColorOption2(
+                            colorCode: const Color(0xffFCFF62),
+                            isSelected: _selectedColor == const Color(0xffFCFF62),
+                            onTap: () =>
+                                _onColorSelected(const Color(0xffFCFF62)),
+                          ),
+                          ColorOption2(
+                            colorCode: const Color(0xff72FF5B),
+                            isSelected: _selectedColor == const Color(0xff72FF5B),
+                            onTap: () =>
+                                _onColorSelected(const Color(0xff72FF5B)),
+                          ),
+                          ColorOption2(
+                            colorCode: const Color(0xff5DD8FF),
+                            isSelected: _selectedColor == const Color(0xff5DD8FF),
+                            onTap: () =>
+                                _onColorSelected(const Color(0xff5DD8FF)),
+                          ),
+                          ColorOption2(
+                            colorCode: const Color(0xffffffff),
+                            isSelected: _selectedColor == const Color(0xffffffff),
+                            onTap: () =>
+                                _onColorSelected(const Color(0xffffffff)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -467,24 +472,39 @@ class _MyGoalAddState extends State<MyGoalAdd> {
         padding: fullPadding,
         child:
 
-            //완료버튼
-            LoginButton('목표 세우기', () {
-          if (_nameController.text == '') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('목표를 입력해 주세요.')),
-            );
-          } else if (!_isChecked && _selectedDate == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
-            );
-          } else if (_selectedColor == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('색상을 선택해 주세요.')),
-            );
-          } else {
-            _addGoal();
-          }
-        }).loginButton(),
+            //❤️완료버튼
+            Row(
+              children: [
+                Expanded(
+            flex: 1,
+            child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
+              Navigator.pop(context);
+            }).newButton(),
+          ),
+          SizedBox(width: 15),
+          //완료 버튼
+          Expanded(
+            flex: currentWidth < 330 ? 2 : 3,
+            child: 
+                NewButton(mainRed, backgroundColor, '목표 만들기 완료!', () {
+                          if (_nameController.text == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표를 입력해 주세요.')),
+                );
+                          } else if (!_isChecked && _selectedDate == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('목표 날짜를 선택해 주세요.')),
+                );
+                          } else if (_selectedColor == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('색상을 선택해 주세요.')),
+                );
+                          } else {
+                _addGoal();
+                          }
+                        }).newButton(),)
+              ],
+            ),
       ),
     );
   }

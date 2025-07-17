@@ -194,7 +194,16 @@ class _MyGoalState extends State<MyGoal> {
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('나의 목표', currentWidth).dPTitleText(),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/img/mg_icon.png',
+                scale: 7,
+              ),
+              SizedBox(width: 10),
+              DPTitleText('나의 목표', currentWidth).dPTitleText(),
+            ],
+          ),
         ),
         backgroundColor: backgroundColor,
       ),
@@ -205,96 +214,92 @@ class _MyGoalState extends State<MyGoal> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //프로필 이미지
-                      Container(
-                        padding: const EdgeInsets.all(4),
+              SizedBox(height: 13),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileEdit(
+                          selectedImage: selectedImage,
+                          profileImage: profile ?? "",
+                          cameraImage: ""),
+                    ),
+                  );
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    //❤️프로필 이미지
+                   Container(
+                        width: 90,
+                        height: 90,
                         decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              offset: const Offset(0, 0),
+                              blurRadius: 7,
+                              spreadRadius: 0,
+                            ),
+                          ],
                           shape: BoxShape.circle,
-                          color: Color(0xff303030),
-                        ),
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black
-                                    .withOpacity(0.05), // 검은색 10% 투명도
-                                offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                                blurRadius: 7, // 블러 7
-                                spreadRadius: 0, // 스프레드 0
-                              ),
-                            ],
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: selectedImage.startsWith('http')
-                                  ? NetworkImage(selectedImage)
-                                  : AssetImage(selectedImage) as ImageProvider,
-                              fit: BoxFit.cover,
-                            ),
+                          image: DecorationImage(
+                            image: selectedImage.startsWith('http')
+                                ? NetworkImage(selectedImage)
+                                : AssetImage(selectedImage) as ImageProvider,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //프로필 닉네임
-                          Text(nickname,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 8),
-                          //프로필 설명
-                          SizedBox(
-                            width: currentWidth * 0.5,
-                            child: Text(
-                              description,
-                              softWrap: true,
-                              style: TextStyle(
-                                  height: 1.5,
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400),
-                            ),
+                    
+                    const SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //❤️프로필 닉네임
+                        Row(
+                          children: [
+                            Text(nickname,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(width: 8),
+                            //❤️프로필 편집 버튼
+                            Icon(Icons.edit, color: settingGrey, size: 20)
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        //❤️프로필 설명
+                        SizedBox(
+                          child: Text(
+                            description,
+                            softWrap: true,
+                            style: TextStyle(
+                                height: 1.5,
+                                color: Color(0xffAAAAAA),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  //프로필 편집 버튼
-                  NewCustomIconButton(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfileEdit(
-                            selectedImage: selectedImage,
-                            profileImage: profile ?? "",
-                            cameraImage: ""),
-                      ),
-                    );
-                  }, Icons.edit, currentWidth, 17)
-                      .newCustomIconButton(),
-                ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: currentWidth < 600 ? 40 : 50),
-              //쓰러뜨릴 목표
+              SizedBox(height: 40),
+              //❤️쓰러뜨릴 목표
               MGSubTitle('쓰러뜨릴 목표').mgSubTitle(context),
 
               SizedBox(
                 height: 15,
               ),
               Column(children: [
+                //쓰러뜨릴 목표가 없을 때 나오는 위젯
                 if (inProgressIDs.isEmpty)
-                  BlankData("엇!\n아직 쓰러뜨릴 목표가 없어요!\n어서 만들어봅시다!", 220).blankData()
+                  BlankData("엇!\n아직 쓰러뜨릴 목표가 없어요!\n어서 만들어봅시다!", 240, currentWidth).blankData()
                 else ...[
                   SizedBox(
                     height: 250,
@@ -373,6 +378,7 @@ class _MyGoalState extends State<MyGoal> {
                             bookmark: bookmark,
                             onBookmarkToggle: (id, action) {},
                             pageIndex: index,
+                            currentWidth: currentWidth,
                           ),
                         );
                       },
@@ -387,17 +393,17 @@ class _MyGoalState extends State<MyGoal> {
               ]),
               const SizedBox(height: 40),
 
-              //이번주의 응원
+              //❤️이번주의 응원
               MGSubTitle('이번주의 응원!').mgSubTitle(context),
               const SizedBox(height: 15),
               const CheeringMessage(),
               const SizedBox(height: 40),
 
-              //쓰러뜨린 목표
+              //❤️쓰러뜨린 목표
               MGSubTitle('쓰러뜨린 목표').mgSubTitle(context),
               const SizedBox(height: 15),
               if (successIDs.isEmpty)
-                BlankData2("함께 목표를 쓰러뜨려봐요").blankData2()
+                BlankData2("함께 목표를 쓰러뜨려봐요!", currentWidth).blankData2()
               else
                 Column(
                   children: List.generate(successIDs.length, (i) {
@@ -469,11 +475,11 @@ class _MyGoalState extends State<MyGoal> {
 
               const SizedBox(height: 40),
 
-              //쓰러뜨리지 못한 목표
+              //❤️쓰러뜨리지 못한 목표
               MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
               const SizedBox(height: 15),
               if (failedIDs.isEmpty)
-                BlankData2("못 쓰러뜨린 목표가 없어요").blankData2()
+                BlankData2("못 쓰러뜨린 목표가 없어요!", currentWidth).blankData2()
               else
                 Column(
                   children: List.generate(failedIDs.length, (i) {

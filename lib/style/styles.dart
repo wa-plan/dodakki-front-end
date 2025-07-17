@@ -12,6 +12,7 @@ const mainTextColor = Colors.white;
 const mainGold = Color.fromARGB(255, 255, 217, 79);
 const mainGreen = Color(0xff72FF5B);
 const mainBlue = Color(0xff5DD8FF);
+const settingGrey = Color(0xff808080);
 const gradientColor = [
               mainRed, 
               Color(0xffFF4C4C), 
@@ -19,7 +20,9 @@ const gradientColor = [
 
 //padding
 const appBarPadding = EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20);
+const tabletPadding1 = EdgeInsets.fromLTRB(30.0, 50.0, 30.0, 20);
 const fullPadding = EdgeInsets.fromLTRB(20.0, 10, 20.0, 20.0);
+const tabletPadding2 = EdgeInsets.fromLTRB(30.0, 15, 30.0, 30.0);
 
 
 class NewButton {
@@ -40,7 +43,7 @@ class NewButton {
     return TextButton(
       onPressed: () => function(),
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+        padding: const EdgeInsets.fromLTRB(20, 13, 20, 13),
         backgroundColor: buttonColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6.0),
@@ -50,7 +53,7 @@ class NewButton {
         text,
         style: TextStyle(
           color: textColor,
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w700,
         ),
       ),
@@ -171,15 +174,16 @@ class FreeGrid {
   final String text;
   final Color color;
   final double maxFontSize;
+  final double currentWidth;
 
-  const FreeGrid(this.text, this.color, this.maxFontSize);
+  const FreeGrid(this.text, this.color, this.maxFontSize, this.currentWidth);
 
   Widget freeGrid() {
     return Container(
       padding: const EdgeInsets.all(3),
       margin: const EdgeInsets.all(1.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
+        borderRadius: BorderRadius.circular(currentWidth < 600 ? 4 : 6),
         color: color,
       ),
       child: Center(
@@ -190,7 +194,7 @@ class FreeGrid {
           maxFontSize: maxFontSize,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
-            color: Colors.black,
+            color: backgroundColor,
             fontWeight: FontWeight.w600,
           ),
           textAlign: TextAlign.center,
@@ -241,7 +245,7 @@ class NewCustomTextField {
       inputFormatters: [
         LengthLimitingTextInputFormatter(50), // 👈 글자 수 제한
       ],
-      style: const TextStyle(color: Colors.white, fontSize: 16),
+      style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
       decoration: InputDecoration(
         errorBorder: OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
         focusedErrorBorder:
@@ -249,9 +253,9 @@ class NewCustomTextField {
         errorStyle: TextStyle(
             color: mainRed, fontSize: 12, fontWeight: FontWeight.w400),
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xffAAAAAA))),
+            borderSide: BorderSide(color: settingGrey)),
         filled: true,
-        fillColor: const Color(0xff2A2A2A),
+        fillColor: const Color(0xff2C2C2C),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(6),
@@ -259,12 +263,12 @@ class NewCustomTextField {
         hintText: hintText,
         contentPadding: const EdgeInsets.fromLTRB(20, 15, 15, 15),
         hintStyle: TextStyle(
-            color: Color(0xffAAAAAA),
+            color: settingGrey,
             fontSize: 15,
-            fontWeight: FontWeight.w400),
+            fontWeight: FontWeight.w600),
         suffixIcon: controller.text.isNotEmpty
             ? Column(
-                mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
+                mainAxisAlignment: MainAxisAlignment.center, 
                 children: [
                   GestureDetector(
                     onTap: onClear ??
@@ -272,11 +276,11 @@ class NewCustomTextField {
                           controller.clear();
                         },
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 15, 20, 10),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 20, 10),
                       child: const Icon(
                         Icons.cancel,
                         size: 17,
-                        color: Color(0xffAAAAAA),
+                        color: settingGrey,
                       ),
                     ),
                   ),

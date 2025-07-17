@@ -1,10 +1,11 @@
-import 'package:domino/provider/DP/model.dart';
 import 'package:domino/provider/TD/datelist_provider.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_todaysDomino.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
+import 'package:domino/widgets/popup.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:domino/widgets/TD/add_calendar.dart';
@@ -30,18 +31,17 @@ class AddPage2State extends State<AddPage2> {
   late int thirdGoalId;
 
   final formKey = GlobalKey<FormState>();
-  late TextEditingController dominoController; // 'late'로 나중에 초기화될 것을 명시
+  late TextEditingController dominoController;
   bool switchValue = false;
 
   String dominoValue = '';
   String repeatInfo = '';
 
-  RepeatSettingsState repeatSettings =
-      RepeatSettingsState(); // RepeatSettingsState 인스턴스 생성
+  RepeatSettingsState repeatSettings = RepeatSettingsState();
 
   @override
   void dispose() {
-    dominoController.dispose(); // 컨트롤러는 사용이 끝난 후 dispose로 메모리 정리
+    dominoController.dispose();
     super.dispose();
   }
 
@@ -69,55 +69,49 @@ class AddPage2State extends State<AddPage2> {
       {required FormFieldSetter onSaved,
       required FormFieldValidator validator,
       required double currentWidth}) {
-    return SizedBox(
-      height: 60,
-      child: TextFormField(
-        onSaved: onSaved,
-        validator: validator,
-        controller: dominoController,
-        style: const TextStyle(color: Colors.white, fontSize: 16),
-        decoration: InputDecoration(
-          prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-          errorBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
-          focusedErrorBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
-          errorStyle: TextStyle(
-              color: mainRed, fontSize: 12, fontWeight: FontWeight.w400),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xffAAAAAA))),
-          filled: true,
-          fillColor: const Color(0xff2A2A2A).withOpacity(0.9),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          contentPadding: const EdgeInsets.fromLTRB(25, 13, 15, 13),
-          hintStyle: TextStyle(
-              color: Color(0xffAAAAAA),
-              fontSize: 15,
-              fontWeight: FontWeight.w400),
-          suffixIcon: dominoController.text.isNotEmpty
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.start, // 아이콘 상단 정렬
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        dominoController.clear();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                        child: const Icon(
-                          Icons.cancel,
-                          size: 17,
-                          color: Color(0xffAAAAAA),
-                        ),
+    return TextFormField(
+      onSaved: onSaved,
+      validator: validator,
+      controller: dominoController,
+      style: const TextStyle(
+          color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+      decoration: InputDecoration(
+        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
+        focusedErrorBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: mainRed)),
+        errorStyle: TextStyle(
+            color: mainRed, fontSize: 12, fontWeight: FontWeight.w400),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: settingGrey, width: 2)),
+        filled: true,
+        fillColor: const Color(0xff2A2A2A).withOpacity(0.9),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        contentPadding: const EdgeInsets.fromLTRB(22, 17, 22, 17),
+        hintStyle: TextStyle(
+            color: settingGrey, fontSize: 15, fontWeight: FontWeight.w600),
+        suffixIcon: dominoController.text.isNotEmpty
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      dominoController.clear();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+                      child: const Icon(
+                        Icons.cancel,
+                        size: 17,
+                        color: settingGrey,
                       ),
                     ),
-                  ],
-                )
-              : null,
-        ),
+                  ),
+                ],
+              )
+            : null,
       ),
     );
   }
@@ -143,24 +137,31 @@ class AddPage2State extends State<AddPage2> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼
               CustomBackButton(
                 () {
-                  context
-                      .read<SelectAPModel>()
-                      .selectAP("제3목표를 클릭하여 선택해주세요.", null);
-                  context
-                      .read<SelectRepeatModel>()
-                      .selectRepeat(false, false, false, false);
+                  PopupDialog.show(context, '지금 나가면,\n만들었던 내용이 사라져!', '잠깐!', true,
+                    false, false, true, onCancel: () {
                   Navigator.pop(context);
-                  Navigator.pop(context);
+                }, onSuccess: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TdMain(),
+                      ),
+                    );
+                });
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('도미노 만들기').pageTitle(),
-              const Spacer(),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('도미노 만들기', currentWidth).dPTitleText(),
+              Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
               ProgressBar(1, 2)
@@ -176,9 +177,9 @@ class AddPage2State extends State<AddPage2> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20),
+              //❤️목표 구체화 카테고리
               TDQuestion('더 구체적으로 바꿔보세요.', currentWidth).tDQuestion(),
               SizedBox(height: 15),
-
               Form(
                 key: formKey,
                 child: renderTextFormField(
@@ -196,22 +197,19 @@ class AddPage2State extends State<AddPage2> {
                   },
                 ),
               ),
+
+              //❤️날짜 설정 카테고리
               SizedBox(height: 40),
               TDQuestion('언제 실행하고 싶나요?', currentWidth).tDQuestion(),
               SizedBox(height: 15),
-              Container(
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
-                  width: double.infinity,
-                  child: const AddCalendar()),
-
+              const AddCalendar(),
+              SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
                     '반복하기',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15),
+                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(width: 10),
                   SizedBox(
@@ -243,7 +241,9 @@ class AddPage2State extends State<AddPage2> {
                   ),
                 ],
               ),
-              if (switchValue) const RepeatSettings() // 반복 설정 위젯 추가
+              SizedBox(height: 7),
+              //반복 옵션 위젯
+              if (switchValue) const RepeatSettings() 
             ],
           ),
         ),
@@ -252,21 +252,18 @@ class AddPage2State extends State<AddPage2> {
         padding: fullPadding,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SizedBox(
-            width: 90,
-            height: 45,
-            child: NewButton(Colors.black, Colors.white, '이전', () {
-              Navigator.of(context).pop();
-              context
-                  .read<SelectRepeatModel>()
-                  .selectRepeat(false, false, false, false);
-            })
-                .newButton(),
+          //이전 버튼
+          Expanded(
+            flex: 1,
+            child: NewButton(Color(0xff2C2C2C), settingGrey, '이전', () {
+              Navigator.pop(context);
+            }).newButton(),
           ),
-          SizedBox(
-            width: 90,
-            height: 45,
-            child: NewButton(mainRed, backgroundColor, '저장', () {
+          SizedBox(width: 15),
+          //완료 버튼
+          Expanded(
+            flex: currentWidth < 330 ? 2 : 3,
+            child: NewButton(mainRed, backgroundColor, '만들기 완료!', () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();
 
@@ -275,10 +272,8 @@ class AddPage2State extends State<AddPage2> {
 
                 if (pickedDate == null) {
                   TutorialMessage("실행날짜를 선택해주세요.").tutorialMessage(context);
-                  
                 } else if (switchValue == true && repeatInfo == "NONE") {
                   TutorialMessage("반복 종류를 선택해주세요.").tutorialMessage(context);
-                 
                 } else {
                   context
                       .read<DateListProvider>()
@@ -296,8 +291,7 @@ class AddPage2State extends State<AddPage2> {
                   );
                 }
               }
-            })
-                .newButton(),
+            }).newButton(),
           ),
         ]),
       ),

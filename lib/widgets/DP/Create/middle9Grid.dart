@@ -9,9 +9,11 @@ class Middle9Grid extends StatelessWidget {
   final Color firstColor;
   final String firstGoalName;
   final bool needColor;
+  final double currentWidth;
 
   const Middle9Grid(
-      {super.key, required this.firstColor, required this.needColor, required this.firstGoalName});
+      {super.key, required this.firstColor, required this.needColor, required this.firstGoalName,
+      required this.currentWidth});
 
 
   Color secondColorDefiner(BuildContext context, int index) {
@@ -44,14 +46,14 @@ class Middle9Grid extends StatelessWidget {
       children: List.generate(9, (index) {
         if (index == 4) {
           //첫 번째 목표 그리드
-          return FreeGrid(firstGoalName, firstColor, 15).freeGrid();
+          return FreeGrid(firstGoalName, firstColor, 15, currentWidth).freeGrid();
         } else {
           //두 번째 목표 그리드
           return FreeGrid(
                   context.select<SaveSecondGoalModel, String>(
                       (model) => model.secondGoal[index.toString()] ?? ''),
                   secondColorDefiner(context, index),
-                  15)
+                  15, currentWidth)
               .freeGrid();
         }
       }),

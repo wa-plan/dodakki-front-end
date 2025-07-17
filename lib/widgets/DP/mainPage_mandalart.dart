@@ -24,6 +24,7 @@ class MainMandalart extends StatelessWidget {
   final Color firstGoalColor;
   final double size;
   final bool detail;
+  final double currentWidth;
 
   const MainMandalart({
     super.key,
@@ -32,7 +33,8 @@ class MainMandalart extends StatelessWidget {
     required this.mandalartId,
     required this.firstGoalColor,
     required this.size,
-    required this.detail
+    required this.detail,
+    required this.currentWidth
   });
 
   static const List<int> centerSecondGoalOrder = [0, 1, 2, 3, 5, 6, 7, 8];
@@ -84,13 +86,13 @@ class MainMandalart extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 children: List.generate(9, (innerIndex) {
                   if (innerIndex == 4) {
-                    return FreeGrid(firstGoalName, firstGoalColor, 15).freeGrid();
+                    return FreeGrid(firstGoalName, firstGoalColor, 15, currentWidth).freeGrid();
                   } else {
                     final secondIndex = centerSecondGoalOrder[innerIndex > 4 ? innerIndex - 1 : innerIndex];
                     final secondGoal = secondGoals[secondIndex];
                     final secondText = secondGoal['secondGoal'] ?? '';
                     final secondColor = ColorTransform(secondGoal['color']).colorTransform();
-                    return FreeGrid(secondText, secondColorDefiner(secondText, secondColor), 15).freeGrid();
+                    return FreeGrid(secondText, secondColorDefiner(secondText, secondColor), 15, currentWidth).freeGrid();
                   }
                 }),
               ),
@@ -132,7 +134,7 @@ class MainMandalart extends StatelessWidget {
                     return FreeGrid(
                       secondText,
                       secondColorDefiner(secondText, secondColor),
-                      15,
+                      15, currentWidth
                     ).freeGrid();
                   } else {
                     final adjustedIndex = index > 4 ? index - 1 : index;
@@ -140,7 +142,7 @@ class MainMandalart extends StatelessWidget {
                         ? thirdGoals[adjustedIndex]['thirdGoal'] ?? ''
                         : '';
                     final thirdColor = thirdColorDefiner(thirdText, secondColor, secondText);
-                    return FreeGrid(thirdText, thirdColor, 15).freeGrid();
+                    return FreeGrid(thirdText, thirdColor, 15, currentWidth).freeGrid();
                   }
                 }),
               ),

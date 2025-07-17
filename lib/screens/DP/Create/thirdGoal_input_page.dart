@@ -53,6 +53,8 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -62,27 +64,31 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
           padding: appBarPadding,
           child: Row(
             children: [
-              CustomBackButton(() {
-                Navigator.pop(
-                  context,
-                );
-              }).customBackButton(),
-              const SizedBox(width: 15),
-              PageTitle(
-                widget.edit ? '제3목표 수정' : '제3목표 작성',
-              ).pageTitle(),
-              const Spacer(),
+              //❤️뒤로가기 버튼
+              CustomBackButton(
+                () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText(
+                      widget.edit == false ? '플랜 만들기' : '플랜 수정하기', currentWidth)
+                  .dPTitleText(),
+              Spacer(),
+
+              //❤️AI 버튼
               Container(
-                height: 40,
+                height: 35,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xff313131),
-                      Color(0xff573434),
-                    ],
-                  ),
+                  color: Color(0xff2C2C2C),
                   borderRadius: BorderRadius.circular(35),
                 ),
                 child: TextButton(
@@ -145,66 +151,95 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: double.infinity,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
+                    //❤️설명 문구
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 15,
+                          height: 1.7,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Pretendard',
+                          color: Colors.white,
                         ),
-                        itemCount: 9,
-                        itemBuilder: (context, index) {
-                          if (index == 4) {
-                            //제2목표 그리드
-                            return FreeGrid(
-                              widget.secondGoalName,
-                              secondGoalColor,
-                              15,
-                            ).freeGrid();
-                          } else {
-                            //제3목표 그리드 (입력)
-                            return Container(
-                              width: 80,
-                              margin: const EdgeInsets.all(1.0),
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: thirdGoalColor,
-                              ),
-                              child: Center(
-                                child: TextFormField(
-                                  controller: controllers[index],
-                                  style: const TextStyle(
-                                    color: backgroundColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  maxLength: 15,
-                                  maxLines: null,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(15),
-                                  ],
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    counterStyle: TextStyle(
-                                      fontSize: 12,
-                                      color: Color.fromARGB(255, 104, 104, 104),
+                        children: [
+                          const TextSpan(text: '세부 목표를 달성할 수 있는\n'),
+                          TextSpan(
+                            text: '실행 계획',
+                            style: TextStyle(
+                              color: mainRed,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Pretendard',
+                              fontSize: 15,
+                            ),
+                          ),
+                          const TextSpan(text: '을 만들어봐요!'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    //❤️만다라트
+                    Center(
+                      child: SizedBox(
+                        width: currentWidth < 600 ? double.infinity : 500,
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5,
+                          ),
+                          itemCount: 9,
+                          itemBuilder: (context, index) {
+                            if (index == 4) {
+                              //제2목표 그리드
+                              return FreeGrid(
+                                widget.secondGoalName,
+                                secondGoalColor,
+                                15, currentWidth
+                              ).freeGrid();
+                            } else {
+                              //제3목표 그리드 (입력)
+                              return Container(
+                                width: 80,
+                                margin: const EdgeInsets.all(2),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: thirdGoalColor,
+                                ),
+                                child: Center(
+                                  child: TextFormField(
+                                    controller: controllers[index],
+                                    style: const TextStyle(
+                                      color: backgroundColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLength: 15,
+                                    maxLines: null,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(15),
+                                    ],
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      counterStyle: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(255, 99, 99, 99),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        },
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(height: 30),
+                    //❤️Smart 기법 드롭다운
                     Description2(widget.firstGoalColor),
                     const SizedBox(height: 20),
                   ],
@@ -219,26 +254,28 @@ class _DPcreateInput2PageState extends State<DPcreateInput2Page> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // ── 취소 버튼 ─────────────────────────
-            SizedBox(
-              width: 90,
-              height: 45,
+            //❤️이전/취소 버튼
+            Expanded(
+              flex: 1,
               child: NewButton(
-                Colors.black,
-                Colors.white,
-                '취소',
-                () => Navigator.pop(context),
+                Color(0xff2C2C2C),
+                settingGrey,
+                "취소",
+                () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
               ).newButton(),
             ),
-
-            // ── 저장 버튼 ─────────────────────────
-            SizedBox(
-              width: 90,
-              height: 45,
+            SizedBox(width: 15),
+            //❤️완료 버튼
+            Expanded(
+              flex: currentWidth < 330 ? 2 : 3,
               child: NewButton(
-                Colors.black,
-                Colors.white,
-                '저장',
+                mainRed,
+                backgroundColor,
+                '완료',
                 () {
                   final model = context.read<SaveThirdGoalModel>();
                   for (int i = 0; i < controllers.length; i++) {

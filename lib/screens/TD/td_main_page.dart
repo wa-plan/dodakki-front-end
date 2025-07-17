@@ -7,7 +7,6 @@ import 'package:domino/widgets/TD/event_calendar.dart';
 import 'package:domino/style/styles.dart';
 import 'package:provider/provider.dart';
 
-// TD 메인 페이지
 class TdMain extends StatelessWidget {
   const TdMain({super.key});
 
@@ -18,7 +17,7 @@ class TdMain extends StatelessWidget {
       backgroundColor: backgroundColor,
       //오늘의 도미노 추가 버튼
       floatingActionButton: FloatingButton(Icons.add, () {
-        context.read<SelectAPModel>().selectAP("제3목표를 클릭하여 선택해주세요.", null);
+        context.read<SelectAPModel>().selectAP("만다라트에서 플랜을 선택해주세요.", null);
 
         context
             .read<SelectRepeatModel>()
@@ -31,18 +30,25 @@ class TdMain extends StatelessWidget {
       }, 25)
           .floatingButton(),
 
-      //appBar
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('오늘의 도미노', currentWidth).dPTitleText(),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/img/td_icon.png',
+                scale: 10,
+              ),
+              SizedBox(width: 10),
+              DPTitleText('오늘의 도미노', currentWidth).dPTitleText(),
+            ],
+          ),
         ),
         backgroundColor: backgroundColor,
       ),
 
-      //body
       body: const Padding(padding: fullPadding, child: EventCalendar()),
       bottomNavigationBar: const NavBar(),
     );

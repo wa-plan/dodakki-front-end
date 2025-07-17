@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:domino/screens/MG/mygoal_profile_edit.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,7 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -76,16 +78,18 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼 (style_login.dart)
               CustomBackButton(
                 () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(
+                    context
+                  );
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('기본 이미지').pageTitle(),
+              Image.asset('assets/img/gallery_icon.png', scale: 4),
+              SizedBox(width: 8),
+              DPTitleText('도민호 갤러리', currentWidth).dPTitleText(),
             ],
           ),
         ),
@@ -99,22 +103,8 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
             SizedBox(height: 20),
             Center(
               child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xff303030),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05), 
-                      offset: const Offset(0, 0), 
-                      blurRadius: 7, 
-                      spreadRadius: 0, 
-                    ),
-                  ],
-                ),
-                child: Container(
-                  width: 150,
-                  height: 150,
+                  width: 200,
+                  height: 200,
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -132,21 +122,21 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
                     ),
                   ),
                 ),
-              ),
+             
             ),
             const SizedBox(height: 40),
             Center(
               child: SizedBox(
-                height: 300,
-                width: 300,
+                height: 330,
+                width: 330,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        mainAxisSpacing: 30.0,
-                        crossAxisSpacing: 30.0,
+                        mainAxisSpacing: 28,
+                        crossAxisSpacing: 28,
                       ),
                       padding: const EdgeInsets.all(3.0),
                       itemCount: _imageUrls.length,
@@ -176,24 +166,26 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
               ),
             ),
             Spacer(),
-            LoginButton('선택하기', 
-                () {
-                  print(_selectedImage);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileEdit(
-                        selectedImage: _selectedImage,
-                        profileImage: _selectedImage.isEmpty
-                            ? (widget.profileImage.isNotEmpty
-                                ? widget.profileImage
-                                : "")
-                            : "",
-                        cameraImage: "",
+            SizedBox(
+              width: double.infinity,
+              child: NewButton(mainRed, backgroundColor, '이미지 적용하기', 
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileEdit(
+                          selectedImage: _selectedImage,
+                          profileImage: _selectedImage.isEmpty
+                              ? (widget.profileImage.isNotEmpty
+                                  ? widget.profileImage
+                                  : "")
+                              : "",
+                          cameraImage: "",
+                        ),
                       ),
-                    ),
-                  );
-                }).loginButton()
+                    );
+                  }).newButton(),
+            )
                 
             
           ],

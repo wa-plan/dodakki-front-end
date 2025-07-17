@@ -20,36 +20,35 @@ final List<String> sampleImages = [
 class BlankData {
   final String text;
   final double height;
+  final double currentWidth;
 
-  const BlankData(this.text, this.height);
+  const BlankData(this.text, this.height, this.currentWidth);
 
   Widget blankData() {
     return Container(
       height: height,
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
+      padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
       decoration: BoxDecoration(
-        color: const Color(0xff2D2D2D),
-        borderRadius: BorderRadius.circular(8),
-      ),
+                      color: const Color(0xff2C2C2C),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
       child: Stack(
         children: [
           Text(
             text,
             style: TextStyle(
-              height: 1.5,
-              color: Color(0xff595959),
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
+                              color: settingGrey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              height: 1.7,
+                            ),
           ),
           Positioned(
-              top: 50,
-              right: 10,
-              child: Opacity(
-                opacity: 0.3,
-                child: Image.asset('assets/img/emptyDominho.png', height: 145),
-              ))
+              bottom: 0,
+              right: 0,
+              child: Image.asset('assets/img/emptyDominho.png', height: currentWidth < 325 ? 120: 180),
+              )
         ],
       ),
     );
@@ -66,8 +65,8 @@ class MGSubTitle {
     return Text(
       text,
       style: TextStyle(
-        color: const Color.fromARGB(255, 178, 178, 178),
-        fontSize: 15,
+        color: Color(0xffAAAAAA),
+        fontSize: 14,
         fontWeight: FontWeight.w700,
       ),
     );
@@ -77,14 +76,15 @@ class MGSubTitle {
 //비어있는 데이터 (for 쓰러뜨린/쓰러뜨리지 못한 목표)
 class BlankData2 {
   final String text;
+  final double currentWidth;
 
-  const BlankData2(this.text);
+  const BlankData2(this.text, this.currentWidth);
 
   Widget blankData2() {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xff2D2D2D),
+        color: const Color(0xff2C2C2C),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
@@ -97,17 +97,16 @@ class BlankData2 {
             Text(
               text,
               style: TextStyle(
-                color: Color(0xff595959),
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+                              color: settingGrey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              height: 1.7,
+                            ),
             ),
             Column(
               children: [
                 SizedBox(height: 15),
-                Opacity(
-                    opacity: 0.3,
-                    child: Image.asset('assets/img/haha.png', scale: 2)),
+                Image.asset('assets/img/haha.png', scale: currentWidth < 325 ? 3 : 2),
               ],
             )
           ],
@@ -173,38 +172,43 @@ class _CheeringMessageState extends State<CheeringMessage> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xff2D2D2D),
+        color: const Color(0xff2C2C2C),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(25, 16, 25, 16),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.rotationY(3.1416),
-                child: const Icon(Icons.format_quote, color: mainRed, size: 25)),
-            SizedBox(
-              width: currentWidth < 600 ? 205 : 250,
-              child: Text(
-                currentMessage,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Icon(Icons.format_quote, color: mainRed, size: 25),
-          ],
+  crossAxisAlignment: CrossAxisAlignment.center,
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.rotationY(3.1416),
+      child: const Icon(Icons.format_quote, color: mainRed, size: 25),
+    ),
+    const SizedBox(width: 3),
+    
+    // ✅ Flexible 추가!
+    Flexible(
+      child: Text(
+        currentMessage,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
         ),
+        textAlign: TextAlign.center,
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+
+    const SizedBox(width: 3),
+    const Icon(Icons.format_quote, color: mainRed, size: 25),
+  ],
+)
+
       ),
     );
   }
@@ -215,8 +219,9 @@ class BottomButton {
   final String text;
   final IconData icon;
   final Function function;
+  final String image;
 
-  const BottomButton (this.text, this.icon, this.function);
+  const BottomButton (this.text, this.icon, this.function, this.image);
 
   Widget bottomButton(){
     return SizedBox(
@@ -226,18 +231,21 @@ class BottomButton {
         onPressed: () => function(),
         style: TextButton.styleFrom(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          backgroundColor: Color(0xff262626),
+          backgroundColor: Color(0xff242424),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.0),
           ),
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: mainRed,
-              size: 20,
-            ),
+            if(image == '')
+              Icon(
+                icon,
+                color: mainRed,
+                size: 20,
+              ),
+            if(image != '')
+              Image.asset(image, scale: 5,),
             SizedBox(width: 15),
             Text(
               text,
@@ -266,10 +274,10 @@ class Question extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(question,
-        style: const TextStyle(
-            fontFamily: "Pretendard",
+        style: TextStyle(
             color: Colors.white,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
-            fontSize: 16));
+          ),);
   }
 }

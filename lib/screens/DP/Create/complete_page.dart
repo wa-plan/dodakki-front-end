@@ -71,21 +71,22 @@ class _CompletePageState extends State<CompletePage> {
                             Text(
                               widget.edit ? "플랜 수정하기 성공!" : "플랜 만들기 성공!",
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 15),
                             Text(
                               widget.edit
                                   ? "새로운 계획과 함께\n달려볼까요?"
                                   : "이제 목표를 향해\n달려볼까요?",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xffAFAFAF),
+                                height: 1.7
                               ),
                             ),
                           ],
@@ -110,7 +111,7 @@ class _CompletePageState extends State<CompletePage> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.fromLTRB(22, 0, 22, 22),
-        child: LoginButton('달려가기!!', () {
+        child: LoginButton('달려가기!', () {
           _confettiController.play();
          Navigator.push(
             context,

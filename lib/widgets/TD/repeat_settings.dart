@@ -53,7 +53,7 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '매일',
               style: TextStyle(
-                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -89,7 +89,7 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '매주',
               style: TextStyle(
-                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -127,7 +127,7 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '격주',
               style: TextStyle(
-                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -163,7 +163,7 @@ class RepeatSettingsState extends State<RepeatSettings> {
             Text(
               '매월',
               style: TextStyle(
-                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+                  color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ],
         ),

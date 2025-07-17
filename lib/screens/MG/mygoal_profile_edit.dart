@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_myGoal.dart';
+import 'package:domino/style/style_todaysDomino.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
@@ -124,50 +126,10 @@ class _ProfileEditState extends State<ProfileEdit> {
     });
   }
 
-  /*Future<void> _uploadSelectedImage() async {
-    print('📤 _uploadSelectedImage 호출됨');
-
-    // ✅ selectedImage가 asset이 아닌 경우 생략
-    if (widget.selectedImage.isEmpty) {
-      print('⏭️ selectedImage가 asset이 아님 — 업로드 생략: ${widget.selectedImage}');
-      return;
-    }
-
-    print('📷 selectedImage 경로: ${widget.selectedImage}');
-
-    ByteData byteData = await rootBundle.load(widget.selectedImage);
-    Uint8List imageBytes = byteData.buffer.asUint8List();
-
-    final directory = await getTemporaryDirectory();
-    final filePath = '${directory.path}/profile_image.png';
-    final file = File(filePath);
-    await file.writeAsBytes(imageBytes);
-    print('📁 파일로 저장 완료: $filePath');
-
-    PlatformFile selectedFile = PlatformFile(
-      name: 'profile_image.png',
-      path: filePath,
-      size: imageBytes.length,
-    );
-
-    List<PlatformFile> fileList = [selectedFile];
-    String uploadedUrl = await UploadFileService.uploadFiles(fileList);
-
-    if (uploadedUrl.isNotEmpty) {
-      setState(() {
-        _imageFiles.clear();
-        _imageFiles.add(uploadedUrl);
-        profile = uploadedUrl;
-        print('함수 내부 _imageFiles: $uploadedUrl');
-      });
-    }
-  }*/
-
   Future<void> _uploadSelectedImage() async {
     print('📤 _uploadSelectedImage 호출됨');
 
     if (widget.selectedImage.isEmpty) {
-      print('⏭️ selectedImage가 비어 있음 — 업로드 생략');
       return;
     }
 
@@ -183,9 +145,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         if (response.statusCode == 200) {
           imageBytes = response.bodyBytes;
           filename = path.basename(widget.selectedImage);
-          print('🌐 네트워크 이미지 다운로드 완료');
         } else {
-          print('⚠️ 이미지 다운로드 실패: ${response.statusCode}');
           return;
         }
       } else {
@@ -193,7 +153,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         final byteData = await rootBundle.load(widget.selectedImage);
         imageBytes = byteData.buffer.asUint8List();
         filename = path.basename(widget.selectedImage);
-        print('📦 로컬 asset 로드 완료');
       }
 
       // ✅ 임시 파일로 저장
@@ -201,7 +160,6 @@ class _ProfileEditState extends State<ProfileEdit> {
       final filePath = path.join(directory.path, filename);
       final file = File(filePath);
       await file.writeAsBytes(imageBytes);
-      print('📁 파일로 저장 완료: $filePath');
 
       // ✅ 업로드
       final selectedFile = PlatformFile(
@@ -218,11 +176,9 @@ class _ProfileEditState extends State<ProfileEdit> {
           _imageFiles.clear();
           _imageFiles.add(uploadedUrl);
           profile = uploadedUrl;
-          print('✅ 업로드 완료: $uploadedUrl');
         });
       }
     } catch (e) {
-      print('❌ 업로드 중 오류 발생: $e');
     }
   }
 
@@ -262,7 +218,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   Future<bool> _editProfile(
       String nickname, String profile, String description) async {
     try {
-      print('_editProfile 실행');
       final success = await EditProfileService.editProfile(
         nickname: nickname,
         profile: profile,
@@ -284,7 +239,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         if (widget.selectedImage.isEmpty) {
           profile = data['profile'] ?? "";
         }
-        //profile = data['profile'] ?? "";
       });
 
       _nicknamecontroller.text = nickname ?? "";
@@ -312,9 +266,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     super.initState();
     userInfo();
     _nicknamecontroller.addListener(_onNicknameChanged);
-    print('selectedImage:${widget.selectedImage}');
-    print('cameraImage:${widget.cameraImage}');
-    print('profileImage:${widget.profileImage}');
+    
   }
 
   @override
@@ -338,7 +290,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼 (style_login.dart)
               CustomBackButton(
                 () {
                   Navigator.push(
@@ -348,9 +300,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('프로필 편집').pageTitle(),
+              Icon(
+                Icons.person,
+                color: mainRed,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('프로필 수정하기', currentWidth).dPTitleText(),
             ],
           ),
         ),
@@ -374,20 +329,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                         child: Stack(
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xff303030),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    offset: const Offset(0, 0),
-                                    blurRadius: 7,
-                                    spreadRadius: 0,
-                                  ),
-                                ],
-                              ),
-                              child: Container(
                                 width: 160,
                                 height: 160,
                                 decoration: BoxDecoration(
@@ -412,7 +353,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   ),
                                 ),
                               ),
-                            ),
+                           
                             Positioned(
                                 right: 20,
                                 top: 125,
@@ -427,9 +368,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                     ),
                     const SizedBox(height: 35),
 
-                    //닉네임 부분
-                    const FieldTitle('닉네임을 만들어봐요.').fieldTitle(),
-                    const SizedBox(height: 10),
+                    //❤️닉네임 부분
+                    TDQuestion('닉네임을 만들어봐요.', currentWidth).tDQuestion(),
+                    const SizedBox(height: 14),
                     StatefulBuilder(
                       builder: (context, setState) {
                         // 🔹 리스너 추가: 입력값 변경 시 setState() 호출
@@ -454,11 +395,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                       },
                     ),
 
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 45),
 
-                    //설명 부분
-                    const FieldTitle('당신은 어떤 사람이 되고 싶나요?').fieldTitle(),
-                    const SizedBox(height: 10),
+                    //❤️설명 부분
+                    TDQuestion('당신은 어떤 사람이 되고 싶나요?', currentWidth).tDQuestion(),
+                    const SizedBox(height: 14),
                     NewCustomTextField('명랑하면서 도전적인 사람?', _explaincontroller,
                             (value) => null, false, 3, currentWidth)
                         .newtextField()
@@ -472,48 +413,65 @@ class _ProfileEditState extends State<ProfileEdit> {
       bottomNavigationBar: Padding(
           padding: fullPadding,
           //저장하기 버튼
-          child: LoginButton('저장하기', () async {
-            print('확인: ${widget.selectedImage}');
-
-            // ✅ 이미지 파일이 없을 경우에만 업로드 시도
-            if (_imageFiles.isEmpty) {
-              await _uploadSelectedImage();
-            }
-
-            String profileToUpload;
-
-            if (_imageFiles.isNotEmpty) {
-              profileToUpload = _imageFiles[0];
-            } else if ((profile ?? widget.profileImage).isNotEmpty &&
-                !(profile ?? widget.profileImage).startsWith('assets/')) {
-              profileToUpload = profile ?? widget.profileImage;
-            } else {
-              profileToUpload = '';
-            }
-
-            bool isEdited = await _editProfile(
-              _nicknamecontroller.text,
-              profileToUpload,
-              _explaincontroller.text,
-            );
-
-            if (isEdited) {
-              if (context.mounted) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyGoal()),
+          child: Row(
+            children: [
+              Expanded(
+            flex: 1,
+            child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
+              Navigator.pop(context);
+            }).newButton(),
+          ),
+          SizedBox(width: 15),
+          //완료 버튼
+          Expanded(
+            flex: currentWidth < 330 ? 2 : 3,
+            child: 
+                NewButton(mainRed, backgroundColor, '프로필 저장하기', () async {
+              
+                // ✅ 이미지 파일이 없을 경우에만 업로드 시도
+                if (_imageFiles.isEmpty) {
+                  await _uploadSelectedImage();
+                }
+              
+                String profileToUpload;
+              
+                if (_imageFiles.isNotEmpty) {
+                  profileToUpload = _imageFiles[0];
+                } else if ((profile ?? widget.profileImage).isNotEmpty &&
+                    !(profile ?? widget.profileImage).startsWith('assets/')) {
+                  profileToUpload = profile ?? widget.profileImage;
+                } else {
+                  profileToUpload = '';
+                }
+              
+                bool isEdited = await _editProfile(
+                  _nicknamecontroller.text,
+                  profileToUpload,
+                  _explaincontroller.text,
                 );
-              }
-            } else {
-              TutorialMessage('프로필 수정에 실패했습니다.').tutorialMessage(context);
-            }
-          }).loginButton()),
+              
+                if (isEdited) {
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MyGoal()),
+                    );
+                  }
+                } else {
+                  TutorialMessage('프로필 수정에 실패했습니다.').tutorialMessage(context);
+                }
+              }).newButton(),)
+
+
+              
+            ],
+          )),
     );
   }
 
   void _showBottomSheet() {
     showModalBottomSheet(
-      backgroundColor: backgroundColor,
+      backgroundColor: Color(0xff2C2C2C),
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -544,14 +502,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                     _imageFiles.clear();
                   });
                   await _takePhoto();
-                }).bottomButton(),
+                }, '').bottomButton(),
                 const SizedBox(height: 10),
                 BottomButton('갤러리', Icons.photo, () async {
                   Navigator.pop(context);
                   _checkGalleryThenPickImages();
-                }).bottomButton(),
+                }, '').bottomButton(),
                 const SizedBox(height: 10),
-                BottomButton('도민호 이미지', Icons.star, () async {
+                BottomButton('도민호 갤러리', Icons.star, () async {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
@@ -561,7 +519,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           profileImage: widget.profileImage),
                     ),
                   );
-                }).bottomButton()
+                }, 'assets/img/gallery_icon.png').bottomButton()
               ],
             ),
           ),
