@@ -54,8 +54,8 @@ class AddCalendarState extends State<AddCalendar> {
         outsideDaysVisible: false,
         markerSize: 0.0,
         isTodayHighlighted: true,
-        todayDecoration: const BoxDecoration(
-            color: mainGrey, shape: BoxShape.circle),
+        todayDecoration:
+            const BoxDecoration(color: mainGrey, shape: BoxShape.circle),
         selectedDecoration: const BoxDecoration(
           color: mainRed,
           shape: BoxShape.circle,
@@ -84,36 +84,37 @@ class AddCalendarState extends State<AddCalendar> {
         ),
         //주말 날짜
         weekendTextStyle: TextStyle(
-          color: Color.fromARGB(255, 201, 110, 110),
+          color: Colors.white,
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
       ),
       daysOfWeekStyle: const DaysOfWeekStyle(
         weekdayStyle: TextStyle(
-          color:  Color.fromARGB(255, 170, 170, 170),
+          color: settingGrey,
           fontSize: 14,
           fontWeight: FontWeight.w600,
-        ), 
+        ),
         weekendStyle: TextStyle(
-          color:  Color.fromARGB(255, 201, 110, 110),
+          color: settingGrey,
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
       ),
       headerStyle: HeaderStyle(
         titleCentered: true,
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 15),
-       leftChevronIcon: Icon(
-                      Icons.arrow_back_rounded,
-                      color: const Color.fromARGB(255, 170, 170, 170),
-                      size: 17,
-                    ),
-                    rightChevronIcon: Icon(
-                      Icons.arrow_forward_rounded,
-                      color: const Color.fromARGB(255, 170, 170, 170),
-                      size: 17,
-                    ),
+        titleTextStyle: const TextStyle(
+            color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+        leftChevronIcon: Icon(
+          Icons.arrow_circle_left_rounded,
+          color: settingGrey,
+          size: 22,
+        ),
+        rightChevronIcon: Icon(
+          Icons.arrow_circle_right_rounded,
+          color: settingGrey,
+          size: 22,
+        ),
         formatButtonVisible: false,
       ),
       firstDay: DateTime.utc(2014, 1, 1),

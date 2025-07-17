@@ -3,6 +3,7 @@ import 'package:domino/screens/LR/agreement.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
 import 'package:domino/screens/Tutorial/tutorial1_page.dart';
 import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_setting.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/apis/services/lr_services.dart';
@@ -124,15 +125,13 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           //도민호 이미지
           Positioned(
-            top: 60,
+            top: 100,
             right: 0,
-            child: Opacity(
-              opacity: 0.5,
-              child: Image.asset(
+            child: Image.asset(
                 "assets/img/tr_1.png",
                 height: 350,
               ),
-            ),
+            
           ),
 
           SingleChildScrollView(
@@ -147,14 +146,16 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 95),
 
-                  //인사말
+                  //❤️인사말
                   LoginDescription('도닦기에 오신 것을\n환영합니다 :)').loginDescription(),
-                  const SizedBox(height: 45),
+                  const SizedBox(height: 30),
 
-                  //아이디 입력창
-                  LoginTextField(
+                  //❤️아이디 입력창
+                  STSubTitle('아이디', Icons.person, 20).sTSubTitle(context),
+              const SizedBox(height: 12),
+                  CustomTextField(
                     '아이디를 입력해 주세요.',
                     _idcontroller,
                     (value) {
@@ -164,11 +165,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     },
                     false,
-                    Icons.person,
-                  ).loginTextField(),
-                  const SizedBox(height: 14),
+                  ).customTextField(),
+                  const SizedBox(height: 20),
 
-                  //비밀번호 입력창
+                  //❤️비밀번호 입력창
+                  STSubTitle('비밀번호', Icons.key_rounded, 20).sTSubTitle(context),
+              const SizedBox(height: 12),
                   PasswordTextField(
                     hintText: '비밀번호를 입력해 주세요.',
                     controller: _pwcontroller,
@@ -181,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     icon: Icons.lock,
                   ),
 
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 50),
 
                   //로그인 버튼
                   LoginButton('로그인', () async {
@@ -197,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     }
                   }).loginButton(),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 14),
 
                   //아이디/비밀번호 찾기 버튼
                   LoginEtcButton('아이디/비밀번호 찾기', () {

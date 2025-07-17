@@ -1,5 +1,6 @@
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_myGoal.dart';
 import 'package:domino/style/styles.dart';
@@ -242,16 +243,20 @@ class _MygoalEditState extends State<MygoalEdit> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼
               CustomBackButton(
                 () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('목표 수정하기').pageTitle(),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('목표 수정하기', currentWidth).dPTitleText(),
             ],
           ),
         ),
@@ -263,7 +268,7 @@ class _MygoalEditState extends State<MygoalEdit> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 어떤 목표인가요?
+              // ❤️어떤 목표인가요?
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -271,14 +276,14 @@ class _MygoalEditState extends State<MygoalEdit> {
                   const Tag(Color(0xff503333), '필수').tag()
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               NewCustomTextField("", _namecontroller, (value) => null, false, 1,
                       currentWidth)
                   .newtextField(),
 
               const SizedBox(height: 40),
 
-              //언제까지 목표를 이루고 싶나요?
+              //❤️언제까지 목표를 이루고 싶나요?
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -286,7 +291,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   const Tag(Color(0xff503333), '필수').tag()
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -297,7 +302,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                       padding: const EdgeInsets.fromLTRB(20, 5, 15, 5),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
-                          color: const Color(0xff2A2A2A)),
+                          color: const Color(0xff2C2C2C)),
                       child: Text(
                         _selectedDate != null
                             ? DateFormat('yyyy년 MM월 dd일')
@@ -308,9 +313,9 @@ class _MygoalEditState extends State<MygoalEdit> {
                         style: TextStyle(
                           color: _selectedDate != null
                               ? Colors.white
-                              : Color(0xffAAAAAA),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                              : settingGrey,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -333,19 +338,19 @@ class _MygoalEditState extends State<MygoalEdit> {
               ),
 
               const SizedBox(height: 40),
-              //목표에 대해서 더 알려주세요.
+              //❤️목표에 대해서 더 알려주세요.
               const Question(question: '목표에 대해서 더 알려주세요.'),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               NewCustomTextField("", _descriptcontroller, (value) => null,
                       false, 4, currentWidth)
                   .newtextField(),
 
               const SizedBox(height: 40),
 
-              // 목표를 보여주는 사진이 있나요?
+              //❤️목표를 보여주는 사진이 있나요?
               const Question(question: '목표를 보여주는 사진이 있나요?'),
-              const SizedBox(height: 10),
-              // 이미지 선택 UI
+              const SizedBox(height: 15),
+              //❤️이미지 선택 UI
               Row(
                 children: [
                   Expanded(
@@ -371,27 +376,30 @@ class _MygoalEditState extends State<MygoalEdit> {
                                       height: 90,
                                       decoration: BoxDecoration(
                                           color: Color(
-                                              0xff2A2A2A), // ✅ 로드 실패 대비 배경 설정
+                                              0xff2C2C2C), // ✅ 로드 실패 대비 배경 설정
                                           borderRadius: BorderRadius.circular(
                                               6)), // ✅ 로드 실패 대비 배경
                                       child: imageData.startsWith("http")
-                                          ? Image.network(
-                                              imageData,
-                                              width: 90,
-                                              height: 90,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return const Center(
-                                                  child: Text(
-                                                    '로드 실패', // ✅ 이미지 로드 실패 시 표시
-                                                    style: TextStyle(
-                                                        color: Colors.red),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                );
-                                              },
-                                            )
+                                          ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(6),
+                                            child: Image.network(
+                                                imageData,
+                                                width: 90,
+                                                height: 90,
+                                                fit: BoxFit.cover,
+                                                errorBuilder:
+                                                    (context, error, stackTrace) {
+                                                  return const Center(
+                                                    child: Text(
+                                                      '로드 실패', // ✅ 이미지 로드 실패 시 표시
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                          )
                                           : const Center(
                                               child: Text(
                                                 '로드 실패', // ✅ URL이 아니면 기본적으로 표시
@@ -448,7 +456,7 @@ class _MygoalEditState extends State<MygoalEdit> {
               ),
 
               const SizedBox(height: 40),
-              // 목표를 색깔로 표현해주세요.
+              //❤️목표를 색깔로 표현해주세요.
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -457,46 +465,49 @@ class _MygoalEditState extends State<MygoalEdit> {
                 ],
               ),
               const SizedBox(height: 10),
-              Container(
-                padding: EdgeInsets.all(13),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Color(0xff2A2A2A)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ColorOption(
-                      colorCode: const Color(0xffFF7A7A),
-                      isSelected: _selectedColor == const Color(0xffFF7A7A),
-                      onTap: () => _onColorSelected(const Color(0xffFF7A7A)),
-                    ),
-                    ColorOption(
-                      colorCode: const Color(0xffFFB82D),
-                      isSelected: _selectedColor == const Color(0xffFFB82D),
-                      onTap: () => _onColorSelected(const Color(0xffFFB82D)),
-                    ),
-                    //여기기
-                    ColorOption(
-                      colorCode: const Color(0xffFCFF62),
-                      isSelected: _selectedColor == const Color(0xffFCFF62),
-                      onTap: () => _onColorSelected(const Color(0xffFCFF62)),
-                    ),
-                    ColorOption(
-                      colorCode: const Color(0xff72FF5B),
-                      isSelected: _selectedColor == const Color(0xff72FF5B),
-                      onTap: () => _onColorSelected(const Color(0xff72FF5B)),
-                    ),
-                    ColorOption(
-                      colorCode: const Color(0xff5DD8FF),
-                      isSelected: _selectedColor == const Color(0xff5DD8FF),
-                      onTap: () => _onColorSelected(const Color(0xff5DD8FF)),
-                    ),
-                    ColorOption(
-                      colorCode: const Color(0xffFFFFFF),
-                      isSelected: _selectedColor == const Color(0xffFFFFFF),
-                      onTap: () => _onColorSelected(const Color(0xffFFFFFF)),
-                    ),
-                  ],
+              Center(
+                child: Container(
+                  width: currentWidth < 600 ? double.infinity : 500,
+                  padding: EdgeInsets.all(13),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Color(0xff2C2C2C)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ColorOption(
+                        colorCode: const Color(0xffFF7A7A),
+                        isSelected: _selectedColor == const Color(0xffFF7A7A),
+                        onTap: () => _onColorSelected(const Color(0xffFF7A7A)),
+                      ),
+                      ColorOption(
+                        colorCode: const Color(0xffFFB82D),
+                        isSelected: _selectedColor == const Color(0xffFFB82D),
+                        onTap: () => _onColorSelected(const Color(0xffFFB82D)),
+                      ),
+                      //여기기
+                      ColorOption(
+                        colorCode: const Color(0xffFCFF62),
+                        isSelected: _selectedColor == const Color(0xffFCFF62),
+                        onTap: () => _onColorSelected(const Color(0xffFCFF62)),
+                      ),
+                      ColorOption(
+                        colorCode: const Color(0xff72FF5B),
+                        isSelected: _selectedColor == const Color(0xff72FF5B),
+                        onTap: () => _onColorSelected(const Color(0xff72FF5B)),
+                      ),
+                      ColorOption(
+                        colorCode: const Color(0xff5DD8FF),
+                        isSelected: _selectedColor == const Color(0xff5DD8FF),
+                        onTap: () => _onColorSelected(const Color(0xff5DD8FF)),
+                      ),
+                      ColorOption(
+                        colorCode: const Color(0xffFFFFFF),
+                        isSelected: _selectedColor == const Color(0xffFFFFFF),
+                        onTap: () => _onColorSelected(const Color(0xffFFFFFF)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
@@ -512,20 +523,18 @@ class _MygoalEditState extends State<MygoalEdit> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              width: 90,
-              height: 45,
-              child: NewButton(Colors.black, Colors.white, '취소', () {
-                Navigator.pop(context);
-              })
-                  .newButton(),
-            ),
-            
-            //완료버튼
-            SizedBox(
-              width: 90,
-              height: 45,
-              child: NewButton(Colors.black, Colors.white, '수정', () async {
+            //이전 버튼
+          Expanded(
+            flex: 1,
+            child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
+              Navigator.pop(context);
+            }).newButton(),
+          ),
+          SizedBox(width: 15),
+          //완료 버튼
+          Expanded(
+            flex: currentWidth < 330 ? 2 : 3,
+            child: NewButton(mainRed, backgroundColor, '목표 수정하기 완료!', () async {
                 // 모든 API 호출이 성공했는지 확인할 변수
                 bool isSuccess = true;
 
@@ -597,9 +606,13 @@ class _MygoalEditState extends State<MygoalEdit> {
                   );
                   //Navigator.pop(context);
                 }
-              })
-                  .newButton(),
-            ),
+              }).newButton(),
+          ),
+
+
+           
+            
+            
           ],
         ),
       ),
@@ -669,8 +682,8 @@ class ColorOption extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(currentWidth < 600 ? 5 : 10),
         child: Container(
-          width: currentWidth < 600 ? 33 : 50,
-          height: currentWidth < 600 ? 33 : 50,
+          width: currentWidth < 600 ? 30 : 40,
+          height: currentWidth < 600 ? 30 : 40,
           decoration: BoxDecoration(
             color: colorCode,
             borderRadius: BorderRadius.circular(5),
@@ -678,7 +691,7 @@ class ColorOption extends StatelessWidget {
           child: isSelected
               ? Icon(
                   Icons.check_circle_rounded,
-                  color: const Color(0xff303030),
+                  color: backgroundColor,
                   size: currentWidth < 600 ? 20 : 22,
                 )
               : null,

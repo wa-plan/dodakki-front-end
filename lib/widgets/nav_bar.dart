@@ -64,7 +64,7 @@ class NavBar extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
               child: Image.asset(
                 iconPath,
-                scale:1.15,
+                scale:2.2,
                 color: isSelected ? mainRed : const Color(0xffAAAAAA), // 선택된 색상 조정
               ),
             ),

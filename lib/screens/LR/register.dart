@@ -1,4 +1,6 @@
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_setting.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
@@ -51,36 +53,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
-          padding: appBarPadding,
+          padding: currentWidth < 600 ? appBarPadding : tabletPadding1,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼
               CustomBackButton(
                 () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('계정 만들기').pageTitle(),
-              const Spacer(),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('계정 만들기', currentWidth).dPTitleText(),
+              Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
-              ProgressBar(2, 2)
+              ProgressBar(1, 2)
             ],
           ),
         ),
         backgroundColor: backgroundColor,
       ),
       body: SingleChildScrollView(
-        padding: fullPadding,
+        padding: currentWidth < 600 ? fullPadding : tabletPadding2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -93,25 +101,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //아이디 타이틀
-                  FieldTitle('아이디').fieldTitle(),
-                  SizedBox(height: 10),
+                  STSubTitle('아이디', Icons.person, 20).sTSubTitle(context),
+                  const SizedBox(height: 12),
                   //아이디 입력창
-                  LoginTextField('아이디를 입력해 주세요.', _idController, (value) {
-                    if (value == null || value.isEmpty) {
-                      return '3~15자 영문/숫자 조합으로 입력해주세요.';
-                    }
-                    if (value.length < 3 || value.length > 15) {
-                      return '아이디는 3~15자로 입력해 주세요.';
-                    }
-                    return null;
-                  }, false, Icons.person)
-                      .loginTextField(),
-                  SizedBox(height: 36),
+                  CustomTextField(
+                    '아이디를 입력해 주세요.',
+                    _idController,
+                    (value) {
+                      if (value == null || value.isEmpty) {
+                        return '3~15자 영문/숫자 조합으로 입력해주세요.';
+                      }
+                      if (value.length < 3 || value.length > 15) {
+                        return '아이디는 3~15자로 입력해 주세요.';
+                      }
+                      return null;
+                    },
+                    false,
+                  ).customTextField(),
+                  SizedBox(height: 41),
 
                   //비밀번호 타이틀
-                  FieldTitle('비밀번호').fieldTitle(),
-                  SizedBox(height: 10),
+                  STSubTitle('비밀번호', Icons.key, 20).sTSubTitle(context),
+                  const SizedBox(height: 12),
 
                   //비밀번호 입력창 1
                   PasswordTextField(
@@ -128,11 +139,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     icon: Icons.lock,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
 
                   //비밀번호 입력창 2
                   PasswordTextField(
-                    hintText: '비밀번호를 확인해 주세요.',
+                    hintText: '비밀번호를 한번 더 확인해 주세요.',
                     controller: _checkpwController,
                     validator: (value) {
                       if (value == null || value != _pwController.text) {
@@ -143,33 +154,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     icon: Icons.lock,
                   ),
 
-                  SizedBox(height: 36),
+                  SizedBox(height: 41),
 
                   //개인정보 타이틀
-                  FieldTitle('개인정보').fieldTitle(),
-                  SizedBox(height: 10),
+                  STSubTitle('개인정보', Icons.numbers_rounded, 20).sTSubTitle(context),
+                  const SizedBox(height: 12),
                   //개인정보 입력창
-                  LoginTextField('이메일 주소를 입력해 주세요.', _emailController, (value) {
-                    if (value == null || value.isEmpty) {
-                      return '이메일을 주소를 입력해 주세요.';
-                    }
-                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                    if (!emailRegex.hasMatch(value)) {
-                      return '유효한 이메일을 입력해 주세요.';
-                    }
-                    return null;
-                  }, false, Icons.mail)
-                      .loginTextField(),
-                  SizedBox(height: 10),
-                  LoginTextField('- 없이 전화번호를 입력해 주세요.', _phoneController,
-                          (value) {
-                    if (value == null || value.isEmpty) {
-                      return '올바른 전화번호를 입력해 주세요.';
-                    }
-                    return null;
-                  }, false, Icons.phone)
-                      .loginTextField(),
-                  SizedBox(height: 10),
+                  CustomTextField(
+                    '이메일 주소를 입력해 주세요.',
+                    _emailController,
+                    (value) {
+                      if (value == null || value.isEmpty) {
+                        return '이메일을 주소를 입력해 주세요.';
+                      }
+                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+                      if (!emailRegex.hasMatch(value)) {
+                        return '유효한 이메일을 입력해 주세요.';
+                      }
+                      return null;
+                    },
+                    false,
+                  ).customTextField(),
+                  SizedBox(height: 12),
+                  CustomTextField(
+                    '- 없이 전화번호를 입력해 주세요.',
+                    _phoneController,
+                    (value) {
+                      if (value == null || value.isEmpty) {
+                        return '올바른 전화번호를 입력해 주세요.';
+                      }
+                      return null;
+                    },
+                    false,
+                  ).customTextField(),
+                  SizedBox(height: 30),
 
                   //드롭다운 설명문
                   DropDownDescription(
@@ -187,19 +205,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       bottomNavigationBar: Padding(
           padding: fullPadding,
-          child:
-              //완료 버튼
-              LoginButton('완료!', () {
-            if (_formKey.currentState!.validate()) {
-              if (_emailController.text.isNotEmpty &&
-                  _phoneController.text.isNotEmpty &&
-                  _idController.text.isNotEmpty &&
-                  _pwController.text.isNotEmpty &&
-                  _checkpwController.text.isNotEmpty) {
-                _register();
-              }
-            }
-          }).loginButton()),
+          child: Row(
+            children: [
+              //취소 버튼
+              Expanded(
+                flex: 1,
+                child: NewButton(Color(0xff2C2C2C), settingGrey, '이전', () {
+                  Navigator.pop(context);
+                }).newButton(),
+              ),
+              SizedBox(width: 15),
+              //비밀번호 바꾸기 버튼
+              Expanded(
+                flex: currentWidth < 360 ? 2 : 3,
+                child: NewButton(mainRed, backgroundColor, '계정 만들기 완료!', () {
+                  if (_formKey.currentState!.validate()) {
+                    if (_emailController.text.isNotEmpty &&
+                        _phoneController.text.isNotEmpty &&
+                        _idController.text.isNotEmpty &&
+                        _pwController.text.isNotEmpty &&
+                        _checkpwController.text.isNotEmpty) {
+                      _register();
+                    }
+                  }
+                }).newButton(),
+              ),
+            ],
+          )),
     );
   }
 }

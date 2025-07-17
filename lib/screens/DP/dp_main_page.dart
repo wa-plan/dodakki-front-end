@@ -42,12 +42,12 @@ class _DPMainState extends State<DPMain> {
 
   Future<void> _initializeData() async {
     await userMandaIdInfo();
-    _mainGoalList(); 
+    _mainGoalList();
   }
 
   String ddayFinder(String mandalartId) {
     String dday = ddayList.firstWhere(
-          (element) => element['mandalartId'] == mandalartId, 
+          (element) => element['mandalartId'] == mandalartId,
           orElse: () => {'dday': ''},
         )['dday'] ??
         '0';
@@ -70,7 +70,7 @@ class _DPMainState extends State<DPMain> {
         await userMandaInfo(mandalartId);
       });
 
-      await Future.wait(tasks); 
+      await Future.wait(tasks);
 
       failedIDs.sort((a, b) {
         return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
@@ -83,10 +83,10 @@ class _DPMainState extends State<DPMain> {
             .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
 
         if (aBookmark && !bBookmark) {
-          return -1; 
+          return -1;
         }
         if (!aBookmark && bBookmark) {
-          return 1; 
+          return 1;
         }
 
         return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
@@ -131,8 +131,7 @@ class _DPMainState extends State<DPMain> {
         await MainGoalListService.mainGoalList(context);
     if (goals != null) {
       List<Map<String, dynamic>> filteredGoals = [];
-      List<Map<String, dynamic>> emptySecondGoals =
-          []; 
+      List<Map<String, dynamic>> emptySecondGoals = [];
       List<Map<String, String>> inProgressID =
           Provider.of<GoalOrder>(context, listen: false).goalOrder;
 
@@ -184,27 +183,35 @@ class _DPMainState extends State<DPMain> {
     return Scaffold(
       backgroundColor: backgroundColor,
       //추가 플로팅 버튼
-      floatingActionButton: FloatingButton(
-        Icons.add, 
-        () async {
-          resetAllProviders(context);
-          await Future.delayed(Duration(milliseconds: 10));
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DPcreateSelectPage(
-                emptyMainGoals: emptyMainGoals,
-                secondGoals: secondGoals,
-              ),
+      floatingActionButton: FloatingButton(Icons.add, () async {
+        resetAllProviders(context);
+        await Future.delayed(Duration(milliseconds: 10));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DPcreateSelectPage(
+              emptyMainGoals: emptyMainGoals,
+              secondGoals: secondGoals,
             ),
-          );
-        }, 25).floatingButton(),
+          ),
+        );
+      }, 25)
+          .floatingButton(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
           padding: appBarPadding,
-          child: DPTitleText('도미노 플랜', currentWidth).dPTitleText(),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/img/dp_icon.png',
+                scale: 11,
+              ),
+              SizedBox(width: 10),
+              DPTitleText('도미노 플랜', currentWidth).dPTitleText(),
+            ],
+          ),
         ),
         backgroundColor: backgroundColor,
       ),
@@ -215,43 +222,39 @@ class _DPMainState extends State<DPMain> {
           children: [
             SizedBox(height: 10),
             mainGoals.isEmpty
-            //도미노 플랜이 없을 경우.
+                //❤️플랜이 없을 경우 나오는 위젯
                 ? Container(
-                    height: 300,
+                    height: 240,
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
                     decoration: BoxDecoration(
-                      color: const Color(0xff2D2D2D),
+                      color: const Color(0xff2C2C2C),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Stack(
                       children: [
-                        Positioned(
-                          top: 25, 
-                          left: 25, 
-                          child: Text(
-                            '아직 플랜이 없어요.\n목표를 이루려면\n철저한 계획은 필수!',
+                        Text(
+                            '엇!\n아직 플랜이 없어요.\n목표를 이루려면\n철저한 계획은 필수!',
                             style: TextStyle(
-                                color: Color(0xff595959),
-                                fontSize: 17,
-                                fontWeight: FontWeight.w700,
-                                height: 1.7),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0, 
-                          right: 0, 
-                          child: Opacity(
-                            opacity: 0.3,
-                            child: Image.asset(
-                              'assets/img/emptyDominho.png',
-                              height: 190,
+                              color: settingGrey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              height: 1.7,
                             ),
+                          ),
+                        Positioned(
+                          bottom: 0,
+                              right: 0,
+                          child: Image.asset(
+                            'assets/img/emptyDominho.png',
+                            height: currentWidth < 330 ? 130 : 180,
                           ),
                         ),
                       ],
                     ),
                   )
 
-                //만다라트 목록 UI
+                //❤️만다라트 목록 UI
                 : SizedBox(
                     height: 440,
                     child: PageView.builder(
@@ -303,7 +306,9 @@ class _DPMainState extends State<DPMain> {
                                         firstGoalName: mandalart,
                                         secondGoals: secondGoals,
                                         mandalartId: int.parse(mandalartId),
-                                        firstGoalColor: ColorTransform(firstColor).colorTransform(),
+                                        firstGoalColor:
+                                            ColorTransform(firstColor)
+                                                .colorTransform(),
                                         dday: ddayFinder(mandalartId),
                                       ),
                                     ),
@@ -313,7 +318,7 @@ class _DPMainState extends State<DPMain> {
                                   padding: const EdgeInsets.all(30),
                                   margin: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                    color: Color(0xff2A2A2A),
+                                    color: Color(0xff2C2C2C),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Column(
@@ -336,13 +341,16 @@ class _DPMainState extends State<DPMain> {
                                       //만다라트
                                       IgnorePointer(
                                         child: MainMandalart(
-                                          firstGoalName: mandalart, 
-                                          secondGoals: secondGoals, 
-                                          mandalartId: int.parse(mandalartId), 
-                                          firstGoalColor: 
-                                          ColorTransform(firstColor).colorTransform(),
+                                          firstGoalName: mandalart,
+                                          secondGoals: secondGoals,
+                                          mandalartId: int.parse(mandalartId),
+                                          firstGoalColor:
+                                              ColorTransform(firstColor)
+                                                  .colorTransform(),
                                           size: 250,
-                                          detail: false,),
+                                          detail: false,
+                                          currentWidth: currentWidth,
+                                        ),
                                       )
                                     ],
                                   ),
@@ -355,7 +363,7 @@ class _DPMainState extends State<DPMain> {
                     ),
                   ),
             const SizedBox(height: 20),
-            //페이지 인디케이터
+            //❤️페이지 인디케이터
             PageIndicator(_pageController, mainGoals),
           ],
         ),

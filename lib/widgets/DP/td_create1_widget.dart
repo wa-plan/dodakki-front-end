@@ -22,12 +22,14 @@ class TDMandalart extends StatefulWidget {
   final String firstGoalName;
   final List<Map<String, dynamic>> secondGoals;
   final Color firstGoalColor;
+  final double currentWidth;
 
   const TDMandalart({
     super.key,
     required this.firstGoalName,
     required this.secondGoals,
     required this.firstGoalColor,
+    required this.currentWidth
   });
 
   @override
@@ -51,7 +53,7 @@ class TDMandalartState extends State<TDMandalart> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
+      width: widget.currentWidth < 600 ? 300 : 500,
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -70,7 +72,7 @@ class TDMandalartState extends State<TDMandalart> {
               physics: const NeverScrollableScrollPhysics(),
               children: List.generate(9, (innerIndex) {
                 if (innerIndex == 4) {
-                  return FreeGrid(widget.firstGoalName, widget.firstGoalColor, 15).freeGrid();
+                  return FreeGrid(widget.firstGoalName, widget.firstGoalColor, 15, widget.currentWidth).freeGrid();
                 } else {
                   final safeIndex = innerIndex > 4 ? innerIndex - 1 : innerIndex;
 
@@ -85,7 +87,7 @@ class TDMandalartState extends State<TDMandalart> {
                   return FreeGrid(
                     secondText,
                     secondColorDefiner(secondText, secondColor.withOpacity(0.3)),
-                    15,
+                    15, widget.currentWidth
                   ).freeGrid();
                 }
               }),
@@ -111,7 +113,7 @@ class TDMandalartState extends State<TDMandalart> {
                   return FreeGrid(
                     secondText,
                     secondColorDefiner(secondText, secondColor.withOpacity(0.3)),
-                    15,
+                    15, widget.currentWidth
                   ).freeGrid();
                 } else {
                   final adjustedIndex = index > 4 ? index - 1 : index;
@@ -134,7 +136,7 @@ class TDMandalartState extends State<TDMandalart> {
                         ),
                         borderRadius: BorderRadius.circular(5)
                       ),
-                      child: FreeGrid(thirdText, thirdColor, 15).freeGrid(),
+                      child: FreeGrid(thirdText, thirdColor, 15, widget.currentWidth).freeGrid(),
                     ),
                   );
                 }

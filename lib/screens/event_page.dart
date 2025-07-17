@@ -112,7 +112,7 @@ class _EventPageState extends State<EventPage> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         TextButton(
                           onPressed: () {
                             setState(() {
@@ -126,13 +126,14 @@ class _EventPageState extends State<EventPage> {
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: mainRed,
+                            padding: EdgeInsets.fromLTRB(30,13,30,13)
                           ),
                           child: const Text(
-                            '공 굴리기',
+                            '공 굴리기!',
                             style: TextStyle(
                               color: backgroundColor,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 17,
                             ),
                           ),
                         )

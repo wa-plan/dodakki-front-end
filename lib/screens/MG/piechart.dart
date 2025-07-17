@@ -1,3 +1,4 @@
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -66,7 +67,7 @@ class PieChart extends CustomPainter {
     startAngle += inProgressArcAngle;
     double failArcAngle = 2 * pi * (failPercentage / 100);
 
-    paint.color = Color.fromARGB(255, 58, 58, 58);
+    paint.color = Color(0xff2C2C2C);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
         failArcAngle, false, paint);
 
@@ -83,8 +84,8 @@ class PieChart extends CustomPainter {
     TextSpan labelSpan = TextSpan(
       style: TextStyle(
         fontSize: labelFontSize, // ✅ "달성률" 작은 크기
-        fontWeight: FontWeight.w500,
-        color: Color(0xffAAAAAA),
+        fontWeight: FontWeight.w600,
+        color: settingGrey,
         height: 2.0,
       ),
       text: "달성률\n", // ✅ 개행 추가

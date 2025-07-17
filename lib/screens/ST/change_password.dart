@@ -1,6 +1,8 @@
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:domino/screens/ST/settings_main.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_setting.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/LR/loginregister_find_password.dart';
@@ -27,25 +29,22 @@ class _ChangePasswordState extends State<ChangePassword> {
         currentPassword: currentPassword, newPassword: newPassword);
     if (success) {
       Message('비밀번호가 성공적으로 변경되었습니다.', const Color(0xff00DB00),
-            Color(0xff31412C), // 배경 색상
-            borderColor: const Color(0xff00DB00), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
+              Color(0xff31412C), // 배경 색상
+              borderColor: const Color(0xff00DB00), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SettingsMain()),
-                        );
-
-      
+        context,
+        MaterialPageRoute(builder: (context) => const SettingsMain()),
+      );
     } else {
-      Message('기존 비밀번호와 일치하지 않습니다.', const Color(0xffFF6767), // 텍스트 색상
-            const Color(0xff412C2C), // 배경 색상
-            borderColor: const Color(0xffFF6767), // 테두리 색상
-            icon: Icons.block)
-        .message(context);
-
-      
+      Message(
+              '기존 비밀번호와 일치하지 않습니다.',
+              const Color(0xffFF6767), // 텍스트 색상
+              const Color(0xff412C2C), // 배경 색상
+              borderColor: const Color(0xffFF6767), // 테두리 색상
+              icon: Icons.block)
+          .message(context);
     }
   }
 
@@ -70,19 +69,19 @@ class _ChangePasswordState extends State<ChangePassword> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼
               CustomBackButton(
                 () {
                   Navigator.of(context).pop();
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('비밀번호 바꾸기').pageTitle(),
-              const Spacer(),
-
-              
+              Icon(
+                Icons.lock,
+                color: mainRed,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('비밀번호 바꾸기', currentWidth).dPTitleText(),
             ],
           ),
         ),
@@ -95,27 +94,16 @@ class _ChangePasswordState extends State<ChangePassword> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: currentWidth < 600 ? 40 : 70),
-              //현재 비밀번호
-              FieldTitle("현재 비밀번호").fieldTitle(),   
-              SizedBox(height: 15),
-              LoginTextField(
-                              '현재 비밀번호를 입력해주세요.', _currentkeycontroller,
-                              (value) {
-                        if (value == null || value.isEmpty) {
-                          return '현재 비밀번호를 입력해주세요.';
-                        }
-                        return null;
-                      },
-                              true, // 비밀번호 필드이므로 obscureText = true
-                              Icons.lock)
-                          .loginTextField(),
-                 
+              const SizedBox(height: 30),
+              //❤️현재 비밀번호 카테고리
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(
-                    onPressed: () {
+                  STSubTitle('현재 비밀번호', Icons.key_rounded, 20)
+                      .sTSubTitle(context),
+                  //비밀번호 찾기 버튼
+                  GestureDetector(
+                    onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -123,74 +111,99 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 const LoginregisterFindPassword(),
                           ));
                     },
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.fromLTRB(15, 10.5, 15, 10.5),
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                    ),
-                    child: Text(
-                      '비밀번호를 잊으셨나요?',
-                      style: TextStyle(
-                        color: const Color(0xffAAAAAA),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                    child: Container(
+                      width: 130,
+                      height: 21,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '비밀번호 찾기',
+                        style: TextStyle(
+                          color: mainRed,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
+              CustomTextField('현재 비밀번호를 입력해주세요.', _currentkeycontroller, (value) {
+                if (value == null || value.isEmpty) {
+                  return '현재 비밀번호를 입력해주세요.';
+                }
+                return null;
+              }, true)
+                  .customTextField(),
 
-              //새 비밀번호
-              FieldTitle("새 비밀번호").fieldTitle(),             
-              SizedBox(height: 15),
-              LoginTextField(
-                              '8~16자를 입력해 주세요.', _newkeycontroller, (value) {
-                        if (value == null ||
-                            value.length < 8 ||
-                            value.length > 16) {
-                          return '비밀번호는 8~16자리여야 해요.';
-                        }
-                        return null;
-                      },
-                              true, // 비밀번호 필드이므로 obscureText = true
-                              Icons.lock)
-                          .loginTextField(),
-                   
-                 
-             
-              SizedBox(height: 15),
-              LoginTextField(
-                              '한번 더 비밀번호를 확인해주세요.', _checkkeycontroller, (value) {
-                        if (value != _newkeycontroller.text) {
-                          return '비밀번호가 일치하지 않습니다.';
-                        }
-                        return null;
-                      },
-                              true, // 비밀번호 필드이므로 obscureText = true
-                              Icons.lock)
-                          .loginTextField(),
-            
-              
-              
+              //❤️새 비밀번호 카테고리
+              const SizedBox(height: 41),
+              STSubTitle('새 비밀번호', Icons.key_rounded, 20).sTSubTitle(context),
+              const SizedBox(height: 12),
+              CustomTextField('새 비밀번호를 입력해 주세요.', _newkeycontroller, (value) {
+                if (value == null || value.length < 8 || value.length > 16) {
+                  return '비밀번호는 8~16자리여야 해요.';
+                }
+                return null;
+              },
+                      true, // 비밀번호 필드이므로 obscureText = true
+                      )
+                  .customTextField(),
+
+              SizedBox(height: 12),
+              CustomTextField('새 비밀번호를 한번 더 확인해주세요.', _checkkeycontroller, (value) {
+                if (value != _newkeycontroller.text) {
+                  return '비밀번호가 일치하지 않습니다.';
+                }
+                return null;
+              },
+                      true, // 비밀번호 필드이므로 obscureText = true
+                      )
+                  .customTextField(),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: Padding(
+  padding: fullPadding,
+  child: Row(
+    children: [
+      //취소 버튼
+      Expanded(
+        flex: 1, 
+        child: NewButton(
+          Color(0xff2C2C2C),
+          settingGrey,
+          '취소',
+          () {
+            Navigator.pop(context);
+          },
+        ).newButton(),
+      ),
+      SizedBox(width: 15),
+      //비밀번호 바꾸기 버튼
+      Expanded(
+        flex: currentWidth < 330 ? 2 : 3, 
+        child: NewButton(
+          mainRed,
+          backgroundColor,
+          '비밀번호 바꾸기',
+          () {
+            if (_formKey.currentState!.validate()) {
+              if (_newkeycontroller.text == _newkeycontroller.text) {
+                _changePassword(
+                  _currentkeycontroller.text,
+                  _newkeycontroller.text,
+                );
+              }
+            }
+          },
+        ).newButton(),
+      ),
+    ],
+  ),
+),
 
-      bottomNavigationBar: Padding(padding: fullPadding,
-      child:LoginButton('변경하기', () {
-                    if (_formKey.currentState!.validate()) {
-                      if (_newkeycontroller.text == _newkeycontroller.text) {
-                        _changePassword(
-                            _currentkeycontroller.text, _newkeycontroller.text);
-                        
-                      }
-                    }
-                  })
-                      .loginButton(),),
     );
   }
 }

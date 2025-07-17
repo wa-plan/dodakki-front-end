@@ -15,6 +15,7 @@ class Tutorial8State extends State<Tutorial8> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
         backgroundColor: backgroundColor,
@@ -23,22 +24,52 @@ class Tutorial8State extends State<Tutorial8> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30),
-              //프로그레스 바
-              ProgressBar(3, 4),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
+                    //❤️메뉴 아이콘
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/img/td_icon.png',
+                          height: currentWidth < 600 ? 17 : 26,
+                          width: currentWidth < 600 ? 17 : 26,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(width: 8),
+                        //❤️메뉴 텍스트
+                        Text(
+                          '오늘의 도미노',
+                          style: TextStyle(
+                            fontSize: currentWidth < 600 ? 18 : 29,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
 
-              //프로그레스 타이틀
-              ProgressTitle('TO-DO 만들기').progressTitle(),
-              SizedBox(height: 10),
-
-              //질문
-              TutorialQuestion(
-                      "", '동아리 들어가기', "를 위해", '실천으로 옮길 수 있는 TO-DO는?', 'blue')
-                  .tutorialQuestion(),
-                  SizedBox(height: 30), 
-
-              // 선택지
+                    //❤️질문
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard',
+                            color: Colors.white,
+                            height: 1.8),
+                        children: [
+                          TextSpan(
+                            text: '동아리 들어가기',
+                            style: TextStyle(color: mainBlue),
+                          ),
+                          TextSpan(
+                            text: '를 위해\n',
+                          ),
+                          TextSpan(text: '실천으로 옮길 수 있는 TO-DO는?'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    //❤️선택지
               ImageOption(
                 imageUrls: [
                   'assets/img/option3.png',
@@ -46,6 +77,7 @@ class Tutorial8State extends State<Tutorial8> {
                   'assets/img/option5.png'
                 ],
                 color: 'blue',
+                currentWidth: currentWidth,
                 onItemSelected: (index) {
                   setState(() {
                     selectedIndex = index;
@@ -58,7 +90,7 @@ class Tutorial8State extends State<Tutorial8> {
         bottomNavigationBar:
             //버튼
             Padding(
-          padding: tutorialPadding,
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 20),
           child: TutorialButton('다음', () {
             if (selectedIndex == 0) {
               Navigator.push(

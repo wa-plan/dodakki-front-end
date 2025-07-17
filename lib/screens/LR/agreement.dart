@@ -1,4 +1,5 @@
 import 'package:domino/screens/LR/register.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:domino/style/styles.dart';
@@ -18,36 +19,42 @@ class _AgreementState extends State<Agreement> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
-          padding: appBarPadding,
+          padding: currentWidth < 600 ? appBarPadding : tabletPadding1,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼
               CustomBackButton(
                 () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('계정 만들기').pageTitle(),
-              const Spacer(),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('계정 만들기', currentWidth).dPTitleText(),
+              Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
-              ProgressBar(1, 2)
+              ProgressBar(0, 2)
             ],
           ),
         ),
         backgroundColor: backgroundColor,
       ),
       body: SingleChildScrollView(
-        padding: fullPadding,
+        padding: currentWidth < 600 ? fullPadding : tabletPadding2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -126,7 +133,7 @@ class _AgreementState extends State<Agreement> {
 
                 //항목 3
                 Text(
-                  '개인정보 수집 및 이용에 동의합니다.',
+                  currentWidth < 360 ? '개인정보 수집 및 이용에 \n동의합니다.' : '개인정보 수집 및 이용에 동의합니다.',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -140,64 +147,53 @@ class _AgreementState extends State<Agreement> {
             ),
             const SizedBox(height: 30),
             DropDownDescription(
-                    Color(0xff2A2A2A),
-                    Color(0xffD3D3D3),
-                    Color(0xffC9C9C9),
+                    Color(0xff2C2C2C),
+                    settingGrey,
+                    Colors.white,
                     '개인정보 처리방침',
                     '''이 개인정보처리방침은 “도를 닦는 사람들”(이하 “서비스 제공자”)이 제공하는 모바일 애플리케이션 도닦기(dodakki) (이하 “앱”)에 적용됩니다. 본 앱은 오픈소스로 제공되며, “있는 그대로(AS IS)”의 형태로 사용됩니다.
 
+1️⃣ 수집하는 정보 및 이용 목적
+💠 사용자 제공 정보: 이메일 주소, 전화번호 (회원가입 및 인증 목적)
+💠 자동 수집 정보: 앱 사용 시점, 사용 시간, 기기 운영체제 정보 등
+💠 앱은 정확한 위치정보를 수집하지 않습니다.
 
-1. 수집하는 정보 및 이용 목적
-사용자 제공 정보: 이메일 주소, 전화번호 (회원가입 및 인증 목적)
-자동 수집 정보: 앱 사용 시점, 사용 시간, 기기 운영체제 정보 등
-앱은 정확한 위치정보를 수집하지 않습니다.
-
-
-2. 알림 기능
+2️⃣ 알림 기능
 앱은 flutter_local_notifications 및 timezone 패키지를 통해 로컬 알림(Local Notification) 기능을 제공합니다. 외부 서버나 제3자 서비스와 연결되지 않으며, 개인정보를 수집하지 않습니다.
 
-
-3. 제3자 서비스
+3️⃣ 제3자 서비스
 앱은 다음 외부 서비스를 사용할 수 있습니다:
-- OpenAI API
+💠 OpenAI API
 
-
-4. 정보 제공 및 공개
+4️⃣ 정보 제공 및 공개
 서비스 제공자는 아래의 경우 사용자 정보를 공개할 수 있습니다:
-- 법령에 따른 요구 또는 수사 협조
-- 사기 방지, 안전 보호 등 공익적 목적
-- 서비스 운영을 지원하는 위탁사 (보안 준수 조건)
+💠 법령에 따른 요구 또는 수사 협조
+💠 사기 방지, 안전 보호 등 공익적 목적
+💠 서비스 운영을 지원하는 위탁사 (보안 준수 조건)
 
-
-5. 수집 거부 권리
+5️⃣ 수집 거부 권리
 앱 삭제를 통해 모든 정보 수집을 중단할 수 있습니다.
 
-
-6. 데이터 보관 및 삭제
+6️⃣ 데이터 보관 및 삭제
 서비스 제공자는 수집된 개인정보를 필요한 기간 동안 보관하며, 사용자가 요청 시 즉시 삭제합니다. 삭제 요청은 이메일(dodakki123@gmail.com)로 접수 가능합니다.
 
-
-7. 아동의 개인정보
+7️⃣ 아동의 개인정보
 앱은 만 13세 미만 아동의 개인정보를 의도적으로 수집하지 않습니다. 수집 사실이 확인되면 즉시 삭제 조치하며, 보호자는 이메일로 연락 부탁드립니다.
 
-
-8. 보안
+8️⃣ 보안
 서비스 제공자는 사용자 정보 보호를 위해 물리적·전자적 보안 조치를 적용합니다.
 
-
-9. 방침 변경
+9️⃣ 방침 변경
 본 방침은 수시로 변경될 수 있으며, 변경 시 본 페이지에 고지됩니다.
 
-
-10. 앱 권한
+🔟 앱 권한
 앱은 아래 기능 제공을 위해 다음 권한을 요청할 수 있습니다:
-- 알림 권한: 사용자에게 목표 알림 등 로컬 알림을 제공하기 위해 사용됩니다.
-- 사진 및 갤러리 접근 권한: 사용자가 프로필 사진을 설정할 수 있도록 하기 위해 사용됩니다. 사용자가 목표를 설정할 때 목표 이미지를 업로드할 수 있도록 하기 위해 사용됩니다.
+💠 알림 권한: 사용자에게 목표 알림 등 로컬 알림을 제공하기 위해 사용됩니다.
+💠 사진 및 갤러리 접근 권한: 사용자가 프로필 사진을 설정할 수 있도록 하기 위해 사용됩니다. 사용자가 목표를 설정할 때 목표 이미지를 업로드할 수 있도록 하기 위해 사용됩니다.
 
-
-해당 권한들은 명시적인 사용자 동의 하에 요청되며, 고지된 목적 외에는 사용되지 않으며, 제3자에게 제공되지 않습니다.
+💥 해당 권한들은 명시적인 사용자 동의 하에 요청되며, 고지된 목적 외에는 사용되지 않으며, 제3자에게 제공되지 않습니다.
               
-시행일자: 2025년 4월 20일''')
+📅 시행일자: 2025년 4월 20일''')
                 .dropDownDescription()
           ],
         ),
@@ -205,19 +201,35 @@ class _AgreementState extends State<Agreement> {
       bottomNavigationBar: Padding(
           padding: fullPadding,
           child:
-              //다음 버튼
-              LoginButton('다음', () {
-            if (agreeAll == true || agreeFirst && agreeSecond == true) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RegisterScreen()),
-              );
-            } else {
-              //미선택 메시지 (from style_tutorial.dart)
-              TutorialMessage("약관 동의를 하지 않으면 가입할 수 없어ㅜㅜ")
-                  .tutorialMessage(context);
-            }
-          }).loginButton()),
+              Row(
+            children: [
+              //취소 버튼
+              Expanded(
+                flex: 1,
+                child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
+                  Navigator.pop(context);
+                }).newButton(),
+              ),
+              SizedBox(width: 15),
+              //비밀번호 바꾸기 버튼
+              Expanded(
+                flex: currentWidth < 360 ? 2 : 3,
+                child: NewButton(mainRed, backgroundColor, '다음', () {
+                  if (agreeAll == true || agreeFirst && agreeSecond == true) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterScreen()),
+                    );
+                  } else {
+                    //미선택 메시지 (from style_tutorial.dart)
+                    TutorialMessage("약관 동의를 하지 않으면 가입할 수 없어ㅜㅜ")
+                        .tutorialMessage(context);
+                  }
+                }).newButton(),
+              ),
+            ],
+          )),
     );
   }
 }

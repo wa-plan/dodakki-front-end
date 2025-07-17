@@ -4,7 +4,6 @@ import 'package:domino/style/styles.dart';
 
 void showCalendarPopup(
     BuildContext context, Function(DateTime?) onDateSelected) {
-  final currentWidth = MediaQuery.of(context).size.width;
 
   showDialog(
     context: context,
@@ -72,39 +71,39 @@ void showCalendarPopup(
                     ),
                     //주말 날짜
                     weekendTextStyle: TextStyle(
-                      color: Color.fromARGB(255, 201, 110, 110),
+                      color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   daysOfWeekStyle: const DaysOfWeekStyle(
-                    weekdayStyle: TextStyle(
-                      color: Color.fromARGB(255, 170, 170, 170),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    weekendStyle: TextStyle(
-                      color: Color.fromARGB(255, 201, 110, 110),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  headerStyle: HeaderStyle(
-                    titleCentered: true,
-                    titleTextStyle:
-                        const TextStyle(color: Colors.white, fontSize: 15),
-                    leftChevronIcon: Icon(
-                      Icons.arrow_back_rounded,
-                      color: const Color.fromARGB(255, 170, 170, 170),
-                      size: 17,
-                    ),
-                    rightChevronIcon: Icon(
-                      Icons.arrow_forward_rounded,
-                      color: const Color.fromARGB(255, 170, 170, 170),
-                      size: 17,
-                    ),
-                    formatButtonVisible: false,
-                  ),
+        weekdayStyle: TextStyle(
+          color: settingGrey,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+        weekendStyle: TextStyle(
+          color: settingGrey,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+                  headerStyle:  HeaderStyle(
+        titleCentered: true,
+        titleTextStyle: const TextStyle(
+            color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+        leftChevronIcon: Icon(
+          Icons.arrow_circle_left_rounded,
+          color: settingGrey,
+          size: 22,
+        ),
+        rightChevronIcon: Icon(
+          Icons.arrow_circle_right_rounded,
+          color: settingGrey,
+          size: 22,
+        ),
+        formatButtonVisible: false,
+      ),
                 ));
           },
         ),
@@ -112,23 +111,26 @@ void showCalendarPopup(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 90,
-                height: 45,
-                child: NewButton(Colors.black, Colors.white, '취소', () {
-                  Navigator.pop(context); // 팝업 닫기
-                })
-                    .newButton(),
-              ),
-              SizedBox(
-                width: 90,
-                height: 45,
-                child: NewButton(Colors.black, Colors.white, '완료', () {
+
+              Expanded(
+            flex: 1,
+            child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
+              Navigator.pop(context);
+            }).newButton(),
+          ),
+          SizedBox(width: 15),
+          //완료 버튼
+          Expanded(
+            flex: 2,
+            child: 
+                NewButton(mainRed, backgroundColor, '선택 완료!', () {
                   onDateSelected(tempSelectedDate); // 콜백 호출
                   Navigator.pop(context); // 팝업 닫기
-                })
-                    .newButton(),
-              ),
+                }).newButton(),)
+            
+
+
+             
             ],
           )
         ],

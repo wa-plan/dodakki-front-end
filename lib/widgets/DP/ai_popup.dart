@@ -1,6 +1,6 @@
 import 'package:domino/apis/services/openai_services.dart';
-import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_tutorial.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class AIPopupDialog extends StatefulWidget {
@@ -48,69 +48,50 @@ class _AIPopupDialogState extends State<AIPopupDialog> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           decoration: BoxDecoration(
-            color: const Color(0xFF303030),
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/img/AI.png',
-                          height: 22,
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Text(
-                              widget.secondGoalName == '없음'
-                                  ? widget.firstGoalName
-                                  : widget.secondGoalName,
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                color: widget.firstGoalColor,
-                                height: 1,
-                              ),
-                            ),
-                            const Text(
-                              '를 위해',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          '내가 추천하는 건..!',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                  Image.asset(
+                    'assets/img/AI.png',
+                    height: 20,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    '도민호의 ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      height: 1,
                     ),
                   ),
+                  const Text(
+                    'AI 추천',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: mainRed,
+                    ),
+                  ),
+                  Spacer(),
+
+                  //❤️나가기 버튼
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: const Icon(Icons.exit_to_app,
-                        color: Color(0xff8E8E8E), size: 27),
+                        color: settingGrey, size: 25),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 35),
 
-              // ───── 추천 목표 리스트 ─────
+              //❤️추천 목표 리스트
               FutureBuilder<List<String>>(
                 future: _generatedGoals,
                 builder: (context, snapshot) {
@@ -155,7 +136,7 @@ class _AIPopupDialogState extends State<AIPopupDialog> {
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? Colors.white
-                                      : const Color(0xFF282828),
+                                      : const Color(0xFF2C2C2C),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(
@@ -165,10 +146,10 @@ class _AIPopupDialogState extends State<AIPopupDialog> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: isSelected
-                                        ? const Color(0xFF303030)
+                                        ? backgroundColor
                                         : Colors.white,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 14,
+                                    fontSize: 13,
                                   ),
                                 ),
                               ),
@@ -176,7 +157,7 @@ class _AIPopupDialogState extends State<AIPopupDialog> {
                           }),
                         ),
                       ),
-                      // 새로고침 버튼
+                      //❤️새로고침 버튼
                       TextButton(
                         onPressed: () {
                           setState(() {
@@ -186,12 +167,13 @@ class _AIPopupDialogState extends State<AIPopupDialog> {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.refresh,
-                                color: Color(0xFF5E5E5E), size: 20),
+                            Icon(Icons.refresh, color: settingGrey, size: 20),
                             SizedBox(width: 5),
                             Text('클릭하여 새로고침',
                                 style: TextStyle(
-                                    color: Color(0xFF5E5E5E), fontSize: 14)),
+                                    color: settingGrey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600)),
                           ],
                         ),
                       ),
@@ -200,13 +182,14 @@ class _AIPopupDialogState extends State<AIPopupDialog> {
                 },
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
-              // ───── 적용 버튼 ─────
+              //❤️적용하기 버튼
               SizedBox(
                 width: double.infinity,
-                height: 45,
-                child: LoginButton(
+                child: NewButton(
+                  mainRed,
+                  backgroundColor,
                   '지금 바로 적용하기',
                   () {
                     if (_selectedGoals.length > widget.howMany) {
@@ -217,7 +200,7 @@ class _AIPopupDialogState extends State<AIPopupDialog> {
                     }
                     Navigator.pop(context, _selectedGoals.toList());
                   },
-                ).loginButton(),
+                ).newButton(),
               ),
             ],
           ),

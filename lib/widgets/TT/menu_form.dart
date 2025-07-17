@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:domino/style/styles.dart';
+import 'package:flutter/material.dart';
 import 'package:domino/style/style_tutorial.dart';
 
 class TTmenuForm extends StatelessWidget {
@@ -24,53 +24,72 @@ class TTmenuForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
+    final currentWidth = MediaQuery.of(context).size.width;
+
+    return Stack(children: [
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
         children: [
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Row(
             children: [
+              //❤️메뉴 아이콘
               Image.asset(
                 icon,
-                height: 28,
-                width: 28,
+                height: currentWidth < 600 ? 17 : 26,
+                width: currentWidth < 600 ? 17 : 26,
                 fit: BoxFit.contain,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const SizedBox(width: 8),
+              //❤️메뉴 텍스트
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: currentWidth < 600 ? 18 : 29,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 18),
+          //❤️메뉴 설명
           TutorialQuestion(
                   description1, description2, "를 위한", description3, color)
               .tutorialQuestion(),
-          const SizedBox(height: 50),
-          AspectRatio(
-            aspectRatio: 795 / 1143,
+          SizedBox(
+            height: 30,
+          ),
+
+          Center(
             child: Image.asset(
               imageUrl,
-              width: double.infinity,
+              height: currentWidth < 600 ? 400 : 500,
               fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
             ),
           ),
         ],
       ),
-    );
+      Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Container(
+          height: 200,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                backgroundColor,
+                backgroundColor.withOpacity(0.8),
+                backgroundColor.withOpacity(0.0),
+              ],
+            ),
+          ),
+        ),
+      )
+    ]);
   }
 }

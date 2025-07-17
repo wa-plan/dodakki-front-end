@@ -170,6 +170,10 @@ flutter:
     - assets/img/option3.png
     - assets/img/option4.png
     - assets/img/option5.png
+    - assets/img/td_icon.png
+    - assets/img/dp_icon.png
+    - assets/img/mg_icon.png
+    - assets/img/gallery_icon.png
 
 
     

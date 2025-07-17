@@ -21,24 +21,18 @@ class _EventCalendarState extends State<EventCalendar> {
   bool _isExpanded = false; // 달력 확장 상태
 
   Future<int?> getThirdGoalId(int mandalartId, String targetThirdGoal) async {
-    print('📥 요청된 mandalartId=$mandalartId');
-    print('🎯 targetThirdGoal: "$targetThirdGoal"');
-
     Map<String, dynamic>? mandalartData =
         await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
 
     // ✅ 1. 응답 데이터 전체 출력
-    print('🔍 전체 mandalartData 응답: ${jsonEncode(mandalartData)}');
 
     if (mandalartData == null) {
-      print('⛔ mandalartData is null');
       return null;
     }
 
     final secondGoals = mandalartData['secondGoals'] as List<dynamic>?;
 
     if (secondGoals == null) {
-      print('⛔ secondGoals is null');
       return null;
     }
 
@@ -55,26 +49,17 @@ class _EventCalendarState extends State<EventCalendar> {
         final String currentGoal =
             (thirdGoal['thirdGoal'] ?? '').toString().trim();
 
-        // ✅ 2. 각 thirdGoal 값과 길이 출력
-        print('🔹 currentGoal: "$currentGoal" (length: ${currentGoal.length})');
-        print(
-            '🔸 targetGoal : "${targetThirdGoal.trim()}" (length: ${targetThirdGoal.trim().length})');
-
         // ✅ 3. 비교 결과 출력
         if (normalize(currentGoal) == normalize(targetThirdGoal)) {
           final thirdGoalId = thirdGoal['id'] as int;
-          print('✅ 일치하는 thirdGoalId: $thirdGoalId');
           return thirdGoalId;
         }
 
         // 부분 매칭일 경우에도 알려줌
-        if (currentGoal.contains(targetThirdGoal.trim())) {
-          print('⚠️ 부분 포함됨: "$currentGoal"');
-        }
+        if (currentGoal.contains(targetThirdGoal.trim())) {}
       }
     }
 
-    print('❌ thirdGoalId를 찾을 수 없습니다.');
     return null;
   }
 
@@ -202,7 +187,7 @@ class _EventCalendarState extends State<EventCalendar> {
                       color: Colors.white,
                     ),
                     outsideTextStyle: TextStyle(
-                      color: const Color.fromARGB(255, 125, 125, 125),
+                      color: mainGrey,
                       fontSize: 14,
                     ),
                     //보통 날짜
@@ -213,19 +198,19 @@ class _EventCalendarState extends State<EventCalendar> {
                     ),
                     //주말 날짜
                     weekendTextStyle: TextStyle(
-                      color: Color.fromARGB(255, 201, 110, 110),
+                      color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   daysOfWeekStyle: const DaysOfWeekStyle(
                     weekdayStyle: TextStyle(
-                      color: Color.fromARGB(255, 170, 170, 170),
+                      color: settingGrey,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
                     weekendStyle: TextStyle(
-                      color: Color.fromARGB(255, 201, 110, 110),
+                      color: settingGrey,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
@@ -233,16 +218,16 @@ class _EventCalendarState extends State<EventCalendar> {
                   headerStyle: HeaderStyle(
                     titleCentered: true,
                     titleTextStyle:
-                        const TextStyle(color: Colors.white, fontSize: 15),
+                        const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
                     leftChevronIcon: Icon(
-                      Icons.arrow_back_rounded,
-                      color: const Color.fromARGB(255, 170, 170, 170),
-                      size: 17,
+                      Icons.arrow_circle_left_rounded,
+                      color: settingGrey,
+                      size: 22,
                     ),
                     rightChevronIcon: Icon(
-                      Icons.arrow_forward_rounded,
-                      color: const Color.fromARGB(255, 170, 170, 170),
-                      size: 17,
+                      Icons.arrow_circle_right_rounded,
+                      color: settingGrey,
+                      size: 22,
                     ),
                     formatButtonVisible: false,
                   ),
@@ -252,62 +237,53 @@ class _EventCalendarState extends State<EventCalendar> {
                   children: [
                     IconButton(
                       onPressed: _toggleCalendarFormat,
-                      padding: EdgeInsets.zero, // 패딩 설정
-                      constraints: const BoxConstraints(), // constraints
+                      padding: EdgeInsets.zero, 
+                      constraints: const BoxConstraints(), 
                       icon: Icon(
                         _isExpanded
                             ? Icons.arrow_drop_up_rounded
                             : Icons.arrow_drop_down_rounded,
-                        color: const Color(0xffD4D4D4),
+                        color: settingGrey,
                         size: 28,
                       ),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 ValueListenableBuilder<List<Event>>(
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
                     if (value.isEmpty) {
+                      //❤️오늘의 도미노 없을 때 나오는 위젯
                       return Container(
+                        height: 240,
                         width: double.infinity,
                         padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
                         decoration: BoxDecoration(
-                          color: const Color(0xff2D2D2D),
+                          color: const Color(0xff2C2C2C),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Column(
+                        child: Stack(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '오늘은 쓰러뜨릴 도미노가 없어요.\n여유로운 하루를 보내세요 :)',
+                            Text(
+                                  '엇!\n오늘은 도미노가 없어요!\n푹 쉬어가는 날이네요 :)',
                                   style: TextStyle(
-                                    color: Color(0xff595959),
-                                    fontSize: currentWidth < 600 ? 15 : 20,
+                                    color: settingGrey,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                     height: 1.7,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Opacity(
-                                    opacity: 0.3,
-                                    child: Image.asset(
-                                      'assets/img/emptyDominho.png',
-                                      height: currentWidth < 600 ? 150 : 300,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Image.asset(
+                                'assets/img/emptyDominho.png',
+                                height: currentWidth < 375 ? 160 : 180,
+                              ),
                             ),
                           ],
                         ),
@@ -352,19 +328,20 @@ class _EventCalendarState extends State<EventCalendar> {
                                   value[index].color,
                                   currentWidth);
                             },
+                            //❤️오늘의 도미노 위젯
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 13),
-                              padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              padding: EdgeInsets.fromLTRB(15,15,20,15),
                               decoration: BoxDecoration(
-                                color: const Color(0xff2A2A2A),
-                                borderRadius: BorderRadius.circular(8),
+                                color: const Color(0xff2C2C2C),
+                                borderRadius: BorderRadius.circular(6),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black
-                                        .withOpacity(0.02), // 검은색 10% 투명도
-                                    offset: const Offset(0, 0), // X, Y 위치 (0,0)
-                                    blurRadius: 15, // 블러 7
-                                    spreadRadius: 0, // 스프레드 0
+                                        .withOpacity(0.02), 
+                                    offset: const Offset(0, 0), 
+                                    blurRadius: 15, 
+                                    spreadRadius: 0, 
                                   ),
                                 ],
                               ),
@@ -391,7 +368,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: currentWidth < 600 ? 10 : 15,
+                                        width: 15,
                                       ),
                                       Column(
                                         crossAxisAlignment:
@@ -403,20 +380,18 @@ class _EventCalendarState extends State<EventCalendar> {
                                             child: Text(
                                               value[index].thirdGoal,
                                               overflow: TextOverflow
-                                                  .ellipsis, // 길면 ...으로 생략
-                                              maxLines: 1, // 한 줄로 제한
+                                                  .ellipsis, 
+                                              maxLines: 1, 
                                               style: TextStyle(
-                                                  fontSize: currentWidth < 600
-                                                      ? 11.5
-                                                      : 14,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
                                                   color:
-                                                      const Color(0xffAAAAAA)),
+                                                      settingGrey),
                                             ),
                                           ),
                                           SizedBox(
                                               height:
-                                                  currentWidth < 600 ? 2 : 5),
+                                                  2),
                                           SizedBox(
                                             width:
                                                 currentWidth < 600 ? 100 : 200,
@@ -425,9 +400,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  fontSize: currentWidth < 600
-                                                      ? 14
-                                                      : 16,
+                                                  fontSize: 15,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white),
                                             ),
@@ -436,6 +409,7 @@ class _EventCalendarState extends State<EventCalendar> {
                                       ),
                                     ],
                                   ),
+                                  //상태 선택 도형들
                                   Row(
                                     children: [
                                       GestureDetector(
@@ -453,14 +427,14 @@ class _EventCalendarState extends State<EventCalendar> {
                                               formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(9),
+                                          padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
                                           color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.clear_outlined,
                                             size: 23,
                                             color: value[index].didZero
                                                 ? mainGold
-                                                : const Color(0xff646464),
+                                                : settingGrey,
                                           ),
                                         ),
                                       ),
@@ -479,14 +453,14 @@ class _EventCalendarState extends State<EventCalendar> {
                                               "IN_PROGRESS", formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(9),
+                                          padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
                                           color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.change_history_outlined,
                                             size: 23,
                                             color: value[index].didHalf
                                                 ? mainGold
-                                                : const Color(0xff646464),
+                                                : settingGrey,
                                           ),
                                         ),
                                       ),
@@ -505,14 +479,14 @@ class _EventCalendarState extends State<EventCalendar> {
                                               "SUCCESS", formattedDate);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(9),
+                                          padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
                                           color: const Color(0xff2A2A2A),
                                           child: Icon(
                                             Icons.circle_outlined,
                                             size: 23,
                                             color: value[index].didAll
                                                 ? mainGold
-                                                : const Color(0xff646464),
+                                                : settingGrey,
                                           ),
                                         ),
                                       ),
@@ -578,12 +552,12 @@ void editDialog(
         insetPadding: EdgeInsets.all(0),
         child: SizedBox(
           height: 200,
-          width: 340,
+          width: currentWidth < 370 ? 290 : 340,
           child: Container(
             padding: EdgeInsets.all(25),
             decoration: BoxDecoration(
                 color: backgroundColor,
-                borderRadius: BorderRadius.all(Radius.circular(13))),
+                borderRadius: BorderRadius.all(Radius.circular(11))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -609,7 +583,7 @@ void editDialog(
                     Text(
                       content,
                       style: TextStyle(
-                          color: Colors.grey,
+                          color: settingGrey,
                           fontWeight: FontWeight.w600,
                           fontSize: 16),
                     ),
@@ -627,7 +601,7 @@ void editDialog(
                         softWrap: true,
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 25),
                     if (switchvalue)
                       Text(
                         '반복',
@@ -643,13 +617,14 @@ void editDialog(
                       getIntervalText(),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
                 Spacer(),
-                NewCustomIconButton(() {
+                GestureDetector(
+                  onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -657,8 +632,10 @@ void editDialog(
                           switchvalue, interval, mandalartId, thirdGoalId),
                     ),
                   );
-                }, Icons.edit, currentWidth, 19)
-                    .newCustomIconButton(),
+                },
+                child: Icon(Icons.edit, color: settingGrey,),
+                )
+                
               ],
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:domino/screens/Tutorial/tutorial7_page.dart';
-import 'package:domino/screens/Tutorial/tutorial6_page.dart';
 import 'package:domino/style/style_tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/style/styles.dart';
@@ -27,26 +26,54 @@ class Tutorial6State extends State<Tutorial6> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 30),
-                    //프로그레스 바
-                    ProgressBar(2, 4),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
+                    //❤️메뉴 아이콘
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/img/dp_icon.png',
+                          height: currentWidth < 600 ? 17 : 26,
+                          width: currentWidth < 600 ? 17 : 26,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(width: 8),
+                        //❤️메뉴 텍스트
+                        Text(
+                          '도미노 플랜',
+                          style: TextStyle(
+                            fontSize: currentWidth < 600 ? 18 : 29,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
 
-                    //프로그레스 타이틀
-                    ProgressTitle('제3목표 만들기').progressTitle(),
-                    SizedBox(height: 10),
-
-                    //질문
-                    TutorialQuestion(
-                            "", '대학교 최강인싸되기', "를 위한", '달성해야 할 제3목표는?', 'green')
-                        .tutorialQuestion(),
-                    SizedBox(height: 10),
-                  ],
-                ),
-              ),
-              //선택지
-              MandalartOption(
-                middleText: '대학교\n최강인싸되기',
+                    //❤️질문
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard',
+                            color: Colors.white,
+                            height: 1.8),
+                        children: [
+                          TextSpan(
+                            text: '슈퍼 인싸 되기',
+                            style: TextStyle(color: mainGreen),
+                          ),
+                          TextSpan(
+                            text: '를 위해\n',
+                          ),
+                          TextSpan(text: '달성해야 할 실행 계획은?'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    //❤️선택지
+                    MandalartOption(
+                middleText: '슈퍼 인싸\n되기',
                 texts: [
                   '',
                   '침대 밖으로\n안 나오기',
@@ -55,7 +82,7 @@ class Tutorial6State extends State<Tutorial6> {
                   '',
                   '비둘기와\n친해지기',
                   '침묵 챌린지\n30일 하기',
-                  '인성파탄자 되기',
+                  '인성파탄자\n되기',
                   ''
                 ],
                 color: 'green',
@@ -64,13 +91,17 @@ class Tutorial6State extends State<Tutorial6> {
                 },
                 currentWidth: currentWidth,
               ),
+                  ],
+                ),
+              ),
+              
             ],
           ),
         ),
         bottomNavigationBar:
             //버튼
             Padding(
-          padding: tutorialPadding,
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 20),
           child: TutorialButton('다음', () {
             if (selectedIndex == 2) {
               Navigator.push(

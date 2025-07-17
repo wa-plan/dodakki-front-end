@@ -1,3 +1,4 @@
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class Description2 extends StatelessWidget {
@@ -18,19 +19,19 @@ class Description2 extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
       child: ExpansionTile(
-        backgroundColor: const Color(0xff2A2A2A),
-        collapsedBackgroundColor: const Color(0xff2A2A2A),
+        backgroundColor: const Color(0xff2C2C2C),
+        collapsedBackgroundColor: const Color(0xff2C2C2C),
         childrenPadding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
         tilePadding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-        iconColor: const Color(0xffAAAAAA),
-        collapsedIconColor: const Color(0xffAAAAAA),
+        iconColor: settingGrey,
+        collapsedIconColor: settingGrey,
         shape: const Border(),
         title: const Text(
-          'SMART 기법을 참고해보세요',
+          'SMART 기법의 도움을 받아보세요!',
           style: TextStyle(
-            color: Color(0xffAAAAAA),
+            color: settingGrey,
             fontSize: 14,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         children: smartItems
@@ -61,7 +62,7 @@ class Description2 extends StatelessWidget {
           style: TextStyle(
             color: color,
             fontSize: 14,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(width: 14),
@@ -70,7 +71,7 @@ class Description2 extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 14,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         Spacer(),
@@ -79,7 +80,7 @@ class Description2 extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 13,
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.w500,
             ),
           ),
        

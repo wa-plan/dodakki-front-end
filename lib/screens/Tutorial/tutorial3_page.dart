@@ -15,6 +15,7 @@ class Tutorial3State extends State<Tutorial3> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
         backgroundColor: backgroundColor,
@@ -24,25 +25,61 @@ class Tutorial3State extends State<Tutorial3> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 30),
-                //프로그레스 바
-                ProgressBar(0, 4),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
+                //❤️메뉴 아이콘
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/img/mg_icon.png',
+                      height: currentWidth < 600 ? 17 : 26,
+                      width: currentWidth < 600 ? 17 : 26,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 8),
+                    //❤️메뉴 텍스트
+                    Text(
+                      '나의 목표',
+                      style: TextStyle(
+                        fontSize: currentWidth < 600 ? 18 : 29,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
 
-                //프로그레스 타이틀
-                ProgressTitle('제1목표 만들기').progressTitle(),
-
-                //질문
-                TutorialQuestion(
-                        "", '새내기', "로 대학에 입학하는", '도민호를 위한 제1목표는?', 'red')
-                    .tutorialQuestion(),
-                SizedBox(height: 30),    
+                const SizedBox(height: 18),
+                //❤️질문
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Pretendard',
+                      color: Colors.white,
+                      height: 1.8
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '새내기',
+                        style: TextStyle(color: mainRed),
+                      ),
+                      TextSpan(
+                        text: '로 대학에 입학하는\n',
+                      ),
+                      TextSpan(text: '도민호를 위한 최종 목표는?'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                
+                //❤️옵션
                 ImageOption(
                   imageUrls: [
                     'assets/img/option1.png',
                     'assets/img/option2.png'
                   ],
                   color: 'red',
+                  currentWidth: currentWidth,
                   onItemSelected: (index) {
                     setState(() {
                       selectedIndex = index;
@@ -54,9 +91,9 @@ class Tutorial3State extends State<Tutorial3> {
           ),
         ),
         bottomNavigationBar:
-            //버튼
+            //❤️다음 버튼
             Padding(
-          padding: tutorialPadding,
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 20),
           child: TutorialButton('다음', () {
             if (selectedIndex == 0) {
               Navigator.push(

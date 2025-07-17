@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
   Color(0xffFCFF62): Color(0xffFEFFCD),
   Color(0xff72FF5B): Color(0xffC1FFB7),
   Color(0xff5DD8FF): Color(0xff94E5FF),
-  Color(0xff929292): Color(0xff5C5C5C),
+  Color(0xff919191): Color(0xff505050),
   Color(0xffFF5794): Color(0xffFF8EB7),
   Color(0xffAE7CFF): Color(0xffD0B4FF),
   Color(0xffC77B7F): Color(0xffEBB6B9),
@@ -23,11 +23,13 @@ import 'package:provider/provider.dart';
 class Around9Grid extends StatelessWidget {
   final int secondGoalIndex;
   final bool needColor;
+  final double currentWidth;
 
   const Around9Grid({
     super.key,
     required this.secondGoalIndex,
     required this.needColor,
+    required this.currentWidth
   });
 
   Color secondColorDefiner(String secondText, Color secondColor) {
@@ -39,7 +41,7 @@ class Around9Grid extends StatelessWidget {
   Color thirdColorDefiner(String thirdText, Color secondColor) {
     if (!needColor) return thirdGoalColor;
     if (thirdText.isEmpty) return Colors.transparent;
-    return colorPalette[secondColor] ?? Colors.transparent;
+    return colorPalette[secondColor] ?? thirdGoalColor;
   }
 
   @override
@@ -61,7 +63,7 @@ class Around9Grid extends StatelessWidget {
           return FreeGrid(
             secondText,
             secondColorDefiner(secondText, secondColor),
-            15,
+            15, currentWidth
           ).freeGrid();
         } else {
           //제3목표 그리드
@@ -72,7 +74,7 @@ class Around9Grid extends StatelessWidget {
           return FreeGrid(
             thirdText,
             thirdColorDefiner(thirdText, secondColor),
-            15,
+            15, currentWidth
           ).freeGrid();
         }
       }),

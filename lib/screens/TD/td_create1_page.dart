@@ -1,5 +1,6 @@
 import 'package:domino/apis/services/dp_services.dart';
 import 'package:domino/apis/services/mg_services.dart';
+import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/style_todaysDomino.dart';
 import 'package:domino/style/style_tutorial.dart';
@@ -48,7 +49,7 @@ class _AddPage1State extends State<AddPage1> {
   List<Map<dynamic, dynamic>> successNums = [];
   Map<String, List<Map<String, String>>> photos = {};
   String? profile;
-  String defaultImage = 'assets/img/profile_smp4.png'; // 기본 이미지 경로
+  String defaultImage = 'assets/img/profile_smp4.png';
 
   List<Map<String, String>> mandalarts = [];
   List<Map<String, String>> bookmarks = [];
@@ -227,23 +228,21 @@ class _AddPage1State extends State<AddPage1> {
           padding: appBarPadding,
           child: Row(
             children: [
-              //나가기 버튼
+              //뒤로가기 버튼
               CustomBackButton(
                 () {
-                  context
-                      .read<SelectAPModel>()
-                      .selectAP("제3목표를 클릭하여 선택해주세요.", null);
-                  context
-                      .read<SelectRepeatModel>()
-                      .selectRepeat(false, false, false, false);
                   Navigator.pop(context);
                 },
               ).customBackButton(),
               SizedBox(width: 15),
-
-              //페이지 타이틀
-              PageTitle('도미노 만들기').pageTitle(),
-              const Spacer(),
+              Icon(
+                Icons.build_rounded,
+                color: mainRed,
+                size: 19,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('도미노 만들기', currentWidth).dPTitleText(),
+              Spacer(),
 
               //프로그레스 바 (from style_tutorial.dart)
               ProgressBar(0, 2)
@@ -259,21 +258,25 @@ class _AddPage1State extends State<AddPage1> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20),
+              //❤️제1목표 선택 카테고리
               TDQuestion('어떤 목표와 관련됐나요?', currentWidth).tDQuestion(),
               SizedBox(height: 15),
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                height: 60,
+                padding: const EdgeInsets.fromLTRB(22, 0, 22, 0),
+                alignment: Alignment.centerLeft,
+                height: 61,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  color: const Color(0xff2A2A2A),
+                  color: const Color(0xff2C2C2C),
                 ),
                 child: FutureBuilder(
                   future: MainGoalListService.mainGoalList(context),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: mainRed,
+                        ),
                       );
                     } else if (snapshot.hasError) {
                       return const Center(
@@ -283,10 +286,8 @@ class _AddPage1State extends State<AddPage1> {
                         ),
                       );
                     } else if (snapshot.hasData) {
-                      // createdGoals에 있는 목표만 필터링
                       List<Map<String, dynamic>> goals = mainGoals;
 
-                      // 기본 옵션을 시작으로 추가
                       List<Map<String, dynamic>> options = [
                         {'id': '0', 'name': '클릭해서 목표를 선택해 주세요.'},
                         ...goals
@@ -302,10 +303,10 @@ class _AddPage1State extends State<AddPage1> {
                             child: Text(
                               goalName,
                               style: TextStyle(
-                                  color: isGuideText
-                                      ? const Color(0xff888888)
-                                      : Colors.white,
-                                  fontWeight: FontWeight.w400,
+                                  color:
+                                      isGuideText ? settingGrey : Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Pretendard',
                                   fontSize: 15),
                             ),
                           );
@@ -327,13 +328,13 @@ class _AddPage1State extends State<AddPage1> {
                           }
                         },
                         isExpanded: true,
-                        dropdownColor: const Color(0xff2A2A2A),
+                        dropdownColor: const Color(0xff2C2C2C),
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 13),
+                            const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                         icon: Icon(
-                          Icons.arrow_drop_down_rounded, // 원하는 아이콘으로 변경 가능
-                          color: const Color(0xff888888),
-                          size: 30, // 아이 // 아이콘 크기 조절
+                          Icons.arrow_drop_down_rounded,
+                          color: settingGrey,
+                          size: 30,
                         ),
                         underline: Container(),
                         elevation: 0,
@@ -353,6 +354,7 @@ class _AddPage1State extends State<AddPage1> {
                   },
                 ),
               ),
+              //❤️제3목표 선택 카테고리
               if (selectedGoalName != "") ...[
                 SizedBox(height: 40),
                 Column(
@@ -361,24 +363,21 @@ class _AddPage1State extends State<AddPage1> {
                     TDQuestion('어떤 플랜과 관련됐나요?', currentWidth).tDQuestion(),
                     SizedBox(height: 15),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                      height: 60,
-                      width: double.infinity,
+                      padding: const EdgeInsets.fromLTRB(22, 0, 22, 0),
+                      alignment: Alignment.centerLeft,
+                      height: 61,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        color: const Color(0xff2A2A2A),
+                        color: const Color(0xff2C2C2C),
                       ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          thirdGoalName,
-                          style: TextStyle(
-                              color: thirdGoalName == '제3목표를 클릭하여 선택해주세요.'
-                                  ? const Color(0xff888888)
-                                  : Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15),
-                        ),
+                      child: Text(
+                        thirdGoalName == '' ? '-' : thirdGoalName,
+                        style: TextStyle(
+                            color: thirdGoalName == '만다라트에서 플랜을 선택해주세요.'
+                                ? settingGrey
+                                : Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15),
                       ),
                     ),
                     SizedBox(height: 25),
@@ -386,7 +385,9 @@ class _AddPage1State extends State<AddPage1> {
                       child: TDMandalart(
                         firstGoalName: selectedGoalName,
                         secondGoals: secondGoals,
-                        firstGoalColor: ColorTransform(firstColor).colorTransform(),
+                        firstGoalColor:
+                            ColorTransform(firstColor).colorTransform(),
+                        currentWidth: currentWidth,
                       ),
                     ),
                   ],
@@ -401,28 +402,26 @@ class _AddPage1State extends State<AddPage1> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            //취소버튼
-            SizedBox(
-              width: 90,
-              height: 45,
-              child: NewButton(Colors.black, Colors.white, '취소', () {
+            //취소 버튼
+            Expanded(
+              flex: 1,
+              child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
                 context
                     .read<SelectAPModel>()
-                    .selectAP("제3목표를 클릭하여 선택해주세요.", null);
+                    .selectAP("만다라트에서 플랜을 선택해주세요.", null);
                 context
                     .read<SelectRepeatModel>()
                     .selectRepeat(false, false, false, false);
                 Navigator.pop(context);
-              })
-                  .newButton(),
+              }).newButton(),
             ),
-
-            //다음버튼
-            SizedBox(
-              width: 90,
-              height: 45,
-              child: NewButton(Colors.black, Colors.white, '다음', () {
-                if (thirdGoalName != '제3목표를 클릭하여 선택해주세요.' && thirdGoalName != "") {
+            SizedBox(width: 15),
+            //비밀번호 바꾸기 버튼
+            Expanded(
+              flex: currentWidth < 330 ? 2 : 3,
+              child: NewButton(mainRed, backgroundColor, '다음', () {
+                if (thirdGoalName != '만다라트에서 플랜을 선택해주세요.' &&
+                    thirdGoalName != "") {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -434,11 +433,10 @@ class _AddPage1State extends State<AddPage1> {
                   );
                 } else {
                   TutorialMessage(
-                    "목표를 선택해 주세요.",
+                    "만다라트에서 플랜을 선택해 주세요.",
                   ).tutorialMessage(context);
                 }
-              })
-                  .newButton(),
+              }).newButton(),
             ),
           ],
         ),

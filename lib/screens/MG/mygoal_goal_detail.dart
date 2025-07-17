@@ -131,7 +131,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
       floatingActionButton: SpeedDial(
         buttonSize: Size(45, 45),
         gradient: LinearGradient(colors: gradientColor),
-        animatedIcon: AnimatedIcons.menu_close,
+        icon: Icons.edit,
         overlayColor: Colors.black,
         foregroundColor: backgroundColor,
         gradientBoxShape: BoxShape.circle,
@@ -139,17 +139,18 @@ class MyGoalDetailState extends State<MyGoalDetail> {
         spaceBetweenChildren: 10,
         children: [
           SpeedDialChild(
-            child: const Icon(Icons.delete, color: Colors.white, size: 20),
-            backgroundColor: Color(0xff303030),
-            labelBackgroundColor: Colors.white,
-            elevation: 0,
-            labelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, color: backgroundColor, fontSize: 15
-            ),
-            label: '삭제하기',
-            shape: CircleBorder(),
-            onTap: () async {
-              PopupDialog.show(
+              child: const Icon(Icons.delete, color: Colors.white, size: 20),
+              backgroundColor: backgroundColor,
+              labelBackgroundColor: Colors.white,
+              elevation: 0,
+              labelStyle: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: backgroundColor,
+                  fontSize: 15),
+              label: '삭제하기',
+              shape: CircleBorder(),
+              onTap: () async {
+                PopupDialog.show(
                   context,
                   '헐 진짜..?\n이 목표는 없어지는거야?',
                   '잠깐!',
@@ -177,31 +178,30 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                   },
                   onSignOut: () {},
                 );
-              
-            }
-          ),
+              }),
           SpeedDialChild(
             child: const Icon(Icons.edit, color: Colors.white, size: 20),
-            backgroundColor: Color(0xff303030),
+            backgroundColor: backgroundColor,
             labelBackgroundColor: Colors.white,
             elevation: 0,
             labelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, color: backgroundColor, fontSize: 15
-            ),
+                fontWeight: FontWeight.w600,
+                color: backgroundColor,
+                fontSize: 15),
             label: '수정하기',
             shape: CircleBorder(),
             onTap: () {
               Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MygoalEdit(
-                              id: widget.id,
-                              dday: dday,
-                              name: name,
-                              description: mandaDescription,
-                              color: color,
-                              goalImage: goalImage)));
-            }, 
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MygoalEdit(
+                          id: widget.id,
+                          dday: dday,
+                          name: name,
+                          description: mandaDescription,
+                          color: color,
+                          goalImage: goalImage)));
+            },
           ),
         ],
       ),
@@ -221,7 +221,6 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                   },
                 ).customBackButton(),
 
-              
                 //진행 상태 드롭다운
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -231,127 +230,121 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                       height: 35,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
-                          color: Color(0xff303030)),
+                          color: Color(0xff2C2C2C)),
                       child: DropdownButton<String>(
-                          icon: Icon(Icons.circle),
-                          iconSize: 10,
-                          iconEnabledColor: _selectedStatus == "진행 중" ? mainGreen : mainGrey,
-                          elevation: 0,
-                          underline: const SizedBox.shrink(),
-                          dropdownColor: Colors.black,
-                          value: _selectedStatus,
-                          items: _status
-                              .map(
-                                (e) => DropdownMenuItem<String>(
-                                  value: e,
-                                  child: Center(
-                                    child: Row(
-                                      children: [
-                                        Text(e),
-                                        SizedBox(width: 5)
-                                      ],
-                                    ),
+                        icon: Icon(Icons.circle),
+                        iconSize: 10,
+                        iconEnabledColor:
+                            _selectedStatus == "진행 중" ? mainGreen : settingGrey,
+                        elevation: 0,
+                        underline: const SizedBox.shrink(),
+                        dropdownColor: Colors.black,
+                        value: _selectedStatus,
+                        items: _status
+                            .map(
+                              (e) => DropdownMenuItem<String>(
+                                value: e,
+                                child: Center(
+                                  child: Row(
+                                    children: [Text(e), SizedBox(width: 4)],
                                   ),
                                 ),
-                              )
-                              .toList(),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedStatus = value;
-                              if (_selectedStatus == '달성 완료') {
-                                PopupDialog.show(
-                                  context,
-                                  '이 목표 정말 \n달성 완료한거야?',
-                                  '대박!',
-                                  true,
-                                  false,
-                                  false,
-                                  true,
-                                  onCancel: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  onDelete: () {},
-                                  onSignOut: () {},
-                                  onSuccess: () {
-                                    _mandaProgress(
-                                        int.parse(widget.id), "SUCCESS");
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => EventPage(
-                                          domino: successNum,
-                                          goalName: name,
-                                        ),
+                              ),
+                            )
+                            .toList(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedStatus = value;
+                            if (_selectedStatus == '달성 완료') {
+                              PopupDialog.show(
+                                context,
+                                '이 목표 정말 \n달성 완료한거야?',
+                                '대박!',
+                                true,
+                                false,
+                                false,
+                                true,
+                                onCancel: () {
+                                  Navigator.of(context).pop();
+                                },
+                                onDelete: () {},
+                                onSignOut: () {},
+                                onSuccess: () {
+                                  _mandaProgress(
+                                      int.parse(widget.id), "SUCCESS");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EventPage(
+                                        domino: successNum,
+                                        goalName: name,
                                       ),
-                                    );
-                                  },
-                                );
-                              }
-                              if (_selectedStatus == '진행 중') {
-                                PopupDialog.show(
-                                  context,
-                                  '잘 생각했어!\n다시 도전해보는거야?',
-                                  '좋아!',
-                                  true,
-                                  false,
-                                  false,
-                                  true,
-                                  onCancel: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  onDelete: () {},
-                                  onSignOut: () {},
-                                  onSuccess: () {
-                                    _mandaProgress(
-                                        int.parse(widget.id), "IN_PROGRESS");
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const MyGoal(),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              if (_selectedStatus == '달성 실패') {
-                                PopupDialog.show(
-                                  context,
-                                  '이 목표는\n달성 실패인거야?',
-                                  '아쉽다..',
-                                  true,
-                                  false,
-                                  false,
-                                  true,
-                                  onCancel: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  onDelete: () {},
-                                  onSignOut: () {},
-                                  onSuccess: () {
-                                    _mandaProgress(
-                                        int.parse(widget.id), "FAIL");
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const MyGoal(),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                            });
-                          },
-                        ),
-                     
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                            if (_selectedStatus == '진행 중') {
+                              PopupDialog.show(
+                                context,
+                                '잘 생각했어!\n다시 도전해보는거야?',
+                                '좋아!',
+                                true,
+                                false,
+                                false,
+                                true,
+                                onCancel: () {
+                                  Navigator.of(context).pop();
+                                },
+                                onDelete: () {},
+                                onSignOut: () {},
+                                onSuccess: () {
+                                  _mandaProgress(
+                                      int.parse(widget.id), "IN_PROGRESS");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const MyGoal(),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                            if (_selectedStatus == '달성 실패') {
+                              PopupDialog.show(
+                                context,
+                                '이 목표는\n달성 실패인거야?',
+                                '아쉽다..',
+                                true,
+                                false,
+                                false,
+                                true,
+                                onCancel: () {
+                                  Navigator.of(context).pop();
+                                },
+                                onDelete: () {},
+                                onSignOut: () {},
+                                onSuccess: () {
+                                  _mandaProgress(int.parse(widget.id), "FAIL");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const MyGoal(),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
-
-                
               ],
             ),
           ),
@@ -369,7 +362,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xff2B2B2B),
+                  color: const Color(0xff2C2C2C),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -415,14 +408,14 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                   color: Color.fromARGB(255, 53, 53, 53),
                                   borderRadius: BorderRadius.circular(6),
                                   image: index == 0
-                                        ? DecorationImage(
-                                            image: AssetImage(
-                                              sampleImages[widget.pageIndex %
-                                                  sampleImages.length],
-                                            ),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : null,
+                                      ? DecorationImage(
+                                          image: AssetImage(
+                                            sampleImages[widget.pageIndex %
+                                                sampleImages.length],
+                                          ),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
                                 ),
                               );
                             },
@@ -430,52 +423,54 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                         ),
                       )
                     ] else ...[
-                      SizedBox(
-                        height: 105,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            if (index < goalImage.length) {
-                              return Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(6),
-                                  child: Image.network(
-                                    goalImage[index],
-                                    fit: BoxFit.cover,
-                                    width: 105,
-                                    height: 105,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return const Center(
-                                        child: Text(
-                                          '이미지 로드 실패',
-                                          style: TextStyle(color: Colors.red),
-                                        ),
-                                      );
-                                    },
+                      Center(
+                        child: SizedBox(
+                          height: 105,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 3,
+                            itemBuilder: (context, index) {
+                              if (index < goalImage.length) {
+                                return Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: Image.network(
+                                      goalImage[index],
+                                      fit: BoxFit.cover,
+                                      width: 105,
+                                      height: 105,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return const Center(
+                                          child: Text(
+                                            '이미지 로드 실패',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              );
-                            } else {
-                              return Container(
-                                color: Colors.grey[200], // 빈 자리 회색 처리
-                              );
-                            }
-                          },
+                                );
+                              } else {
+                                return Container(
+                                  color: Colors.grey[200], // 빈 자리 회색 처리
+                                );
+                              }
+                            },
+                          ),
                         ),
                       ),
                     ],
                     if (mandaDescription.isNotEmpty)
                       Container(
-                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
                         child: Text(
                           mandaDescription,
                           style: const TextStyle(
                               height: 1.5,
-                              color: Colors.white,
+                              color: Color(0xffAAAAAA),
                               fontSize: 14,
-                              fontWeight: FontWeight.w500),
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                   ],
@@ -484,7 +479,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
 
               //통계
               const SizedBox(
-                height: 90,
+                height: 110,
               ),
               //원형 그래프
               Center(
@@ -498,13 +493,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                 ),
               ),
               const SizedBox(
-                height: 90,
+                height: 110,
               ),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 17),
                 decoration: BoxDecoration(
-                  color: const Color(0xff2B2B2B),
+                  color: const Color(0xff2C2C2C),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Column(
@@ -589,7 +584,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                   Icons.help,
                                   key: _iconKey,
                                   color: Color.fromARGB(255, 107, 107, 107),
-                                  size: 17,
+                                  size: 20,
                                 ),
                               ),
                             ],
@@ -601,15 +596,15 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                 'assets/img/domino.png',
                                 width: 27,
                               ),
-                              const SizedBox(width: 5),
+                              const SizedBox(width: 8),
                               Text(
                                 'x',
                                 style: TextStyle(
                                     color: Color(0xffAAAAAA),
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w800),
                               ),
-                              const SizedBox(width: 5),
+                              const SizedBox(width: 8),
                               Text(
                                 '$successNum',
                                 style: TextStyle(
@@ -645,7 +640,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               text,
               style: TextStyle(
                 color: textColor,
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -663,7 +658,7 @@ class MyGoalDetailState extends State<MyGoalDetail> {
               '$num개',
               style: TextStyle(
                 color: textColor,
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -738,8 +733,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                     message,
                     style: const TextStyle(
                         fontSize: 14,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500),
+                        color: backgroundColor,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
