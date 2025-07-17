@@ -68,15 +68,18 @@ class _EventCalendarState extends State<EventCalendar> {
     final events =
         await DominoInfoService.dominoInfo(context, date: formattedDate);
 
-    if (events != null) {
-      setState(() {
-        _selectedEvents.value = events;
-      });
-    } else {
-      setState(() {
-        _selectedEvents.value = [];
-      });
-    }
+    if (!mounted) return;
+
+if (events != null) {
+  setState(() {
+    _selectedEvents.value = events;
+  });
+} else {
+  setState(() {
+    _selectedEvents.value = [];
+  });
+}
+
   }
 
   void dominoStatus(int goalId, String attainment, String date) async {

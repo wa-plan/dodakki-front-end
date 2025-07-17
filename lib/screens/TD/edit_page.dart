@@ -152,32 +152,34 @@ class EditPageState extends State<EditPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
-        title: Padding(
-          padding: appBarPadding,
-          child: Row(
-            children: [
-              //뒤로가기 버튼
-              CustomBackButton(
-                () {
-                  PopupDialog.show(context, '지금 나가면,\n수정한 내용이 사라져!', '잠깐!',
-                      true, false, false, true, onCancel: () {
-                    Navigator.pop(context);
-                  }, onSuccess: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  });
-                },
-              ).customBackButton(),
-              SizedBox(width: 15),
-              Icon(
-                Icons.build_rounded,
-                color: mainRed,
-                size: 19,
-              ),
-              SizedBox(width: 7),
-              DPTitleText('도미노 수정하기', currentWidth).dPTitleText(),
-            ],
+        title: SingleChildScrollView(
+          child: Padding(
+            padding: appBarPadding,
+            child: Row(
+              children: [
+                //뒤로가기 버튼
+                CustomBackButton(
+                  () {
+                    PopupDialog.show(context, '지금 나가면,\n수정한 내용이 사라져!', '잠깐!',
+                        true, false, false, true, onCancel: () {
+                      Navigator.pop(context);
+                    }, onSuccess: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    });
+                  },
+                ).customBackButton(),
+                SizedBox(width: 15),
+                Icon(
+                  Icons.build_rounded,
+                  color: mainRed,
+                  size: 19,
+                ),
+                SizedBox(width: 7),
+                DPTitleText('도미노 수정하기', currentWidth).dPTitleText(),
+              ],
+            ),
           ),
         ),
         backgroundColor: backgroundColor,
@@ -268,6 +270,18 @@ class EditPageState extends State<EditPage> {
                   key: ValueKey(
                       '$everyDay-$everyWeek-$everyTwoWeek-$everyMonth'),
                 ),
+                SizedBox(height: 15),
+
+          SizedBox(
+            width: double.infinity,
+            child: NewButton(Color(0xff2C2C2C), Colors.white, '🗑️ 삭제', () {
+              DateTime? pickedDate = context.read<DateProvider>().pickedDate;
+              context
+                  .read<DateListProvider>()
+                  .setInterval(switchValue, pickedDate!);
+              howDeleteDialog(context, widget.goalId, widget.date);
+            }).newButton(),
+          ),
             ],
           ),
         ),
@@ -346,18 +360,7 @@ class EditPageState extends State<EditPage> {
           ),
 
          
-          /*
-          SizedBox(
-            width: 90,
-            height: 45,
-            child: NewButton(Color(0xff6A1B1B), Colors.white, '삭제', () {
-              DateTime? pickedDate = context.read<DateProvider>().pickedDate;
-              context
-                  .read<DateListProvider>()
-                  .setInterval(switchValue, pickedDate!);
-              howDeleteDialog(context, widget.goalId, widget.date);
-            }).newButton(),
-          ),*/
+          
           
         ]),
       ),
