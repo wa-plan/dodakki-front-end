@@ -50,8 +50,6 @@ class AddGoalService {
         body: body,
       );
 
-    
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
       } else if (response.statusCode == 401) {
@@ -414,6 +412,8 @@ class UserMandaInfoService {
       {required int mandalartId}) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('authToken');
+
+    print('토큰 값: $token');
 
     if (token == null) {
       return null; // 로그인 토큰 없으면 null 반환

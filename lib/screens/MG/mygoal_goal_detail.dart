@@ -106,6 +106,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
     dday = widget.dday;
     status = widget.status;
     photoList = widget.photoList;
+    print('mandalartId=$mandalartId');
+    print('photoList=$photoList');
 
     userMandaInfo(mandalartId);
 
@@ -432,7 +434,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                             itemBuilder: (context, index) {
                               if (index < goalImage.length) {
                                 return Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 7, 0),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(6),
                                     child: Image.network(
@@ -440,7 +443,8 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                       fit: BoxFit.cover,
                                       width: 105,
                                       height: 105,
-                                      errorBuilder: (context, error, stackTrace) {
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
                                         return const Center(
                                           child: Text(
                                             '이미지 로드 실패',
