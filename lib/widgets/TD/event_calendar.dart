@@ -431,7 +431,7 @@ if (events != null) {
                                         },
                                         child: Container(
                                           padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
-                                          color: const Color(0xff2A2A2A),
+                                          color: const Color(0xff2C2C2C),
                                           child: Icon(
                                             Icons.clear_outlined,
                                             size: 23,
@@ -457,7 +457,7 @@ if (events != null) {
                                         },
                                         child: Container(
                                           padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
-                                          color: const Color(0xff2A2A2A),
+                                          color: const Color(0xff2C2C2C),
                                           child: Icon(
                                             Icons.change_history_outlined,
                                             size: 23,
@@ -483,7 +483,7 @@ if (events != null) {
                                         },
                                         child: Container(
                                           padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
-                                          color: const Color(0xff2A2A2A),
+                                          color: const Color(0xff2C2C2C),
                                           child: Icon(
                                             Icons.circle_outlined,
                                             size: 23,

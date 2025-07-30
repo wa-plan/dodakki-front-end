@@ -274,6 +274,7 @@ class _MyGoalState extends State<MyGoal> {
                         const SizedBox(height: 8),
                         //❤️프로필 설명
                         SizedBox(
+                          width: 260,
                           child: Text(
                             description,
                             softWrap: true,
