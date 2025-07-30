@@ -26,55 +26,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //자동 로그인 함수
   Future<void> _asyncMethod() async {
-    final String? authToken = await storage.read(key: "token");
+    final token = await storage.read(key: "token");
 
-    if (authToken == null || authToken.isEmpty) {
-      return;
-    }
+    if (token != null && token.isNotEmpty) {
+      print('✅ 토큰 있음. 자동 로그인 진행.');
 
-    final String? storedUserInfo = await storage.read(key: "login");
+      // TODO: 서버에서 토큰 유효성 검사 API가 있다면 여기서 호출 (추천)
 
-    userInfo = storedUserInfo ?? "";
-
-    if (userInfo.isNotEmpty) {
-      final parts = userInfo.split(' ');
-      final userIdIndex = parts.indexOf('id');
-      final passwordIndex = parts.indexOf('password');
-
-      String? userId;
-      String? password;
-
-      if (userIdIndex != -1 && userIdIndex + 1 < parts.length) {
-        userId = parts[userIdIndex + 1];
-      }
-      if (passwordIndex != -1 && passwordIndex + 1 < parts.length) {
-        password = parts[passwordIndex + 1];
-      }
-
-      if (userId != null && password != null) {
-        bool isSuccess = await _loginService.login(
+      if (context.mounted) {
+        Navigator.pushReplacement(
           context,
-          userId,
-          password,
-          showErrorMessage: false,
+          MaterialPageRoute(builder: (context) => const TdMain()),
         );
-        if (isSuccess && context.mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const TdMain()),
-          );
-        }
-
-        if (isSuccess) {
-          if (context.mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const TdMain()),
-            );
-          }
-        } else {}
-      } else {}
-    } else {}
+      }
+    } else {
+      print('⛔️ 저장된 토큰 없음. 로그인 필요.');
+    }
   }
 
   //로그인 함수
@@ -88,18 +55,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
     bool isSuccess = await _loginService.login(context, userId, password);
     if (isSuccess) {
-      final String? accessToken = await storage.read(key: "token");
-      if (accessToken == null || accessToken.isEmpty) {
-        await storage.write(key: "token", value: "your_generated_token_here");
-      }
-
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Tutorial1()),
         );
       }
-    } else {}
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('로그인이 실패하였습니다. 아이디와 비밀번호를 확인해주세요.'),
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -128,10 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
             top: 100,
             right: 0,
             child: Image.asset(
-                "assets/img/tr_1.png",
-                height: 350,
-              ),
-            
+              "assets/img/tr_1.png",
+              height: 350,
+            ),
           ),
 
           SingleChildScrollView(
@@ -154,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   //❤️아이디 입력창
                   STSubTitle('아이디', Icons.person, 20).sTSubTitle(context),
-              const SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   CustomTextField(
                     '아이디를 입력해 주세요.',
                     _idcontroller,
@@ -170,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   //❤️비밀번호 입력창
                   STSubTitle('비밀번호', Icons.key_rounded, 20).sTSubTitle(context),
-              const SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   PasswordTextField(
                     hintText: '비밀번호를 입력해 주세요.',
                     controller: _pwcontroller,
@@ -190,11 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (_formKey.currentState!.validate()) {
                       if (_idcontroller.text.isNotEmpty &&
                           _pwcontroller.text.isNotEmpty) {
-                        await storage.write(
-                          key: "login",
-                          value:
-                              "id ${_idcontroller.text} password ${_pwcontroller.text}",
-                        );
                         _login();
                       }
                     }

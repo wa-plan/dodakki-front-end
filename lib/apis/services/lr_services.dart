@@ -8,6 +8,7 @@ import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:domino/style/style_tutorial.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 String? baseUrl = dotenv.env['BASE_URL'];
 
@@ -43,8 +44,17 @@ class LoginService {
           final accessToken = responseData['accessToken'] ?? '';
 
           if (accessToken.isNotEmpty) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('authToken', accessToken);
+            print('✅ accessToken: $accessToken');
+
+            // 기존 코드
+
+            // 🔥 추가: SecureStorage에도 저장
+            final secureStorage = FlutterSecureStorage();
+            await secureStorage.write(key: 'token', value: accessToken);
+
+            // 🔍 저장 확인 로그
+            final readBack = await secureStorage.read(key: 'token');
+            print('📦 SecureStorage 저장 확인: $readBack');
 
             if (context.mounted) {
               return true;

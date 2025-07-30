@@ -8,7 +8,7 @@ import 'package:domino/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/change_password.dart';
 import 'package:domino/widgets/popup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:domino/apis/services/lr_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -193,9 +193,14 @@ class _AccountManagementState extends State<AccountManagement> {
 
   //로그아웃 함수
   void _logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    const FlutterSecureStorage storage = FlutterSecureStorage();
+    final FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.deleteAll();
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
   }
 }
