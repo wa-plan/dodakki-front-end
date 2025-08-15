@@ -1,8 +1,16 @@
+import 'package:domino/apis/services/mg_services.dart';
+import 'package:domino/apis/services/td_services.dart';
+import 'package:domino/provider/DP/model.dart';
 import 'package:domino/screens/MG/mygoal_goal_detail.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_myGoal.dart';
+import 'package:domino/style/styles.dart';
+import 'package:domino/widgets/MG/buildcard.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/MG/mygoal_profile_edit.dart';
 import 'package:domino/widgets/nav_bar.dart';
 import 'package:domino/screens/MG/mygoal_goal_add.dart';
+import 'package:provider/provider.dart';
 
 class MyGoal extends StatefulWidget {
   const MyGoal({super.key});
@@ -12,267 +20,540 @@ class MyGoal extends StatefulWidget {
 }
 
 class _MyGoalState extends State<MyGoal> {
-  final String message = "실패하는 것이 두려운 게 아니라\n노력하지 않는 것이 두렵다.";
+  final String message = "";
+  String nickname = '';
+  String description = '';
+  String selectedImage = "assets/img/profile_smp4.png";
+
+  late PageController _pageController;
+  int successNum = 0;
+  String mandaDescription = '';
+  String bookmark = 'UNBOOKMARK';
+  List<Map<String, String>> failedIDs = [];
+  List<Map<String, String>> inProgressIDs = [];
+  List<Map<String, String>> successIDs = [];
+  List<Map<String, String>> nameList = [];
+  List<Map<String, String>> statusList = [];
+  List<Map<String, String>> ddayList = [];
+  List<Map<String, String>> colorList = [];
+  List<Map<dynamic, dynamic>> successNums = [];
+  Map<String, List<Map<String, String>>> photos = {};
+  String? profile;
+  String defaultImage = 'assets/img/profile_smp4.png';
+
+  List<Map<String, String>> mandalarts = [];
+  List<Map<String, String>> bookmarks = [];
+
+  void userInfo() async {
+    final data = await UserInfoService.userInfo();
+    if (data.isNotEmpty) {
+      setState(() {
+        nickname = (data['nickname']?.toString().isEmpty ?? true)
+            ? '당신은 어떤 사람인가요?'
+            : data['nickname'];
+
+        description = (data['description']?.toString().isEmpty ?? true)
+            ? '프로필 편집을 통해 \n자신을 표현해주세요.'
+            : data['description'];
+
+        final profile = data['profile']?.toString() ?? '';
+        selectedImage = profile ==
+                'https://dodakkibucket.s3.ap-northeast-2.amazonaws.com/baseImage.png'
+            ? defaultImage
+            : profile;
+      });
+    }
+  }
+
+  Future<void> userMandaIdInfo() async {
+    if (mandalarts.isNotEmpty) return;
+
+    final data = await UserMandaIdService.userManda();
+
+    if (data.isNotEmpty) {
+      setState(() {
+        mandalarts = data['mandalarts']!;
+        bookmarks = data['bookmarks']!;
+      });
+
+      final tasks = mandalarts.map((mandalart) async {
+        final String mandalartId = mandalart['id'] ?? '0';
+        await userMandaInfo(mandalartId);
+        await mandaColor(mandalartId);
+      });
+
+      await Future.wait(tasks);
+
+      failedIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
+
+      inProgressIDs.sort((a, b) {
+        final aBookmark = bookmarks
+            .any((bm) => bm["id"] == a["id"] && bm["bookmark"] == "BOOKMARK");
+        final bBookmark = bookmarks
+            .any((bm) => bm["id"] == b["id"] && bm["bookmark"] == "BOOKMARK");
+
+        if (aBookmark && !bBookmark) {
+          return -1;
+        }
+        if (!aBookmark && bBookmark) {
+          return 1;
+        }
+
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
+
+      context.read<GoalOrder>().saveGoalOrder(inProgressIDs);
+
+      successIDs.sort((a, b) {
+        return int.parse(a["id"]!).compareTo(int.parse(b["id"]!));
+      });
+    }
+  }
+
+  Future<void> userMandaInfo(String mandalartId) async {
+    if (nameList.any((item) => item['mandalartId'] == mandalartId)) return;
+
+    final data = await UserMandaInfoService.userMandaInfo(context,
+        mandalartId: int.parse(mandalartId));
+
+    if (data != null) {
+      String id = mandalartId;
+      String name = data['name'] ?? '';
+      String status = data['status']?.toString() ?? '';
+      List<dynamic> photoList = data['photoList'] ?? [];
+      String dday = data['dday']?.toString() ?? '0';
+      int successNum = data['statusNum']?['successNum'] ?? 0;
+
+      setState(() {
+        if (status == "FAIL") failedIDs.add({"id": id, "name": name});
+        if (status == "IN_PROGRESS") {
+          inProgressIDs.add({"id": id, "name": name});
+        }
+        if (status == "SUCCESS") successIDs.add({"id": id, "name": name});
+
+        nameList.add({'mandalartId': id, 'name': name});
+        statusList.add({'mandalartId': id, 'status': status});
+        ddayList.add({'mandalartId': id, 'dday': dday});
+        successNums.add({'mandalartId': id, 'successNum': successNum});
+
+        if (photoList.isNotEmpty) {
+          photos[id] = [];
+          for (var photo in photoList) {
+            photos[id]?.add({
+              'path': photo['path'] ?? '',
+              'id': photo['id'].toString(),
+            });
+          }
+        }
+      });
+    } else {}
+  }
+
+  Future<void> mandaColor(String mandalartId) async {
+    if (colorList.any((item) => item['id'] == mandalartId)) return;
+    final data = await MandalartInfoService.mandalartInfo(
+        mandalartId: int.parse(mandalartId));
+    if (data != null) {
+      setState(() {
+        colorList.add({"id": mandalartId, "color": data["color"]});
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    userInfo();
+    userMandaIdInfo();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: FloatingButton(Icons.add, () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyGoalAdd()),
+        );
+      }, 25)
+          .floatingButton(),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
         title: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
-          child: Text(
-            '나의 목표',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: MediaQuery.of(context).size.width * 0.06,
-              fontWeight: FontWeight.bold,
-            ),
+          padding: appBarPadding,
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/img/mg_icon.png',
+                scale: 7,
+              ),
+              SizedBox(width: 10),
+              DPTitleText('나의 목표', currentWidth).dPTitleText(),
+            ],
           ),
         ),
-        backgroundColor: const Color(0xff262626),
+        backgroundColor: backgroundColor,
       ),
       bottomNavigationBar: const NavBar(),
       body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.fromLTRB(35.0, 20, 35.0, 25.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: const Color(0xff5C5C5C), width: 1),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: fullPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 13),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileEdit(
+                          selectedImage: selectedImage,
+                          profileImage: profile ?? "",
+                          cameraImage: ""),
+                    ),
+                  );
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      '당신은 어떤 사람인가요?',
-                      style: TextStyle(color: Color(0xff5C5C5C)),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '프로필 편집을 통해 \n자신을 표현해주세요.',
-                      style: TextStyle(color: Color(0xff5C5C5C)),
+                    //❤️프로필 이미지
+                   Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              offset: const Offset(0, 0),
+                              blurRadius: 7,
+                              spreadRadius: 0,
+                            ),
+                          ],
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: selectedImage.startsWith('http')
+                                ? NetworkImage(selectedImage)
+                                : AssetImage(selectedImage) as ImageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    
+                    const SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //❤️프로필 닉네임
+                        Row(
+                          children: [
+                            Text(nickname,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(width: 8),
+                            //❤️프로필 편집 버튼
+                            Icon(Icons.edit, color: settingGrey, size: 20)
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        //❤️프로필 설명
+                        SizedBox(
+                          width: 260,
+                          child: Text(
+                            description,
+                            softWrap: true,
+                            style: TextStyle(
+                                height: 1.5,
+                                color: Color(0xffAAAAAA),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProfileEdit(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.edit),
-                  color: const Color(0xff5C5C5C),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Divider(color: Color(0xff5C5C5C), thickness: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '쓰러트릴 목표',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        fontWeight: FontWeight.bold,
-                      ),
+              ),
+              SizedBox(height: 40),
+              //❤️쓰러뜨릴 목표
+              MGSubTitle('쓰러뜨릴 목표').mgSubTitle(context),
+
+              SizedBox(
+                height: 15,
+              ),
+              Column(children: [
+                //쓰러뜨릴 목표가 없을 때 나오는 위젯
+                if (inProgressIDs.isEmpty)
+                  BlankData("엇!\n아직 쓰러뜨릴 목표가 없어요!\n어서 만들어봅시다!", 240, currentWidth).blankData()
+                else ...[
+                  SizedBox(
+                    height: 250,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: inProgressIDs.length,
+                      itemBuilder: (context, index) {
+                        String mandalartId =
+                            inProgressIDs[index]['id'] ?? ''; // id 값
+
+                        String name =
+                            inProgressIDs[index]['name'] ?? ''; // name 값
+
+                        String status = statusList.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'status': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['status'] ??
+                            '';
+
+                        String dday = ddayList.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'dday': ''}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['dday'] ??
+                            '0';
+
+                        String color = colorList.firstWhere(
+                              (element) =>
+                                  element['id'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () => {
+                                'color': '0xff000000'
+                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['color'] ??
+                            '0xff000000';
+
+                        int successNum = successNums.firstWhere(
+                              (element) =>
+                                  element['mandalartId'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () =>
+                                  {'successNum': 0}, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['successNum'] ??
+                            0;
+
+                        List<String> photoList = (photos[mandalartId] ?? [])
+                            .map<String>((photo) => photo['path'].toString())
+                            .toList();
+
+                        String bookmark = bookmarks.firstWhere(
+                              (element) =>
+                                  element['id'] ==
+                                  mandalartId, // mandalartId와 비교
+                              orElse: () => {
+                                'bookmark': 'UNBOOKMARK'
+                              }, // 일치하는 항목이 없을 경우 빈 문자열 반환
+                            )['bookmark'] ??
+                            'UNBOOKMARK';
+
+                        return Center(
+                          key: ValueKey(name),
+                          child: GoalCard(
+                            key: ValueKey(name),
+                            mandalartId: mandalartId,
+                            name: name,
+                            status: status,
+                            photoList: photoList,
+                            dday: dday,
+                            color: color,
+                            successNum: successNum,
+                            bookmark: bookmark,
+                            onBookmarkToggle: (id, action) {},
+                            pageIndex: index,
+                            currentWidth: currentWidth,
+                          ),
+                        );
+                      },
                     ),
-                    IconButton(
-                      onPressed: () {
+                  ),
+                  const SizedBox(height: 18),
+                  if (inProgressIDs.length != 1 && inProgressIDs.isNotEmpty)
+                    Center(
+                      child: PageIndicator(_pageController, inProgressIDs),
+                    ),
+                ],
+              ]),
+              const SizedBox(height: 40),
+
+              //❤️이번주의 응원
+              MGSubTitle('이번주의 응원!').mgSubTitle(context),
+              const SizedBox(height: 15),
+              const CheeringMessage(),
+              const SizedBox(height: 40),
+
+              //❤️쓰러뜨린 목표
+              MGSubTitle('쓰러뜨린 목표').mgSubTitle(context),
+              const SizedBox(height: 15),
+              if (successIDs.isEmpty)
+                BlankData2("함께 목표를 쓰러뜨려봐요!", currentWidth).blankData2()
+              else
+                Column(
+                  children: List.generate(successIDs.length, (i) {
+                    final item = successIDs[i];
+
+                    String status = statusList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'status': ''},
+                        )['status'] ??
+                        '';
+
+                    String dday = ddayList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'dday': ''},
+                        )['dday'] ??
+                        '0';
+
+                    List<String> photoList = (photos[item['id']] ?? [])
+                        .map<String>((photo) => photo['path'].toString())
+                        .toList();
+
+                    final color = colorList.firstWhere(
+                        (element) => element['id'] == item['id'],
+                        orElse: () => {'color': 'Color(0xff000000)'})['color'];
+
+                    final colorValue = Color(int.parse(
+                        color!.replaceAll('Color(', '').replaceAll(')', '')));
+
+                    return GestureDetector(
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MyGoalAdd(),
+                            builder: (context) => MyGoalDetail(
+                              id: item['id']!,
+                              name: item['name']!,
+                              status: status,
+                              photoList: photoList,
+                              dday: int.parse(dday),
+                              color: color,
+                              colorValue: colorValue.value,
+                              pageIndex: i, // ← 인덱스 안전하게 전달!
+                            ),
                           ),
                         );
-                        // 나의 목표 추가 기능
                       },
-                      icon: const Icon(Icons.add),
-                      color: Colors.white,
-                    ),
-                    /*IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MyGoalDetail(),
-                              ),
-                            );
-                            // 나의 목표 추가 기능
-                          },
-                          icon: const Icon(Icons.add),
-                          color: Colors.white,
-                        ),*/
-                  ],
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: colorValue,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        height: 35,
+                        child: Center(
+                          child: Text(
+                            item['name']!,
+                            style: TextStyle(
+                                color: backgroundColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
-                const SizedBox(height: 10.0),
-                SizedBox(
-                  height: 170,
-                  child: PageView(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Row(
-                                      children: [
-                                        Icon(Icons.star, color: Colors.yellow),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          '환상적인 세계여행',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'D-200',
-                                          style: TextStyle(
-                                            color: Color(0xff5C5C5C),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Container(
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              255, 53, 53, 53),
-                                          borderRadius:
-                                              BorderRadius.circular(3.0),
-                                        ),
-                                        width: 250,
-                                        height: 80,
-                                        child: const Center(
-                                            child: Text(
-                                          '이미지를 추가해 주세요',
-                                          style: TextStyle(color: Colors.white),
-                                        ))),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Column(children: [
-                                            Text(
-                                              '나의 도미노',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            Text(
-                                              '80개',
-                                              style: TextStyle(
-                                                  color: Color(0xffFCFF62),
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                          ]),
-                                          const SizedBox(width: 15),
-                                          SizedBox(
-                                              child: Image.asset(
-                                                  'assets/img/MG_domino.png')),
-                                        ])
-                                  ],
-                                ),
-                                Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xffFCFF62),
-                                      borderRadius: BorderRadius.circular(3.0),
-                                    ),
-                                    width: 15,
-                                    height: 170),
-                              ]))
-                    ],
-                  ),
+
+              const SizedBox(height: 40),
+
+              //❤️쓰러뜨리지 못한 목표
+              MGSubTitle('쓰러뜨리지 못한 목표').mgSubTitle(context),
+              const SizedBox(height: 15),
+              if (failedIDs.isEmpty)
+                BlankData2("못 쓰러뜨린 목표가 없어요!", currentWidth).blankData2()
+              else
+                Column(
+                  children: List.generate(failedIDs.length, (i) {
+                    final item = failedIDs[i];
+
+                    String status = statusList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'status': ''},
+                        )['status'] ??
+                        '';
+
+                    String dday = ddayList.firstWhere(
+                          (element) => element['mandalartId'] == item['id'],
+                          orElse: () => {'dday': ''},
+                        )['dday'] ??
+                        '0';
+
+                    List<String> photoList = (photos[item['id']] ?? [])
+                        .map<String>((photo) => photo['path'].toString())
+                        .toList();
+
+                    final color = colorList.firstWhere(
+                        (element) => element['id'] == item['id'],
+                        orElse: () => {'color': 'Color(0xff000000)'})['color'];
+
+                    final colorValue = Color(int.parse(
+                        color!.replaceAll('Color(', '').replaceAll(')', '')));
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyGoalDetail(
+                              id: item['id']!,
+                              name: item['name']!,
+                              status: status,
+                              photoList: photoList,
+                              dday: int.parse(dday),
+                              color: color,
+                              colorValue: colorValue.value,
+                              pageIndex: i, // ✅ 고유 인덱스 넘기기
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                        height: 35,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: colorValue,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Center(
+                          child: Text(
+                            item['name']!,
+                            style: TextStyle(
+                                color: backgroundColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
-                const SizedBox(height: 30.0),
-                Text(
-                  '오늘의 응원',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(3),
-                    shape: BoxShape.rectangle,
-                    border: Border.all(
-                      color: const Color(0xff5C5C5C),
-                      width: 1,
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    message,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30.0),
-                Text(
-                  '쓰러트린 목표',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                SizedBox(child: Image.asset('assets/img/MG_domino2.png')),
-                const SizedBox(height: 30.0),
-                Text(
-                  '쓰러트리지 못한 목표',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                SizedBox(child: Image.asset('assets/img/MG_domino3.png')),
-              ],
-            ),
-          ],
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
-      )),
-      backgroundColor: const Color(0xff262626),
+      ),
     );
   }
 }

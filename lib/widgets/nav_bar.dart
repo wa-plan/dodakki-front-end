@@ -1,9 +1,10 @@
+import 'package:domino/screens/DP/dp_main_page.dart';
+import 'package:domino/screens/TD/td_main_page.dart';
+import 'package:domino/screens/splash_page.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:domino/provider/nav_provider.dart';
-
-import 'package:domino/screens/DP/list_page.dart';
-import 'package:domino/screens/TD/td_main.dart';
 import 'package:domino/screens/ST/settings_main.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
 
@@ -15,41 +16,75 @@ class NavBar extends StatelessWidget {
     final navBarProvider = Provider.of<NavBarProvider>(context);
     final int selectedIndex = navBarProvider.selectedIndex;
 
-    return BottomNavigationBar(
-      backgroundColor: const Color(0xff262626),
-      selectedItemColor: const Color(0xffF6C92B),
-      selectedFontSize: 12,
-      unselectedItemColor: const Color(0xffBDBDBD),
-      type: BottomNavigationBarType.fixed,
-      currentIndex: selectedIndex,
-      onTap: (index) {
-        navBarProvider.setIndex(index);
-        _onItemTapped(context, index);
-      },
-      items: [
-        BottomNavigationBarItem(
-          icon:
-              Image.asset('assets/img/vector1.png', width: 15.73, height: 21.0),
-          label: '나의 목표',
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12.0),
+        topRight: Radius.circular(12.0),
+      ),
+      child: BottomAppBar(
+        height: 77,
+          color: Color(0xff2D2D2D),
+          shadowColor: Colors.black,
+          elevation: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(
+                  context, 'assets/img/vector1.png', '나의 목표', 0, selectedIndex),
+              _buildNavItem(
+                  context, 'assets/img/vector2.png', '도미노 플랜', 1, selectedIndex),
+              _buildNavItem(
+                  context, 'assets/img/vector3.png', '오늘의 도미노', 2, selectedIndex),
+              _buildNavItem(
+                  context, 'assets/img/vector4.png', '설정', 3, selectedIndex),
+            ],
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: Image.asset('assets/img/vector2.png', width: 21, height: 21.0),
-          label: '도미노 플랜',
+    );
+  }
+
+  Widget _buildNavItem(BuildContext context, String iconPath, String label,
+      int index, int selectedIndex) {
+    final isSelected = selectedIndex == index;
+
+
+    return Expanded(
+      child: GestureDetector( // 터치 영역 확장
+        onTap: () {
+          if (selectedIndex != index) {
+            Provider.of<NavBarProvider>(context, listen: false).setIndex(index);
+            _onItemTapped(context, index);
+          }
+        },
+        behavior: HitTestBehavior.opaque, // 빈 공간도 터치 인식
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+              child: Image.asset(
+                iconPath,
+                scale:2.2,
+                color: isSelected ? mainRed : const Color(0xffAAAAAA), // 선택된 색상 조정
+              ),
+            ),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10.5,
+                color: isSelected ? mainRed : const Color(0xffAAAAAA),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
-        BottomNavigationBarItem(
-          icon: Image.asset('assets/img/vector3.png', width: 25, height: 25.0),
-          label: '오늘의 도미노',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset('assets/img/vector4.png', width: 23, height: 23.0),
-          label: '설정',
-        ),
-      ],
+      ),
     );
   }
 
   void _onItemTapped(BuildContext context, int index) {
-    // Use Navigator to navigate to different pages based on the index
     switch (index) {
       case 0:
         Navigator.pushReplacement(
@@ -60,14 +95,13 @@ class NavBar extends StatelessWidget {
       case 1:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const DPlistPage()),
+          MaterialPageRoute(builder: (context) => const DPMain()),
         );
         break;
       case 2:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-              builder: (context) => const TdMain()), // 현재 화면으로 돌아오기
+          MaterialPageRoute(builder: (context) => const TdMain()),
         );
         break;
       case 3:

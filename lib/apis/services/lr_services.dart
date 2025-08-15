@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:domino/screens/TD/td_main.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,12 +7,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:domino/style/style_tutorial.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 String? baseUrl = dotenv.env['BASE_URL'];
 
 class LoginService {
-  Future<void> login(
-      BuildContext context, String userId, String password) async {
+  Future<bool> login(
+    BuildContext context,
+    String userId,
+    String password, {
+    bool showErrorMessage = true, // ✅ 메시지 출력 여부 추가
+  }) async {
     final url = Uri.parse('$baseUrl/api/auth/login');
 
     final body = jsonEncode({
@@ -28,76 +34,50 @@ class LoginService {
         },
         body: body,
       );
+      print('🔢 응답 status code: ${response.statusCode}');
+      print('📃 응답 body: ${response.body}');
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         final responseData = jsonDecode(response.body);
 
         if (responseData != null && responseData is Map<String, dynamic>) {
           final accessToken = responseData['accessToken'] ?? '';
 
           if (accessToken.isNotEmpty) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('authToken', accessToken);
+            print('✅ accessToken: $accessToken');
+
+            // 기존 코드
+
+            // 🔥 추가: SecureStorage에도 저장
+            final secureStorage = FlutterSecureStorage();
+            await secureStorage.write(key: 'token', value: accessToken);
+
+            // 🔍 저장 확인 로그
+            final readBack = await secureStorage.read(key: 'token');
+            print('📦 SecureStorage 저장 확인: $readBack');
 
             if (context.mounted) {
-              Fluttertoast.showToast(
-                msg: '로그인 성공!',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-              );
-
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TdMain(),
-                ),
-              );
-            }
-          } else {
-            if (context.mounted) {
-              Fluttertoast.showToast(
-                msg: '토큰을 받아오지 못했습니다.',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-              );
+              return true;
             }
           }
-        } else {
-          if (context.mounted) {
-            Fluttertoast.showToast(
-              msg: '서버 응답 형식이 올바르지 않습니다.',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            );
-          }
+          return false;
         }
+        return false;
       } else {
-        if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '로그인 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+        if (context.mounted && showErrorMessage) {
+          Message(
+            "입력하신 정보가 올바르지 않습니다.",
+            const Color(0xffFF6767), // 텍스트 색상
+            const Color(0xff412C2C), // 배경 색상
+            borderColor: const Color(0xffFF6767), // 테두리 색상
+            icon: Icons.block, // 아이콘
+          ).message(context);
         }
+        return false;
       }
     } catch (e) {
-      if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-      }
+      if (context.mounted) {}
+      return false;
     }
   }
 }
@@ -105,18 +85,10 @@ class LoginService {
 class ChangePasswordService {
   static Future<bool> changePassword(
       {required String currentPassword, required String newPassword}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
       return false;
     }
 
@@ -137,37 +109,12 @@ class ChangePasswordService {
         body: body,
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-
-      if (response.statusCode == 200 ||
-          response.statusCode == 201 ||
-          response.statusCode == 201) {
-        Fluttertoast.showToast(
-          msg: '비밀번호가 성공적으로 변경되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '비밀번호 변경 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
       return false;
     }
   }
@@ -199,10 +146,7 @@ class RegistrationService {
         body: body,
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         if (context.mounted) {
           Navigator.pushReplacement(
             context,
@@ -212,26 +156,14 @@ class RegistrationService {
           );
         }
       } else {
+        print('❌ 회원가입 실패 - 상태코드 ${response.statusCode}');
         if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '서버 오류: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          TutorialMessage("아이디가 중복되었습니다").tutorialMessage(context);
         }
       }
     } catch (e) {
-      if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-      }
+      print('❗ 예외 발생: $e');
+      if (context.mounted) {}
     }
   }
 }
@@ -257,39 +189,23 @@ class IdFindService {
         body: body,
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseData = jsonDecode(response.body);
-        return responseData.toString(); // Adjust based on your API response
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        //final responseData = jsonDecode(response.body);
+        return response.body; // Adjust based on your API response
       } else {
-        Fluttertoast.showToast(
-          msg: '사용자 ID를 찾을 수 없습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        return '';
+        return '실패';
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return '';
+      return '실패';
     }
   }
 }
 
 class PwFindService {
-  static Future<void> findPassword({
+  static Future<String> findPassword({
     required String userId,
     required String email,
+    required BuildContext context,
   }) async {
     final url = Uri.parse('$baseUrl/api/user/reset_password');
 
@@ -306,41 +222,25 @@ class PwFindService {
         },
         body: body,
       );
-
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return response.body; // Adjust based on your API response
+      } else {
+        return '실패';
+      }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      return '실패';
     }
   }
 }
 
 class SignOutService {
-  static Future<String?> signOut(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+  static Future<bool> signOut(BuildContext context) async {
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
-    if (token == null) {
-      if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-      }
-      return null;
-    }
+    if (token == null) return false;
 
-    final url = Uri.parse('$baseUrl/api/user/me/password');
+    final url = Uri.parse('$baseUrl/api/user/me');
 
     try {
       final response = await http.delete(
@@ -351,71 +251,26 @@ class SignOutService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '탈퇴가 성공적으로 이루어졌습니다.',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-          );
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MyApp(),
-            ),
-          );
-        }
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return true; // ✅ 성공
       } else {
-        if (context.mounted) {
-          Fluttertoast.showToast(
-            msg: '탈퇴 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
-        }
-        return null;
+        return false; // ✅ 실패
       }
     } catch (e) {
-      if (context.mounted) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-      }
-      return null;
+      return false; // ✅ 예외 발생
     }
-    return null;
   }
 }
 
 class MorningAlertService {
-  static Future<String?> morningAlert(
-    BuildContext context,
-    String alarm,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+  static Future<bool> morningAlert({
+    required String alarm,
+  }) async {
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null || token.isEmpty) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return null;
+      return false;
     }
 
     final url = Uri.parse('$baseUrl/api/user/morning_alarm');
@@ -431,58 +286,24 @@ class MorningAlertService {
           },
           body: body);
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '아침알람이 업데이트되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-        return alarm; //성공한 경우 'on' 또는 'off' 값을 반환
+        return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        return null;
+        return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return null;
+      return false;
     }
   }
 }
 
 class NightAlertService {
-  static Future<String?> nightAlert(
-    BuildContext context,
-    String alarm,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+  static Future<bool> nightAlert({required String alarm}) async {
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null || token.isEmpty) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return null;
+      return false;
     }
 
     final url = Uri.parse('$baseUrl/api/user/night_alarm');
@@ -498,36 +319,13 @@ class NightAlertService {
           },
           body: body);
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Fluttertoast.showToast(
-          msg: '저녁알람이 업데이트되었습니다.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-        return alarm; //성공한 경우 'on' 또는 'off' 값을 반환
+        return true; //성공한 경우 'on' 또는 'off' 값을 반환
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        return null;
+        return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return null;
+      return false;
     }
   }
 }

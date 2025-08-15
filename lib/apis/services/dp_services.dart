@@ -1,29 +1,28 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:math' as math;
+
+
+String? baseUrl = dotenv.env['BASE_URL'];
 
 class MainGoalListService {
   static Future<List<Map<String, dynamic>>?> mainGoalList(
     BuildContext context,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
 
-    final url = Uri.parse('http://13.124.78.26:8080/api/mandalart');
+    final url = Uri.parse('$baseUrl/api/mandalart');
 
     try {
       final response = await http.get(
@@ -34,37 +33,24 @@ class MainGoalListService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 200) {
-        final List<dynamic> jsonResponse = json.decode(response.body);
+        
+        final List<dynamic> jsonResponse =
+            json.decode(utf8.decode(response.bodyBytes));
+
         List<Map<String, dynamic>> mainGoals = jsonResponse
             .map((item) => {
                   'id': item['id'],
                   'name': item['name'],
                 })
             .toList();
-        print('mainGoals: $mainGoals');
         return mainGoals;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return null;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
   }
@@ -76,22 +62,15 @@ class AddSecondGoalService {
     required List<String> name,
     required List<String> color,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
-    final url = Uri.parse('http://13.124.78.26:8080/api/secondgoal/add');
+    final url = Uri.parse('$baseUrl/api/secondgoal/add');
 
     if (name.length != color.length) {
       throw Exception("Mismatch in the number of names and colors");
@@ -100,11 +79,8 @@ class AddSecondGoalService {
     bool allSuccess = true;
 
     for (int i = 0; i < name.length; i++) {
-      final body = json.encode({
-        "mandalartId": mandalartId,
-        "name": name[i],
-        "color": color[i]
-      });
+      final body = json.encode(
+          {"mandalartId": mandalartId, "name": name[i], "color": color[i]});
 
       try {
         final response = await http.post(
@@ -116,35 +92,13 @@ class AddSecondGoalService {
           body: body,
         );
 
-        print('서버 응답 상태 코드: ${response.statusCode}');
-        print('서버 응답 본문: ${response.body}');
-
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Fluttertoast.showToast(
-            msg: '목표가 성공적으로 저장되었습니다.',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-          );
         } else {
-          Fluttertoast.showToast(
-            msg: '목표 생성 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         allSuccess = false;
       }
     }
@@ -153,16 +107,13 @@ class AddSecondGoalService {
   }
 }
 
-
-
 class SecondGoalListService {
   static Future<List<Map<String, dynamic>>?> secondGoalList(
     BuildContext context,
     String mandalartId, // Added to dynamically insert mandalartId in the URL
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -175,8 +126,7 @@ class SecondGoalListService {
       return null;
     }
 
-    final url =
-        Uri.parse('http://13.124.78.26:8080/api/mandalart/all/$mandalartId'); // Insert mandalartId here
+    final url = Uri.parse('$baseUrl/api/mandalart/all/$mandalartId');
 
     try {
       final response = await http.get(
@@ -187,16 +137,14 @@ class SecondGoalListService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        
-        // Parsing the response to match the desired structure
+        final Map<String, dynamic> jsonResponse =
+            json.decode(utf8.decode(response.bodyBytes));
+
         final List<Map<String, dynamic>> mainGoals = [
           {
             "mandalart": jsonResponse["mandalart"],
+            "color": jsonResponse["color"],
             "secondGoals": (jsonResponse["secondGoals"] as List<dynamic>)
                 .map((secondGoal) => {
                       "id": secondGoal["id"],
@@ -213,83 +161,47 @@ class SecondGoalListService {
           }
         ];
 
-        print('mainGoals: $mainGoals');
         return mainGoals;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return null;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
   }
 }
 
-
 class AddThirdGoalService {
   static Future<bool> addThirdGoal({
     required List<int> secondGoalId,
-    required List<String> third0,
-    required List<String> third1,
-    required List<String> third2,
-    required List<String> third3,
-    required List<String> third4,
-    required List<String> third5,
-    required List<String> third6,
-    required List<String> third7,
-    required List<String> third8,
+    required List<List<String>> thirdValues,
+   
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
-    final url = Uri.parse('http://13.124.78.26:8080/api/thirdgoal/add');
+    final url = Uri.parse('$baseUrl/api/thirdgoal/add');
 
     bool allSuccess = true;
 
-    // List of all thirdGoals
-    List<List<String>> allThirdGoals = [
-      third0, third1, third2, third3, third4, third5, third6, third7, third8
-    ];
+    final minLen = math.min(secondGoalId.length, thirdValues.length);
 
-    for (int i = 0; i < secondGoalId.length; i++) {
-      // Check if we have more thirdGoals than secondGoals
-      if (i >= allThirdGoals.length) break;
+    for (int i = 0; i < minLen; i++) {
+      final curSecondGoalId = secondGoalId[i];
+      final curThirdGoals = thirdValues[i];
 
-      List<String> currentThirdGoals = allThirdGoals[i];
-      
-      for (int j = 0; j < currentThirdGoals.length; j++) {
-        final thirdGoalName = currentThirdGoals[j];
-        
-    
+      for (final thirdGoalName in curThirdGoals) {
 
         final body = json.encode({
-          "secondGoalId": secondGoalId[i],
-          "name": thirdGoalName,
+          'secondGoalId': curSecondGoalId,
+          'name': thirdGoalName,
         });
 
         try {
@@ -302,35 +214,13 @@ class AddThirdGoalService {
             body: body,
           );
 
-          print('서버 응답 상태 코드: ${response.statusCode}');
-          print('서버 응답 본문: ${response.body}');
-
           if (response.statusCode == 200 || response.statusCode == 201) {
-            Fluttertoast.showToast(
-              msg: '목표가 성공적으로 저장되었습니다.',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-            );
           } else {
-            Fluttertoast.showToast(
-              msg: '목표 생성 실패: ${response.body}',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            );
+            
             allSuccess = false;
           }
         } catch (e) {
-          Fluttertoast.showToast(
-            msg: '오류 발생: $e',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       }
@@ -340,30 +230,20 @@ class AddThirdGoalService {
   }
 }
 
-
-
 class DeleteMandalartService {
-  
   static Future<bool> deleteMandalart(
     BuildContext context,
-    int mandalartId,
+    int secondGoalId,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
-    final url = Uri.parse('http://13.124.78.26:8080/api/mandalart/$mandalartId');
+    final url = Uri.parse('$baseUrl/api/secondgoal/$secondGoalId');
 
     try {
       final response = await http.delete(
@@ -374,30 +254,51 @@ class DeleteMandalartService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 204) {
-        // Handle successful deletion
         return true;
       } else {
-        Fluttertoast.showToast(
-          msg: '삭제 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
+      
+      return false;
+    }
+  }
+}
+
+class DeleteThirdGoalService {
+  static Future<bool> deleteThirdGoal(
+    BuildContext context,
+    int thirdGoalId,
+  ) async {
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
+
+    if (token == null) {
+      
+      return false;
+    }
+
+    final url = Uri.parse('$baseUrl/api/thirdgoal/$thirdGoalId');
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
       );
+
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        
+        return false;
+      }
+    } catch (e) {
+      
       return false;
     }
   }
@@ -408,25 +309,19 @@ class EditSecondGoalService {
     required List<int> secondGoalId,
     required List<String> newSecondGoal,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
-    final url = Uri.parse('http://13.124.78.26:8080/api/secondgoal');
+    final url = Uri.parse('$baseUrl/api/secondgoal');
 
     if (secondGoalId.length != newSecondGoal.length) {
-      throw Exception("Mismatch in the number of secondGoalId and newSecondGoal");
+      throw Exception(
+          "Mismatch in the number of secondGoalId and newSecondGoal");
     }
 
     bool allSuccess = true;
@@ -447,37 +342,13 @@ class EditSecondGoalService {
           body: body,
         );
 
-        print('서버 응답 상태 코드: ${response.statusCode}');
-        print('서버 응답 본문: ${response.body}');
-        print(secondGoalId);
-        print(newSecondGoal);
-
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Fluttertoast.showToast(
-            msg: '목표가 성공적으로 수정되었습니다.',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-          );
         } else {
-          Fluttertoast.showToast(
-            msg: '목표 수정 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         allSuccess = false;
       }
     }
@@ -486,28 +357,19 @@ class EditSecondGoalService {
   }
 }
 
-
 class EditGoalColorService {
   static Future<bool> editGoalColor({
     required List<int> secondGoalId,
     required List<String> color,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
-
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return false;
     }
 
-    final url = Uri.parse('http://13.124.78.26:8080/api/secondgoal/color');
+    final url = Uri.parse('$baseUrl/api/secondgoal/color');
 
     if (secondGoalId.length != color.length) {
       throw Exception("Mismatch in the number of secondGoalId and color");
@@ -531,35 +393,13 @@ class EditGoalColorService {
           body: body,
         );
 
-        print('서버 응답 상태 코드: ${response.statusCode}');
-        print('서버 응답 본문: ${response.body}');
-
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Fluttertoast.showToast(
-            msg: '목표가 성공적으로 수정되었습니다.',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-          );
         } else {
-          Fluttertoast.showToast(
-            msg: '목표 수정 실패: ${response.body}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
+          
           allSuccess = false;
         }
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: '오류 발생: $e',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         allSuccess = false;
       }
     }
@@ -568,63 +408,32 @@ class EditGoalColorService {
   }
 }
 
-
 class EditThirdGoalService {
   static Future<bool> editThirdGoal({
-    required List<int> third0id,
-    required List<int> third1id,
-    required List<int> third2id,
-    required List<int> third3id,
-    required List<int> third4id,
-    required List<int> third5id,
-    required List<int> third6id,
-    required List<int> third7id,
-    required List<int> third8id,
-    
-    required List<String> third0,
-    required List<String> third1,
-    required List<String> third2,
-    required List<String> third3,
-    required List<String> third4,
-    required List<String> third5,
-    required List<String> third6,
-    required List<String> third7,
-    required List<String> third8,
+    required List<List<int>> thirdGoalIds,    
+    required List<List<String>> thirdGoals,    
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
       return false;
     }
 
-    final url = Uri.parse('http://13.124.78.26:8080/api/thirdgoal');
+    final url = Uri.parse('$baseUrl/api/thirdgoal');
     bool allSuccess = true;
 
-    // List of all thirdGoalIds and corresponding goals
-    List<List<int>> allThirdGoalIds = [
-      third0id, third1id, third2id, third3id, third4id, third5id, third6id, third7id, third8id
-    ];
+    final goalCount = math.min(thirdGoalIds.length, thirdGoals.length);
 
-    List<List<String>> allThirdGoals = [
-      third0, third1, third2, third3, third4, third5, third6, third7, third8
-    ];
+    for (int i = 0; i < goalCount; i++) {
+      final idList = thirdGoalIds[i];
+      final goalList = thirdGoals[i];
+      final loopCount = math.min(idList.length, goalList.length);
 
-    // Loop through all the goal lists and send them one by one
-    for (int i = 0; i < allThirdGoalIds.length; i++) {
-      for (int j = 0; j < allThirdGoalIds[i].length; j++) {
-        // For each thirdGoalId and newThirdGoal pair, make a request
+      for (int j = 0; j < loopCount; j++) {
         final body = json.encode({
-          "thirdGoalId": allThirdGoalIds[i][j],
-          "newThirdGoal": allThirdGoals[i][j],
+          "thirdGoalId": idList[j],
+          "newThirdGoal": goalList[j],
         });
 
         try {
@@ -637,37 +446,10 @@ class EditThirdGoalService {
             body: body,
           );
 
-          print('서버 응답 상태 코드: ${response.statusCode}');
-          print('서버 응답 본문: ${response.body}');
-          print(allThirdGoals);
-          print(allThirdGoalIds);
-
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            Fluttertoast.showToast(
-              msg: '목표가 성공적으로 저장되었습니다.',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-            );
-          } else {
-            Fluttertoast.showToast(
-              msg: '목표 생성 실패: ${response.body}',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            );
+          if (response.statusCode != 200 && response.statusCode != 201) {
             allSuccess = false;
           }
         } catch (e) {
-          Fluttertoast.showToast(
-            msg: '오류 발생: $e',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
           allSuccess = false;
         }
       }
@@ -677,22 +459,16 @@ class EditThirdGoalService {
   }
 }
 
+
 class MainGoalDetailService {
   static Future<List<Map<String, dynamic>>?> mainGoalDetailList(
     BuildContext context,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-    print('저장된 토큰: $token');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
-      Fluttertoast.showToast(
-        msg: '로그인 토큰이 없습니다. 다시 로그인해 주세요.',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
 
@@ -707,11 +483,9 @@ class MainGoalDetailService {
         },
       );
 
-      print('서버 응답 상태 코드: ${response.statusCode}');
-      print('서버 응답: ${response.body}');
-
       if (response.statusCode == 200) {
-        final List<dynamic> jsonResponse = json.decode(response.body);
+        final List<dynamic> jsonResponse =
+            json.decode(utf8.decode(response.bodyBytes));
         List<Map<String, dynamic>> mainGoalsDetail = jsonResponse
             .map((item) => {
                   'id': item['id'],
@@ -722,26 +496,13 @@ class MainGoalDetailService {
                   'repetition': item['repetition'],
                 })
             .toList();
-        print('mainGoalsDetail: $mainGoalsDetail');
         return mainGoalsDetail;
       } else {
-        Fluttertoast.showToast(
-          msg: '업데이트 실패: ${response.body}',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        
         return null;
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: '오류 발생: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      
       return null;
     }
   }

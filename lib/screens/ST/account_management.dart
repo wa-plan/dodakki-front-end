@@ -1,13 +1,27 @@
 import 'package:domino/main.dart';
 import 'package:domino/screens/LR/login.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_login.dart';
+import 'package:domino/style/style_setting.dart';
+import 'package:domino/style/styles.dart';
+import 'package:domino/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/screens/ST/change_password.dart';
 import 'package:domino/widgets/popup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:domino/apis/services/lr_services.dart'; // Import the new service
+//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:domino/apis/services/lr_services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AccountManagement extends StatefulWidget {
-  const AccountManagement({super.key});
+  final String email;
+  final String password;
+  final String phoneNum;
+  const AccountManagement({
+    super.key,
+    required this.email,
+    required this.password,
+    required this.phoneNum,
+  });
 
   @override
   State<AccountManagement> createState() => _AccountManagementState();
@@ -16,138 +30,177 @@ class AccountManagement extends StatefulWidget {
 class _AccountManagementState extends State<AccountManagement> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Padding(
-            padding: const EdgeInsets.fromLTRB(5.0, 20.0, 20.0, 0.0),
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  color: Colors.white,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '계정관리',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.width * 0.06,
-                      fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
-          backgroundColor: const Color(0xff262626),
-        ),
-        backgroundColor: const Color(0xff262626),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(38.0, 30.0, 40.0, 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '내 계정',
-                style: TextStyle(color: Colors.white),
-              ),
-              Expanded(
-                  child: ListView(
-                children: [
-                  const AccountInfo(infoType: '이메일', info: 'new7932@naver.com'),
-                  const AccountInfo(infoType: '휴대폰 번호', info: '010 7536 7932'),
-                  const AccountInfo(infoType: '로그인 정보', info: '카카오톡'),
-                  ListTile(
-                    title: const Text('비밀번호 변경',
-                        style: TextStyle(color: Colors.white)),
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ChangePassword(),
-                          ));
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('로그아웃',
-                        style: TextStyle(color: Colors.white)),
-                    onTap: () {
-                      _logout();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('탈퇴하기',
-                        style: TextStyle(color: Colors.white)),
-                    onTap: () {
-                      PopupDialog.show(
-                        context,
-                        '이건 아니야.. \n정말 떠날거야...?',
-                        true, // cancel
-                        false, // delete
-                        true, // signout
-                        onCancel: () {
-                          // 취소 버튼을 눌렀을 때 실행할 코드
-                          Navigator.of(context).pop();
-                        },
+    final currentWidth = MediaQuery.of(context).size.width;
 
-                        onDelete: () {
-                          // 삭제 버튼을 눌렀을 때 실행할 코드
-                        },
-                        onSignOut: () {
-                          // 탈퇴 버튼을 눌렀을 때 실행할 코드
-                          SignOutService.signOut(context);
-                          Navigator.of(context).pop();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MyApp(),
-                              ));
-                        },
-                      );
-                    },
-                  )
-                ],
-              ))
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      bottomNavigationBar: const NavBar(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
+        title: Padding(
+          padding: appBarPadding,
+          child: Row(
+            children: [
+              //뒤로가기 버튼 (style_login.dart)
+              CustomBackButton(
+                () {
+                  Navigator.of(context).pop();
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+              Icon(
+                Icons.person,
+                color: mainRed,
+              ),
+              SizedBox(width: 7),
+              DPTitleText('내 계정', currentWidth).dPTitleText(),
             ],
           ),
-        ));
-  }
-}
-
-class AccountInfo extends StatelessWidget {
-  const AccountInfo({super.key, required this.infoType, required this.info});
-  final String infoType;
-  final String info;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      dense: true,
-      title: Text(
-        infoType,
-        style: const TextStyle(color: Colors.white, fontSize: 16),
+        ),
+        backgroundColor: backgroundColor,
       ),
-      trailing: Text(
-        info,
-        style: const TextStyle(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal),
+      body: Padding(
+        padding: fullPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
+            //❤️개인 정보 카테고리
+            STSubTitle('개인 정보', Icons.person, 20).sTSubTitle(context),
+            const SizedBox(height: 12),
+            _buildSettingItem(
+              title: '이메일',
+              email: true,
+              onTap: () {},
+            ),
+
+            //❤️보안 카테고리
+            const SizedBox(height: 41),
+            STSubTitle('보안', Icons.lock, 18).sTSubTitle(context),
+            const SizedBox(height: 12),
+            _buildSettingItem(
+              title: '비밀번호 바꾸기',
+              email: false,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangePassword(
+                      password: widget.password,
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            //❤️종료 카테고리
+            const SizedBox(height: 41),
+            STSubTitle('종료', Icons.exit_to_app_rounded, 20).sTSubTitle(context),
+            const SizedBox(height: 12),
+            _buildSettingItem(
+              title: '로그아웃',
+              email: false,
+              onTap: () {
+                _logout();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 5),
+            _buildSettingItem(
+              title: '탈퇴하기',
+              email: false,
+              onTap: () {
+                PopupDialog.show(
+                  context,
+                  '지금 떠나면,\n지금까지의 기록이 없어져..!',
+                  '잠깐만!!',
+                  true, // cancel
+                  false, // delete
+                  true, //signout
+                  false, // success
+                  onCancel: () {
+                    Navigator.of(context).pop();
+                  },
+                  onDelete: () {},
+                  onSignOut: () async {
+                    final success = await SignOutService.signOut(context);
+                    if (!context.mounted) return;
+                    if (success) {
+                      Navigator.of(context).pop();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MyApp()),
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
-}
 
-void _logout() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove('authToken');
+  //카테고리 내 아이템 위젯
+  Widget _buildSettingItem(
+      {required String title, required bool email, void Function()? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(22),
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: const Color(0xff2C2C2C),
+          borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              offset: const Offset(0, 0),
+              blurRadius: 15,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(title,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                )),
+            if (email)
+              Text(widget.email,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //로그아웃 함수
+  void _logout() async {
+    final FlutterSecureStorage storage = const FlutterSecureStorage();
+    await storage.deleteAll();
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:domino/provider/TD/date_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class EditCalendar extends StatefulWidget {
 class EditCalendarState extends State<EditCalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  late DateTime pickedDate = DateTime.now(); //도미노로 저장할 때, 해당 페이지로 넘길 날짜 변수
+  late DateTime pickedDate = DateTime.now(); 
   Map pickDates = {};
 
   @override
@@ -21,7 +22,12 @@ class EditCalendarState extends State<EditCalendar> {
     super.initState();
     _focusedDay = widget.date;
     _selectedDay = widget.date;
-    pickedDate = widget.date; // 초기에는 전달된 날짜로 설정
+    pickedDate = widget.date; 
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<DateProvider>(context, listen: false)
+          .setPickedDate(pickedDate);
+    });
   }
 
   @override
@@ -29,6 +35,7 @@ class EditCalendarState extends State<EditCalendar> {
     return Column(
       children: [
         TableCalendar(
+          rowHeight: 45,
           locale: 'ko-KR',
           focusedDay: _focusedDay,
           selectedDayPredicate: (day) {
@@ -36,16 +43,13 @@ class EditCalendarState extends State<EditCalendar> {
           },
           onDaySelected: (selectedDay, focusedDay) {
             if (!isSameDay(_selectedDay, selectedDay)) {
-              // Call `setState()` when updating the selected day
-              //bool everyDay = repeatSettingsKey.currentState!.everyDay;
               setState(() {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
                 pickedDate = selectedDay;
               });
-              // DateProvider를 통해 상태 업데이트
               Provider.of<DateProvider>(context, listen: false)
-                  .setPickedDate(selectedDay);
+                  .setPickedDate(pickedDate);
             }
           },
           onPageChanged: (focusedDay) {
@@ -53,32 +57,70 @@ class EditCalendarState extends State<EditCalendar> {
           },
           calendarFormat: CalendarFormat.month,
           calendarStyle: CalendarStyle(
-              outsideDaysVisible: false,
-              isTodayHighlighted: true,
-              todayDecoration: const BoxDecoration(
-                  color: Color(0xFF5B5B5B), shape: BoxShape.circle),
-              selectedDecoration: const BoxDecoration(
-                  color: Color(0xFFFF6767), shape: BoxShape.rectangle),
-              defaultTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: MediaQuery.of(context).size.width * 0.035,
-              ),
-              weekendTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: MediaQuery.of(context).size.width * 0.035,
-              )),
-          headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-              titleTextStyle: TextStyle(color: Colors.white),
-              leftChevronIcon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
-              rightChevronIcon: Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-              )),
+            markerSize: 0.0,
+            outsideDaysVisible: false,
+            isTodayHighlighted: true,
+            todayDecoration:
+                const BoxDecoration(color: mainGrey, shape: BoxShape.circle),
+            selectedDecoration:
+                const BoxDecoration(color: mainRed, shape: BoxShape.circle),
+            //선택된 날짜
+        selectedTextStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: backgroundColor,
+        ),
+        //오늘 날짜
+        todayTextStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+        outsideTextStyle: TextStyle(
+          color: const Color.fromARGB(255, 125, 125, 125),
+          fontSize: 14,
+        ),
+        //보통 날짜
+        defaultTextStyle: TextStyle(
+          color: mainTextColor,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+        //주말 날짜
+        weekendTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      daysOfWeekStyle: const DaysOfWeekStyle(
+        weekdayStyle: TextStyle(
+          color: settingGrey,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+        weekendStyle: TextStyle(
+          color: settingGrey,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+          headerStyle: HeaderStyle(
+        titleCentered: true,
+        titleTextStyle: const TextStyle(
+            color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+        leftChevronIcon: Icon(
+          Icons.arrow_circle_left_rounded,
+          color: settingGrey,
+          size: 22,
+        ),
+        rightChevronIcon: Icon(
+          Icons.arrow_circle_right_rounded,
+          color: settingGrey,
+          size: 22,
+        ),
+        formatButtonVisible: false,
+      ),
           firstDay: DateTime.utc(2014, 1, 1),
           lastDay: DateTime.utc(2034, 12, 31),
         ),

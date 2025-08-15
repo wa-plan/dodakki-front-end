@@ -1,28 +1,24 @@
+import 'package:domino/screens/MG/mygoal_main.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: EventPage(),
-  ));
-}
-
 class EventPage extends StatefulWidget {
-  const EventPage({super.key});
+  final int domino;
+  final String goalName;
+
+  const EventPage({super.key, required this.domino, required this.goalName});
 
   @override
   State<EventPage> createState() => _EventPageState();
 }
 
 class _EventPageState extends State<EventPage> {
-  String domino = "30";  //도미노 개수 api 가져오기
-  String goal = "환상적인 세계여행"; //제1목표 title api 가져오기
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
   bool _isContentVisible = true;
   bool _isVideoEnded = false;
+  bool _isCountdownStarted = false;
 
   @override
   void initState() {
@@ -32,12 +28,14 @@ class _EventPageState extends State<EventPage> {
     _controller.setLooping(false);
     _controller.setVolume(1.0);
 
-    
     _controller.addListener(() {
       if (_controller.value.position == _controller.value.duration) {
-        setState(() {
-          _isVideoEnded = true; 
-        });
+        if (!_isVideoEnded) {
+          setState(() {
+            _isVideoEnded = true;
+            _isCountdownStarted = true; // 카운트다운 시작
+          });
+        }
       }
     });
   }
@@ -46,6 +44,12 @@ class _EventPageState extends State<EventPage> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _goToNextPage() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const MyGoal()),
+    );
   }
 
   @override
@@ -63,10 +67,9 @@ class _EventPageState extends State<EventPage> {
                   height: double.infinity,
                   child: VideoPlayer(_controller),
                 ),
-                if (_isContentVisible &&
-                    !_isVideoEnded) 
+                if (_isContentVisible && !_isVideoEnded)
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
+                    padding: const EdgeInsets.fromLTRB(40, 90, 30, 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -81,7 +84,7 @@ class _EventPageState extends State<EventPage> {
                             ),
                           ),
                           TextSpan(
-                            text: domino,
+                            text: widget.domino.toString(),
                             style: const TextStyle(
                               height: 2,
                               color: Color(0xffFF7575),
@@ -109,14 +112,11 @@ class _EventPageState extends State<EventPage> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 30),
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              _isContentVisible =
-                                  !_isContentVisible; 
+                              _isContentVisible = !_isContentVisible;
                               if (_controller.value.isPlaying) {
                                 _controller.pause();
                               } else {
@@ -125,30 +125,84 @@ class _EventPageState extends State<EventPage> {
                             });
                           },
                           style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            backgroundColor: mainRed,
+                            padding: EdgeInsets.fromLTRB(30,13,30,13)
                           ),
                           child: const Text(
-                            '공 굴리기',
+                            '공 굴리기!',
                             style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900),
+                              color: backgroundColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 17,
+                            ),
                           ),
                         )
                       ],
                     ),
                   ),
-                if (_isVideoEnded) 
+                if (_isVideoEnded)
                   Align(
                     alignment: const Alignment(0, -0.5),
-                    child: Text(
-                      '$goal\n쓰러뜨리기 성공!\n\n축하해요!',
-                      style: const TextStyle(
-                        height: 2,
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${widget.goalName}\n쓰러뜨리기 성공!',
+                          style: const TextStyle(
+                            height: 1.5,
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          '축하해요!',
+                          style: TextStyle(
+                            height: 2,
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 30),
+
+                        /// ✅ 원형 카운트다운 애니메이션
+                        if (_isCountdownStarted)
+                          TweenAnimationBuilder<double>(
+                            tween: Tween(begin: 1.0, end: 0.0),
+                            duration: const Duration(seconds: 3),
+                            onEnd: _goToNextPage,
+                            builder: (context, value, child) {
+                              int seconds = (value * 3).ceil();
+                              return Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 80,
+                                    height: 80,
+                                    child: CircularProgressIndicator(
+                                      value: value,
+                                      strokeWidth: 6,
+                                      valueColor: const AlwaysStoppedAnimation<Color>(mainRed),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ),
+                                  Text(
+                                    '$seconds',
+                                    style: const TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                      ],
                     ),
                   ),
               ],

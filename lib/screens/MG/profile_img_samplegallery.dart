@@ -1,7 +1,16 @@
+import 'dart:io';
+
+import 'package:domino/screens/MG/mygoal_profile_edit.dart';
+import 'package:domino/style/style_dominoPlan.dart';
+import 'package:domino/style/style_login.dart';
+import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class ProfileSampleGallery extends StatefulWidget {
-  const ProfileSampleGallery({super.key});
+  final String selectedImage;
+  final String profileImage;
+  const ProfileSampleGallery(
+      {super.key, required this.selectedImage, required this.profileImage});
 
   @override
   ProfileSampleGalleryState createState() => ProfileSampleGalleryState();
@@ -20,132 +29,165 @@ class ProfileSampleGalleryState extends State<ProfileSampleGallery> {
     'assets/img/profile_smp9.png',
   ];
 
+  String defaultImage = 'assets/img/profile_smp4.png'; // 기본 이미지 경로
+
+  late String _selectedImage;
+  late String _profileImage;
+  ImageProvider getImageProvider(
+      String? selectedImage, String? profileImage, String defaultImage) {
+    // 1️⃣ 우선순위에 따라 사용할 이미지 선택
+    String? imageToShow = selectedImage?.isNotEmpty == true
+        ? selectedImage
+        : (profileImage?.isNotEmpty == true ? profileImage : defaultImage);
+
+    // 2️⃣ 기본 이미지 처리
+    if (imageToShow == null || imageToShow.isEmpty) {
+      return AssetImage(defaultImage); // 기본 이미지
+    }
+
+    // 3️⃣ 이미지 타입에 따라 적절한 Provider 반환
+    if (imageToShow.startsWith('http')) {
+      return NetworkImage(imageToShow);
+    } else if (imageToShow.startsWith('file://')) {
+      // 로컬 파일은 FileImage로 변환
+      return FileImage(File(imageToShow.replaceFirst('file://', '')));
+    } else {
+      // Asset 이미지 사용 (경로 확인 필요)
+      return AssetImage(imageToShow);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedImage = widget.selectedImage;
+
+    _profileImage = widget.profileImage;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final imageSize = MediaQuery.of(context).size.width / 3.5;
+    final currentWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
         title: Padding(
-          padding: const EdgeInsets.fromLTRB(10.0, 20.0, 20.0, 0.0),
+          padding: appBarPadding,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '프로필 편집하기',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * 0.06,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              //뒤로가기 버튼 (style_login.dart)
+              CustomBackButton(
+                () {
+                  Navigator.pop(
+                    context
+                  );
+                },
+              ).customBackButton(),
+              SizedBox(width: 15),
+              Image.asset('assets/img/gallery_icon.png', scale: 4),
+              SizedBox(width: 8),
+              DPTitleText('도민호 갤러리', currentWidth).dPTitleText(),
             ],
           ),
         ),
-        backgroundColor: const Color(0xff262626),
+        backgroundColor: backgroundColor,
       ),
-      backgroundColor: const Color(0xff262626),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: fullPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '사진으로 당신을 표현해봐요.',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 20),
             Center(
               child: Container(
-                width: imageSize,
-                height: imageSize,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage('assets/img/profile_smp4.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            '기본 이미지',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              /*Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ProfileEdit(),
-                                ),
-                              );*/
-                            },
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.grey,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4))),
-                            child: const Text(
-                              '완료',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Expanded(
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return GridView.builder(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                mainAxisSpacing: 10.0,
-                                crossAxisSpacing: 10.0,
-                              ),
-                              padding: const EdgeInsets.all(5.0),
-                              itemCount: _imageUrls.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage(_imageUrls[index]),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05), 
+                        offset: const Offset(0, 0), 
+                        blurRadius: 7, 
+                        spreadRadius: 0, 
                       ),
                     ],
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: getImageProvider(
+                          _selectedImage, _profileImage, defaultImage),
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                ),
+             
+            ),
+            const SizedBox(height: 40),
+            Center(
+              child: SizedBox(
+                height: 330,
+                width: 330,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 28,
+                        crossAxisSpacing: 28,
+                      ),
+                      padding: const EdgeInsets.all(3.0),
+                      itemCount: _imageUrls.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedImage = _imageUrls[index];
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: _imageUrls[index].isNotEmpty
+                                    ? AssetImage(_imageUrls[index])
+                                        as ImageProvider
+                                    : AssetImage(defaultImage),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ),
+            Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: NewButton(mainRed, backgroundColor, '이미지 적용하기', 
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileEdit(
+                          selectedImage: _selectedImage,
+                          profileImage: _selectedImage.isEmpty
+                              ? (widget.profileImage.isNotEmpty
+                                  ? widget.profileImage
+                                  : "")
+                              : "",
+                          cameraImage: "",
+                        ),
+                      ),
+                    );
+                  }).newButton(),
+            )
+                
+            
           ],
         ),
       ),

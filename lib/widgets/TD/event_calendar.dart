@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'package:domino/apis/services/td_services.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:domino/screens/TD/add_page1.dart';
 import 'package:domino/screens/TD/edit_page.dart';
-import 'package:intl/intl.dart'; // 요일 변환을 위한 패키지
+import 'package:intl/intl.dart';
+import 'package:domino/style/styles.dart';
 
 class EventCalendar extends StatefulWidget {
   const EventCalendar({super.key});
@@ -17,56 +18,73 @@ class _EventCalendarState extends State<EventCalendar> {
   DateTime? _selectedDay;
   CalendarFormat _calendarFormat = CalendarFormat.week;
   late final ValueNotifier<List<Event>> _selectedEvents;
+  bool _isExpanded = false; // 달력 확장 상태
 
-  @override
-  void initState() {
-    super.initState();
+  Future<int?> getThirdGoalId(int mandalartId, String targetThirdGoal) async {
+    Map<String, dynamic>? mandalartData =
+        await MandalartInfoService.mandalartInfo(mandalartId: mandalartId);
 
-    _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier([]);
-    dominoInfo(_selectedDay!);
+    // ✅ 1. 응답 데이터 전체 출력
+
+    if (mandalartData == null) {
+      return null;
+    }
+
+    final secondGoals = mandalartData['secondGoals'] as List<dynamic>?;
+
+    if (secondGoals == null) {
+      return null;
+    }
+
+    // 🔧 문자열 비교 정규화 함수
+    String normalize(String input) =>
+        input.replaceAll(RegExp(r'\s+'), '').trim().toLowerCase();
+
+    for (var secondGoal in secondGoals) {
+      final thirdGoals = secondGoal['thirdGoals'] as List<dynamic>?;
+
+      if (thirdGoals == null) continue;
+
+      for (var thirdGoal in thirdGoals) {
+        final String currentGoal =
+            (thirdGoal['thirdGoal'] ?? '').toString().trim();
+
+        // ✅ 3. 비교 결과 출력
+        if (normalize(currentGoal) == normalize(targetThirdGoal)) {
+          final thirdGoalId = thirdGoal['id'] as int;
+          return thirdGoalId;
+        }
+
+        // 부분 매칭일 경우에도 알려줌
+        if (currentGoal.contains(targetThirdGoal.trim())) {}
+      }
+    }
+
+    return null;
   }
 
   Future<void> dominoInfo(DateTime date) async {
     String formattedDate = DateFormat('yyyy-MM-dd').format(date);
-    //"${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     final events =
         await DominoInfoService.dominoInfo(context, date: formattedDate);
 
-    if (events != null) {
-      setState(() {
-        _selectedEvents.value = events;
-      });
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
-      //ScaffoldMessenger.of(context).showSnackBar(
-      //  const SnackBar(content: Text('정보조회에 성공했습니다.')),
-      //);
-    } else {
-      setState(() {
-        _selectedEvents.value = [];
-      });
-      // 실패한 경우에 처리할 코드
-      //ScaffoldMessenger.of(context).showSnackBar(
-      //  const SnackBar(content: Text('정보조회에 실패했습니다.')),
-      //);
-    }
+    if (!mounted) return;
+
+if (events != null) {
+  setState(() {
+    _selectedEvents.value = events;
+  });
+} else {
+  setState(() {
+    _selectedEvents.value = [];
+  });
+}
+
   }
 
   void dominoStatus(int goalId, String attainment, String date) async {
-    final success = await DominoStatusService.dominoStatus(
+    await DominoStatusService.dominoStatus(
         goalId: goalId, attainment: attainment, date: date);
-
-    if (success) {
-      // 성공적으로 서버에 전송된 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('상태가 $attainment(으)로 업데이트 되었습니다.')),
-      );
-    } else {
-      // 실패한 경우에 처리할 코드
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('업데이트에 실패했습니다.')),
-      );
-    }
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -75,9 +93,29 @@ class _EventCalendarState extends State<EventCalendar> {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
       });
-
       dominoInfo(selectedDay);
     }
+  }
+
+  // 캘린더 형식을 토글하는 함수
+  void _toggleCalendarFormat() {
+    setState(() {
+      if (_calendarFormat == CalendarFormat.week) {
+        _calendarFormat = CalendarFormat.month;
+        _isExpanded = true;
+      } else {
+        _calendarFormat = CalendarFormat.week;
+        _isExpanded = false;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = _focusedDay;
+    _selectedEvents = ValueNotifier([]);
+    dominoInfo(_selectedDay!);
   }
 
   @override
@@ -88,269 +126,386 @@ class _EventCalendarState extends State<EventCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: TableCalendar<Event>(
-            firstDay: DateTime.utc(2014, 1, 1),
-            lastDay: DateTime.utc(2034, 12, 31),
-            focusedDay: _focusedDay,
-            eventLoader: (day) {
-              if (isSameDay(day, _selectedDay)) {
-                return _selectedEvents.value;
-              }
-              return [];
-            },
-            calendarFormat: _calendarFormat,
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            onDaySelected: _onDaySelected,
-            onPageChanged: (focusedDay) {
-              setState(() {
-                _focusedDay = focusedDay;
-                _selectedDay = focusedDay;
-              });
-              dominoInfo(focusedDay);
-            },
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            availableCalendarFormats: const {
-              CalendarFormat.month: '한달',
-              CalendarFormat.week: '1주',
-            },
-            locale: 'ko-KR',
-            calendarStyle: CalendarStyle(
-                markerSize: 0.0,
-                isTodayHighlighted: true,
-                todayDecoration: const BoxDecoration(
-                    color: Color(0xFF5B5B5B), shape: BoxShape.circle),
-                selectedDecoration: const BoxDecoration(
-                    color: Color(0xFFFF6767), shape: BoxShape.rectangle),
-                defaultTextStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * 0.035,
-                ),
-                weekendTextStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * 0.035,
-                )),
-            headerStyle: HeaderStyle(
-              leftChevronMargin: const EdgeInsets.only(right: 55.0),
-              // formatButtonVisible: false,
-              titleCentered: true,
-              titleTextStyle:
-                  const TextStyle(color: Colors.white, fontSize: 20),
-              leftChevronIcon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
-              rightChevronIcon: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-              ),
-              formatButtonVisible: true,
-              formatButtonDecoration: BoxDecoration(
-                color: Colors.transparent, // 버튼의 배경색을 투명으로 설정
-                borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(
-                  color: Colors.white, // 윤곽선을 흰색으로 설정
-                ),
-              ),
-              formatButtonTextStyle: const TextStyle(
-                color: Colors.white,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            SizedBox(width: MediaQuery.of(context).size.width * (6 / 7)),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddPage1(),
-                    ));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff262626),
-                elevation: 0.0,
-              ),
-              icon: const Icon(Icons.add, color: Color(0xff5C5C5C), size: 30),
-              alignment: Alignment.centerRight,
-            ), //루틴 추가하기 아이콘
-          ],
-        ),
-        const SizedBox(height: 8.0),
         Expanded(
-          child: ValueListenableBuilder<List<Event>>(
-            //ValueNotifier의 값이 변경될 때마다 자신의 'builder' 콜백을 호출한다.
-            valueListenable: _selectedEvents,
-            builder: (context, value, _) {
-              if (value.isEmpty) {
-                // 이벤트가 없는 경우
-                return const Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        '오늘은 도미노가 없네요.',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff5C5C5C),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '여유를 가져도 되겠어요:)',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff5C5C5C),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TableCalendar<Event>(
+                  rowHeight: 45,
+                  firstDay: DateTime.utc(2014, 1, 1),
+                  lastDay: DateTime.utc(2034, 12, 31),
+                  focusedDay: _focusedDay,
+                  eventLoader: (day) {
+                    if (isSameDay(day, _selectedDay)) {
+                      return _selectedEvents.value;
+                    }
+                    return [];
+                  },
+                  calendarFormat: _calendarFormat,
+                  selectedDayPredicate: (day) {
+                    return isSameDay(_selectedDay, day);
+                  },
+                  onDaySelected: _onDaySelected,
+                  onPageChanged: (focusedDay) {
+                    setState(() {
+                      _focusedDay = focusedDay;
+                      _selectedDay = focusedDay;
+                    });
+                    dominoInfo(focusedDay);
+                  },
+                  onFormatChanged: (format) {
+                    if (_calendarFormat != format) {
+                      setState(() {
+                        _calendarFormat = format;
+                      });
+                    }
+                  },
+                  availableCalendarFormats: const {
+                    CalendarFormat.month: '열기',
+                    CalendarFormat.week: '닫기',
+                  },
+                  locale: 'ko-KR',
+                  calendarStyle: CalendarStyle(
+                    markerSize: 0.0,
+                    isTodayHighlighted: true,
+                    todayDecoration: const BoxDecoration(
+                        color: mainGrey, shape: BoxShape.circle),
+                    selectedDecoration: const BoxDecoration(
+                      color: mainRed,
+                      shape: BoxShape.circle,
+                    ),
+                    //선택된 날짜
+                    selectedTextStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: backgroundColor,
+                    ),
+                    //오늘 날짜
+                    todayTextStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                    outsideTextStyle: TextStyle(
+                      color: mainGrey,
+                      fontSize: 14,
+                    ),
+                    //보통 날짜
+                    defaultTextStyle: TextStyle(
+                      color: mainTextColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    //주말 날짜
+                    weekendTextStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                );
-              } else {
-                // 이벤트가 있는 경우
-
-                return ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onLongPress: () {
-                        // 롱 프레스 이벤트 처리
-                        editDialog(
-                            context,
-                            _focusedDay,
-                            value[index].title,
-                            value[index].content,
-                            value[index].switchValue,
-                            value[index].interval,
-                            value[index].id);
-                      },
-                      child: Container(
+                  daysOfWeekStyle: const DaysOfWeekStyle(
+                    weekdayStyle: TextStyle(
+                      color: settingGrey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    weekendStyle: TextStyle(
+                      color: settingGrey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                    titleTextStyle:
+                        const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+                    leftChevronIcon: Icon(
+                      Icons.arrow_circle_left_rounded,
+                      color: settingGrey,
+                      size: 22,
+                    ),
+                    rightChevronIcon: Icon(
+                      Icons.arrow_circle_right_rounded,
+                      color: settingGrey,
+                      size: 22,
+                    ),
+                    formatButtonVisible: false,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: _toggleCalendarFormat,
+                      padding: EdgeInsets.zero, 
+                      constraints: const BoxConstraints(), 
+                      icon: Icon(
+                        _isExpanded
+                            ? Icons.arrow_drop_up_rounded
+                            : Icons.arrow_drop_down_rounded,
+                        color: settingGrey,
+                        size: 28,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ValueListenableBuilder<List<Event>>(
+                  valueListenable: _selectedEvents,
+                  builder: (context, value, _) {
+                    if (value.isEmpty) {
+                      //❤️오늘의 도미노 없을 때 나오는 위젯
+                      return Container(
+                        height: 240,
+                        width: double.infinity,
+                        padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
                         decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.transparent), // 테두리 제거
+                          color: const Color(0xff2C2C2C),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.all(8.0),
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 12.0, vertical: 4.0),
-                        child: Row(
+                        child: Stack(
                           children: [
-                            Container(
-                              width: 22,
-                              height: 55,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  value[index].content,
-                                  style: const TextStyle(color: Colors.white),
+                            Text(
+                                  '엇!\n오늘은 도미노가 없어요!\n푹 쉬어가는 날이네요 :)',
+                                  style: TextStyle(
+                                    color: settingGrey,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    height: 1.7,
+                                  ),
                                 ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  value[index].title,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        value[index].didZero =
-                                            !value[index].didZero;
-                                        value[index].didHalf = false;
-                                        value[index].didAll = false;
-                                      });
-                                      //_selectedDay
-                                      String formattedDate =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(_selectedDay!);
-                                      dominoStatus(value[index].id, "FAIL",
-                                          formattedDate);
-                                    },
-                                    icon: Icon(
-                                      Icons.clear_outlined,
-                                      color: value[index].didZero
-                                          ? Colors.yellow
-                                          : const Color(0xff5C5C5C),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        value[index].didHalf =
-                                            !value[index].didHalf;
-                                        value[index].didZero = false;
-                                        value[index].didAll = false;
-                                      });
-                                      String formattedDate =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(_selectedDay!);
-                                      dominoStatus(value[index].id,
-                                          "IN_PROGRESS", formattedDate);
-                                    },
-                                    icon: Icon(
-                                      Icons.change_history_outlined,
-                                      color: value[index].didHalf
-                                          ? Colors.yellow
-                                          : const Color(0xff5C5C5C),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        value[index].didAll =
-                                            !value[index].didAll;
-                                        value[index].didZero = false;
-                                        value[index].didHalf = false;
-                                      });
-                                      String formattedDate =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(_selectedDay!);
-                                      dominoStatus(value[index].id, "SUCCESS",
-                                          formattedDate);
-                                    },
-                                    icon: Icon(
-                                      Icons.circle_outlined,
-                                      color: value[index].didAll
-                                          ? Colors.yellow
-                                          : const Color(0xff5C5C5C),
-                                    ),
-                                  ),
-                                ],
+                              
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Image.asset(
+                                'assets/img/emptyDominho.png',
+                                height: currentWidth < 375 ? 160 : 180,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: value.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              // 롱 프레스 이벤트 처리
+                              if (value[index].repetition != 'NONE') {
+                                value[index].switchValue = true;
+                                if (value[index].repetition == 'EVERYDAY') {
+                                  value[index].interval = 1;
+                                }
+                                if (value[index].repetition == 'EVERYWEEK') {
+                                  value[index].interval = 7;
+                                }
+                                if (value[index].repetition == 'BIWEEKLY') {
+                                  value[index].interval = 14;
+                                }
+                                if (value[index].repetition == 'EVERYMONTH') {
+                                  value[index].interval = 31;
+                                }
+                              } else {
+                                value[index].switchValue = false;
+                                value[index].interval = 0;
+                              }
+
+                              editDialog(
+                                  context,
+                                  _focusedDay,
+                                  value[index].goalName,
+                                  value[index].thirdGoal,
+                                  value[index].switchValue,
+                                  value[index].interval,
+                                  value[index].id,
+                                  value[index].thirdGoalId,
+                                  value[index].color,
+                                  currentWidth);
+                            },
+                            //❤️오늘의 도미노 위젯
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
+                              padding: EdgeInsets.fromLTRB(15,15,20,15),
+                              decoration: BoxDecoration(
+                                color: const Color(0xff2C2C2C),
+                                borderRadius: BorderRadius.circular(6),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black
+                                        .withOpacity(0.02), 
+                                    offset: const Offset(0, 0), 
+                                    blurRadius: 15, 
+                                    spreadRadius: 0, 
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 13,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                          color: Color(int.parse(
+                                            value[index]
+                                                .color
+                                                .replaceAll('Color(', '')
+                                                .replaceAll(')', ''),
+                                          )),
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width:
+                                                currentWidth < 600 ? 100 : 200,
+                                            child: Text(
+                                              value[index].thirdGoal,
+                                              overflow: TextOverflow
+                                                  .ellipsis, 
+                                              maxLines: 1, 
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
+                                                  color:
+                                                      settingGrey),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                              height:
+                                                  2),
+                                          SizedBox(
+                                            width:
+                                                currentWidth < 600 ? 100 : 200,
+                                            child: Text(
+                                              value[index].goalName,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  //상태 선택 도형들
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            value[index].didZero =
+                                                !value[index].didZero;
+                                            value[index].didHalf = false;
+                                            value[index].didAll = false;
+                                          });
+                                          String formattedDate =
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(_selectedDay!);
+                                          dominoStatus(value[index].id, "FAIL",
+                                              formattedDate);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
+                                          color: const Color(0xff2C2C2C),
+                                          child: Icon(
+                                            Icons.clear_outlined,
+                                            size: 23,
+                                            color: value[index].didZero
+                                                ? mainGold
+                                                : settingGrey,
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            value[index].didHalf =
+                                                !value[index].didHalf;
+                                            value[index].didZero = false;
+                                            value[index].didAll = false;
+                                          });
+                                          String formattedDate =
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(_selectedDay!);
+                                          dominoStatus(value[index].id,
+                                              "IN_PROGRESS", formattedDate);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
+                                          color: const Color(0xff2C2C2C),
+                                          child: Icon(
+                                            Icons.change_history_outlined,
+                                            size: 23,
+                                            color: value[index].didHalf
+                                                ? mainGold
+                                                : settingGrey,
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            value[index].didAll =
+                                                !value[index].didAll;
+                                            value[index].didZero = false;
+                                            value[index].didHalf = false;
+                                          });
+                                          String formattedDate =
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(_selectedDay!);
+                                          dominoStatus(value[index].id,
+                                              "SUCCESS", formattedDate);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(currentWidth < 365 ? 8 : 15),
+                                          color: const Color(0xff2C2C2C),
+                                          child: Icon(
+                                            Icons.circle_outlined,
+                                            size: 23,
+                                            color: value[index].didAll
+                                                ? mainGold
+                                                : settingGrey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
                   },
-                );
-              }
-            },
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -358,15 +513,25 @@ class _EventCalendarState extends State<EventCalendar> {
   }
 }
 
-void editDialog(BuildContext context, DateTime date, String title,
-    String content, bool switchvalue, int interval, int goalId) {
+//오늘의 도미노 상세 팝업
+void editDialog(
+    BuildContext context,
+    DateTime date,
+    String title,
+    String content,
+    bool switchvalue,
+    int interval,
+    int mandalartId,
+    int thirdGoalId,
+    String color,
+    double currentWidth) {
   String getIntervalText() {
     if (!switchvalue) {
-      return 'X';
+      return '';
     }
 
-    String weekday = DateFormat('EEEE', 'ko_KR').format(date); // 요일을 한국어로 변환
-    String dayOfMonth = date.day.toString(); // 날짜 가져오기
+    String weekday = DateFormat('EEEE', 'ko_KR').format(date);
+    String dayOfMonth = date.day.toString();
 
     if (interval == 1) {
       return '매일';
@@ -378,87 +543,105 @@ void editDialog(BuildContext context, DateTime date, String title,
       return '매월 $dayOfMonth일';
     }
 
-    return 'X'; // 기본값
+    return '';
   }
 
   showDialog(
     context: context,
-    barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+    barrierDismissible: true,
     builder: (BuildContext context) {
-      return AlertDialog(
-        //title: const Text('팝업 메시지'),
-        backgroundColor: const Color(0xff262626),
-        content: Row(
-          children: [
-            Container(
-              width: 15,
-              height: 140,
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.all(Radius.circular(3)),
-              ),
-            ),
-            const SizedBox(width: 20),
-            Column(
-              mainAxisSize: MainAxisSize.min,
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.all(0),
+        child: SizedBox(
+          height: 200,
+          width: currentWidth < 370 ? 290 : 340,
+          child: Container(
+            padding: EdgeInsets.all(25),
+            decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(11))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                Container(
+                  width: 16,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Color(int.parse(
+                            color
+                                .replaceAll('Color(', '')
+                                .replaceAll(')', '')
+                                .replaceAll('0x', ''),
+                            radix: 16) +
+                        0xFF000000),
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '환상적인 세계여행',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Text(
-                          content,
-                          style:
-                              const TextStyle(color: Colors.grey, fontSize: 13),
-                        ),
-                      ],
+                    Text(
+                      content,
+                      style: TextStyle(
+                          color: settingGrey,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
                     ),
-                    const SizedBox(
-                      width: 80,
+                    SizedBox(height: 5),
+                    SizedBox(
+                      width: 160,
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditPage(date, content, title,
-                                switchvalue, interval, goalId),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.edit),
+                    SizedBox(height: 25),
+                    if (switchvalue)
+                      Text(
+                        '반복',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      getIntervalText(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
-                Text(
-                  title,
-                  style: const TextStyle(color: Colors.white),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Container(
-                    height: 1,
-                    width: 200,
-                    color: Colors.grey,
-                  ),
-                ),
-                const Text(
-                  '반복',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                Text(
-                  getIntervalText(),
-                  style: const TextStyle(color: Colors.white),
-                ),
+                Spacer(),
+                GestureDetector(
+                  onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditPage(date, content, title,
+                          switchvalue, interval, mandalartId, thirdGoalId),
+                    ),
+                  );
+                },
+                child: Icon(Icons.edit, color: settingGrey,),
+                )
+                
               ],
             ),
-          ],
+          ),
         ),
       );
     },
