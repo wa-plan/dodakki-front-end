@@ -130,94 +130,89 @@ class _SettingsMainState extends State<SettingsMain> {
               STSubTitle('계정', Icons.person, 20).sTSubTitle(context),
               const SizedBox(height: 12),
               _buildSettingItem(
-                title: '내 계정',
-                menu: '계정',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AccountManagement(
-                        email: email!,
-                        phoneNum: phoneNum!,
-                        password: password!,
+                  title: '내 계정',
+                  menu: '계정',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AccountManagement(
+                          email: email!,
+                          phoneNum: phoneNum!,
+                          password: password!,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                currentWidth: currentWidth
-              ),
+                    );
+                  },
+                  currentWidth: currentWidth),
 
               //❤️알림 카테고리
               const SizedBox(height: 41),
               STSubTitle('알림', Icons.alarm_rounded, 18).sTSubTitle(context),
               const SizedBox(height: 12),
               _buildSettingItem(
-                title: '동기부여 알림',
-                menu: '동기부여 알림',
-                onTap: () {},
-                currentWidth: currentWidth
-              ),
+                  title: '동기부여 알림',
+                  menu: '동기부여 알림',
+                  onTap: () {},
+                  currentWidth: currentWidth),
               const SizedBox(height: 5),
               _buildSettingItem(
-                title: '리마인드 알림',
-                menu: '리마인드 알림',
-                onTap: () {},
-                currentWidth: currentWidth
-              ),
+                  title: '리마인드 알림',
+                  menu: '리마인드 알림',
+                  onTap: () {},
+                  currentWidth: currentWidth),
 
               //❤️지원 카테고리
               const SizedBox(height: 41),
               STSubTitle('지원', Icons.question_answer, 18).sTSubTitle(context),
               const SizedBox(height: 12),
               _buildSettingItem(
-                title: '문의하기',
-                menu: '지원',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ContactUs(email: email!),
-                    ),
-                  );
-                },
-                currentWidth: currentWidth
-              ),
+                  title: '문의하기',
+                  menu: '지원',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactUs(email: email!),
+                      ),
+                    );
+                  },
+                  currentWidth: currentWidth),
               const SizedBox(height: 5),
               _buildSettingItem(
-                title: '앱 사용설명서',
-                menu: '지원',
-                onTap: () async {
-                  if (!await launchUrl(Uri.parse(
-                      'https://www.notion.so/343b8dda304c415fb9cd0417120103eb?v=d2780555ab674e33b6e9c96e22575921&pvs=4'))) {
-                    throw 'Could not launch';
-                  }
-                },
-                currentWidth: currentWidth
-              ),
+                  title: '앱 사용설명서',
+                  menu: '지원',
+                  onTap: () async {
+                    if (!await launchUrl(Uri.parse(
+                        'https://www.notion.so/343b8dda304c415fb9cd0417120103eb?v=d2780555ab674e33b6e9c96e22575921&pvs=4'))) {
+                      throw 'Could not launch';
+                    }
+                  },
+                  currentWidth: currentWidth),
 
               //❤️앱 정보 카테고리
               const SizedBox(height: 41),
               STSubTitle('앱 정보', Icons.question_answer, 18).sTSubTitle(context),
               const SizedBox(height: 12),
               _buildSettingItem(
-                title: '버전 정보',
-                menu: '버전',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ContactUs(email: email!),
-                    ),
-                  );
-                },
-                currentWidth: currentWidth
-              ),
+                  title: '버전 정보',
+                  menu: '버전',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactUs(email: email!),
+                      ),
+                    );
+                  },
+                  currentWidth: currentWidth),
               const SizedBox(height: 5),
               _buildSettingItem(
-                title: '서비스 이용약관',
-                menu: '앱 정보',
-                onTap: () {
-                  showServiceRulePopup(context, currentWidth, '서비스 이용약관', '''1️⃣ 동의
+                  title: '서비스 이용약관',
+                  menu: '앱 정보',
+                  onTap: () {
+                    showServiceRulePopup(
+                        context, currentWidth, '서비스 이용약관', '''1️⃣ 동의
 사용자가 도닦기 앱을 다운로드하거나 사용하는 경우, 아래 조건에 동의한 것으로 간주됩니다. 본 약관을 숙지 후 사용해 주시기 바랍니다.
 
 2️⃣ 지식재산권
@@ -237,15 +232,15 @@ class _SettingsMainState extends State<SettingsMain> {
 
 7️⃣ 향후 광고
 현재 앱은 광고를 포함하지 않으나, 추후 광고 기능이 추가될 수 있으며 그에 따라 약관 및 방침이 변경될 수 있습니다.''');
-                },
-                currentWidth: currentWidth
-              ),
+                  },
+                  currentWidth: currentWidth),
               const SizedBox(height: 5),
               _buildSettingItem(
-                title: '개인정보 처리방침',
-                menu: '앱 정보',
-                onTap: () {
-                  showServiceRulePopup(context, currentWidth, '개인정보 처리방침', '''이 개인정보처리방침은 “도를 닦는 사람들”(이하 “서비스 제공자”)이 제공하는 모바일 애플리케이션 도닦기(dodakki) (이하 “앱”)에 적용됩니다. 본 앱은 오픈소스로 제공되며, “있는 그대로(AS IS)”의 형태로 사용됩니다.
+                  title: '개인정보 처리방침',
+                  menu: '앱 정보',
+                  onTap: () {
+                    showServiceRulePopup(context, currentWidth, '개인정보 처리방침',
+                        '''이 개인정보처리방침은 “도를 닦는 사람들”(이하 “서비스 제공자”)이 제공하는 모바일 애플리케이션 도닦기(dodakki) (이하 “앱”)에 적용됩니다. 본 앱은 오픈소스로 제공되며, “있는 그대로(AS IS)”의 형태로 사용됩니다.
 
 1️⃣ 수집하는 정보 및 이용 목적
 💠 사용자 제공 정보: 이메일 주소, 전화번호 (회원가입 및 인증 목적)
@@ -288,9 +283,8 @@ class _SettingsMainState extends State<SettingsMain> {
 💥 해당 권한들은 명시적인 사용자 동의 하에 요청되며, 고지된 목적 외에는 사용되지 않으며, 제3자에게 제공되지 않습니다.
               
 📅 시행일자: 2025년 4월 20일''');
-                },
-                currentWidth: currentWidth
-              ),
+                  },
+                  currentWidth: currentWidth),
             ],
           ),
         ),
@@ -301,7 +295,10 @@ class _SettingsMainState extends State<SettingsMain> {
 
   //카테고리 내 아이템 위젯
   Widget _buildSettingItem(
-      {required String title, required String menu, void Function()? onTap, required double currentWidth}) {
+      {required String title,
+      required String menu,
+      void Function()? onTap,
+      required double currentWidth}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -337,7 +334,7 @@ class _SettingsMainState extends State<SettingsMain> {
                     fontWeight: FontWeight.w600,
                   )),
             if (menu == '동기부여 알림') ...[
-              Text(currentWidth < 350 ? '🎉 아침 응원!': '🎉 도민호의 아침 응원!',
+              Text(currentWidth < 350 ? '🎉 아침 응원!' : '🎉 도민호의 아침 응원!',
                   style: TextStyle(
                     fontSize: currentWidth < 600 ? 13 : 15,
                     color: settingGrey,
@@ -347,7 +344,7 @@ class _SettingsMainState extends State<SettingsMain> {
               customSwitch(time: "morning"),
             ],
             if (menu == '리마인드 알림') ...[
-              Text(currentWidth < 350 ? '✅ 저녁 체크!': '✅ 도민호의 저녁 체크!',
+              Text(currentWidth < 350 ? '✅ 저녁 체크!' : '✅ 도민호의 저녁 체크!',
                   style: TextStyle(
                     fontSize: currentWidth < 600 ? 13 : 15,
                     color: settingGrey,
@@ -361,7 +358,7 @@ class _SettingsMainState extends State<SettingsMain> {
       ),
     );
   }
-  
+
   //토글 버튼 위젯
   Widget customSwitch({required String time}) {
     final currentWidth = MediaQuery.of(context).size.width;
@@ -505,8 +502,8 @@ class _SettingsMainState extends State<SettingsMain> {
     );
   }
 }
-  
-  //알림 관련 클래스
+
+//알림 관련 클래스
 class NotificationService {
   static final NotificationService _instance = NotificationService._();
   factory NotificationService() => _instance;
@@ -595,7 +592,8 @@ class NotificationService {
 }
 
 //약관 팝업
-void showServiceRulePopup(BuildContext context, double currentWidth, String title, String text) {
+void showServiceRulePopup(
+    BuildContext context, double currentWidth, String title, String text) {
   showDialog(
     context: context,
     builder: (context) {
@@ -621,7 +619,10 @@ void showServiceRulePopup(BuildContext context, double currentWidth, String titl
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.article_rounded, color: mainRed,),
+                              Icon(
+                                Icons.article_rounded,
+                                color: mainRed,
+                              ),
                               SizedBox(width: 7),
                               Text(
                                 title,
@@ -633,7 +634,7 @@ void showServiceRulePopup(BuildContext context, double currentWidth, String titl
                             ],
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: Icon(
@@ -644,7 +645,6 @@ void showServiceRulePopup(BuildContext context, double currentWidth, String titl
                         ],
                       ),
                       SizedBox(height: 25),
-                      
                       Text(
                         text,
                         style: TextStyle(
@@ -655,7 +655,6 @@ void showServiceRulePopup(BuildContext context, double currentWidth, String titl
                       ),
                     ],
                   ),
-                  
                 ],
               ),
             ),
