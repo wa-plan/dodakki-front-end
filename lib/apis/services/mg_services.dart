@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 String? baseUrl = dotenv.env['BASE_URL'];
 
@@ -16,8 +17,8 @@ class AddGoalService {
     required String date,
     required List<String> pictures,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -66,8 +67,8 @@ class EditGoalNameService {
     required String name,
     required int mandalartId,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -110,8 +111,8 @@ class EditGoalDateService {
     required String newDate,
     required int mandalartId,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -147,8 +148,8 @@ class EditGoalDescriptionService {
     required String description,
     required int mandalartId,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -185,8 +186,8 @@ class EditGoalPhotoService {
     required List<String> photo,
     required int mandalartId,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -222,8 +223,8 @@ class EditGoalColorService {
     required String color,
     required int mandalartId,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -260,8 +261,8 @@ class EditProfileService {
     required String profile,
     required String description,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -298,8 +299,8 @@ class EditProfileService {
 
 class UserInfoService {
   static Future<Map<String, dynamic>> userInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return {};
@@ -354,8 +355,8 @@ class UserInfoService {
 
 class UserMandaIdService {
   static Future<Map<String, List<Map<String, String>>>> userManda() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -410,8 +411,8 @@ class UserMandaIdService {
 class UserMandaInfoService {
   static Future<Map<String, dynamic>?> userMandaInfo(context,
       {required int mandalartId}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     print('토큰 값: $token');
 
@@ -449,8 +450,8 @@ class MandaBookmarkService {
     required int id,
     required String bookmark,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -489,8 +490,8 @@ class MandaProgressService {
     required int id,
     required String status,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -526,8 +527,8 @@ class MandaProgressService {
 
 class CheeringService {
   static Future<List<Map<String, String>>> cheering() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return [];
@@ -566,8 +567,8 @@ class UploadImage {
   static Future<bool> uploadImage({
     required String filePath,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -605,8 +606,8 @@ class DeleteFirstGoalService {
     BuildContext context,
     int mandalartId,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;

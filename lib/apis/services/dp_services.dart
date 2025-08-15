@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,8 +14,8 @@ class MainGoalListService {
   static Future<List<Map<String, dynamic>>?> mainGoalList(
     BuildContext context,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -61,8 +62,8 @@ class AddSecondGoalService {
     required List<String> name,
     required List<String> color,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -111,8 +112,8 @@ class SecondGoalListService {
     BuildContext context,
     String mandalartId, // Added to dynamically insert mandalartId in the URL
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       Fluttertoast.showToast(
@@ -178,8 +179,8 @@ class AddThirdGoalService {
     required List<List<String>> thirdValues,
    
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -234,8 +235,8 @@ class DeleteMandalartService {
     BuildContext context,
     int secondGoalId,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -271,8 +272,8 @@ class DeleteThirdGoalService {
     BuildContext context,
     int thirdGoalId,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -308,8 +309,8 @@ class EditSecondGoalService {
     required List<int> secondGoalId,
     required List<String> newSecondGoal,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -361,9 +362,8 @@ class EditGoalColorService {
     required List<int> secondGoalId,
     required List<String> color,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
     if (token == null) {
       
       return false;
@@ -413,8 +413,8 @@ class EditThirdGoalService {
     required List<List<int>> thirdGoalIds,    
     required List<List<String>> thirdGoals,    
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -464,8 +464,8 @@ class MainGoalDetailService {
   static Future<List<Map<String, dynamic>>?> mainGoalDetailList(
     BuildContext context,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       

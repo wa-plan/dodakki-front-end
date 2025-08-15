@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -62,8 +63,8 @@ class DominoInfoService {
     context, {
     required String date,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -104,8 +105,8 @@ class AddDominoService {
       required String name,
       required List<DateTime> dates,
       required String repetition}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -154,8 +155,8 @@ class DominoStatusService {
       {required int goalId,
       required String attainment,
       required String date}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -197,8 +198,8 @@ class EditDominoService {
     required int goalId,
     required String newGoal,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -243,8 +244,8 @@ class EditDominoNewService {
       required String name,
       required List dates,
       required String repetition}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -289,8 +290,8 @@ class EditDominoNewService {
 
 class DeleteDominoService {
   static Future<bool> deleteDomino({required int goalId}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -331,8 +332,8 @@ class DeleteDominoService {
 class DeleteTodayDominoService {
   static Future<bool> deleteTodayDomino(
       {required int goalId, required String goalDate}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       
@@ -372,8 +373,8 @@ class DeleteTodayDominoService {
 class MandalartInfoService {
   static Future<Map<String, dynamic>?> mandalartInfo(
       {required int mandalartId}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       

@@ -30,6 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (token != null && token.isNotEmpty) {
       print('✅ 토큰 있음. 자동 로그인 진행.');
+      final secureStorage = FlutterSecureStorage();
+  final savedToken = await secureStorage.read(key: 'token');
+  print('💾 저장된 토큰 확인: $savedToken');  // 토큰 값이 나오면 정상 저장
 
       // TODO: 서버에서 토큰 유효성 검사 API가 있다면 여기서 호출 (추천)
 
@@ -55,6 +58,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     bool isSuccess = await _loginService.login(context, userId, password);
     if (isSuccess) {
+      final secureStorage = FlutterSecureStorage();
+  final savedToken = await secureStorage.read(key: 'token');
+  print('💾 저장된 토큰 확인: $savedToken');  // 토큰 값이 나오면 정상 저장
+  
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
