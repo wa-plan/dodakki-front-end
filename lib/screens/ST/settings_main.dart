@@ -330,7 +330,7 @@ class _SettingsMainState extends State<SettingsMain> {
                 )),
             SizedBox(width: 15),
             if (menu == '버전')
-              Text('1.0.17',
+              Text('1.0.18',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.white,

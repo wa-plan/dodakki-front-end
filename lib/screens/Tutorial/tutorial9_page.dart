@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
+import 'package:domino/screens/splash_page.dart';
 import 'package:domino/style/style_login.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,7 @@ class Tutorial9State extends State<Tutorial9> {
           _confettiController.play();
          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const TdMain()),
+            MaterialPageRoute(builder: (context) => const SplashScreen()),
           );
         }).loginButton(),
       ),

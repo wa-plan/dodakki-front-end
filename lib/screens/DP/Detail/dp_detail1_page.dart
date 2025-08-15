@@ -130,6 +130,10 @@ class DPdetailPage extends StatelessWidget {
                       }
                     }
                     if (allThirdDeleted) {
+                      final mandalartProvider =
+                          context.read<MandalartProvider>();
+                      await mandalartProvider.reloadData(context); // ✅ 올바른 호출
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(

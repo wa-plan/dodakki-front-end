@@ -306,7 +306,7 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
           //❤️완료 버튼
           Expanded(
             flex: currentWidth < 330 ? 2 : 3,
-            child: NewButton(mainRed, backgroundColor, '플랜 만들기 완료!', () async {
+            child: NewButton(mainRed, backgroundColor, widget.edit == true ? '플랜 수정 완료!' : '플랜 만들기 완료!', () async {
               _loadingPopup();
             }).newButton(),
           ),
@@ -355,6 +355,10 @@ class DPcreateColorPageState extends State<DPcreateColorPage> {
         final colorSuccess = await editGoalColor();
         if (!colorSuccess) throw Exception('색상 저장 실패');
       }
+
+      final mandalartProvider = context.read<MandalartProvider>();
+await mandalartProvider.reloadData(context); // ✅ 올바른 호출
+
 
       if (mounted) Navigator.pop(context); // 성공 시 팝업 닫기
       Navigator.push(

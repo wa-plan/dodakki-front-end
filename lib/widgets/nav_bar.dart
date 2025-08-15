@@ -1,5 +1,6 @@
 import 'package:domino/screens/DP/dp_main_page.dart';
 import 'package:domino/screens/TD/td_main_page.dart';
+import 'package:domino/screens/splash_page.dart';
 import 'package:domino/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

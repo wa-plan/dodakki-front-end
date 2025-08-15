@@ -21,7 +21,7 @@ void showCalendarPopup(
           builder: (context, setState) {
             return SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
-                height: 330,
+                height: 360,
                 child: TableCalendar(
                   locale: 'ko_KR',
                   rowHeight: 45,

@@ -1,3 +1,4 @@
+import 'package:domino/provider/DP/model.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
 import 'package:domino/screens/MG/piechart.dart';
 import 'package:domino/screens/event_page.dart';
@@ -11,6 +12,7 @@ import 'package:domino/screens/MG/mygoal_goal_edit.dart';
 import 'package:domino/apis/services/mg_services.dart';
 import 'package:domino/widgets/popup.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:provider/provider.dart';
 
 class MyGoalDetail extends StatefulWidget {
   final String id;
@@ -170,6 +172,10 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                       int.parse(widget.id),
                     );
                     if (isDeleted) {
+                      final mandalartProvider =
+                          context.read<MandalartProvider>();
+                      await mandalartProvider.reloadData(context); // ✅ 올바른 호출
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -275,9 +281,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                 },
                                 onDelete: () {},
                                 onSignOut: () {},
-                                onSuccess: () {
+                                onSuccess: () async {
                                   _mandaProgress(
                                       int.parse(widget.id), "SUCCESS");
+                                  final mandalartProvider =
+                                      context.read<MandalartProvider>();
+                                  await mandalartProvider
+                                      .reloadData(context); // ✅ 올바른 호출
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -304,9 +314,13 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                 },
                                 onDelete: () {},
                                 onSignOut: () {},
-                                onSuccess: () {
+                                onSuccess: () async {
                                   _mandaProgress(
                                       int.parse(widget.id), "IN_PROGRESS");
+                                  final mandalartProvider =
+                                      context.read<MandalartProvider>();
+                                  await mandalartProvider
+                                      .reloadData(context); // ✅ 올바른 호출
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -330,8 +344,12 @@ class MyGoalDetailState extends State<MyGoalDetail> {
                                 },
                                 onDelete: () {},
                                 onSignOut: () {},
-                                onSuccess: () {
+                                onSuccess: () async {
                                   _mandaProgress(int.parse(widget.id), "FAIL");
+                                  final mandalartProvider =
+                                      context.read<MandalartProvider>();
+                                  await mandalartProvider
+                                      .reloadData(context); // ✅ 올바른 호출
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

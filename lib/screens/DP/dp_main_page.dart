@@ -1,4 +1,3 @@
-
 import 'package:domino/provider/DP/model.dart';
 import 'package:domino/screens/DP/Detail/dp_detail1_page.dart';
 import 'package:domino/style/style_dominoPlan.dart';
@@ -21,9 +20,9 @@ class _DPMainState extends State<DPMain> {
 
   String ddayFinder(String mandalartId, MandalartProvider provider) {
     String dday = provider.ddayList.firstWhere(
-          (element) => element['mandalartId'] == mandalartId,
-          orElse: () => {'dday': '0'},
-        )['dday'] ??
+      (element) => element['mandalartId'].toString() == mandalartId,
+      orElse: () => {'dday': '0'},
+    )['dday'] ??
         '0';
     return dday;
   }
@@ -118,9 +117,12 @@ class _DPMainState extends State<DPMain> {
                         final goal = mandalartProvider.mainGoals[index];
                         final mandalartId = goal['id'].toString();
 
+                        // ✅ mandalartId를 toString()으로 변환하여 필터링
                         final secondGoalData = mandalartProvider.secondGoals
-                            .where((e) => e['mandalartId'] == mandalartId)
+                            .where((e) =>
+                                e['mandalartId'].toString() == mandalartId)
                             .toList();
+
                         if (secondGoalData.isEmpty) return const SizedBox.shrink();
 
                         final firstColor = secondGoalData[0]['color'];

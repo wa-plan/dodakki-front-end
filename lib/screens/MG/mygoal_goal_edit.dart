@@ -1,4 +1,5 @@
 import 'package:domino/apis/services/mg_services.dart';
+import 'package:domino/provider/DP/model.dart';
 import 'package:domino/screens/MG/mygoal_main.dart';
 import 'package:domino/style/style_dominoPlan.dart';
 import 'package:domino/style/style_login.dart';
@@ -13,6 +14,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:domino/apis/services/image_services.dart';
 import 'package:domino/widgets/MG/calender.dart';
 import 'package:domino/utils/permission_util.dart';
+import 'package:provider/provider.dart';
 
 class MygoalEdit extends StatefulWidget {
   final String name;
@@ -323,16 +325,20 @@ class _MygoalEditState extends State<MygoalEdit> {
                   const SizedBox(width: 9),
                   SizedBox(
                     height: 55,
-                    child: NewButton(Color(0xff161616), Colors.white, '📅', () {
-                      showCalendarPopup(context, (DateTime? selectedDate) {
-                        if (selectedDate != null) {
-                          setState(() {
-                            _selectedDate = selectedDate; // 상위 화면의 변수에 저장
-                          });
-                        }
-                      });
-                    }, )
-                        .newButton(),
+                    child: NewButton(
+                      Color(0xff161616),
+                      Colors.white,
+                      '📅',
+                      () {
+                        showCalendarPopup(context, (DateTime? selectedDate) {
+                          if (selectedDate != null) {
+                            setState(() {
+                              _selectedDate = selectedDate; // 상위 화면의 변수에 저장
+                            });
+                          }
+                        });
+                      },
+                    ).newButton(),
                   ),
                 ],
               ),
@@ -381,25 +387,27 @@ class _MygoalEditState extends State<MygoalEdit> {
                                               6)), // ✅ 로드 실패 대비 배경
                                       child: imageData.startsWith("http")
                                           ? ClipRRect(
-                                            borderRadius: BorderRadius.circular(6),
-                                            child: Image.network(
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              child: Image.network(
                                                 imageData,
                                                 width: 90,
                                                 height: 90,
                                                 fit: BoxFit.cover,
-                                                errorBuilder:
-                                                    (context, error, stackTrace) {
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
                                                   return const Center(
                                                     child: Text(
                                                       '로드 실패', // ✅ 이미지 로드 실패 시 표시
                                                       style: TextStyle(
                                                           color: Colors.red),
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
                                                   );
                                                 },
                                               ),
-                                          )
+                                            )
                                           : const Center(
                                               child: Text(
                                                 '로드 실패', // ✅ URL이 아니면 기본적으로 표시
@@ -524,17 +532,18 @@ class _MygoalEditState extends State<MygoalEdit> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //이전 버튼
-          Expanded(
-            flex: 1,
-            child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
-              Navigator.pop(context);
-            }).newButton(),
-          ),
-          SizedBox(width: 15),
-          //완료 버튼
-          Expanded(
-            flex: currentWidth < 330 ? 2 : 3,
-            child: NewButton(mainRed, backgroundColor, '목표 수정하기 완료!', () async {
+            Expanded(
+              flex: 1,
+              child: NewButton(Color(0xff2C2C2C), settingGrey, '취소', () {
+                Navigator.pop(context);
+              }).newButton(),
+            ),
+            SizedBox(width: 15),
+            //완료 버튼
+            Expanded(
+              flex: currentWidth < 330 ? 2 : 3,
+              child:
+                  NewButton(mainRed, backgroundColor, '목표 수정하기 완료!', () async {
                 // 모든 API 호출이 성공했는지 확인할 변수
                 bool isSuccess = true;
 
@@ -598,6 +607,9 @@ class _MygoalEditState extends State<MygoalEdit> {
 
                 // 🔹 모든 API 호출이 성공했을 경우만 화면 닫기
                 if (isSuccess) {
+                  final mandalartProvider = context.read<MandalartProvider>();
+                  await mandalartProvider.reloadData(context); // ✅ 올바른 호출
+
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -607,12 +619,7 @@ class _MygoalEditState extends State<MygoalEdit> {
                   //Navigator.pop(context);
                 }
               }).newButton(),
-          ),
-
-
-           
-            
-            
+            ),
           ],
         ),
       ),
