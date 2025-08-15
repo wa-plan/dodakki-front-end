@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,8 +17,8 @@ class UploadFileService {
 
     try {
       // SharedPreferences에서 토큰 가져오기
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('authToken');
+      final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
       if (token == null || token.isEmpty) {
         
@@ -83,8 +84,8 @@ class UploadFilesService {
     List<String> uploadedUrls = [];
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('authToken');
+      final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
       if (token == null || token.isEmpty) {
         
@@ -138,8 +139,8 @@ class DeleteFileService {
   static Future<bool> deleteFile(String imageUrl) async {
     try {
       // SharedPreferences에서 토큰 가져오기
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('authToken');
+      final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
       if (token == null || token.isEmpty) {
         

@@ -39,6 +39,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SaveMandalartCreatedGoal()),
         ChangeNotifierProvider(create: (_) => GoalOrder()),
         ChangeNotifierProvider(create: (_) => SelectRepeatModel()),
+        ChangeNotifierProvider(create: (_) => MandalartProvider()),
       ],
       child: const MyApp(), 
     ),

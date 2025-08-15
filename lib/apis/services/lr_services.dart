@@ -85,8 +85,8 @@ class LoginService {
 class ChangePasswordService {
   static Future<bool> changePassword(
       {required String currentPassword, required String newPassword}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) {
       return false;
@@ -235,8 +235,8 @@ class PwFindService {
 
 class SignOutService {
   static Future<bool> signOut(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null) return false;
 
@@ -266,8 +266,8 @@ class MorningAlertService {
   static Future<bool> morningAlert({
     required String alarm,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null || token.isEmpty) {
       return false;
@@ -299,8 +299,8 @@ class MorningAlertService {
 
 class NightAlertService {
   static Future<bool> nightAlert({required String alarm}) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+    final storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token'); 
 
     if (token == null || token.isEmpty) {
       return false;

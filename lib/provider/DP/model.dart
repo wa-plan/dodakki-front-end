@@ -270,3 +270,43 @@ class SaveMandalartCreatedGoal with ChangeNotifier {
 
 }
 
+class MandalartProvider with ChangeNotifier {
+  List<Map<String, dynamic>> mainGoals = [];
+  List<Map<String, dynamic>> emptyMainGoals = [];
+  List<Map<String, dynamic>> secondGoals = [];
+  List<Map<String, String>> inProgressIDs = [];
+  List<Map<String, String>> failedIDs = [];
+  List<Map<String, String>> successIDs = [];
+  List<Map<String, String>> nameList = [];
+  List<Map<String, String>> statusList = [];
+  List<Map<String, String>> ddayList = [];
+  List<Map<String, String>> mandalarts = [];
+  List<Map<String, String>> bookmarks = [];
+
+  void setMandalartData({
+    required List<Map<String, dynamic>> mainGoals,
+    required List<Map<String, dynamic>> emptyMainGoals,
+    required List<Map<String, dynamic>> secondGoals,
+    required List<Map<String, String>> inProgressIDs,
+    required List<Map<String, String>> failedIDs,
+    required List<Map<String, String>> successIDs,
+    required List<Map<String, String>> nameList,
+    required List<Map<String, String>> statusList,
+    required List<Map<String, String>> ddayList,
+    required List<Map<String, String>> mandalarts,
+    required List<Map<String, String>> bookmarks,
+  }) {
+    this.mainGoals = mainGoals;
+    this.emptyMainGoals = emptyMainGoals;
+    this.secondGoals = secondGoals;
+    this.inProgressIDs = inProgressIDs;
+    this.failedIDs = failedIDs;
+    this.successIDs = successIDs;
+    this.nameList = nameList;
+    this.statusList = statusList;
+    this.ddayList = ddayList;
+    this.mandalarts = mandalarts;
+    this.bookmarks = bookmarks;
+    notifyListeners();
+  }
+}
