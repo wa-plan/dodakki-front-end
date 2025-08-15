@@ -61,16 +61,9 @@ dependencies:
   confetti: ^0.8.0
   flutter_speed_dial: ^7.0.0
   path: ^1.9.0
+  package_info_plus: ^8.3.1
+  store_redirect: ^2.0.4
 
-#새로고침 해결해야 함...
-flutter_native_splash:
-  color: "#1E1E1E" # 스플래시 화면의 배경색 설정 (흰색)
-  image: "assets/img/splash(2).png" # 스플래시 화면에 표시될 이미지 설정 (앱 로고)
-  android: true # 안드로이드 플랫폼에 스플래시 화면 적용
-  ios: true # iOS 플랫폼에 스플래시 화면 적용
-  android_12: # Android 12 이상을 위한 추가 설정
-    color: "#1E1E1E" # Android 12 이상 스플래시 화면의 배경색 (흰색)
-    image: "assets/img/splash(2).png" # Android 12 이상 스플래시 화면에 표시될 이미지
 
 flutter_launcher_icons:
   android: true # 안드로이드 플랫폼에 런처 아이콘 적용 여부
